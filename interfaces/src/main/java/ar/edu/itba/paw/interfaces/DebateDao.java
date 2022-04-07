@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface DebateDao {
     Optional<Debate> getPostById(long id);
-    List<Debate> getAll(int page, int pageSize);
+    List<Debate> getAll(int page);
     Debate create(String name, String description);
 }

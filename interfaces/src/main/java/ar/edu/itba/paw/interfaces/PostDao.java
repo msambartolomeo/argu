@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface PostDao {
     Optional<Post> getPostById(long id);
-    List<Post> getAll(int page, int pageSize);
+    List<Post> getAll(int page);
     Post create(long userId, long debateId, String content);
 }

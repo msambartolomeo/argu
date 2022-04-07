@@ -4,3 +4,18 @@ CREATE TABLE IF NOT EXISTS users
     username varchar(100) UNIQUE NOT NULL,
     password varchar(100) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS debates
+(
+    debateid SERIAL PRIMARY KEY,
+    name varchar(100) NOT NULL,
+    description varchar(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS posts
+(
+    postid SERIAL PRIMARY KEY,
+    debateid INTEGER NOT NULL REFERENCES debates,
+    userid INTEGER REFERENCES users NOT NULL,
+    content TEXT NOT NULL
+);
