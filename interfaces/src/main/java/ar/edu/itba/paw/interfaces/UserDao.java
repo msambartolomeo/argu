@@ -10,5 +10,6 @@ public interface UserDao {
 
     User create(String username, String password);
 
+    // int pageSize
     List<User> getAll(int page);
 }
