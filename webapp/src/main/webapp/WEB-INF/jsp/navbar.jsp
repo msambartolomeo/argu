@@ -9,7 +9,10 @@
     <div class="navbar-fixed">
         <nav>
             <div class="nav-wrapper nav-bar">
-                <a href="#" class="brand-logo">NoReddit</a>
+                <a href="#" class="brand-logo logo-text logo">
+                    <i class="material-icons">record_voice_over</i>
+                    NoReddit
+                </a>
                 <form class="right hide-on-med-and-down">
                     <div class="input-field" style="max-width: 400pt;">
                       <input class="search-color" placeholder="Search" id-="search" type="search" required>
@@ -31,5 +34,15 @@
     }
     .search-color {
         background: var(--white);
+    }
+    .logo-text {
+        margin-left: 1%;
+    }
+    .logo {
+        display: inline-block;
+        height: 100%;
+    }
+    .logo>img {
+        vertical-align: middle;
     }
 </style>
