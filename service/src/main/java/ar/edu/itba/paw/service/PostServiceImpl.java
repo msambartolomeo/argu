@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.PostDao;
-import ar.edu.itba.paw.interfaces.PostService;
+import ar.edu.itba.paw.interfaces.dao.PostDao;
+import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
