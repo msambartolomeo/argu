@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface UserDao {
     Optional<User> getUserById(long id);
+    Optional<User> getUserByEmail(String email);
 
     User create(String email);
 
