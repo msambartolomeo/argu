@@ -1,19 +1,35 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-<head>
-    <title>Navbar</title>
-</head>
+    <head>
+        <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
 <body>
-<nav>
-    <div class="nav-wrapper">
-        <a href="#" class="brand-logo">NoReddit</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="sass.html">Sass</a></li>
-            <li><a href="badges.html">Components</a></li>
-            <li><a href="collapsible.html">JavaScript</a></li>
-        </ul>
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper nav-bar">
+                <a href="#" class="brand-logo">NoReddit</a>
+                <form class="right hide-on-med-and-down">
+                    <div class="input-field" style="max-width: 400pt;">
+                      <input class="search-color" placeholder="Search" id-="search" type="search" required>
+                      <label class="label-icon" for="search">
+                          <i class="material-icons">search</i>
+                        </label>
+                      <i class="material-icons">close</i>
+                    </div>
+                  </form>
+            </div>
+        </nav>
     </div>
-</nav>
 </body>
 </html>
+
+<style>
+    .nav-bar {
+        background: var(--primary-color);
+    }
+    .search-color {
+        background: var(--white);
+    }
+</style>
