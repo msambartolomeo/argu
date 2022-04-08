@@ -33,7 +33,7 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public Optional<Debate> getPostById(long id) {
+    public Optional<Debate> getDebateById(long id) {
         return jdbcTemplate.query("SELECT * FROM debates WHERE debateId = ?", ROW_MAPPER, id)
                 .stream().findFirst();
     }

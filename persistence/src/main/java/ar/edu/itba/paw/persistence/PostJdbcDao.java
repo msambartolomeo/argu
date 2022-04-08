@@ -42,8 +42,8 @@ public class PostJdbcDao implements PostDao {
     }
 
     @Override
-    public List<Post> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM posts LIMIT 10 OFFSET ?", new Object[]{(page-1) * 10}, ROW_MAPPER);
+    public List<Post> getAllByDebate(int page, long debateId) {
+        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? LIMIT 10 OFFSET ?", new Object[]{debateId, (page-1) * 10}, ROW_MAPPER);
     }
 
     @Override
