@@ -1,8 +1,7 @@
 CREATE TABLE IF NOT EXISTS users
 (
     userid SERIAL PRIMARY KEY,
-    username varchar(100) UNIQUE NOT NULL,
-    password varchar(100) NOT NULL
+    email varchar(100) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS debates
