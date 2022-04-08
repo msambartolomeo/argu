@@ -35,7 +35,7 @@ public class HelloWorldController {
 
     @RequestMapping("/create")
     public ModelAndView create(@RequestParam(value = "name") final String username) {
-            final User user = userService.create(username, "1234");
+            final User user = userService.create(username);
             return new ModelAndView("redirect:/?userId=" + user.getId());
     }
 
