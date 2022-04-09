@@ -33,18 +33,15 @@ public class WebController {
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debatesList() {
         final ModelAndView mav = new ModelAndView("debates-list");
-        List<Debate> debates = debateService.getAll(0);
-        if (debates.isEmpty())
-            throw new DebateNotFoundException();
-        mav.addObject("debates", debates);
+        mav.addObject("debates", debateService.getAll(0));
         return mav;
     }
 
     @RequestMapping(value = "/debate/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debate(@PathVariable("debateId") final long debateId, @ModelAttribute("postForm") final PostForm form) {
         final ModelAndView mav = new ModelAndView("debate");
-        mav.addObject("debate", debateService.getDebateById(debateId)/*.orElseThrow(DebateNotFoundException::new)*/); // TODO uncomment later
-        mav.addObject("posts", postService.getPostsByDebate(debateId, 0)); // TODO get post by debate
+        mav.addObject("debate", debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new));
+        mav.addObject("posts", postService.getPostsByDebate(debateId, 0));
         return mav;
     }
 

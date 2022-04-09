@@ -20,9 +20,9 @@ public class PostJdbcDao implements PostDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private static final RowMapper<Post> ROW_MAPPER = (rs, rowNum) ->
-            new Post(rs.getLong("postId"),
-                    rs.getLong("userId"),
-                    rs.getLong("debateId"),
+            new Post(rs.getLong("postid"),
+                    rs.getLong("userid"),
+                    rs.getLong("debateid"),
                     rs.getString("content"));
 
     @Autowired
@@ -30,7 +30,7 @@ public class PostJdbcDao implements PostDao {
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("posts")
-                .usingGeneratedKeyColumns("postId");
+                .usingGeneratedKeyColumns("postid");
     }
 
     @Override
@@ -43,7 +43,7 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<Post> getPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? LIMIT 30 OFFSET ?", new Object[]{debateId, (page-1) * 10}, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? LIMIT 30 OFFSET ?", new Object[]{debateId, page * 10}, ROW_MAPPER);
     }
 
     @Override

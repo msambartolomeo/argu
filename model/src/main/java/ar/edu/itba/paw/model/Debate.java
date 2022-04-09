@@ -11,9 +11,10 @@ public class Debate {
         this.description = description;
     }
 
-    public long getId() {
+    public long getDebateId() {
         return debateId;
     }
+
     public String getName() {
         return name;
     }

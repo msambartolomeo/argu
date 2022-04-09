@@ -21,7 +21,7 @@ public class UserJdbcDao implements UserDao {
     private final SimpleJdbcInsert jdbcInsert;
     private static final RowMapper<User> ROW_MAPPER =
             (rs, rowNum) -> new User(
-                    rs.getLong("userId"),
+                    rs.getLong("userid"),
                     rs.getString("email"));
 
     @Autowired
@@ -62,6 +62,6 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public List<User> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM users LIMIT 10 OFFSET ?", new Object[] { (page - 1) * 10}, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM users LIMIT 10 OFFSET ?", new Object[] { page * 10 }, ROW_MAPPER);
     }
 }

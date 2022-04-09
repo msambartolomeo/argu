@@ -20,7 +20,7 @@ public class DebateJdbcDao implements DebateDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private static final RowMapper<Debate> ROW_MAPPER = (rs, rowNum) ->
-            new Debate(rs.getLong("debateId"),
+            new Debate(rs.getLong("debateid"),
                     rs.getString("name"),
                     rs.getString("description"));
 
@@ -29,7 +29,7 @@ public class DebateJdbcDao implements DebateDao {
         this.jdbcTemplate = new JdbcTemplate(ds);
         this.jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("debates")
-                .usingGeneratedKeyColumns("debateId");
+                .usingGeneratedKeyColumns("debateid");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public List<Debate> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM debates LIMIT 15 OFFSET ?", new Object[]{ (page-1) * 10 }, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM debates LIMIT 15 OFFSET ?", new Object[]{ page * 10 }, ROW_MAPPER);
     }
 
     @Override
