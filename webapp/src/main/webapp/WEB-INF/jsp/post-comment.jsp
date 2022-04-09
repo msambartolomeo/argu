@@ -20,7 +20,7 @@
                             <form:input type="text" path="email" />
                             <form:errors path="email" element="p" cssClass="error" />
                         </div>
-                        <button class="btn waves-effect center-block blue-grey darken-2" type="submit"
+                        <button class="btn waves-effect center-block" type="submit"
                             name="action">Post comment!
                             <i class="material-icons right">send</i>
                         </button>
@@ -34,12 +34,23 @@
 </html>
 
 <style>
+    :root {
+        --primary-color: #212D40;
+        --secondary-color: #D66853;
+        --white: white;
+    }
+
     .error {
-        color: red;
+        color: red; 
     }
 
     .btn {
         display: flex;
         justify-content: center;
+        background: #212D40;
+        background-color: #212D40;
+    }
+    .btn:hover {
+        background-color: #4076bd;
     }
 </style>

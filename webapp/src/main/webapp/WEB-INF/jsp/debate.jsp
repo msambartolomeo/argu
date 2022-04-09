@@ -54,7 +54,7 @@
 
     .debate-title {
         font-size: 50px !important;
-        padding-bottom: 10px;
+        padding-bottom: 1%;
     }
 
     .debate-description {
@@ -67,12 +67,12 @@
         display: flex;
         flex-direction: column;
         width: 54%;
-        margin-right: 15px;
+        margin-right: 1%;
     }
 
     .post-comments {
         width: 34%;
-        margin-left: 15px;
+        margin-left: 1%;
     }
 
     @media only screen and (max-width: 1300px) {
@@ -97,7 +97,7 @@
     }
 
     .user-comment {
-        margin: 0 10px;
+        margin: 1% 3%;
     }
 
     .debate-content {
