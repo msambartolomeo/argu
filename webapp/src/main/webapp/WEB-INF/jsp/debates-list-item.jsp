@@ -12,19 +12,16 @@
     </head>
 
     <body>
-        <div class="card radius">
+        <a class="card radius" href="/debate/${debate.debateId}">
             <div class="card-content">
                 <span class="card-title">
-                    Debate1
-                    <span class="new badge blue-grey darken-2" data-badge-caption="16:00 15/04/22"></span>
-                    <span class="new badge blue-grey darken-2" data-badge-caption="Category1"></span>
+                    <c:out value="${debate.name}"/>
+<%--                    <span class="new badge blue-grey darken-2" data-badge-caption="16:00 15/04/22"></span>--%>
+<%--                    <span class="new badge blue-grey darken-2" data-badge-caption="Category1"></span>--%>
                 </span>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Repellat exercitationem cumque accusantium debitis nemo.
-                    At id placeat molestiae esse hic delectus omnis, odit obcaecati eaque,
-                    distinctio molestias totam impedit repellat.</p>
+                <p><c:out value="${debate.description}"/></p>
             </div>
-        </div>
+        </a>
     </body>
 
 </html>
