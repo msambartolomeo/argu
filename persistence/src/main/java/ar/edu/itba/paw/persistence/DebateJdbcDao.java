@@ -40,7 +40,7 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public List<Debate> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM debates LIMIT 10 OFFSET ?", new Object[]{ (page-1) * 10 }, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM debates LIMIT 15 OFFSET ?", new Object[]{ (page-1) * 10 }, ROW_MAPPER);
     }
 
     @Override
