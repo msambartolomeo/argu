@@ -8,6 +8,7 @@ import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,5 +36,10 @@ public class PostServiceImpl implements PostService {
         User user;
         user = optionalUser.orElseGet(() -> userDao.create(userEmail));
         return postDao.create(user.getId(), debateId, content);
+    }
+
+    @Override
+    public List<Post> getPostsByDebate(long debateId, int page) {
+        return postDao.getPostsByDebate(debateId, page);
     }
 }
