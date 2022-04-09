@@ -1,60 +1,65 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-<head>
-    <title>Debate</title>
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-</head>
-<body>
 
-<%@include file="navbar.jsp" %>
-<div class="card normalized-margins">
-    <div class="card-content">
-        <span class="card-title debate-title">Debate1</span>
-        <p class="debate-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu lacus urna.
-            Aliquam erat volutpat. Sed
-            gravida tortor id est commodo varius. Suspendisse nulla justo, commodo non mauris eu, pharetra sodales nisi.
-            Proin accumsan aliquet ipsum, a vulputate mauris sodales sit amet. Sed quis aliquam velit, ac faucibus
-            sapien. Morbi ac scelerisque risus.</p>
-    </div>
-</div>
+    <head>
+        <title>Debate</title>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
 
-<div class="debate-content">
+    <body>
 
-    <div class="z-depth-3 comments">
-        <div class="user-comment">
-            <%@include file="comment.jsp" %>
+        <%@include file="navbar.jsp" %>
+        <div class="card normalized-margins">
+            <div class="card-content">
+                <span class="card-title debate-title">Debate1</span>
+                <p class="debate-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Vestibulum eu lacus urna.
+                    Aliquam erat volutpat. Sed
+                    gravida tortor id est commodo varius. Suspendisse nulla justo, commodo non mauris eu,
+                    pharetra sodales nisi.
+                    Proin accumsan aliquet ipsum, a vulputate mauris sodales sit amet. Sed quis aliquam velit,
+                    ac faucibus
+                    sapien. Morbi ac scelerisque risus.</p>
+            </div>
         </div>
-        <div class="user-comment">
-            <%@include file="comment.jsp" %>
-        </div>
-        <div class="user-comment">
-            <%@include file="comment.jsp" %>
-        </div>
-        <div class="user-comment">
-            <%@include file="comment.jsp" %>
-        </div>
-        <div class="user-comment">
-            <%@include file="comment.jsp" %>
-        </div>
-        <div class="user-comment">
-            <%@include file="comment.jsp" %>
-        </div>
-        <div class="user-comment">
-            <%@include file="comment.jsp" %>
-        </div>
-    </div>
 
-    <div class="post-comments">
-        <div class="post-comment">
-            <%@include file="post-comment.jsp" %>
+        <div class="debate-content">
+
+            <div class="z-depth-3 comments">
+                <div class="user-comment">
+                    <%@include file="comment.jsp" %>
+                </div>
+                <div class="user-comment">
+                    <%@include file="comment.jsp" %>
+                </div>
+                <div class="user-comment">
+                    <%@include file="comment.jsp" %>
+                </div>
+                <div class="user-comment">
+                    <%@include file="comment.jsp" %>
+                </div>
+                <div class="user-comment">
+                    <%@include file="comment.jsp" %>
+                </div>
+                <div class="user-comment">
+                    <%@include file="comment.jsp" %>
+                </div>
+                <div class="user-comment">
+                    <%@include file="comment.jsp" %>
+                </div>
+            </div>
+
+            <div class="post-comments">
+                <%@include file="post-comment.jsp" %>
+            </div>
+
         </div>
-    </div>
 
-</div>
+    </body>
 
-</body>
 </html>
 
 <style>
@@ -78,12 +83,12 @@
         border-radius: 10px;
         display: flex;
         flex-direction: column;
-        width: 40%;
+        width: 54%;
         margin-right: 15px;
     }
 
     .post-comments {
-        width: 20%;
+        width: 34%;
         margin-left: 15px;
     }
 
