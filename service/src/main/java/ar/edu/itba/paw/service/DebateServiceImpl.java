@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.Debate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,5 +23,10 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public Debate create(String name, String description) {
         return debateDao.create(name, description);
+    }
+
+    @Override
+    public List<Debate> getAll(int page) {
+        return debateDao.getAll(page);
     }
 }
