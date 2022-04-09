@@ -53,7 +53,7 @@ public class WebController {
         if (errors.hasErrors()) {
             return debate(debateId, form);
         }
-//        postService.createEmail(form.getEmail(), debateId, form.getContent()); // TODO create with email
+        postService.createWithEmail(form.getEmail(), debateId, form.getContent());
         return new ModelAndView("redirect:/debate/" + debateId);
     }
 

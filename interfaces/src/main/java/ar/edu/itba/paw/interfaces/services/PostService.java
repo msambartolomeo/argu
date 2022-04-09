@@ -8,4 +8,5 @@ public interface PostService {
 
     Optional<Post> getPostById(int id);
     Post create(long userId, long debateId, String content);
+    Post createWithEmail(String userEmail, long debateId, String content);
 }
