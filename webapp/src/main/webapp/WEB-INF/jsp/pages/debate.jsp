@@ -11,7 +11,7 @@
 
     <body>
 
-        <%@include file="navbar.jsp" %>
+        <%@include file="../components/navbar.jsp" %>
         <div class="card normalized-margins">
             <div class="card-content">
                 <span class="card-title debate-title"><c:out value="${debate.name}"/></span>
@@ -26,7 +26,7 @@
                         <c:forEach var="post" items="${posts}">
                             <div class="user-comment">
                                 <c:set var="post" value="${post}" scope="request"/>
-                                <%@include file="comment.jsp" %>
+                                <%@include file="../components/comment.jsp" %>
                             </div>
                         </c:forEach>
                 </c:if>
@@ -36,7 +36,7 @@
             </div>
 
             <div class="post-comments">
-                <%@include file="post-comment.jsp" %>
+                <%@include file="../components/post-comment.jsp" %>
             </div>
 
         </div>

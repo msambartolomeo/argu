@@ -9,7 +9,7 @@
         <title>Debates</title>
     </head>
 
-    <%@include file="navbar.jsp" %>
+    <%@include file="../components/navbar.jsp" %>
 
     <body>
         <div class="items normalized-margins">
@@ -17,7 +17,7 @@
                 <c:forEach var="debate" items="${debates}">
                     <div class="each-item">
                         <c:set var="debate" value="${debates}" scope="request"/>
-                        <%@include file="debates-list-item.jsp" %>
+                        <%@include file="../components/debates-list-item.jsp" %>
                     </div>
                 </c:forEach>
             </c:if>

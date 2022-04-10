@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.webapp.exception.DebateNotFoundException;
 import ar.edu.itba.paw.webapp.form.PostForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 public class WebController {
@@ -32,14 +30,14 @@ public class WebController {
 
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debatesList() {
-        final ModelAndView mav = new ModelAndView("debates-list");
+        final ModelAndView mav = new ModelAndView("pages/debates-list");
         mav.addObject("debates", debateService.getAll(0));
         return mav;
     }
 
     @RequestMapping(value = "/debate/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debate(@PathVariable("debateId") final long debateId, @ModelAttribute("postForm") final PostForm form) {
-        final ModelAndView mav = new ModelAndView("debate");
+        final ModelAndView mav = new ModelAndView("pages/debate");
         mav.addObject("debate", debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new));
         mav.addObject("posts", postService.getPublicPostsByDebate(debateId, 0));
         return mav;
