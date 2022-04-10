@@ -1,18 +1,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <html>
     <head>
-		<!--Import Google Icon Font-->
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<!-- Compiled and minified CSS -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <title>Debates</title>
+        <%@include file="../components/imports.jsp"%>
     </head>
 
-    <%@include file="../components/navbar.jsp" %>
-
     <body>
-        <div class="items normalized-margins">
+    <%@include file="../components/navbar.jsp" %>
+    <div class="items normalized-margins">
             <c:if test="${debates.size() > 0}">
                 <c:forEach var="debate" items="${debates}">
                     <div class="each-item">
@@ -25,8 +23,8 @@
                 <h3>No debates found</h3>
             </c:if>
         </div>
-      <!-- Compiled and minified JavaScript -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </body>
 </html>
 <style>

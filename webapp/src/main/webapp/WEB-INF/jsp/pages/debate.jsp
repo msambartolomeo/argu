@@ -1,16 +1,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <html>
+
 
     <head>
         <title>Debate</title>
-        <!-- Compiled and minified CSS -->
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <%@include file="../components/imports.jsp"%>
     </head>
 
     <body>
-
         <%@include file="../components/navbar.jsp" %>
         <div class="card normalized-margins">
             <div class="card-content">
@@ -40,7 +40,7 @@
             </div>
 
         </div>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </body>
 
 </html>
