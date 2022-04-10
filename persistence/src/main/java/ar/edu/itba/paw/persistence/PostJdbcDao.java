@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.PostDao;
 import ar.edu.itba.paw.model.Post;
+import ar.edu.itba.paw.model.PublicPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,6 +25,11 @@ public class PostJdbcDao implements PostDao {
                     rs.getLong("userid"),
                     rs.getLong("debateid"),
                     rs.getString("content"));
+    private static final RowMapper<PublicPost> PUBLIC_POST_ROW_MAPPER = (rs, rowNum) ->
+            new PublicPost(rs.getLong("postid"),
+                    rs.getString("email"),
+                    rs.getLong("debateid"),
+                    rs.getString("content"));
 
     @Autowired
     public PostJdbcDao(final DataSource ds) {
@@ -44,6 +50,21 @@ public class PostJdbcDao implements PostDao {
     @Override
     public List<Post> getPostsByDebate(long debateId, int page) {
         return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? LIMIT 30 OFFSET ?", new Object[]{debateId, page * 10}, ROW_MAPPER);
+    }
+
+    @Override
+    public Optional<PublicPost> getPublicPostById(long id) {
+        return jdbcTemplate.query("SELECT postid, email, debateid, content FROM posts NATURAL JOIN users WHERE postId = ?",
+                new Object[]{id},
+                PUBLIC_POST_ROW_MAPPER)
+                .stream().findFirst();
+    }
+
+    @Override
+    public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
+        return jdbcTemplate.query("SELECT postid, email, debateid, content FROM posts NATURAL JOIN users WHERE debateid = ? LIMIT 30 OFFSET ?",
+                new Object[]{debateId, page * 10},
+                PUBLIC_POST_ROW_MAPPER);
     }
 
     @Override
