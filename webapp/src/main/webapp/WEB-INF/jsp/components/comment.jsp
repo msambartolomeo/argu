@@ -9,15 +9,5 @@
         <p class="comment-text"><c:out value="${post.content}"/></p>
     </div>
 </div>
-
-
 </body>
 </html>
-
-<style>
-
-    .card {
-        border-radius: 10px;
-    }
-
-</style>

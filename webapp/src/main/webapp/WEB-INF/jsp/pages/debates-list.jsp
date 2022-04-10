@@ -10,10 +10,10 @@
 
     <body>
     <%@include file="../components/navbar.jsp" %>
-    <div class="items normalized-margins">
+        <div class="z-depth-3 debate-list normalized-margins">
             <c:if test="${debates.size() > 0}">
                 <c:forEach var="debate" items="${debates}">
-                    <div class="each-item">
+                    <div class="list-item">
                         <c:set var="debate" value="${debates}" scope="request"/>
                         <%@include file="../components/debates-list-item.jsp" %>
                     </div>
@@ -27,29 +27,3 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </body>
 </html>
-<style>
-    :root {
-        --primary-color: #212D40;
-        --secondary-color: #D66853;
-        --white: white;
-    }
-    .normalized-margins {
-        width: 90%;
-        margin: 1% auto;
-    }
-    .items {
-        background: var(--white);
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        /* justify-content: center; */
-    }
-    .each-item {
-        display: flex;
-        justify-content: center;
-        padding: 10px;
-    }
-    body {
-        background: var(--secondary-color);
-    }
-</style>

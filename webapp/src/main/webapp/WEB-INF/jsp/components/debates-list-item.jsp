@@ -3,7 +3,7 @@
 
 <html>
     <body>
-        <a class="card radius black-text" href="/debate/${debate.debateId}">
+        <a class="card black-text" href="/debate/${debate.debateId}">
             <div class="card-content">
                 <span class="card-title">
                     <c:out value="${debate.name}"/>
@@ -14,21 +14,4 @@
             </div>
         </a>
     </body>
-
 </html>
-
-<style>
-    :root {
-        --badge-color: #364156;
-    }
-
-    .normalized-margins {
-        margin: 1% auto;
-        justify-content: center;
-    }
-
-    .radius {
-        border-radius: 10px;
-        width: 98%;
-    }
-</style>

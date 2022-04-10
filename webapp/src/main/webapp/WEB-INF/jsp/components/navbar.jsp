@@ -23,32 +23,4 @@
             </nav>
         </div>
     </body>
-
 </html>
-
-<style>
-    .nav-bar {
-        background: var(--primary-color);
-    }
-
-    .search-color {
-        background: var(--white);
-    }
-
-    .logo-text {
-        margin-left: 1%;
-    }
-
-    .logo {
-        display: inline-block;
-        height: 100%;
-    }
-
-    .logo>img {
-        vertical-align: middle;
-    }
-
-    .search-size {
-        max-width: 100%;
-    }
-</style>
