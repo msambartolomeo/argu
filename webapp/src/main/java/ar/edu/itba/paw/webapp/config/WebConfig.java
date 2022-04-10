@@ -66,11 +66,16 @@ public class WebConfig {
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("localhost");
-        mailSender.setPort(25);
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+
+        mailSender.setUsername("paw.2022a.06@gmail.com");
+        mailSender.setPassword("verysecurepassword.tm");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.debug", "true");
 
         return mailSender;
