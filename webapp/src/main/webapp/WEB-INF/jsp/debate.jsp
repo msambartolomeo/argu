@@ -14,42 +14,25 @@
         <%@include file="navbar.jsp" %>
         <div class="card normalized-margins">
             <div class="card-content">
-                <span class="card-title debate-title">Debate1</span>
-                <p class="debate-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Vestibulum eu lacus urna.
-                    Aliquam erat volutpat. Sed
-                    gravida tortor id est commodo varius. Suspendisse nulla justo, commodo non mauris eu,
-                    pharetra sodales nisi.
-                    Proin accumsan aliquet ipsum, a vulputate mauris sodales sit amet. Sed quis aliquam velit,
-                    ac faucibus
-                    sapien. Morbi ac scelerisque risus.</p>
+                <span class="card-title debate-title"><c:out value="${debate.name}"/></span>
+                <p class="debate-description"><c:out value="${debate.description}"/></p>
             </div>
         </div>
 
         <div class="debate-content">
 
             <div class="z-depth-3 comments">
-                <div class="user-comment">
-                    <%@include file="comment.jsp" %>
-                </div>
-                <div class="user-comment">
-                    <%@include file="comment.jsp" %>
-                </div>
-                <div class="user-comment">
-                    <%@include file="comment.jsp" %>
-                </div>
-                <div class="user-comment">
-                    <%@include file="comment.jsp" %>
-                </div>
-                <div class="user-comment">
-                    <%@include file="comment.jsp" %>
-                </div>
-                <div class="user-comment">
-                    <%@include file="comment.jsp" %>
-                </div>
-                <div class="user-comment">
-                    <%@include file="comment.jsp" %>
-                </div>
+                <c:if test="${posts.size() > 0}">
+                        <c:forEach var="post" items="${posts}">
+                            <div class="user-comment">
+                                <c:set var="post" value="${post}" scope="request"/>
+                                <%@include file="comment.jsp" %>
+                            </div>
+                        </c:forEach>
+                </c:if>
+                <c:if test="${posts.size() == 0}">
+                    <h3>No posts found</h3>
+                </c:if>
             </div>
 
             <div class="post-comments">
@@ -71,7 +54,7 @@
 
     .debate-title {
         font-size: 50px !important;
-        padding-bottom: 10px;
+        padding-bottom: 1%;
     }
 
     .debate-description {
@@ -84,12 +67,12 @@
         display: flex;
         flex-direction: column;
         width: 54%;
-        margin-right: 15px;
+        margin-right: 1%;
     }
 
     .post-comments {
         width: 34%;
-        margin-left: 15px;
+        margin-left: 1%;
     }
 
     @media only screen and (max-width: 1300px) {
@@ -114,7 +97,7 @@
     }
 
     .user-comment {
-        margin: 0 10px;
+        margin: 1% 3%;
     }
 
     .debate-content {

@@ -4,8 +4,8 @@
 <body>
 <div class="card">
     <div class="card-content">
-        <span class="card-title">${user.username}</span>
-        <p class="comment-text">lorem ipsum Morbi facilisis turpis ac nisl suscipit auctor. Mauris justo urna, commodo vitae turpis eget, tempus placerat eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas erat risus, facilisis nec auctor vel, vulputate vitae risus. Duis metus eros, rutrum ut hendrerit sit amet, molestie a odio. Etiam eu blandit lorem. Nulla laoreet metus ac laoreet vehicula. Ut accumsan aliquet mollis.</p>
+        <span class="card-title"><c:out value="${post.email}"/></span>
+        <p class="comment-text"><c:out value="${post.content}"/></p>
     </div>
 </div>
 
