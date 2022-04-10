@@ -11,7 +11,7 @@
         <div class="navbar-fixed">
             <nav>
                 <div class="nav-wrapper nav-bar">
-                    <a href="#" class="brand-logo left logo-text logo">
+                    <a href="/" class="brand-logo left logo-text logo">
                         <i class="material-icons">record_voice_over</i>
                         NoReddit
                     </a>

@@ -12,7 +12,7 @@
     </head>
 
     <body>
-        <a class="card radius" href="/debate/${debate.debateId}">
+        <a class="card radius black-text" href="/debate/${debate.debateId}">
             <div class="card-content">
                 <span class="card-title">
                     <c:out value="${debate.name}"/>
@@ -38,5 +38,6 @@
 
     .radius {
         border-radius: 10px;
+        width: 98%;
     }
 </style>
