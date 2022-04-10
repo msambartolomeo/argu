@@ -4,7 +4,7 @@
 <body>
 <div class="card">
     <div class="card-content">
-        <span class="card-title"><c:out value="${post.userId}"/></span>
+        <span class="card-title"><c:out value="${post.email}"/></span>
         <p class="comment-text"><c:out value="${post.content}"/></p>
     </div>
 </div>
