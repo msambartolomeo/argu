@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.PostDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.model.Post;
+import ar.edu.itba.paw.model.PublicPost;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,16 @@ public class PostServiceImpl implements PostService {
         User user;
         user = optionalUser.orElseGet(() -> userDao.create(userEmail));
         return postDao.create(user.getId(), debateId, content);
+    }
+
+    @Override
+    public Optional<PublicPost> getPublicPostById(int id) {
+        return postDao.getPublicPostById(id);
+    }
+
+    @Override
+    public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
+        return postDao.getPublicPostsByDebate(debateId, page);
     }
 
     @Override

@@ -41,7 +41,7 @@ public class WebController {
     public ModelAndView debate(@PathVariable("debateId") final long debateId, @ModelAttribute("postForm") final PostForm form) {
         final ModelAndView mav = new ModelAndView("debate");
         mav.addObject("debate", debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new));
-        mav.addObject("posts", postService.getPostsByDebate(debateId, 0));
+        mav.addObject("posts", postService.getPublicPostsByDebate(debateId, 0));
         return mav;
     }
 
