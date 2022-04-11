@@ -6,10 +6,12 @@
         <div class="navbar-fixed">
             <nav>
                 <div class="nav-wrapper nav-bar">
-                    <a href="/" class="brand-logo left logo-text logo">
-                        <i class="material-icons">record_voice_over</i>
-                        NoReddit
-                    </a>
+<%--                    <div class="left ">--%>
+                        <a href="/" class="brand-logo">
+                            <img src="/resources/images/image.png" class="logo-image" alt="NoReddit Logo">
+                            NoReddit
+                        </a>
+<%--                    </div>--%>
                     <form class="right">
                         <div class="input-field search-size">
                             <input class="search-color" placeholder="Search" id="search" type="search" required>

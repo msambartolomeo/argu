@@ -51,17 +51,14 @@ a.card {
     background: var(--white);
 }
 
-.logo-text {
+.brand-logo {
+    display: flex !important;
+    align-items: center;
+}
+
+.logo-image {
     margin-left: 1%;
-}
-
-.logo {
-    display: inline-block;
-    height: 100%;
-}
-
-.logo>img {
-    vertical-align: middle;
+    width: 50px;
 }
 
 .search-size {
