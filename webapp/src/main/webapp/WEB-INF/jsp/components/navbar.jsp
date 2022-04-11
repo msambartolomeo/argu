@@ -7,8 +7,8 @@
             <nav>
                 <div class="nav-wrapper nav-bar">
 <%--                    <div class="left ">--%>
-                        <a href="/" class="brand-logo">
-                            <img src="/resources/images/argu-logo-2.jpeg" class="logo-image" alt="Argu Logo">
+                        <a href="${pageContext.request.contextPath}/" class="brand-logo">
+                            <img src="${pageContext.request.contextPath}/resources/images/argu-logo-2.jpeg" class="logo-image" alt="Argu Logo">
                             &#8205
                         </a>
 <%--                    </div>--%>
