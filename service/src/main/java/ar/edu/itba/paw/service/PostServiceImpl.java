@@ -33,7 +33,7 @@ public class PostServiceImpl implements PostService {
         Debate debate = new DebateServiceImpl().getDebateById(debateId).orElseThrow(() -> new IllegalArgumentException("Debate not found"));
         EmailService emailService = new EmailServiceImpl();
 
-        for (Post post : postDao.getPostsByDebate(debateId, 0)) {
+        for (Post post : postDao.getAllPostByDebate(debateId)) {
             user = userDao.getUserById(post.getUserId()).orElseThrow(() -> new IllegalArgumentException("User not found"));
             // TODO: Fijarse que no hagan Injection en el debate.getName();
             if (user.getId() != userId) // Si no es el usuario que creo el post
