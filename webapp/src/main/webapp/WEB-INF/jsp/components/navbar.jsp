@@ -7,9 +7,9 @@
             <nav>
                 <div class="nav-wrapper nav-bar">
 <%--                    <div class="left ">--%>
-                        <a href="/" class="brand-logo">
-                            <img src="/resources/images/image.png" class="logo-image" alt="NoReddit Logo">
-                            NoReddit
+                        <a href="${pageContext.request.contextPath}/" class="brand-logo">
+                            <img src="${pageContext.request.contextPath}/resources/images/argu-logo-2.jpeg" class="logo-image" alt="Argu Logo">
+                            &#8205
                         </a>
 <%--                    </div>--%>
                     <form class="right">
