@@ -20,7 +20,7 @@
                 </c:forEach>
             </c:if>
             <c:if test="${debates.size() == 0}">
-                <h3>No debates found</h3>
+                <h3><spring:message code="pages.debates-list.no-debates"/></h3>
             </c:if>
         </div>
 
