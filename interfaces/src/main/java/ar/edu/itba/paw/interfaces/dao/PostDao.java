@@ -9,6 +9,4 @@ public interface PostDao {
     Optional<Post> getPostById(long id);
     List<Post> getPostsByDebate(long debateId, int page);
     Post create(long userId, long debateId, String content);
-    // Without pagination, to be used internally
-    List<Post> getAllPostByDebate(long debateId);
 }

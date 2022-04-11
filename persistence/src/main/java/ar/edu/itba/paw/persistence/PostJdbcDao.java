@@ -57,9 +57,4 @@ public class PostJdbcDao implements PostDao {
 
         return new Post(postId.longValue(), userId, debateId, content);
     }
-
-    @Override
-    public List<Post> getAllPostByDebate(long debateId) {
-        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ?", new Object[]{debateId}, ROW_MAPPER);
-    }
 }
