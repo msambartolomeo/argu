@@ -44,10 +44,10 @@ public class EmailServiceImpl implements EmailService {
     public void notifyNewPost(String to) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-        System.out.println("Por entrar");
+
 
         String htmlMsg = ResourceReader.asString(notificationEmail);
-        System.out.println("Acá debería salir");
+        
         try {
             helper.setText(htmlMsg, true); // Use this or above line.
             helper.setTo(to);
