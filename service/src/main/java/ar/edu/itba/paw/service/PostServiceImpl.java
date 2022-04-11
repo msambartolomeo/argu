@@ -31,12 +31,13 @@ public class PostServiceImpl implements PostService {
         // TODO: Ver el warning del get() y las excepciones
         User user;
         Debate debate = new DebateServiceImpl().getDebateById(debateId).orElseThrow(() -> new IllegalArgumentException("Debate not found"));
+        EmailService emailService = new EmailServiceImpl();
 
         for (Post post : postDao.getPostsByDebate(debateId, 0)) {
             user = userDao.getUserById(post.getUserId()).orElseThrow(() -> new IllegalArgumentException("User not found"));
-            EmailService emailService = new EmailServiceImpl();
             // TODO: Fijarse que no hagan Injection en el debate.getName();
-            emailService.notifyNewPost(user.getEmail());
+            if (user.getId() != userId) // Si no es el usuario que creo el post
+                emailService.notifyNewPost(user.getEmail());
         }
         return postDao.create(userId, debateId, content);
     }
