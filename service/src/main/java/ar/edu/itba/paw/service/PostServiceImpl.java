@@ -20,6 +20,8 @@ public class PostServiceImpl implements PostService {
     private PostDao postDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public Optional<Post> getPostById(int id) {
@@ -28,26 +30,21 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post create(long userId, long debateId, String content) {
+        Post createdPost = postDao.create(userId, debateId, content);
         // TODO: Ver el warning del get() y las excepciones
-        User user;
-        Debate debate = new DebateServiceImpl().getDebateById(debateId).orElseThrow(() -> new IllegalArgumentException("Debate not found"));
-        EmailService emailService = new EmailServiceImpl();
-
-        for (Post post : postDao.getAllPostByDebate(debateId)) {
-            user = userDao.getUserById(post.getUserId()).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        for (User user : userDao.getAllUsersByDebate(debateId)) {
             // TODO: Fijarse que no hagan Injection en el debate.getName();
             if (user.getId() != userId) // Si no es el usuario que creo el post
                 emailService.notifyNewPost(user.getEmail());
         }
-        return postDao.create(userId, debateId, content);
+        return createdPost;
     }
 
     @Override
     public Post createWithEmail(String userEmail, long debateId, String content) {
         Optional<User> optionalUser = userDao.getUserByEmail(userEmail);
-        User user;
-        user = optionalUser.orElseGet(() -> userDao.create(userEmail));
-        return postDao.create(user.getId(), debateId, content);
+        User user = optionalUser.orElseGet(() -> userDao.create(userEmail));
+        return create(user.getId(), debateId, content);
     }
 
     @Override
