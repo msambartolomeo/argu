@@ -8,8 +8,8 @@
                 <div class="nav-wrapper nav-bar">
 <%--                    <div class="left ">--%>
                         <a href="/" class="brand-logo">
-                            <img src="/resources/images/image.png" class="logo-image" alt="NoReddit Logo">
-                            NoReddit
+                            <img src="/resources/images/argu-logo-2.jpeg" class="logo-image" alt="Argu Logo">
+                            &#8205
                         </a>
 <%--                    </div>--%>
                     <form class="right">
