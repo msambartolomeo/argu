@@ -3,9 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -39,22 +37,22 @@ public class EmailServiceImpl implements EmailService {
     }
 
 
-    @Value("classpath:html/notification-email.html")
+    @Value("classpath:notification-email.html")
     private Resource notificationEmail;
 
     @Override
     public void notifyNewPost(String to) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+        System.out.println("Por entrar");
 
-        //TODO: Decidir entre texto plano o html. Además, verificar que funcione.
         String htmlMsg = ResourceReader.asString(notificationEmail);
-        //String htmlMsg = "<h3>Hello World!</h3>"; 
+        System.out.println("Acá debería salir");
         try {
             helper.setText(htmlMsg, true); // Use this or above line.
             helper.setTo(to);
             helper.setSubject("New post in a debate you're following!");
-            helper.setFrom("noreply@noreddit.com"); //TODO: Actualizar el nombre
+            helper.setFrom("noreply@argu.com"); //TODO: Actualizar el nombre
             emailSender.send(mimeMessage);
         } catch (Exception e) {
             e.printStackTrace(); //TODO: handle exception
