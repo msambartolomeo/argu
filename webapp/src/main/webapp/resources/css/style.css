@@ -105,4 +105,27 @@ a.card {
     margin-left: 1%;
 }
 
+/* 404.jsp */
 
+.error-div {
+    padding: 4%;
+    background: white;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.error-div>h1 {
+}
+
+.error-div>a:hover {
+    text-decoration: underline;
+}
+
+.error-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
