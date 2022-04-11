@@ -29,7 +29,7 @@
                         </c:forEach>
                 </c:if>
                 <c:if test="${posts.size() == 0}">
-                    <h3><spring:message code="pages.debate.no-posts"/></h3>
+                    <h3 class="center"><spring:message code="pages.debate.no-posts"/></h3>
                 </c:if>
             </div>
 
