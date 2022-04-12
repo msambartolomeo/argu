@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.DebateService;
+import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.webapp.exception.DebateNotFoundException;
@@ -20,12 +21,14 @@ public class WebController {
     private final UserService userService;
     private final DebateService debateService;
     private final PostService postService;
+    private final EmailService emailService;
 
     @Autowired
-    public WebController(UserService userService, DebateService debateService, PostService postService) {
+    public WebController(UserService userService, DebateService debateService, PostService postService, EmailService emailService) {
         this.userService = userService;
         this.debateService = debateService;
         this.postService = postService;
+        this.emailService = emailService;
     }
 
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })

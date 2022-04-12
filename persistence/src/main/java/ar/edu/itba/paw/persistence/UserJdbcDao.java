@@ -64,4 +64,9 @@ public class UserJdbcDao implements UserDao {
     public List<User> getAll(int page) {
         return jdbcTemplate.query("SELECT * FROM users LIMIT 10 OFFSET ?", new Object[] { page * 10 }, ROW_MAPPER);
     }
+
+    @Override
+    public List<User> getAllUsersByDebate(long debateId) {
+        return jdbcTemplate.query("SELECT DISTINCT userid, email FROM users NATURAL JOIN posts WHERE debateid = ?", new Object[] { debateId }, ROW_MAPPER);
+    }
 }
