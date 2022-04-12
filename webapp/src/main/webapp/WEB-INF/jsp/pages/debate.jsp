@@ -4,7 +4,7 @@
 
 <html>
     <head>
-        <title>Debate</title>
+        <title><c:out value="${debate.name}"/></title>
         <%@include file="../components/imports.jsp"%>
     </head>
 
