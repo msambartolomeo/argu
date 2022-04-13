@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 
 <html>
 
@@ -8,7 +9,7 @@
         <div class="card">
             <c:url value="/debate/${debate.debateId}" var="postPath" />
                 <%--@elvariable id="postForm" type="ar.edu.itba.paw.webapp.form.PostForm"--%>
-                <form:form modelAttribute="postForm" action="${postPath}" method="post">
+                <form:form modelAttribute="postForm" action="${postPath}" method="post" acceptCharset="utf-8">
                     <div class="card-content">
                         <span class="card-title"><spring:message code="components.post-comment.title"/></span>
                         <div class="input-field">
