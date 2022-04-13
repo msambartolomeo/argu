@@ -89,6 +89,7 @@ public class WebConfig {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(env.getProperty("spring.mail.host"));
         mailSender.setPort(Integer.parseInt(env.getProperty("spring.mail.port")));
+        mailSender.setDefaultEncoding("UTF-8");
 
         mailSender.setUsername(env.getProperty("spring.mail.username"));
         mailSender.setPassword(env.getProperty("spring.mail.password"));
@@ -98,6 +99,8 @@ public class WebConfig {
         props.put("mail.smtp.auth", env.getProperty("spring.mail.properties.mail.smtp.auth"));
         props.put("mail.smtp.starttls.enable", env.getProperty("spring.mail.properties.mail.smtp.starttls.enable"));
         props.put("mail.debug", env.getProperty("spring.mail.properties.mail.debug"));
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
         return mailSender;
     }
