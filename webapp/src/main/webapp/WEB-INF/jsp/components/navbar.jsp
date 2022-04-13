@@ -15,7 +15,8 @@
 <%--                    </div>--%>
                     <form class="right">
                         <div class="input-field search-size">
-                            <input class="search-color" placeholder="Search" id="search" type="search" required>
+                            <input class="search-color" placeholder="<spring:message code="components.navbar.search"/>" id="search"
+                                   type="search" required>
                             <label class="label-icon" for="search">
                                 <i class="material-icons">search</i>
                             </label>
