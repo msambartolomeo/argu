@@ -1,3 +1,4 @@
+SET DATABASE SQL SYNTAX PGS TRUE;
 CREATE TABLE IF NOT EXISTS users
 (
     userid SERIAL PRIMARY KEY,
@@ -8,7 +9,7 @@ CREATE TABLE IF NOT EXISTS debates
 (
     debateid SERIAL PRIMARY KEY,
     name varchar(100) NOT NULL,
-    description TEXT NOT NULL
+    description varchar(100) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS posts

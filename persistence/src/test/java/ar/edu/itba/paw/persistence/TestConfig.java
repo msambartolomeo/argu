@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -12,11 +13,13 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 
+@ComponentScan({ "ar.edu.itba.paw.persistence" })
 @Configuration
 public class TestConfig {
 
-    @Value("classpath:schema.sql")
-    private Resource schemaSql;
+
+    @Value("classpath:hsqldb.sql")
+    private Resource hsqldbSql;
 
     @Bean
     public DataSource dataSource() {
@@ -40,7 +43,8 @@ public class TestConfig {
 
     public DatabasePopulator databasePopulator() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(schemaSql);
+        populator.addScript(hsqldbSql);
+
         return populator;
     }
 }
