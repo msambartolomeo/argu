@@ -15,6 +15,11 @@
     <param-value>ar.edu.itba.paw.webapp.config.WebConfig</param-value>
   </context-param>
 
+  <error-page>
+    <error-code>404</error-code>
+    <location>/404</location>
+  </error-page>
+
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>

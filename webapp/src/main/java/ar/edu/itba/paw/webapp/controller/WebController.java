@@ -60,4 +60,9 @@ public class WebController {
     public ModelAndView handleUserNotFoundException() {
         return new ModelAndView("error/404");
     }
+
+    @RequestMapping(value = "/404", method = { RequestMethod.GET})
+    public ModelAndView error() {
+        return new ModelAndView("error/404");
+    }
 }
