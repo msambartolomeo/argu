@@ -37,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
 
-    @Value("classpath:notification-email.html")
+    @Value("classpath:new-noti-email.html")
     private Resource notificationEmail;
 
     @Override
