@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS debates
 (
     debateid SERIAL PRIMARY KEY,
     name varchar(100) NOT NULL,
-    description varchar(100) NOT NULL
+    description TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS posts
