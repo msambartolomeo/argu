@@ -25,20 +25,22 @@ public class PostServiceImpl implements PostService {
     private EmailService emailService;
 
     @Override
-    public Optional<Post> getPostById(int id) {
+    public Optional<Post> getPostById(long id) {
         return postDao.getPostById(id);
     }
 
     @Override
     public Post create(long userId, long debateId, String content) {
         Post createdPost = postDao.create(userId, debateId, content);
-        // TODO: Ver el warning del get() y las excepciones
+        sendEmailToSubscribedUsers(debateId, userId);
+        return createdPost;
+    }
+
+    private void sendEmailToSubscribedUsers(long debateId, long userId) {
         for (User user : userDao.getAllUsersByDebate(debateId)) {
-            // TODO: Fijarse que no hagan Injection en el debate.getName();
             if (user.getId() != userId) // Si no es el usuario que creo el post
                 emailService.notifyNewPost(user.getEmail());
         }
-        return createdPost;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Optional<PublicPost> getPublicPostById(int id) {
+    public Optional<PublicPost> getPublicPostById(long id) {
         return postDao.getPublicPostById(id);
     }
 

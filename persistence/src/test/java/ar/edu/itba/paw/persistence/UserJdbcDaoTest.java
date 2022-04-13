@@ -24,6 +24,8 @@ public class UserJdbcDaoTest {
     private UserJdbcDao userDao;
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
+    private SimpleJdbcInsert jdbcInsertDebates;
+    private SimpleJdbcInsert jdbcInsertPosts;
     @Autowired
     private DataSource ds;
 
@@ -33,6 +35,15 @@ public class UserJdbcDaoTest {
     private final static String ID = "userid";
     private final static int USERS_PAGE = 0;
 
+    private final static String DEBATE_NAME = "Debate Name Test";
+    private final static String DEBATE_DESCRIPTION = "Debate Description Test";
+    private final static String DEBATES_TABLE = "debates";
+    private final static String DEBATES_ID = "debateid";
+
+    private final static String POST_CONTENT = "Post Content";
+    private final static String POSTS_TABLE = "posts";
+    private final static String POSTS_ID = "postid";
+
     @Before
     public void setUp() {
         userDao = new UserJdbcDao(ds);
@@ -40,10 +51,17 @@ public class UserJdbcDaoTest {
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName(USER_TABLE)
                 .usingGeneratedKeyColumns(ID);
+        jdbcInsertPosts = new SimpleJdbcInsert(ds)
+                .withTableName(POSTS_TABLE)
+                .usingGeneratedKeyColumns(POSTS_ID);
+        jdbcInsertDebates = new SimpleJdbcInsert(ds)
+                .withTableName(DEBATES_TABLE)
+                .usingGeneratedKeyColumns(DEBATES_ID);
     }
     @After
     public void tearDown() {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, POSTS_TABLE);
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, DEBATES_TABLE, USER_TABLE);
     }
 
     @Test
@@ -108,6 +126,37 @@ public class UserJdbcDaoTest {
         jdbcInsert.execute(userData);
 
         List<User> users = userDao.getAll(USERS_PAGE);
+
+        assertEquals(1, users.size());
+        assertEquals(USER_EMAIL, users.get(0).getEmail());
+    }
+
+    @Test
+    public void testGetAllUsersByDebateEmpty() {
+        List<User> users = userDao.getAllUsersByDebate(1);
+        assertTrue(users.isEmpty());
+    }
+
+    @Test
+    public void testGetAllUsersByDebate() {
+        final Map<String, Object> debateData = new HashMap<>();
+        debateData.put("name", DEBATE_NAME);
+        debateData.put("description", DEBATE_DESCRIPTION);
+        long debateId = jdbcInsertDebates.executeAndReturnKey(debateData).longValue();
+
+        final Map<String, Object> userData = new HashMap<>();
+        userData.put("email", USER_EMAIL);
+        long userId = jdbcInsert.executeAndReturnKey(userData).longValue();
+
+        final Map<String, Object> postData = new HashMap<>();
+        postData.put("userid", userId);
+        postData.put("debateid", debateId);
+        postData.put("content", POST_CONTENT);
+        jdbcInsertPosts.execute(postData);
+
+
+
+        List<User> users = userDao.getAllUsersByDebate(debateId);
 
         assertEquals(1, users.size());
         assertEquals(USER_EMAIL, users.get(0).getEmail());
