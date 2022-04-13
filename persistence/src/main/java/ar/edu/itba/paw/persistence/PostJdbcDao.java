@@ -62,7 +62,7 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT postid, email, debateid, content FROM posts NATURAL JOIN users WHERE debateid = ? LIMIT 30 OFFSET ?",
+        return jdbcTemplate.query("SELECT postid, email, debateid, content FROM posts NATURAL JOIN users WHERE debateid = ? ORDER BY postid LIMIT 30 OFFSET ?",
                 new Object[]{debateId, page * 10},
                 PUBLIC_POST_ROW_MAPPER);
     }
