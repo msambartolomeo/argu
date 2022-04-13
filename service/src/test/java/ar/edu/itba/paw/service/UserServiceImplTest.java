@@ -9,7 +9,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
+import java.util.Optional;
+
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {
@@ -31,5 +33,25 @@ public class UserServiceImplTest {
         User u = userService.create(USER_EMAIL);
 
         assertEquals(user, u);
+    }
+
+    @Test
+    public void testGetUserById() {
+        User user = new User(USER_ID, USER_EMAIL);
+        Mockito.when(userDao.getUserById(USER_ID)).thenReturn(Optional.of(user));
+
+        Optional<User> u = userService.getUserById(USER_ID);
+
+        assertTrue(u.isPresent());
+        assertEquals(user, u.get());
+    }
+
+    @Test
+    public void testGetUserByIdDoesntExist() {
+        Mockito.when(userDao.getUserById(USER_ID)).thenReturn(Optional.empty());
+
+        Optional<User> u = userService.getUserById(USER_ID);
+
+        assertFalse(u.isPresent());
     }
 }
