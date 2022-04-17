@@ -64,4 +64,14 @@ public class PostServiceImpl implements PostService {
     public List<Post> getPostsByDebate(long debateId, int page) {
         return postDao.getPostsByDebate(debateId, page);
     }
+
+    @Override
+    public void likePost(long postId, long userId) {
+        postDao.likePost(postId, userId);
+    }
+
+    @Override
+    public void unlikePost(long postId, long userId) {
+        postDao.unlikePost(postId, userId);
+    }
 }
