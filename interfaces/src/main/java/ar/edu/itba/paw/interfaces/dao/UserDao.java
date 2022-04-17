@@ -14,5 +14,5 @@ public interface UserDao {
     // int pageSize
     List<User> getAll(int page);
 
-    List<User> getAllUsersByDebate(long debateId);
+    List<User> getSuscribedUsersByDebate(long debateId);
 }
