@@ -29,6 +29,7 @@ public class PostServiceImplTest {
     private final static long USER_ID = 1;
     private final static long DEBATE_ID = 1;
     private final static String USER_EMAIL = "test@test.com";
+    private final static int LIKES = 1;
 
 
     @InjectMocks
@@ -93,7 +94,7 @@ public class PostServiceImplTest {
 
     @Test
     public void testGetPublicPostById() {
-        PublicPost post = new PublicPost(POST_ID, USER_EMAIL, DEBATE_ID, POST_CONTENT);
+        PublicPost post = new PublicPost(POST_ID, USER_EMAIL, DEBATE_ID, POST_CONTENT, LIKES);
         Mockito.when(postDao.getPublicPostById(Mockito.anyLong())).thenReturn(Optional.of(post));
 
         Optional<PublicPost> p = postService.getPublicPostById(POST_ID);
@@ -135,7 +136,7 @@ public class PostServiceImplTest {
 
     @Test
     public void testGetPublicPostByDebate() {
-        PublicPost post = new PublicPost(POST_ID, USER_EMAIL, DEBATE_ID, POST_CONTENT);
+        PublicPost post = new PublicPost(POST_ID, USER_EMAIL, DEBATE_ID, POST_CONTENT, LIKES);
         List<PublicPost> posts = new ArrayList<>();
         posts.add(post);
         Mockito.when(postDao.getPublicPostsByDebate(Mockito.anyLong(), Mockito.anyInt())).thenReturn(posts);
