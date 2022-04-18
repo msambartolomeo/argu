@@ -65,6 +65,75 @@ a.card {
     max-width: 100%;
 }
 
+/*landing-page.jsp*/
+.container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.parallax-container {
+    position: relative;
+    overflow: hidden;
+    height: 500px;
+    color: white;
+}
+
+.parallax-container .parallax {
+    filter: brightness(0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.parallax-container .btn-small {
+    background-color: transparent;
+    border-radius: 10px;
+}
+
+.parallax-container .btn-small:hover {
+    background: var(--badge-color);
+}
+
+.parallax-container h5 {
+    text-align: center;
+}
+
+.parallax-container .parallax img {
+    opacity: 0;
+    z-index: -1 !important;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.section {
+    display: flex;
+    flex-display: row;
+    justify-content: center;
+}
+
+.section>div {
+    flex-grow: 1;
+}
+
+.section>img {
+    flex-grow: 1;
+}
+
+.page-footer {
+    background: var(--primary-color);
+    text-align: right !important;
+    padding-bottom: 20px;
+}
+.page-footer>p {
+    text-align: right !important;
+}
+
 /* debate-list.jsp */
 
 .debate-list {
