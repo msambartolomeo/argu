@@ -38,7 +38,7 @@ public class WebController {
         return mav;
     }
 
-    @RequestMapping(value = "/debate/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
+    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debate(@PathVariable("debateId") final long debateId, @ModelAttribute("postForm") final PostForm form) {
         final ModelAndView mav = new ModelAndView("pages/debate");
         mav.addObject("debate", debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new));
@@ -46,13 +46,13 @@ public class WebController {
         return mav;
     }
 
-    @RequestMapping(value = "/debate/{debateId}", method = { RequestMethod.POST })
+    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST })
     public ModelAndView createPost(@PathVariable("debateId") final long debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors) {
         if (errors.hasErrors()) {
             return debate(debateId, form);
         }
         postService.createWithEmail(form.getEmail(), debateId, form.getContent());
-        return new ModelAndView("redirect:/debate/" + debateId);
+        return new ModelAndView("redirect:/debates/" + debateId);
     }
 
     @ExceptionHandler(DebateNotFoundException.class)

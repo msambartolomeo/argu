@@ -41,6 +41,10 @@ a.card {
     margin: 1% 3%;
 }
 
+.word-wrap {
+    word-wrap: break-word;
+}
+
 /* NavBar */
 
 .nav-bar {
