@@ -55,6 +55,16 @@ public class WebController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
+    @RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.HEAD })
+    public ModelAndView loginPage() {
+        return new ModelAndView("pages/login");
+    }
+
+    @RequestMapping(value = "/register", method = { RequestMethod.GET, RequestMethod.HEAD })
+    public ModelAndView registerPage() {
+        return new ModelAndView("pages/register");
+    }
+
     @ExceptionHandler(DebateNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView handleUserNotFoundException() {

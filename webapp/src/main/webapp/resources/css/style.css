@@ -14,6 +14,10 @@ body {
     color: var(--error);
 }
 
+.link:hover {
+    text-decoration: underline;
+}
+
 .normalized-margins {
     width: 90%;
     margin: 1% auto;
@@ -132,4 +136,17 @@ a.card {
     align-items: center;
     align-content: center;
     justify-content: center;
+}
+
+/* login.jsp */
+
+.login-container {
+    width: 40%;
+    margin: 1% auto;
+}
+
+@media screen and (max-width: 900px) {
+    .login-container {
+        width: 95%;
+    }
 }
