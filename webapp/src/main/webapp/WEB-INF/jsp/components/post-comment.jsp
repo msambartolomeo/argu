@@ -4,12 +4,15 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 
 <html>
-
+<%--    <head>--%>
+<%--        <script type="text/javascript">--%>
+<%--        </script>--%>
+<%--    </head>--%>
     <body>
         <div class="card">
             <c:url value="/debate/${debate.debateId}" var="postPath" />
                 <%--@elvariable id="postForm" type="ar.edu.itba.paw.webapp.form.PostForm"--%>
-                <form:form modelAttribute="postForm" action="${postPath}" method="post" acceptCharset="utf-8">
+                <form:form modelAttribute="postForm" action="${postPath}" method="post" acceptCharset="utf-8" id="myForm">
                     <div class="card-content">
                         <span class="card-title"><spring:message code="components.post-comment.title"/></span>
                         <div class="input-field">
@@ -22,12 +25,14 @@
                             <form:input type="text" path="email" />
                             <form:errors path="email" element="p" cssClass="error" />
                         </div>
-                        <button class="btn waves-effect center-block" type="submit"
-                            name="action"><spring:message code="components.post-comment.submit"/>
+                        <button class="btn waves-effect center-block" type="submit" form="myForm" id="myForm"
+                                onclick="this.form.submit(); this.disabled=true; this.value='Sending...';"
+                                name="action"><spring:message code="components.post-comment.submit"/>
                             <i class="material-icons right">send</i>
                         </button>
                     </div>
                 </form:form>
         </div>
+
     </body>
 </html>
