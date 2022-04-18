@@ -4,6 +4,8 @@
     --white: white;
     --badge-color: #364156;
     --error: red;
+    --champagne-pink: #f1ddcf;
+    --charcoal: #364156;
 }
 
 body {
@@ -128,4 +130,63 @@ a.card {
     align-items: center;
     align-content: center;
     justify-content: center;
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.speech-bubble {
+    width: 80%;
+    margin: 1% 10%;
+    border-radius: 15px;
+    background: var(--champagne-pink);
+    color: black;
+    padding: 2%;
+    text-align: left;
+    font-weight: 500;
+    word-break: break-all;
+    /*flex-wrap: wrap;*/
+    /*justify-self: center;*/
+    /*justify-content: center;*/
+    /*display: flex;*/
+    /*font-family: arial;*/
+    position: relative;
+}
+
+
+/* speech bubble right */
+
+.sb-right:before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 15px solid var(--champagne-pink);
+    border-right: 15px solid transparent;
+    border-top: 15px solid var(--champagne-pink);
+    border-bottom: 15px solid transparent;
+    right: -16px;
+    top: 0;
+}
+
+
+/* speech bubble left */
+
+.sb-left:before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 15px solid transparent;
+    border-right: 15px solid var(--champagne-pink);
+    border-top: 15px solid var(--champagne-pink);
+    border-bottom: 15px solid transparent;
+    left: -16px;
+    top: 0;
+}
+
+.comment-owner {
+    color: slategrey !important;
 }
