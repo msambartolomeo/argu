@@ -32,7 +32,7 @@ import java.util.Properties;
 @Configuration
 public class WebConfig {
 
-    @Value("classpath:sql/schema.sql")
+    @Value("classpath:schema.sql")
     private Resource schemaSql;
 
     @Autowired
