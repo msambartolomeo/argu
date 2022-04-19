@@ -12,7 +12,7 @@
   </context-param>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>ar.edu.itba.paw.webapp.config.WebConfig</param-value>
+    <param-value>ar.edu.itba.paw.webapp.config.WebConfig, ar.edu.itba.paw.webapp.config.WebAuthConfig</param-value>
   </context-param>
 
   <error-page>
