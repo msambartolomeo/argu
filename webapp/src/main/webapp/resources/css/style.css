@@ -11,7 +11,8 @@ body {
 }
 
 .error {
-    color: var(--error);
+    color: var(--error) !important;
+    font-size: 12px;
 }
 
 .link:hover {

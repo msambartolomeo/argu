@@ -6,6 +6,9 @@ import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.webapp.exception.DebateNotFoundException;
 import ar.edu.itba.paw.webapp.form.PostForm;
+import ar.edu.itba.paw.webapp.form.RegisterForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,7 @@ import javax.validation.Valid;
 @Controller
 public class WebController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebController.class);
     private final UserService userService;
     private final DebateService debateService;
     private final PostService postService;
@@ -61,8 +65,18 @@ public class WebController {
     }
 
     @RequestMapping(value = "/register", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView registerPage() {
+    public ModelAndView registerPage(@ModelAttribute("registerForm") final RegisterForm form) {
         return new ModelAndView("pages/register");
+    }
+
+    @RequestMapping(value = "/register", method = { RequestMethod.POST })
+    public ModelAndView register(@Valid @ModelAttribute("registerForm") final RegisterForm form, BindingResult errors) {
+        if (errors.hasErrors()) {
+            LOGGER.info("Error registering new user {}", errors);
+            return registerPage(form);
+        }
+//        userService.create(form.getUsername(), form.getEmail(), form.getPassword()); // TODO: uncomment when userService supports passwords and usernames
+        return new ModelAndView("redirect:/");
     }
 
     @ExceptionHandler(DebateNotFoundException.class)
