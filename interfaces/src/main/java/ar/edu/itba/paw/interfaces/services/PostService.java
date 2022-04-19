@@ -10,7 +10,8 @@ public interface PostService {
 
     Optional<Post> getPostById(long id);
     Post create(long userId, long debateId, String content);
-    Post createWithEmail(String userEmail, long debateId, String content);
+    // TODO: Deprecated
+    //  Post createWithEmail(String userEmail, long debateId, String content);
     List<Post> getPostsByDebate(long debateId, int page);
     Optional<PublicPost> getPublicPostById(long id);
     List<PublicPost> getPublicPostsByDebate(long debateId, int page);
