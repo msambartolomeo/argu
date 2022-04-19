@@ -74,8 +74,9 @@ a.card {
 .parallax-container {
     position: relative;
     overflow: hidden;
-    height: 500px;
+    height: max-content !important;
     color: white;
+    padding-bottom: 30px;
 }
 
 .parallax-container .parallax {
@@ -129,9 +130,6 @@ a.card {
     background: var(--primary-color);
     text-align: right !important;
     padding-bottom: 20px;
-}
-.page-footer>p {
-    text-align: right !important;
 }
 
 /* debate-list.jsp */
