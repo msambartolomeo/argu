@@ -4,14 +4,14 @@
 
 <html>
     <body>
-        <a class="card black-text" href="${pageContext.request.contextPath}/debate/${debate.debateId}">
+        <a class="card black-text" href="${pageContext.request.contextPath}/debates/${debate.debateId}">
             <div class="card-content">
-                <span class="card-title">
+                <span class="card-title word-wrap">
                     <c:out value="${debate.name}"/>
 <%--                    <span class="new badge blue-grey darken-2" data-badge-caption="16:00 15/04/22"></span>--%>
 <%--                    <span class="new badge blue-grey darken-2" data-badge-caption="Category1"></span>--%>
                 </span>
-                <p><c:out value="${debate.description}"/></p>
+                <p class="word-wrap"><c:out value="${debate.description}"/></p>
             </div>
         </a>
     </body>

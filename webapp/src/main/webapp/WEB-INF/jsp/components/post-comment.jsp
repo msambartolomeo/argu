@@ -10,7 +10,7 @@
 <%--    </head>--%>
     <body>
         <div class="card">
-            <c:url value="/debate/${debate.debateId}" var="postPath" />
+            <c:url value="/debates/${debate.debateId}" var="postPath" />
                 <%--@elvariable id="postForm" type="ar.edu.itba.paw.webapp.form.PostForm"--%>
                 <form:form modelAttribute="postForm" action="${postPath}" method="post" acceptCharset="utf-8" id="myForm">
                     <div class="card-content">
