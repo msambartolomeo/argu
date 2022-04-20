@@ -4,6 +4,8 @@
     --white: white;
     --badge-color: #364156;
     --error: red;
+    --champagne-pink: #f1ddcf;
+    --charcoal: #364156;
 }
 
 body {
@@ -63,6 +65,73 @@ a.card {
 
 .search-size {
     max-width: 100%;
+}
+
+/*landing-page.jsp*/
+.container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.parallax-container {
+    position: relative;
+    overflow: hidden;
+    height: max-content !important;
+    color: white;
+    padding-bottom: 30px;
+}
+
+.parallax-container .parallax {
+    filter: brightness(0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.parallax-container .btn-small {
+    background-color: transparent;
+    border-radius: 10px;
+}
+
+.parallax-container .btn-small:hover {
+    background: var(--badge-color);
+}
+
+.parallax-container h5 {
+    text-align: center;
+}
+
+.parallax-container .parallax img {
+    opacity: 0;
+    z-index: -1 !important;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.section {
+    display: flex;
+    flex-display: row;
+    justify-content: center;
+}
+
+.section>div {
+    flex-grow: 1;
+}
+
+.section>img {
+    flex-grow: 1;
+}
+
+.page-footer {
+    background: var(--primary-color);
+    text-align: right !important;
+    padding-bottom: 20px;
 }
 
 /* debate-list.jsp */
@@ -128,4 +197,63 @@ a.card {
     align-items: center;
     align-content: center;
     justify-content: center;
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.speech-bubble {
+    width: 80%;
+    margin: 1% 10%;
+    border-radius: 15px;
+    background: var(--champagne-pink);
+    color: black;
+    padding: 2%;
+    text-align: left;
+    font-weight: 500;
+    word-break: break-all;
+    /*flex-wrap: wrap;*/
+    /*justify-self: center;*/
+    /*justify-content: center;*/
+    /*display: flex;*/
+    /*font-family: arial;*/
+    position: relative;
+}
+
+
+/* speech bubble right */
+
+.sb-right:before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 15px solid var(--champagne-pink);
+    border-right: 15px solid transparent;
+    border-top: 15px solid var(--champagne-pink);
+    border-bottom: 15px solid transparent;
+    right: -16px;
+    top: 0;
+}
+
+
+/* speech bubble left */
+
+.sb-left:before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 15px solid transparent;
+    border-right: 15px solid var(--champagne-pink);
+    border-top: 15px solid var(--champagne-pink);
+    border-bottom: 15px solid transparent;
+    left: -16px;
+    top: 0;
+}
+
+.comment-owner {
+    color: slategrey !important;
 }

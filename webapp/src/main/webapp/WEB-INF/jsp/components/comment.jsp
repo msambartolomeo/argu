@@ -4,11 +4,12 @@
 
 <html>
 <body>
-<div class="card">
-    <div class="card-content">
-        <span class="card-title"><c:out value="${post.userEmail}"/></span>
-        <p class="comment-text"><c:out value="${post.content}"/></p>
+<%--<div class="card">--%>
+    <div class="speech-bubble sb-left">
+        <p class="comment-owner"><c:out value="${post.userEmail}"/> <spring:message code="components.user-comment"/></p>
+        <br>
+        <p><c:out value="${post.content}"/></p>
     </div>
-</div>
+<%--</div>--%>
 </body>
 </html>
