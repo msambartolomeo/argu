@@ -228,7 +228,7 @@ a.card {
     border-radius: 15px;
     background: var(--champagne-pink);
     color: black;
-    padding: 2%;
+    padding: 2% 2% 5%;
     text-align: left;
     font-weight: 500;
     word-break: break-all;
