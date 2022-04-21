@@ -82,6 +82,15 @@ a.card {
     margin-bottom: 20px;
 }
 
+.to-debates {
+    color: var(--white);
+    transition: 0.3s;
+}
+
+.to-debates:hover {
+    color: var(--secondary-color);
+}
+
 .parallax-container {
     position: relative;
     overflow: hidden;

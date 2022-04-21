@@ -13,10 +13,12 @@
             <div class="section no-pad-bot">
                 <div class="container">
                     <br><br>
-                    <h2 class="header center">
-                        <i class="medium material-icons">explore</i>
-                        <spring:message code="pages.landing.page.explore"/>
-                    </h2>
+                    <a class="to-debates" href="<c:url value="/debates" />">
+                        <h2 class="header center">
+                            <i class="medium material-icons">explore</i>
+                            <spring:message code="pages.landing.page.explore"/>
+                        </h2>
+                    </a>
                     <div class="row center">
                         <a class="waves-effect btn-small">Culture</a>
                         <a class="waves-effect btn-small">Economics</a>
@@ -107,11 +109,12 @@
                 </p>
             </div>
         </footer>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script>
+            M.AutoInit();
+            $(document).ready(function(){
+                $('.parallax').parallax();
+            });
+        </script>
     </body>
 </html>
-<script>
-    M.AutoInit();
-    $(document).ready(function(){
-        $('.parallax').parallax();
-    });
-</script>

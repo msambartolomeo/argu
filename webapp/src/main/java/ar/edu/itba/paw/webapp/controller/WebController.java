@@ -34,8 +34,12 @@ public class WebController {
         this.postService = postService;
         this.emailService = emailService;
     }
-
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })
+    public ModelAndView home() {
+        return new ModelAndView("pages/landing-page");
+    }
+
+    @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debatesList() {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
         mav.addObject("debates", debateService.getAll(0));
