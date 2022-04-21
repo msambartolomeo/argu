@@ -44,12 +44,14 @@ public class PostServiceImpl implements PostService {
     }
 
     // TODO: Deprecate this method
-//    @Override
-//    public Post createWithEmail(String userEmail, long debateId, String content) {
-//        Optional<User> optionalUser = userDao.getUserByEmail(userEmail);
-//        User user = optionalUser.orElseGet(() -> userDao.create(userEmail));
-//        return create(user.getId(), debateId, content);
-//    }
+    @Override
+    public Post createWithEmail(String userEmail, long debateId, String content) {
+        Optional<User> optionalUser = userDao.getUserByEmail(userEmail);
+        //TODO: Change method in users
+        //User user = optionalUser.orElseGet(() -> userDao.create(userEmail));
+        //return create(user.getId(), debateId, content);
+        return null;
+    }
 
     @Override
     public Optional<PublicPost> getPublicPostById(long id) {
