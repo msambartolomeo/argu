@@ -20,8 +20,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(String email) {
+    public Optional<User> getUserByUsername(String username) {
+        return userDao.getUserByUsername(username);
+    }
+
+    @Override
+    public User create(String username, String password, String email) {
         // TODO: Validate email
-        return userDao.create(email);
+        return userDao.create(username, password, email);
     }
 }

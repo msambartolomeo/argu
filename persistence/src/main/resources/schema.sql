@@ -1,7 +1,10 @@
 CREATE TABLE IF NOT EXISTS users
 (
     userid SERIAL PRIMARY KEY,
-    email varchar(100) UNIQUE NOT NULL
+    username VARCHAR(64) UNIQUE default null,
+    password VARCHAR(100) default null,
+    email varchar(100) UNIQUE NOT NULL,
+    created_date TIMESTAMP default now()
 );
 
 CREATE TABLE IF NOT EXISTS debates

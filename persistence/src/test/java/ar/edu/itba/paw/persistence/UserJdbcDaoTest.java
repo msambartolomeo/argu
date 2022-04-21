@@ -30,6 +30,8 @@ public class UserJdbcDaoTest {
     private DataSource ds;
 
     private final static long USER_ID = 1;
+    private final static String USER_USERNAME = "username";
+    private final static String USER_PASSWORD = "password";
     private final static String USER_EMAIL = "test@test.com";
     private final static String USER_TABLE = "users";
     private final static String ID = "userid";
@@ -66,9 +68,11 @@ public class UserJdbcDaoTest {
 
     @Test
     public void testCreateUser() {
-        User user = userDao.create(USER_EMAIL);
+        User user = userDao.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
 
         assertNotNull(user);
+        assertEquals(USER_USERNAME, user.getUsername());
+        assertEquals(USER_PASSWORD, user.getPassword());
         assertEquals(USER_EMAIL, user.getEmail());
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, USER_TABLE));
     }
@@ -76,12 +80,16 @@ public class UserJdbcDaoTest {
     @Test
     public void testGetUserByIdExists() {
         final Map<String, Object> userData = new HashMap<>();
+        userData.put("username", USER_USERNAME);
+        userData.put("password", USER_PASSWORD);
         userData.put("email", USER_EMAIL);
         Number key = jdbcInsert.executeAndReturnKey(userData);
 
         Optional<User> user = userDao.getUserById(key.longValue());
 
         assertTrue(user.isPresent());
+        assertEquals(USER_USERNAME, user.get().getUsername());
+        assertEquals(USER_PASSWORD, user.get().getPassword());
         assertEquals(USER_EMAIL, user.get().getEmail());
     }
     @Test
@@ -145,6 +153,8 @@ public class UserJdbcDaoTest {
         long debateId = jdbcInsertDebates.executeAndReturnKey(debateData).longValue();
 
         final Map<String, Object> userData = new HashMap<>();
+        userData.put("username", USER_USERNAME);
+        userData.put("password", USER_PASSWORD);
         userData.put("email", USER_EMAIL);
         long userId = jdbcInsert.executeAndReturnKey(userData).longValue();
 
@@ -159,6 +169,8 @@ public class UserJdbcDaoTest {
         List<User> users = userDao.getAllUsersByDebate(debateId);
 
         assertEquals(1, users.size());
+        assertEquals(USER_USERNAME, users.get(0).getUsername());
+        assertEquals(USER_PASSWORD, users.get(0).getPassword());
         assertEquals(USER_EMAIL, users.get(0).getEmail());
     }
 }

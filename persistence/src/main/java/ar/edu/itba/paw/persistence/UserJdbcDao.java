@@ -9,10 +9,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Repository
 public class UserJdbcDao implements UserDao {
@@ -22,7 +20,11 @@ public class UserJdbcDao implements UserDao {
     private static final RowMapper<User> ROW_MAPPER =
             (rs, rowNum) -> new User(
                     rs.getLong("userid"),
-                    rs.getString("email"));
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("email"),
+                    //TODO: check whether LocalDateTime, Date, or Instant is more useful
+                    rs.getObject("created_date", LocalDateTime.class));
 
     @Autowired
     public UserJdbcDao(final DataSource ds){
@@ -42,6 +44,15 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public Optional<User> getUserByUsername(String username) {
+        List<User> query = jdbcTemplate.query("SELECT * FROM users WHERE username = ?",
+                new Object[]{username},
+                ROW_MAPPER);
+
+        return query.stream().findFirst();
+    }
+
+    @Override
     public Optional<User> getUserByEmail(String email) {
         List<User> query = jdbcTemplate.query("SELECT * FROM users WHERE email = ?",
                 new Object[]{email},
@@ -51,13 +62,15 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public User create(String email) {
+    public User create(String username, String password, String email) {
         final Map<String, Object> userData = new HashMap<>();
+        userData.put("username", username);
+        userData.put("password", password);
         userData.put("email", email);
 
         final Number userId = jdbcInsert.executeAndReturnKey(userData);
 
-        return new User(userId.longValue(), email);
+        return getUserById(userId.longValue()).get();
     }
 
     @Override
@@ -67,6 +80,6 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public List<User> getAllUsersByDebate(long debateId) {
-        return jdbcTemplate.query("SELECT DISTINCT userid, email FROM users NATURAL JOIN posts WHERE debateid = ?", new Object[] { debateId }, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT DISTINCT userid, username, password, email, created_date FROM users NATURAL JOIN posts WHERE debateid = ?", new Object[] { debateId }, ROW_MAPPER);
     }
 }

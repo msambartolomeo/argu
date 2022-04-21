@@ -51,16 +51,16 @@ public class PostServiceImplTest {
         assertEquals(post, p);
     }
 
-    @Test
-    public void testCreatePostWithEmail() {
-        Post post = new Post(POST_ID, USER_ID, DEBATE_ID, POST_CONTENT);
-        Mockito.when(userDao.getUserByEmail(Mockito.anyString())).thenReturn(Optional.of(new User(USER_ID, USER_EMAIL)));
-        Mockito.when(postDao.create(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString())).thenReturn(post);
-
-        Post p = postService.createWithEmail(USER_EMAIL, DEBATE_ID, POST_CONTENT);
-
-        assertEquals(post, p);
-    }
+//    @Test
+//    public void testCreatePostWithEmail() {
+//        Post post = new Post(POST_ID, USER_ID, DEBATE_ID, POST_CONTENT);
+//        Mockito.when(userDao.getUserByEmail(Mockito.anyString())).thenReturn(Optional.of(new User(USER_ID, USER_EMAIL)));
+//        Mockito.when(postDao.create(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString())).thenReturn(post);
+//
+//        Post p = postService.createWithEmail(USER_EMAIL, DEBATE_ID, POST_CONTENT);
+//
+//        assertEquals(post, p);
+//    }
 
     @Test
     public void testGetPostByIdDoesntExist() {

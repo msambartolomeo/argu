@@ -2,6 +2,9 @@ SET DATABASE SQL SYNTAX PGS TRUE;
 CREATE TABLE IF NOT EXISTS users
 (
     userid SERIAL PRIMARY KEY,
+    username VARCHAR(64) UNIQUE,
+    password VARCHAR(100),
+    created_date TIMESTAMP DEFAULT now(),
     email varchar(100) UNIQUE NOT NULL
 );
 
