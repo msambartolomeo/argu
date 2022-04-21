@@ -15,12 +15,12 @@
             <div class="card-content">
                 <span class="card-title center">Login</span>
                 <div class="input-field">
-                    <label for="email">Email:</label>
-                    <input type="text" name="email" id="email" />
+                    <label for="username">Username:</label>
+                    <input type="text" name="j_username" id="username" />
                 </div>
                 <div class="input-field">
                     <label for="password">Password:</label>
-                    <input type="password" name="password" id="password" />
+                    <input type="password" name="j_password" id="password" />
                 </div>
                 <div>
                     <label>
