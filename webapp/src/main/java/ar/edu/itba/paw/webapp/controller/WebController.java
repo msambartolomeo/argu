@@ -79,7 +79,7 @@ public class WebController {
             LOGGER.info("Error registering new user {}", errors);
             return registerPage(form);
         }
-//        userService.create(form.getUsername(), form.getEmail(), form.getPassword()); // TODO: uncomment when userService supports passwords and usernames
+        userService.create(form.getUsername(), form.getPassword(), form.getEmail());
         return new ModelAndView("redirect:/");
     }
 
