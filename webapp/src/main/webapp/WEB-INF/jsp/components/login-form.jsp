@@ -8,27 +8,29 @@
     <div class="card login-container">
         <form method="post" action="<c:url value="/login"/>" accept-charset="UTF-8">
             <div class="card-content">
-                <span class="card-title center">Login</span>
+                <span class="card-title center"><spring:message code="components.login-welcome-back"/></span>
                 <div class="input-field">
-                    <label for="username">Username:</label>
+                    <label for="username"><spring:message code="components.login-username"/></label>
                     <input type="text" name="j_username" id="username" />
                 </div>
                 <div class="input-field">
-                    <label for="password">Password:</label>
+                    <label for="password"><spring:message code="components.login-password"/></label>
                     <input type="password" name="j_password" id="password" />
                 </div>
                 <div>
                     <label>
                         <input type="checkbox" class="filled-in" name="rememberme" id="rememberme" />
-                        <span>Remember me</span>
+                        <span><spring:message code="components.login-remember-me"/></span>
                     </label>
                 </div>
                 <button class="btn waves-effect center-block" type="submit"
-                        name="action">Login
+                        name="action"><spring:message code="components.login"/>
                     <i class="material-icons right">send</i>
                 </button>
             </div>
         </form>
+
+        <h6 class="center"><spring:message code="components.no-account"/><a class="link" href="<c:url value="/register"/>"><spring:message code="components.register-here"/></a></h6>
     </div>
 </body>
 </html>
