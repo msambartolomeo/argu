@@ -20,6 +20,8 @@ public class PostJdbcDao implements PostDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private final SimpleJdbcInsert jdbcInsertLikes;
+
     private static final RowMapper<Post> ROW_MAPPER = (rs, rowNum) ->
             new Post(rs.getLong("postid"),
                     rs.getLong("userid"),
@@ -29,7 +31,8 @@ public class PostJdbcDao implements PostDao {
             new PublicPost(rs.getLong("postid"),
                     rs.getString("email"),
                     rs.getLong("debateid"),
-                    rs.getString("content"));
+                    rs.getString("content"),
+                    rs.getInt("likes"));
 
     @Autowired
     public PostJdbcDao(final DataSource ds) {
@@ -37,6 +40,8 @@ public class PostJdbcDao implements PostDao {
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("posts")
                 .usingGeneratedKeyColumns("postid");
+        jdbcInsertLikes = new SimpleJdbcInsert(ds)
+                .withTableName("likes");
     }
 
     @Override
@@ -62,7 +67,7 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT postid, email, debateid, content FROM posts NATURAL JOIN users WHERE debateid = ? ORDER BY postid LIMIT 30 OFFSET ?",
+        return jdbcTemplate.query("SELECT postid, email, debateid, content, likes FROM posts_with_likes NATURAL JOIN users WHERE debateid = ? ORDER BY postid LIMIT 30 OFFSET ?",
                 new Object[]{debateId, page * 10},
                 PUBLIC_POST_ROW_MAPPER);
     }
@@ -77,5 +82,19 @@ public class PostJdbcDao implements PostDao {
         final Number postId = jdbcInsert.executeAndReturnKey(data);
 
         return new Post(postId.longValue(), userId, debateId, content);
+    }
+
+    @Override
+    public void likePost(long postId, long userId) {
+        final Map<String, Object> data = new HashMap<>();
+        data.put("postId", postId);
+        data.put("userId", userId);
+
+        jdbcInsertLikes.execute(data);
+    }
+
+    @Override
+    public void unlikePost(long postId, long userId) {
+        jdbcTemplate.update("DELETE FROM likes WHERE postId = ? AND userId = ?", postId, userId);
     }
 }

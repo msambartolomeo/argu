@@ -21,10 +21,21 @@ CREATE TABLE IF NOT EXISTS posts
     userid INTEGER REFERENCES users NOT NULL,
     content TEXT NOT NULL
 );
-
 CREATE TABLE IF NOT EXISTS suscribed
 (
     userid INTEGER NOT NULL REFERENCES users,
     debateid INTEGER NOT NULL REFERENCES debates,
     PRIMARY KEY (userid, debateid)
 );
+
+CREATE TABLE IF NOT EXISTS likes
+(
+    userid INTEGER NOT NULL REFERENCES users,
+    postid INTEGER NOT NULL REFERENCES posts
+);
+
+CREATE OR REPLACE VIEW posts_with_likes AS
+    SELECT posts.postid, posts.debateid, posts.userid, posts.content, COUNT(likes.userid) AS likes
+    FROM posts
+    LEFT JOIN likes ON posts.postid = likes.postid
+    GROUP BY posts.postid, posts.debateid, posts.userid, posts.content;
