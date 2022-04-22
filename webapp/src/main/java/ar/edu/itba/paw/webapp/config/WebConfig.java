@@ -32,8 +32,10 @@ import java.util.Properties;
 @Configuration
 public class WebConfig {
 
-    @Value("classpath:schema.sql")
-    private Resource schemaSql;
+    @Value("classpath:schema-v0.sql")
+    private Resource schemaV0;
+    @Value("classpath:schema-v1.sql")
+    private Resource schemaV1;
 
     @Autowired
     private Environment env;
@@ -70,7 +72,8 @@ public class WebConfig {
 
     public DatabasePopulator databasePopulator() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(schemaSql);
+        populator.addScript(schemaV0);
+        populator.addScript(schemaV1);
         return populator;
     }
 
