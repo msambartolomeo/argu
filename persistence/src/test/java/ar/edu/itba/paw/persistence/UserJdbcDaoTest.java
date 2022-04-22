@@ -141,7 +141,7 @@ public class UserJdbcDaoTest {
 
     @Test
     public void testGetAllUsersByDebateEmpty() {
-        List<User> users = userDao.getAllUsersByDebate(1);
+        List<User> users = userDao.getSuscribedUsersByDebate(1);
         assertTrue(users.isEmpty());
     }
 
@@ -166,7 +166,7 @@ public class UserJdbcDaoTest {
 
 
 
-        List<User> users = userDao.getAllUsersByDebate(debateId);
+        List<User> users = userDao.getSuscribedUsersByDebate(debateId);
 
         assertEquals(1, users.size());
         assertEquals(USER_USERNAME, users.get(0).getUsername());

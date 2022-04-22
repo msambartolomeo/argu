@@ -21,3 +21,10 @@ CREATE TABLE IF NOT EXISTS posts
     userid INTEGER REFERENCES users NOT NULL,
     content TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS suscribed
+(
+    userid INTEGER NOT NULL REFERENCES users,
+    debateid INTEGER NOT NULL REFERENCES debates,
+    PRIMARY KEY (userid, debateid)
+);

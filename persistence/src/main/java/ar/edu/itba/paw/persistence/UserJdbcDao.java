@@ -79,7 +79,8 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsersByDebate(long debateId) {
-        return jdbcTemplate.query("SELECT DISTINCT userid, username, password, email, created_date FROM users NATURAL JOIN posts WHERE debateid = ?", new Object[] { debateId }, ROW_MAPPER);
+    public List<User> getSuscribedUsersByDebate(long debateId) {
+        return jdbcTemplate.query("SELECT DISTINCT userid, username, password, email, created_date FROM users NATURAL JOIN suscribed WHERE debateid = ?", new Object[] { debateId }, ROW_MAPPER);
+
     }
 }
