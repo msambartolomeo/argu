@@ -232,14 +232,8 @@ a.card {
     text-align: left;
     font-weight: 500;
     word-break: break-all;
-    /*flex-wrap: wrap;*/
-    /*justify-self: center;*/
-    /*justify-content: center;*/
-    /*display: flex;*/
-    /*font-family: arial;*/
     position: relative;
 }
-
 
 /* speech bubble right */
 
@@ -255,7 +249,6 @@ a.card {
     right: -16px;
     top: 0;
 }
-
 
 /* speech bubble left */
 
@@ -281,6 +274,7 @@ a.card {
 .login-container {
     width: 40%;
     margin: 1% auto;
+    padding-bottom: 1%;
 }
 
 @media screen and (max-width: 900px) {
