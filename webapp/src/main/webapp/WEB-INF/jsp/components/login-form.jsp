@@ -30,7 +30,8 @@
             </div>
         </form>
 
-        <h6 class="center"><spring:message code="components.no-account"/><a class="link" href="<c:url value="/register"/>"><spring:message code="components.register-here"/></a></h6>
+        <h6 class="center"><spring:message code="components.no-account"/> <a class="link" href="<c:url value="/register"/>">
+            <spring:message code="components.register-here"/></a></h6>
     </div>
 </body>
 </html>
