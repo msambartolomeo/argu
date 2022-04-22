@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.model;
 
+import java.time.LocalDateTime;
+
 public class PublicPost {
     private final long postId;
     private final String userEmail;
@@ -7,12 +9,15 @@ public class PublicPost {
     private final String content;
     private final int likes;
 
-    public PublicPost(long postId, String userEmail, long debateId, String content, int likes) {
+    private final LocalDateTime createdDate;
+
+    public PublicPost(long postId, String userEmail, long debateId, String content, int likes, LocalDateTime createdDate) {
         this.postId = postId;
         this.userEmail = userEmail;
         this.debateId = debateId;
         this.content = content;
         this.likes = likes;
+        this.createdDate = createdDate;
     }
 
     public long getPostId() {
@@ -33,5 +38,9 @@ public class PublicPost {
 
     public int getLikes() {
         return likes;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
     }
 }

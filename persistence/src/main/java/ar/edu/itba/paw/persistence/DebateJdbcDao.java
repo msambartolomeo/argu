@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,8 @@ public class DebateJdbcDao implements DebateDao {
     private static final RowMapper<Debate> ROW_MAPPER = (rs, rowNum) ->
             new Debate(rs.getLong("debateid"),
                     rs.getString("name"),
-                    rs.getString("description"));
+                    rs.getString("description"),
+                    rs.getObject("creation_date", LocalDateTime.class));
 
     @Autowired
     public DebateJdbcDao(final DataSource ds) {
@@ -46,11 +48,13 @@ public class DebateJdbcDao implements DebateDao {
     @Override
     public Debate create(String name, String description) {
         final Map<String, Object> data = new HashMap<>();
+        LocalDateTime created = LocalDateTime.now();
         data.put("name", name);
         data.put("description", description);
+        data.put("creationDate", created);
 
         final Number debateId = jdbcInsert.executeAndReturnKey(data);
 
-        return new Debate(debateId.longValue(), name, description);
+        return new Debate(debateId.longValue(), name, description, created);
     }
 }

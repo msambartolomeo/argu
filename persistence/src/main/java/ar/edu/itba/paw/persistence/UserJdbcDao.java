@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -24,7 +25,7 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("password"),
                     rs.getString("email"),
                     //TODO: check whether LocalDateTime, Date, or Instant is more useful
-                    rs.getObject("created_date", LocalDateTime.class));
+                    rs.getObject("created_date", LocalDate.class));
 
     @Autowired
     public UserJdbcDao(final DataSource ds){
@@ -64,13 +65,14 @@ public class UserJdbcDao implements UserDao {
     @Override
     public User create(String username, String password, String email) {
         final Map<String, Object> userData = new HashMap<>();
+        LocalDate created = LocalDate.now();
         userData.put("username", username);
         userData.put("password", password);
         userData.put("email", email);
-        userData.put("created_date", LocalDateTime.now());
+        userData.put("created_date", created);
         final Number userId = jdbcInsert.executeAndReturnKey(userData);
 
-        return getUserById(userId.longValue()).get();
+        return new User(userId.longValue(), username, password, email, created);
     }
 
     @Override

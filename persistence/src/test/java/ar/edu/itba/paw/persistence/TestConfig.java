@@ -18,6 +18,7 @@ import javax.sql.DataSource;
 public class TestConfig {
 
 
+    // TODO: Test compatibility between HSQLDB and PostgreSQL.
     @Value("classpath:hsqldb.sql")
     private Resource hsqldbSql;
 

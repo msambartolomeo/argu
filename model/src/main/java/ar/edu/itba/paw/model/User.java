@@ -1,15 +1,15 @@
 package ar.edu.itba.paw.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class User {
     private final long userId;
     private final String username;
     private final String password;
-    private final LocalDateTime createdDate;
+    private final LocalDate createdDate;
     private final String email;
 
-    public User(long userId, String username, String password, String email, LocalDateTime createdDate) {
+    public User(long userId, String username, String password, String email, LocalDate createdDate) {
         this.userId = userId;
         this.email = email;
         this.username = username;
@@ -33,7 +33,7 @@ public class User {
         return password;
     }
 
-    public LocalDateTime getcreatedDate() {
+    public LocalDate getcreatedDate() {
         return createdDate;
     }
 }

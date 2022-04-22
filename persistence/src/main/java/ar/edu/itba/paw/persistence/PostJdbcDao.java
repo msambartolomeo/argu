@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +28,16 @@ public class PostJdbcDao implements PostDao {
             new Post(rs.getLong("postid"),
                     rs.getLong("userid"),
                     rs.getLong("debateid"),
-                    rs.getString("content"));
+                    rs.getString("content"),
+                    rs.getObject("creationdate", LocalDateTime.class));
+
     private static final RowMapper<PublicPost> PUBLIC_POST_ROW_MAPPER = (rs, rowNum) ->
             new PublicPost(rs.getLong("postid"),
                     rs.getString("email"),
                     rs.getLong("debateid"),
                     rs.getString("content"),
-                    rs.getInt("likes"));
+                    rs.getInt("likes"),
+                    rs.getObject("creationdate", LocalDateTime.class));
 
     @Autowired
     public PostJdbcDao(final DataSource ds) {
@@ -67,7 +72,7 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT postid, email, debateid, content, likes FROM posts_with_likes NATURAL JOIN users WHERE debateid = ? ORDER BY postid LIMIT 30 OFFSET ?",
+        return jdbcTemplate.query("SELECT postid, email, debateid, content, likes, created_date FROM posts_with_likes NATURAL JOIN users WHERE debateid = ? ORDER BY postid LIMIT 30 OFFSET ?",
                 new Object[]{debateId, page * 10},
                 PUBLIC_POST_ROW_MAPPER);
     }
@@ -75,13 +80,15 @@ public class PostJdbcDao implements PostDao {
     @Override
     public Post create(long userId, long debateId, String content) {
         final Map<String, Object> data = new HashMap<>();
+        LocalDateTime created = LocalDateTime.now();
         data.put("userId", userId);
         data.put("debateId", debateId);
         data.put("content", content);
+        data.put("creationDate", created);
 
         final Number postId = jdbcInsert.executeAndReturnKey(data);
 
-        return new Post(postId.longValue(), userId, debateId, content);
+        return new Post(postId.longValue(), userId, debateId, content, created);
     }
 
     @Override

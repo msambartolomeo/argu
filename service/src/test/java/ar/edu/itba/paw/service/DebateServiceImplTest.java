@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class DebateServiceImplTest {
     private final static long DEBATE_ID = 1;
     private final static String DEBATE_NAME = "Debate Name Test";
     private final static String DEBATE_DESCRIPTION = "Debate Description Test";
+    private final static LocalDateTime DEBATE_CREATED_DATE = LocalDateTime.of(2018, 1, 1, 0, 0);
 
     @InjectMocks
     private DebateServiceImpl debateService = new DebateServiceImpl();
@@ -31,7 +33,7 @@ public class DebateServiceImplTest {
 
     @Test
     public void testCreateDebate() {
-        Debate debate = new Debate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION);
+        Debate debate = new Debate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATED_DATE);
         Mockito.when(debateDao.create(Mockito.anyString(), Mockito.anyString())).thenReturn(debate);
 
 
@@ -42,7 +44,7 @@ public class DebateServiceImplTest {
 
     @Test
     public void testGetDebateById() {
-        Debate debate = new Debate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION);
+        Debate debate = new Debate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATED_DATE);
         Mockito.when(debateDao.getDebateById(DEBATE_ID)).thenReturn(Optional.of(debate));
 
         Optional<Debate> d = debateService.getDebateById(DEBATE_ID);
@@ -62,7 +64,7 @@ public class DebateServiceImplTest {
 
     @Test
     public void testGetAll() {
-        Debate debate = new Debate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION);
+        Debate debate = new Debate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATED_DATE);
         List<Debate> debates = new ArrayList<>();
         debates.add(debate);
         Mockito.when(debateDao.getAll(Mockito.anyInt())).thenReturn(debates);
