@@ -3,6 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.PostDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Post;
@@ -23,6 +24,8 @@ public class PostServiceImpl implements PostService {
     private UserDao userDao;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public Optional<Post> getPostById(long id) {
@@ -31,14 +34,20 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post create(long userId, long debateId, String content) {
-        Post createdPost = postDao.create(userId, debateId, content);
+        Post createdPost = postDao.create(userId, debateId, content,null);
         sendEmailToSubscribedUsers(debateId, userId);
         return createdPost;
     }
 
+    @Override
+    public Post create(long userId, long debateId, String content, byte[] image) {
+        long imageId = imageService.createImage(image);
+        return postDao.create(userId, debateId, content, imageId);
+    }
+
     private void sendEmailToSubscribedUsers(long debateId, long userId) {
         for (User user : userDao.getSuscribedUsersByDebate(debateId)) {
-            if (user.getId() != userId) // Si no es el usuario que creo el post
+            if (user.getUserId() != userId) // Si no es el usuario que creo el post
                 emailService.notifyNewPost(user.getEmail());
         }
     }

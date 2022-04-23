@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface DebateDao {
     Optional<Debate> getDebateById(long id);
     List<Debate> getAll(int page);
-    Debate create(String name, String description);
+    Debate create(String name, String description, Long imageId);
 }

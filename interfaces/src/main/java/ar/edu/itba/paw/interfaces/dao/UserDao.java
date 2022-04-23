@@ -11,7 +11,7 @@ public interface UserDao {
     Optional<User> getUserByUsername(String username);
     Optional<User> getUserByEmail(String email);
 
-    User create(String username, String password, String email);
+    User create(String username, String password, String email, Long imageId);
 
     // int pageSize
     List<User> getAll(int page);

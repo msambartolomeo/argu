@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +28,8 @@ public class PostJdbcDao implements PostDao {
                     rs.getLong("userid"),
                     rs.getLong("debateid"),
                     rs.getString("content"),
-                    rs.getObject("created_date", LocalDateTime.class));
+                    rs.getObject("created_date", LocalDateTime.class),
+                    rs.getLong("imageid"));
 
     private static final RowMapper<PublicPost> PUBLIC_POST_ROW_MAPPER = (rs, rowNum) ->
             new PublicPost(rs.getLong("postid"),
@@ -78,17 +78,18 @@ public class PostJdbcDao implements PostDao {
     }
 
     @Override
-    public Post create(long userId, long debateId, String content) {
+    public Post create(long userId, long debateId, String content, Long imageId) {
         final Map<String, Object> data = new HashMap<>();
         LocalDateTime created = LocalDateTime.now();
         data.put("userId", userId);
         data.put("debateId", debateId);
         data.put("content", content);
         data.put("created_date", created);
+        data.put("imageid", imageId);
 
         final Number postId = jdbcInsert.executeAndReturnKey(data);
 
-        return new Post(postId.longValue(), userId, debateId, content, created);
+        return new Post(postId.longValue(), userId, debateId, content, created, imageId);
     }
 
     @Override

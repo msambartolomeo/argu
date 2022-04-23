@@ -8,21 +8,27 @@ public class User {
     private final String password;
     private final LocalDate createdDate;
     private final String email;
+    private final Long imageId;
 
-    public User(long userId, String username, String password, String email, LocalDate createdDate) {
+    public User(long userId, String username, String password, String email, LocalDate createdDate, Long imageId) {
         this.userId = userId;
-        this.email = email;
         this.username = username;
         this.password = password;
         this.createdDate = createdDate;
+        this.email = email;
+        this.imageId = imageId;
+    }
+
+    public User(long userId, String username, String password, String email, LocalDate createdDate) {
+        this(userId, username, password, email, createdDate, null);
     }
 
     public String getEmail() {
         return email;
     }
 
-    public long getId() {
-        return userId;
+    public Long getImageId() {
+        return imageId;
     }
 
     public String getUsername() {
@@ -33,7 +39,11 @@ public class User {
         return password;
     }
 
-    public LocalDate getcreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate;
+    }
+
+    public long getUserId() {
+        return userId;
     }
 }

@@ -51,7 +51,7 @@ public class DebateJdbcDaoTest {
 
     @Test
     public void testCreateDebate() {
-        Debate debate = debateDao.create(DEBATE_NAME, DEBATE_DESCRIPTION);
+        Debate debate = debateDao.create(DEBATE_NAME, DEBATE_DESCRIPTION, null);
 
         assertNotNull(debate);
         assertEquals(DEBATE_NAME, debate.getName());

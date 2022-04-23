@@ -25,7 +25,8 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("password"),
                     rs.getString("email"),
                     //TODO: check whether LocalDateTime, Date, or Instant is more useful
-                    rs.getObject("created_date", LocalDate.class));
+                    rs.getObject("created_date", LocalDate.class),
+                    rs.getLong("imageid"));
 
     @Autowired
     public UserJdbcDao(final DataSource ds){
@@ -63,16 +64,18 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public User create(String username, String password, String email) {
+    public User create(String username, String password, String email, Long imageId) {
         final Map<String, Object> userData = new HashMap<>();
         LocalDate created = LocalDate.now();
         userData.put("username", username);
         userData.put("password", password);
         userData.put("email", email);
         userData.put("created_date", created);
+        userData.put("imageid", imageId);
+
         final Number userId = jdbcInsert.executeAndReturnKey(userData);
 
-        return new User(userId.longValue(), username, password, email, created);
+        return new User(userId.longValue(), username, password, email, created, imageId);
     }
 
     @Override
