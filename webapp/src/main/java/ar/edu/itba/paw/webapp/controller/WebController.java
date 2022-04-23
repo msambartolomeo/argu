@@ -82,6 +82,7 @@ public class WebController {
         return new ModelAndView("redirect:/");
     }
 
+    @ResponseBody
     @RequestMapping(value = "/images/{imageId}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public byte[] getImage(@PathVariable("imageId") final long imageId) {
         Image image = imageService.getImage(imageId).orElseThrow(ImageNotFoundException::new);

@@ -27,13 +27,13 @@ public class ImageJdbcDao implements ImageDao {
     public ImageJdbcDao(final DataSource ds) {
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("image")
+                .withTableName("images")
                 .usingGeneratedKeyColumns("imageid");
     }
 
     @Override
     public Optional<Image> getImage(long id) {
-        return jdbcTemplate.query("SELECT data FROM images WHERE imageid = ?", new Object[]{id}, IMAGE_ROW_MAPPER).stream().findFirst();
+        return jdbcTemplate.query("SELECT * FROM images WHERE imageid = ?", new Object[]{id}, IMAGE_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
