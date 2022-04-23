@@ -38,4 +38,9 @@ public class DebateServiceImpl implements DebateService {
     public List<Debate> getAll(int page) {
         return debateDao.getAll(page);
     }
+
+    @Override
+    public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
+        return debateDao.getSubscribedDebatesByUsername(userid, page);
+    }
 }

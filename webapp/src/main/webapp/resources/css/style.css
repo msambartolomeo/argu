@@ -282,3 +282,66 @@ a.card {
         width: 95%;
     }
 }
+
+/*profile.jsp*/
+
+.profile-container {
+    width: 80%;
+    height: 80%;
+    margin: 1% auto;
+    display: flex;
+    flex-direction: row;
+}
+
+/*
+.profile-img {
+    margin-top: 5%;
+    margin-left: 5% !important;
+}
+
+.profile-img>img {
+    width: 90%;
+}
+
+.profile-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.profile-data>h5 {
+    font-weight: bold;
+}*/
+.profile-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.email-format {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.profile-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
+    margin-right: 10%;
+}
+
+.profile-data>img {
+    margin: 5%;
+    width: 50%;
+}
+
+.profile-data>h5 {
+    margin-top: 10%;
+    font-weight: bold;
+}
+
+.user-debates {
+    width: 60%;
+    padding: 2%;
+}

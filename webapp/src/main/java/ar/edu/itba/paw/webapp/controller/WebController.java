@@ -2,14 +2,18 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.DebateNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
+import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.PostForm;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -80,6 +84,17 @@ public class WebController {
         }
         userService.create(form.getUsername(), form.getPassword(), form.getEmail());
         return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
+    public ModelAndView profilePage() {
+        final ModelAndView mav = new ModelAndView("/pages/profile");
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
+        mav.addObject("user", user);
+        mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getId(), 0));
+        return mav;
     }
 
     @ResponseBody

@@ -59,4 +59,8 @@ public class DebateJdbcDao implements DebateDao {
 
         return new Debate(debateId.longValue(), name, description, created, imageId);
     }
+    @Override
+    public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
+        return jdbcTemplate.query("SELECT * FROM debates WHERE debateid IN (SELECT debateid FROM suscribed WHERE userid = ?) LIMIT 15 OFFSET ?", new Object[]{userid, page}, ROW_MAPPER);
+    }
 }
