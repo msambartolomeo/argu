@@ -10,4 +10,5 @@ public interface DebateService {
     Optional<Debate> getDebateById(long id);
     Debate create(String name, String description);
     List<Debate> getAll(int page);
+    List<Debate> getSubscribedDebatesByUsername(long userid, int page);
 }

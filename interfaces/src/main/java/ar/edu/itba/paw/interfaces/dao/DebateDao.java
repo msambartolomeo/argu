@@ -9,4 +9,5 @@ public interface DebateDao {
     Optional<Debate> getDebateById(long id);
     List<Debate> getAll(int page);
     Debate create(String name, String description);
+    List<Debate> getSubscribedDebatesByUsername(long userid, int page);
 }
