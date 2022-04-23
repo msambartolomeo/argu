@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.DebateNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.PostForm;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 public class WebController {
@@ -92,8 +92,9 @@ public class WebController {
         final ModelAndView mav = new ModelAndView("/pages/profile");
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        mav.addObject("user", userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new));
-
+        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
+        mav.addObject("user", user);
+        mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getId(), 0));
         return mav;
     }
 

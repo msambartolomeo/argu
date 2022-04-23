@@ -8,27 +8,6 @@
     </head>
     <body>
         <%@include file="../components/navbar.jsp" %>
-       <%-- <div class="row">
-            <div class="col s12">
-                <div class="z-depth-3 profile-container card">
-                    <div class="col s3 profile-img center">
-                        <img src="${pageContext.request.contextPath}/resources/images/user-profile-default.png" class=" responsive-img">
-                    </div>
-                    <div class="col s9 profile-data">
-                        <h5>
-                            <c:out value="${user.username}"/>
-                        </h5>
-                        <div class="email-format">
-                            <i class="material-icons">email</i>
-                            <h6>
-                                <c:out value="${user.email}"/>
-                            </h6>
-                        </div>
-                        <h6>Created in: </h6>
-                    </div>
-                </div>
-            </div>
-        </div>--%>
         <div class="profile-container">
             <div class="card profile-data">
                 <img src="${pageContext.request.contextPath}/resources/images/user-profile-default.png" class="responsive-img">
@@ -47,6 +26,14 @@
             </div>
             <div class="card user-debates">
                 <h5>Debates subscribed:</h5>
+                <c:if test="${suscribed_debates.size() > 0}">
+                    <c:forEach var="debate" items="${suscribed_debates}">
+                        <div class="list-item">
+                            <c:set var="debate" value="${suscribed_debates}" scope="request"/>
+                            <%@include file="../components/debates-list-item.jsp" %>
+                        </div>
+                    </c:forEach>
+                </c:if>
             </div>
         </div>
 
