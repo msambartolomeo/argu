@@ -44,7 +44,7 @@
                     </p>
                 </div>
                 <p>
-                    Created in: <c:out value="${user.getcreatedDate()}"/>
+                    Created in: <c:out value="${user.createdDate}"/>
                 </p>
             </div>
             <div class="card user-debates">

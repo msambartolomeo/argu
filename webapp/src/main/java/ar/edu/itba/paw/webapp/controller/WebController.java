@@ -93,7 +93,7 @@ public class WebController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         mav.addObject("user", user);
-        mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getId(), 0));
+        mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), 0));
         return mav;
     }
 
