@@ -8,7 +8,6 @@ public class PublicPost {
     private final long debateId;
     private final String content;
     private final int likes;
-
     private final LocalDateTime createdDate;
 
     public PublicPost(long postId, String userEmail, long debateId, String content, int likes, LocalDateTime createdDate) {

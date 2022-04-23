@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS likes
     PRIMARY KEY (userid, postid)
 );
 
-CREATE OR REPLACE VIEW posts_with_likes AS
-    SELECT posts.postid, posts.debateid, posts.userid, posts.content, COUNT(likes.userid) AS likes
+CREATE OR REPLACE VIEW public_posts AS
+    SELECT posts.postid, posts.debateid, posts.userid, posts.content, COUNT(likes.userid) AS likes, posts.created_date
     FROM posts LEFT JOIN likes ON posts.postid = likes.postid
     GROUP BY posts.postid, posts.debateid, posts.userid, posts.content;

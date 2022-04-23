@@ -37,7 +37,7 @@ public class PostJdbcDao implements PostDao {
                     rs.getLong("debateid"),
                     rs.getString("content"),
                     rs.getInt("likes"),
-                    rs.getObject("creationdate", LocalDateTime.class));
+                    rs.getObject("created_date", LocalDateTime.class));
 
     @Autowired
     public PostJdbcDao(final DataSource ds) {
@@ -64,7 +64,7 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public Optional<PublicPost> getPublicPostById(long id) {
-        return jdbcTemplate.query("SELECT postid, email, debateid, content FROM posts NATURAL JOIN users WHERE postId = ?",
+        return jdbcTemplate.query("SELECT postid, email, debateid, content, likes, created_date FROM public_posts NATURAL JOIN users WHERE postId = ?",
                 new Object[]{id},
                 PUBLIC_POST_ROW_MAPPER)
                 .stream().findFirst();
@@ -72,7 +72,7 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT postid, email, debateid, content, likes, created_date FROM posts_with_likes NATURAL JOIN users WHERE debateid = ? ORDER BY postid LIMIT 30 OFFSET ?",
+        return jdbcTemplate.query("SELECT postid, email, debateid, content, likes, created_date FROM public_posts NATURAL JOIN users WHERE debateid = ? ORDER BY postid LIMIT 30 OFFSET ?",
                 new Object[]{debateId, page * 10},
                 PUBLIC_POST_ROW_MAPPER);
     }
