@@ -7,6 +7,7 @@
 <body>
 <div class="card login-container">
     <c:url value="/register" var="postPath" />
+    <%--@elvariable id="registerForm" type="ar.edu.itba.paw.webapp.form.RegisterForm"--%>
     <form:form modelAttribute="registerForm" action="${postPath}" method="post" acceptCharset="utf-8">
         <div class="card-content">
             <c:set var="globalErrors"><form:errors/></c:set>

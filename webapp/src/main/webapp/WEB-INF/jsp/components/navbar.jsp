@@ -7,12 +7,10 @@
         <div class="navbar-fixed">
             <nav>
                 <div class="nav-wrapper nav-bar">
-<%--                    <div class="left ">--%>
                         <a href="${pageContext.request.contextPath}/" class="brand-logo">
                             <img src="${pageContext.request.contextPath}/resources/images/argu-logo-2.jpeg" class="logo-image" alt="Argu Logo">
                             &#8205
                         </a>
-<%--                    </div>--%>
                     <form class="right">
                         <div class="input-field search-size">
                             <input class="search-color" placeholder="<spring:message code="components.navbar.search"/>" id="search"
