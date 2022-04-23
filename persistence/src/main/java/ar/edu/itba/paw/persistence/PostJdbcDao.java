@@ -29,7 +29,7 @@ public class PostJdbcDao implements PostDao {
                     rs.getLong("userid"),
                     rs.getLong("debateid"),
                     rs.getString("content"),
-                    rs.getObject("creationdate", LocalDateTime.class));
+                    rs.getObject("created_date", LocalDateTime.class));
 
     private static final RowMapper<PublicPost> PUBLIC_POST_ROW_MAPPER = (rs, rowNum) ->
             new PublicPost(rs.getLong("postid"),
@@ -84,7 +84,7 @@ public class PostJdbcDao implements PostDao {
         data.put("userId", userId);
         data.put("debateId", debateId);
         data.put("content", content);
-        data.put("creationDate", created);
+        data.put("created_date", created);
 
         final Number postId = jdbcInsert.executeAndReturnKey(data);
 

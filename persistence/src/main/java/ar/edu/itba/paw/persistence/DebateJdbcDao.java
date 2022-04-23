@@ -24,7 +24,7 @@ public class DebateJdbcDao implements DebateDao {
             new Debate(rs.getLong("debateid"),
                     rs.getString("name"),
                     rs.getString("description"),
-                    rs.getObject("creation_date", LocalDateTime.class));
+                    rs.getObject("created_date", LocalDateTime.class));
 
     @Autowired
     public DebateJdbcDao(final DataSource ds) {
@@ -51,7 +51,7 @@ public class DebateJdbcDao implements DebateDao {
         LocalDateTime created = LocalDateTime.now();
         data.put("name", name);
         data.put("description", description);
-        data.put("creationDate", created);
+        data.put("created_date", created);
 
         final Number debateId = jdbcInsert.executeAndReturnKey(data);
 
