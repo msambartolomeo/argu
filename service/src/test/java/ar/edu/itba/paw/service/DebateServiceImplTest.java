@@ -34,7 +34,7 @@ public class DebateServiceImplTest {
     @Test
     public void testCreateDebate() {
         Debate debate = new Debate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATED_DATE);
-        Mockito.when(debateDao.create(Mockito.anyString(), Mockito.anyString())).thenReturn(debate);
+        Mockito.when(debateDao.create(Mockito.anyString(), Mockito.anyString(), Mockito.any())).thenReturn(debate);
 
 
         Debate d = debateService.create(DEBATE_NAME, DEBATE_DESCRIPTION);

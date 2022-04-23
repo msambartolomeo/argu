@@ -10,10 +10,8 @@ public interface UserDao {
     Optional<User> getUserById(long id);
     Optional<User> getUserByUsername(String username);
     Optional<User> getUserByEmail(String email);
-
     User create(String username, String password, String email);
-
-    // int pageSize
+    void updateImage(long userId, long imageId);
     List<User> getAll(int page);
 
     List<User> getSuscribedUsersByDebate(long debateId);

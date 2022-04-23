@@ -80,7 +80,7 @@ public class PostJdbcDaoTest {
 
     @Test
     public void testCreatePost() {
-        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT);
+        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, null);
 
         assertNotNull(post);
         assertEquals(postUserId, post.getUserId());

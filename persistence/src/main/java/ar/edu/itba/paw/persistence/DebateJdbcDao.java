@@ -24,7 +24,8 @@ public class DebateJdbcDao implements DebateDao {
             new Debate(rs.getLong("debateid"),
                     rs.getString("name"),
                     rs.getString("description"),
-                    rs.getObject("created_date", LocalDateTime.class));
+                    rs.getObject("created_date", LocalDateTime.class),
+                    rs.getLong("imageid"));
 
     @Autowired
     public DebateJdbcDao(final DataSource ds) {
@@ -46,15 +47,16 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public Debate create(String name, String description) {
+    public Debate create(String name, String description, Long imageId) {
         final Map<String, Object> data = new HashMap<>();
         LocalDateTime created = LocalDateTime.now();
         data.put("name", name);
         data.put("description", description);
         data.put("created_date", created);
+        data.put("imageid", imageId);
 
         final Number debateId = jdbcInsert.executeAndReturnKey(data);
 
-        return new Debate(debateId.longValue(), name, description, created);
+        return new Debate(debateId.longValue(), name, description, created, imageId);
     }
 }

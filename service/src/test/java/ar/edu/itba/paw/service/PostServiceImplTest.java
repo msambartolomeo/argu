@@ -45,7 +45,7 @@ public class PostServiceImplTest {
     @Test
     public void testCreatePost() {
         Post post = new Post(POST_ID, USER_ID, DEBATE_ID, POST_CONTENT, POST_DATE);
-        Mockito.when(postDao.create(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString())).thenReturn(post);
+        Mockito.when(postDao.create(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString(), Mockito.any())).thenReturn(post);
 
         Post p = postService.create(USER_ID, DEBATE_ID, POST_CONTENT);
 

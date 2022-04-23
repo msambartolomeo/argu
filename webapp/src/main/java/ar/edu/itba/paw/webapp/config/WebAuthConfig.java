@@ -60,6 +60,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring() // Ignore static resources
-                .antMatchers("/resources/**", "/403");
+                .antMatchers("/resources/**", "/images/**", "/403");
     }
 }

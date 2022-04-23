@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.interfaces.services.DebateService;
+import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.model.Debate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ public class DebateServiceImpl implements DebateService {
 
     @Autowired
     private DebateDao debateDao;
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public Optional<Debate> getDebateById(long id) {
@@ -22,7 +25,13 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public Debate create(String name, String description) {
-        return debateDao.create(name, description);
+        return debateDao.create(name, description, null);
+    }
+
+    @Override
+    public Debate create(String name, String description, byte[] image) {
+        long imageId = imageService.createImage(image);
+        return debateDao.create(name, description, imageId);
     }
 
     @Override

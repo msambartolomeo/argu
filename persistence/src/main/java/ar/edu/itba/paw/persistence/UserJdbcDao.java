@@ -25,7 +25,8 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("password"),
                     rs.getString("email"),
                     //TODO: check whether LocalDateTime, Date, or Instant is more useful
-                    rs.getObject("created_date", LocalDate.class));
+                    rs.getObject("created_date", LocalDate.class),
+                    rs.getLong("imageid"));
 
     @Autowired
     public UserJdbcDao(final DataSource ds){
@@ -70,6 +71,7 @@ public class UserJdbcDao implements UserDao {
         userData.put("password", password);
         userData.put("email", email);
         userData.put("created_date", created);
+
         final Number userId = jdbcInsert.executeAndReturnKey(userData);
 
         return new User(userId.longValue(), username, password, email, created);
@@ -84,5 +86,10 @@ public class UserJdbcDao implements UserDao {
     public List<User> getSuscribedUsersByDebate(long debateId) {
         return jdbcTemplate.query("SELECT DISTINCT userid, username, password, email, created_date FROM users NATURAL JOIN suscribed WHERE debateid = ?", new Object[] { debateId }, ROW_MAPPER);
 
+    }
+
+    @Override
+    public void updateImage(long userId, long imageId) {
+        jdbcTemplate.update("UPDATE users SET imageid = ? WHERE userid = ?", imageId, userId);
     }
 }
