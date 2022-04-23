@@ -11,6 +11,29 @@
         <div class="profile-container">
             <div class="card profile-data">
                 <img src="${pageContext.request.contextPath}/resources/images/user-profile-default.png" class="responsive-img">
+                <!-- Modal Trigger -->
+                <a class="waves-effect waves-light btn modal-trigger" href="#edit-profile-image">Edit Profile Image</a>
+                <!-- Modal Structure -->
+                <div id="edit-profile-image" class="modal">
+                    <div class="modal-content">
+                        <h4>Edit Profile Image</h4>
+                        <form action="#">
+                            <div class="file-field input-field">
+                                <div class="btn">
+                                    <span>Upload</span>
+                                    <input type="file">
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Edit</a>
+                    </div>
+                </div>
                 <h5>
                     <c:out value="${user.username}"/>
                 </h5>
@@ -36,6 +59,12 @@
                 </c:if>
             </div>
         </div>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script>
+            M.AutoInit();
+            $(document).ready(function(){
+                $('.modal').modal();
+            });
+        </script>
     </body>
 </html>
