@@ -64,18 +64,17 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public User create(String username, String password, String email, Long imageId) {
+    public User create(String username, String password, String email) {
         final Map<String, Object> userData = new HashMap<>();
         LocalDate created = LocalDate.now();
         userData.put("username", username);
         userData.put("password", password);
         userData.put("email", email);
         userData.put("created_date", created);
-        userData.put("imageid", imageId);
 
         final Number userId = jdbcInsert.executeAndReturnKey(userData);
 
-        return new User(userId.longValue(), username, password, email, created, imageId);
+        return new User(userId.longValue(), username, password, email, created);
     }
 
     @Override
@@ -87,5 +86,10 @@ public class UserJdbcDao implements UserDao {
     public List<User> getSuscribedUsersByDebate(long debateId) {
         return jdbcTemplate.query("SELECT DISTINCT userid, username, password, email, created_date FROM users NATURAL JOIN suscribed WHERE debateid = ?", new Object[] { debateId }, ROW_MAPPER);
 
+    }
+
+    @Override
+    public void updateImage(long userId, long imageId) {
+        jdbcTemplate.update("UPDATE users SET imageid = ? WHERE userid = ?", imageId, userId);
     }
 }

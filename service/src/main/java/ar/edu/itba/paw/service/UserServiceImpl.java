@@ -33,12 +33,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(String username, String password, String email) {
         // TODO: Validate email
-        return userDao.create(username, passwordEncoder.encode(password), email, null);
+        return userDao.create(username, passwordEncoder.encode(password), email);
     }
 
     @Override
-    public User create(String username, String password, String email, byte[] image) {
+    public void updateImage(long id, byte[] image) {
+        getUserById(id).ifPresent(user -> {
+            if (user.getImageId() != null) imageService.deleteImage(user.getImageId());
+        });
         long imageId = imageService.createImage(image);
-        return userDao.create(username, passwordEncoder.encode(password), email, imageId);
+        userDao.updateImage(id, imageId);
     }
 }
