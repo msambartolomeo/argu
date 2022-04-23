@@ -29,7 +29,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(String username, String password, String email) {
-        // TODO: Validate email
-        return userDao.create(username, passwordEncoder.encode(password), email);
+        Optional<User> user = userDao.getUserByEmail(email);
+        if (user.isPresent()) {
+            if (user.get().getUsername() == null) {
+                return userDao.updateLegacyUser(user.get().getId(), username, passwordEncoder.encode(password), email);
+            }
+            else  {
+                // TODO: throw UserAlreadyExists exception
+                return null;
+            }
+        }
+        else
+            return userDao.create(username, passwordEncoder.encode(password), email);
     }
 }
