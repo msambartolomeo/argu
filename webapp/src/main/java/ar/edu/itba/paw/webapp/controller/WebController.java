@@ -1,10 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.services.DebateService;
-import ar.edu.itba.paw.interfaces.services.EmailService;
-import ar.edu.itba.paw.interfaces.services.PostService;
-import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.interfaces.services.*;
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.webapp.exception.DebateNotFoundException;
+import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
 import ar.edu.itba.paw.webapp.form.PostForm;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import org.slf4j.Logger;
@@ -25,14 +24,14 @@ public class WebController {
     private final UserService userService;
     private final DebateService debateService;
     private final PostService postService;
-    private final EmailService emailService;
+    private final ImageService imageService;
 
     @Autowired
-    public WebController(UserService userService, DebateService debateService, PostService postService, EmailService emailService) {
+    public WebController(UserService userService, DebateService debateService, PostService postService, ImageService imageService) {
         this.userService = userService;
         this.debateService = debateService;
         this.postService = postService;
-        this.emailService = emailService;
+        this.imageService = imageService;
     }
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView home() {
@@ -81,6 +80,18 @@ public class WebController {
         }
         userService.create(form.getUsername(), form.getPassword(), form.getEmail());
         return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping(value = "/images/{imageId}", method = { RequestMethod.GET, RequestMethod.HEAD })
+    public byte[] getImage(@PathVariable("imageId") final long imageId) {
+        Image image = imageService.getImage(imageId).orElseThrow(ImageNotFoundException::new);
+        return image.getData();
+    }
+
+    @ExceptionHandler(ImageNotFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ModelAndView handleImageNotFoundException() {
+        return new ModelAndView("error/404");
     }
 
     @ExceptionHandler(DebateNotFoundException.class)

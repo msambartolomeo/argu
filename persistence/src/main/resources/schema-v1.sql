@@ -6,6 +6,12 @@ ALTER TABLE debates ADD COLUMN IF NOT EXISTS created_date timestamp;
 
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS created_date timestamp;
 
+CREATE TABLE IF NOT EXISTS images
+(
+    imageid SERIAL PRIMARY KEY,
+    data BYTEA NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS suscribed
 (
     userid INTEGER NOT NULL REFERENCES users,
