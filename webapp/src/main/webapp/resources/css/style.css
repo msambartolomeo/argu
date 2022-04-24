@@ -56,6 +56,7 @@ a.card {
 
 .nav-bar {
     background: var(--primary-color);
+    padding-right: 3%;
 }
 
 .search-color {
@@ -65,6 +66,7 @@ a.card {
 .brand-logo {
     display: flex !important;
     align-items: center;
+    margin-left: 2%;
 }
 
 .logo-image {
@@ -73,7 +75,8 @@ a.card {
 }
 
 .search-size {
-    max-width: 100%;
+    max-width: 80%;
+    max-height: 95%;
 }
 
 /*landing-page.jsp*/
