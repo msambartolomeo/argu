@@ -1,19 +1,12 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.validators.PasswordEquality;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.Constraint;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.Payload;
 import javax.validation.constraints.Size;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
-@RegisterForm.PasswordEquality
+@PasswordEquality
 public class RegisterForm {
 
     @Size(max = 64)
@@ -63,29 +56,6 @@ public class RegisterForm {
 
     public void setPasswordConfirmation(String passwordConfirmation) {
         this.passwordConfirmation = passwordConfirmation;
-    }
-
-    @Constraint(validatedBy = PasswordEqualityValidator.class)
-    @Target(ElementType.TYPE)
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface PasswordEquality {
-        String message() default "The passwords don't match";
-        Class<?>[] groups() default { };
-        Class<? extends Payload>[] payload() default { };
-    }
-
-    public static class PasswordEqualityValidator implements ConstraintValidator<PasswordEquality, RegisterForm> {
-        @Override
-        public void initialize(PasswordEquality constraintAnnotation) {
-        }
-
-        @Override
-        public boolean isValid(RegisterForm form, ConstraintValidatorContext context) {
-            String password = form.getPassword();
-            String passwordConfirmation = form.getPasswordConfirmation();
-
-            return password.equals(passwordConfirmation);
-        }
     }
 }
 
