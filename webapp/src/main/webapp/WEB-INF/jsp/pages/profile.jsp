@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
     <head>
-        <title>Profile</title>
+        <title>Argu | <spring:message code="pages.profile"/></title>
         <%@include file="../components/imports.jsp"%>
     </head>
     <body>
@@ -12,26 +12,22 @@
             <div class="card profile-data">
                 <img src="${pageContext.request.contextPath}/resources/images/user-profile-default.png" class="responsive-img">
                 <!-- Modal Trigger -->
-                <a class="waves-effect waves-light btn modal-trigger" href="#edit-profile-image">Edit Profile Image</a>
+                <a class="waves-effect waves-light btn modal-trigger" href="#edit-profile-image">
+                    <spring:message code="pages.profile.edit-profile-image"/>
+                </a>
                 <!-- Modal Structure -->
                 <div id="edit-profile-image" class="modal">
                     <div class="modal-content">
-                        <h4>Edit Profile Image</h4>
-                        <form action="#">
-                            <div class="file-field input-field">
-                                <div class="btn">
-                                    <span>Upload</span>
-                                    <input type="file">
-                                </div>
-                                <div class="file-path-wrapper">
-                                    <input class="file-path validate" type="text">
-                                </div>
-                            </div>
-                        </form>
+                        <h4>
+                            <spring:message code="pages.profile.edit-profile-image"/>
+                        </h4>
+                        <%@include file="../components/profile-photo-form.jsp"%>
                     </div>
                     <div class="modal-footer">
-                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Edit</a>
+                        <a href="#!" class="modal-close waves-effect btn-flat">Close</a>
+                        <button class="modal-close waves-effect btn-flat" type="submit" name="action">
+                            <spring:message code="pages.profile.edit"/>
+                        </button>
                     </div>
                 </div>
                 <h5>
@@ -44,11 +40,13 @@
                     </p>
                 </div>
                 <p>
-                    Created in: <c:out value="${user.createdDate}"/>
+                    <spring:message code="pages.profile.created-in"/> <c:out value="${user.createdDate}"/>
                 </p>
             </div>
             <div class="card user-debates">
-                <h5>Debates subscribed:</h5>
+                <h5>
+                    <spring:message code="pages.profile.debates-subscribed"/>
+                </h5>
                 <c:if test="${suscribed_debates.size() > 0}">
                     <c:forEach var="debate" items="${suscribed_debates}">
                         <div class="list-item">
