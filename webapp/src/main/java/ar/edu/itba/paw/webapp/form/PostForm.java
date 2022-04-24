@@ -1,15 +1,14 @@
 package ar.edu.itba.paw.webapp.form;
 
-import org.hibernate.validator.constraints.Email;
+import ar.edu.itba.paw.webapp.validators.Image;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.constraints.Size;
 
 public class PostForm {
     @NotEmpty
     private String content;
 
+    @Image
     private MultipartFile file;
 
     public String getContent() {

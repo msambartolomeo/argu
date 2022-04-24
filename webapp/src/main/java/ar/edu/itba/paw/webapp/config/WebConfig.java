@@ -113,8 +113,6 @@ public class WebConfig {
     // upload files
     @Bean
     public MultipartResolver multipartResolver() {
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(1000000);
-        return multipartResolver;
+        return new CommonsMultipartResolver();
     }
 }

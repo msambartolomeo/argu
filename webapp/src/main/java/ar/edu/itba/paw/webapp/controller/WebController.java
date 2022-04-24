@@ -59,16 +59,12 @@ public class WebController {
     }
 
     @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST })
-    public ModelAndView createPost(@PathVariable("debateId") final long debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors) throws IOException {
+    public ModelAndView createPost(@PathVariable("debateId") final long debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
         if (errors.hasErrors()) {
             return debate(debateId, form);
         }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
-        if (form.getFile().getContentType().equals("image/jpeg") || form.getFile().getContentType().equals("image/png")) {
-            postService.create(user.getUserId(), debateId, form.getContent(), form.getFile().getBytes());
-        }
-
+        postService.create(user.getUserId(), debateId, form.getContent(), form.getFile().getBytes());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 

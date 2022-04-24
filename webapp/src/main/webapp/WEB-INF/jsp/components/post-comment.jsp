@@ -6,10 +6,10 @@
 <html>
     <body>
         <div class="card">
-            <%--@elvariable id="postForm" type="ar.edu.itba.paw.webapp.form.PostForm"--%>
             <c:choose>
                 <c:when test="${pageContext.request.userPrincipal.name != null}">
                     <c:url value="/debates/${debate.debateId}" var="postPath" />
+                    <%--@elvariable id="postForm" type="ar.edu.itba.paw.webapp.form.PostForm"--%>
                     <form:form enctype="multipart/form-data" modelAttribute="postForm" action="${postPath}" method="post" acceptCharset="utf-8" id="myForm">
                         <div class="card-content">
                             <span class="card-title"><spring:message code="components.post-comment.title"/></span>
@@ -24,12 +24,12 @@
                             <div class="file-field input-field">
                                 <div class="btn">
                                     <form:label path="file" for="file"><spring:message code="components.user-image-button"/></form:label>
-                                    <form:input id="file" path="file" type="file" accept="image/jpeg, image/png"/>
-                                    <form:errors path="file" cssClass="helper-text error"/>
+                                    <form:input id="file" path="file" type="file"/>
                                 </div>
                                 <div class="file-path-wrapper">
                                     <input class="file-path validate" type="text"/>
                                 </div>
+                                <form:errors path="file" cssClass="helper-text error"/>
                             </div>
 
 
