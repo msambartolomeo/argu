@@ -7,6 +7,7 @@ import ar.edu.itba.paw.webapp.exception.DebateNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.PostForm;
+import ar.edu.itba.paw.webapp.form.ProfileImageForm;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 public class WebController {
@@ -87,7 +89,7 @@ public class WebController {
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView profilePage() {
+    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form) {
         final ModelAndView mav = new ModelAndView("/pages/profile");
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -95,6 +97,21 @@ public class WebController {
         mav.addObject("user", user);
         mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), 0));
         return mav;
+    }
+
+    @RequestMapping(value = "/profile", method = { RequestMethod.POST})
+    public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors) throws IOException {
+        if(errors.hasErrors()) {
+            LOGGER.info("Error uploading file {}", errors);
+            return profilePage(form);
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
+
+        userService.updateImage(user.getUserId(), form.getFile().getBytes());
+
+        return new ModelAndView("redirect:/profile");
     }
 
     @ResponseBody

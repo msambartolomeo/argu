@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
     <head>
         <title>Argu | <spring:message code="pages.profile"/></title>
@@ -10,25 +11,21 @@
         <%@include file="../components/navbar.jsp" %>
         <div class="profile-container">
             <div class="card profile-data">
-                <img src="${pageContext.request.contextPath}/resources/images/user-profile-default.png" class="responsive-img">
+                <c:choose>
+                    <c:when test="${user.imageId != 0}">
+                        <img src="<c:url value="/images/${user.imageId}"/>" class="circle responsive-img"/>
+                    </c:when>
+                    <c:otherwise>
+                        <img src="${pageContext.request.contextPath}/resources/images/user-profile-default.png" class="responsive-img">
+                    </c:otherwise>
+                </c:choose>
                 <!-- Modal Trigger -->
                 <a class="waves-effect waves-light btn modal-trigger" href="#edit-profile-image">
                     <spring:message code="pages.profile.edit-profile-image"/>
                 </a>
                 <!-- Modal Structure -->
                 <div id="edit-profile-image" class="modal">
-                    <div class="modal-content">
-                        <h4>
-                            <spring:message code="pages.profile.edit-profile-image"/>
-                        </h4>
-                        <%@include file="../components/profile-photo-form.jsp"%>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="#!" class="modal-close waves-effect btn-flat">Close</a>
-                        <button class="modal-close waves-effect btn-flat" type="submit" name="action">
-                            <spring:message code="pages.profile.edit"/>
-                        </button>
-                    </div>
+                    <%@include file="../components/profile-photo-form.jsp"%>
                 </div>
                 <h5>
                     <c:out value="${user.username}"/>
