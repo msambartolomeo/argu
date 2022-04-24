@@ -1,38 +1,31 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
     <head>
-        <title>Profile</title>
+        <title>Argu | <spring:message code="pages.profile"/></title>
         <%@include file="../components/imports.jsp"%>
     </head>
     <body>
         <%@include file="../components/navbar.jsp" %>
         <div class="profile-container">
             <div class="card profile-data">
-                <img src="${pageContext.request.contextPath}/resources/images/user-profile-default.png" class="responsive-img">
+                <c:choose>
+                    <c:when test="${user.imageId != 0}">
+                        <img src="<c:url value="/images/${user.imageId}"/>" class="circle responsive-img"/>
+                    </c:when>
+                    <c:otherwise>
+                        <img src="${pageContext.request.contextPath}/resources/images/user-profile-default.png" class="responsive-img">
+                    </c:otherwise>
+                </c:choose>
                 <!-- Modal Trigger -->
-                <a class="waves-effect waves-light btn modal-trigger" href="#edit-profile-image">Edit Profile Image</a>
+                <a class="waves-effect waves-light btn modal-trigger" href="#edit-profile-image">
+                    <spring:message code="pages.profile.edit-profile-image"/>
+                </a>
                 <!-- Modal Structure -->
                 <div id="edit-profile-image" class="modal">
-                    <div class="modal-content">
-                        <h4>Edit Profile Image</h4>
-                        <form action="#">
-                            <div class="file-field input-field">
-                                <div class="btn">
-                                    <span>Upload</span>
-                                    <input type="file">
-                                </div>
-                                <div class="file-path-wrapper">
-                                    <input class="file-path validate" type="text">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Edit</a>
-                    </div>
+                    <%@include file="../components/profile-photo-form.jsp"%>
                 </div>
                 <h5>
                     <c:out value="${user.username}"/>
@@ -44,11 +37,13 @@
                     </p>
                 </div>
                 <p>
-                    Created in: <c:out value="${user.createdDate}"/>
+                    <spring:message code="pages.profile.created-in"/> <c:out value="${user.createdDate}"/>
                 </p>
             </div>
             <div class="card user-debates">
-                <h5>Debates subscribed:</h5>
+                <h5>
+                    <spring:message code="pages.profile.debates-subscribed"/>
+                </h5>
                 <c:if test="${suscribed_debates.size() > 0}">
                     <c:forEach var="debate" items="${suscribed_debates}">
                         <div class="list-item">
