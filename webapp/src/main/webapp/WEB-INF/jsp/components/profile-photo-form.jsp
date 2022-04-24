@@ -17,11 +17,11 @@
             <div class="btn">
               <form:label path="file"><spring:message code="pages.profile.upload"/></form:label>
               <form:input path="file" type="file"/>
-              <form:errors path="file" cssClass="helper-text error"/>
             </div>
             <div class="file-path-wrapper">
               <input class="file-path validate" type="text"/>
             </div>
+            <form:errors path="file" cssClass="helper-text error"/>
           </div>
       </div>
       <div class="modal-footer">
