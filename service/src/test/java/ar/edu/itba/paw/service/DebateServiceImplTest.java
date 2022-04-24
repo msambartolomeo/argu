@@ -63,23 +63,23 @@ public class DebateServiceImplTest {
     }
 
     @Test
-    public void testGetAll() {
+    public void testGet() {
         Debate debate = new Debate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATED_DATE);
         List<Debate> debates = new ArrayList<>();
         debates.add(debate);
         Mockito.when(debateDao.getAll(Mockito.anyInt())).thenReturn(debates);
 
-        List<Debate> dl = debateService.getAll(PAGE);
+        List<Debate> dl = debateService.get(PAGE, null);
 
         assertFalse(dl.isEmpty());
         assertEquals(debate, dl.get(0));
     }
 
     @Test
-    public void testGetAllEmpty() {
+    public void testGetEmpty() {
         Mockito.when(debateDao.getAll(Mockito.anyInt())).thenReturn(new ArrayList<>());
 
-        List<Debate> dl = debateService.getAll(PAGE);
+        List<Debate> dl = debateService.get(PAGE, null);
 
         assertTrue(dl.isEmpty());
     }

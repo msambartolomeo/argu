@@ -35,12 +35,16 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<Debate> getAll(int page) {
-        return debateDao.getAll(page);
+    public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
+        return debateDao.getSubscribedDebatesByUsername(userid, page);
     }
 
     @Override
-    public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
-        return debateDao.getSubscribedDebatesByUsername(userid, page);
+    public List<Debate> get(int page, String search) {
+        if (search != null) {
+            return debateDao.getQuery(page, search);
+        } else {
+            return debateDao.getAll(page);
+        }
     }
 }
