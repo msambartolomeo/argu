@@ -62,7 +62,11 @@ public class WebController {
         if (errors.hasErrors()) {
             return debate(debateId, form);
         }
-        postService.createWithEmail(form.getEmail(), debateId, form.getContent());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
+        // TODO: check if post includes image
+        // TODO: remove email from frontend, only users can post
+        postService.create(user.getUserId(), debateId, form.getContent());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 

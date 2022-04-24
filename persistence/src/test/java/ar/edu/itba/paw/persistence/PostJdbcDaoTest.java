@@ -154,7 +154,6 @@ public class PostJdbcDaoTest {
         Optional<PublicPost> post = postDao.getPublicPostById(key.longValue());
 
         assertTrue(post.isPresent());
-        assertEquals(USER_EMAIL, post.get().getUserEmail());
         assertEquals(postDebateId, post.get().getDebateId());
         assertEquals(POST_CONTENT, post.get().getContent());
     }
@@ -179,7 +178,6 @@ public class PostJdbcDaoTest {
 
         assertFalse(post.isEmpty());
         assertEquals(key.longValue(), post.get(0).getPostId());
-        assertEquals(USER_EMAIL, post.get(0).getUserEmail());
         assertEquals(postDebateId, post.get(0).getDebateId());
         assertEquals(POST_CONTENT, post.get(0).getContent());
     }
