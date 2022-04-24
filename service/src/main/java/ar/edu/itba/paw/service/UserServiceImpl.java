@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
@@ -19,6 +20,8 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public Optional<User> getUserById(long id) {
@@ -43,5 +46,10 @@ public class UserServiceImpl implements UserService {
         });
         long imageId = imageService.createImage(image);
         userDao.updateImage(id, imageId);
+    }
+
+    @Override
+    public void requestModerator(String username, String reason) {
+        emailService.sendEmailSelf("New user moderator request for " + username, "reason for request: " + reason);
     }
 }
