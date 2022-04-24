@@ -348,3 +348,8 @@ a.card {
     width: 60%;
     padding: 2%;
 }
+
+.card-title-margins {
+    margin: 5%;
+    padding: 5% 0;
+}

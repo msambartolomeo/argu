@@ -6,28 +6,55 @@
 <html>
     <body>
         <div class="card">
-            <c:url value="/debates/${debate.debateId}" var="postPath" />
-                <%--@elvariable id="postForm" type="ar.edu.itba.paw.webapp.form.PostForm"--%>
-                <form:form modelAttribute="postForm" action="${postPath}" method="post" acceptCharset="utf-8" id="myForm">
-                    <div class="card-content">
-                        <span class="card-title"><spring:message code="components.post-comment.title"/></span>
-                        <div class="input-field">
-                            <form:label path="content"><spring:message code="components.post-comment.content"/></form:label>
-                            <form:textarea class="materialize-textarea" rows="5" cols="30" path="content" />
-                            <form:errors path="content" element="span" cssClass="error" />
+            <%--@elvariable id="postForm" type="ar.edu.itba.paw.webapp.form.PostForm"--%>
+            <c:choose>
+                <c:when test="${pageContext.request.userPrincipal.name != null}">
+                    <c:url value="/debates/${debate.debateId}" var="postPath" />
+                    <form:form modelAttribute="postForm" action="${postPath}" method="post" acceptCharset="utf-8" id="myForm">
+                        <div class="card-content">
+                            <span class="card-title"><spring:message code="components.post-comment.title"/></span>
+                            <div class="input-field">
+                                <form:label for="comment" path="content"><spring:message code="components.post-comment.content"/></form:label>
+                                <form:textarea id="comment" maxlength="280" class="materialize-textarea" rows="5" cols="30"
+                                               path="content"/>
+                                <form:errors path="content" element="span" cssClass="error" />
+                            </div>
+
+    <%--                        TODO : Correctly implement image input--%>
+    <%--                        <div class="file-field input-field">--%>
+    <%--                            <div class="btn">--%>
+    <%--                                <span>File</span>--%>
+    <%--                                <input type="file" accept="image/jpeg, image/png">--%>
+    <%--                            </div>--%>
+    <%--                            <div class="file-path-wrapper">--%>
+    <%--                                <form:label></form:label>--%>
+    <%--                                <form:input class="file-path validate" type="text"/>--%>
+    <%--                            </div>--%>
+    <%--                        </div>--%>
+
+
+    <%--                        TODO : Deprecate the following--%>
+    <%--                        <div class="input-field">--%>
+    <%--                            <form:label path="email"><spring:message code="components.post-comment.email"/></form:label>--%>
+    <%--                            <form:input type="text" path="email" />--%>
+    <%--                            <form:errors path="email" element="p" cssClass="error" />--%>
+    <%--                        </div>--%>
+                            <button class="btn waves-effect center-block" type="submit" form="myForm" id="myForm"
+                                    onclick="this.form.submit(); this.disabled=true; this.value='Sending...';"
+                                    name="action"><spring:message code="components.post-comment.submit"/>
+                                <i class="material-icons right">send</i>
+                            </button>
                         </div>
-                        <div class="input-field">
-                            <form:label path="email"><spring:message code="components.post-comment.email"/></form:label>
-                            <form:input type="text" path="email" />
-                            <form:errors path="email" element="p" cssClass="error" />
-                        </div>
-                        <button class="btn waves-effect center-block" type="submit" form="myForm" id="myForm"
-                                onclick="this.form.submit(); this.disabled=true; this.value='Sending...';"
-                                name="action"><spring:message code="components.post-comment.submit"/>
-                            <i class="material-icons right">send</i>
-                        </button>
+                    </form:form>
+                </c:when>
+
+                <c:otherwise>
+                    <div class="card-title card-title-margins">
+                        <spring:message code="components.post-need-to-log-in"/>
                     </div>
-                </form:form>
+                </c:otherwise>
+            </c:choose>
+
         </div>
 
     </body>

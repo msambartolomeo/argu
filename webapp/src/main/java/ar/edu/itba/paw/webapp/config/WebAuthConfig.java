@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PawUserDetailsService userDetailsService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -34,29 +35,31 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
-                    .invalidSessionUrl("/login")
+                .invalidSessionUrl("/login")
                 .and().authorizeRequests()
-                    .antMatchers("/").permitAll()
-                    .antMatchers("/login", "/register").anonymous()
-                    .antMatchers("/**").authenticated()
+                .antMatchers("/", "/debates", "/debates/{debateId}").permitAll()
+                .antMatchers("/login", "/register").anonymous()
+                .antMatchers("/**").authenticated()
                 .and().formLogin()
-                    .usernameParameter("j_username")
-                    .passwordParameter("j_password")
-                    .defaultSuccessUrl("/debates", false)
-                    .loginPage("/login")
+                .usernameParameter("j_username")
+                .passwordParameter("j_password")
+                .defaultSuccessUrl("/debates", false)
+                .loginPage("/login")
                 .and().rememberMe()
-                    .rememberMeParameter("j_rememberme")
-                    .userDetailsService(userDetailsService)
-                    // TODO: Usar OpenSSL para generar un String aleatorio de 4K u 8K para usar como key
-                    .key("mysupersecretketthatnobodyknowsabout")
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
+                .rememberMeParameter("j_rememberme")
+                .userDetailsService(userDetailsService)
+                // TODO: Usar OpenSSL para generar un String aleatorio de 4K u 8K para usar como
+                // key
+                .key("mysupersecretketthatnobodyknowsabout")
+                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
                 .and().logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
                 .and().exceptionHandling()
-                    .accessDeniedPage("/403")
+                .accessDeniedPage("/403")
                 .and().csrf().disable();
     }
+
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring() // Ignore static resources
