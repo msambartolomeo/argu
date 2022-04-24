@@ -15,7 +15,7 @@
         <c:out value="${post.content}" />
     </p>
     <br>
-    <span class="new badge blue-grey darken-2" data-badge-caption="16:00 15/05/22"></span>
+    <span class="new badge blue-grey darken-2" data-badge-caption="${post.createdDate}"></span>
 </div>
 </body>
 

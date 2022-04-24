@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class PublicPost {
     private final long postId;
@@ -8,7 +10,7 @@ public class PublicPost {
     private final long debateId;
     private final String content;
     private final int likes;
-    private final LocalDateTime createdDate;
+    private final String createdDateString;
     private final Long imageId;
 
     public PublicPost(long postId, String username, long debateId, String content, int likes, LocalDateTime createdDate, Long imageId) {
@@ -17,7 +19,7 @@ public class PublicPost {
         this.debateId = debateId;
         this.content = content;
         this.likes = likes;
-        this.createdDate = createdDate;
+        this.createdDateString = createdDate.format(DateTimeFormatter.ofPattern("dd-MM-yy HH:mm"));
         this.imageId = imageId;
     }
 
@@ -41,8 +43,8 @@ public class PublicPost {
         return likes;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public String getCreatedDate() {
+        return createdDateString;
     }
 
     public Long getImageId() {
