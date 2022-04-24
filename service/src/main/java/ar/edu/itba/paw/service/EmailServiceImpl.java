@@ -3,6 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -21,11 +22,18 @@ import java.nio.charset.StandardCharsets;
 public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender emailSender;
+    @Autowired
+    Environment env;
+
+    @Override
+    public void sendEmailSelf(String subject, String body) {
+        sendEmail(env.getProperty("spring.mail.username"), subject, body);
+    }
 
     @Override
     public void sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("noreply@noreddit.com");
+        message.setFrom("noreply@argu.com");
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);

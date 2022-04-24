@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.DebateNotFoundException;
 import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
+import ar.edu.itba.paw.webapp.form.ModeratorForm;
 import ar.edu.itba.paw.webapp.form.PostForm;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import org.slf4j.Logger;
@@ -64,6 +65,21 @@ public class WebController {
         }
         postService.createWithEmail(form.getEmail(), debateId, form.getContent());
         return new ModelAndView("redirect:/debates/" + debateId);
+    }
+
+    @RequestMapping(value = "/moderator", method = { RequestMethod.GET, RequestMethod.HEAD })
+    public ModelAndView moderatorPage(@ModelAttribute("moderatorForm") final ModeratorForm form) {
+        return new ModelAndView("pages/request-moderator");
+    }
+
+    @RequestMapping(value = "/moderator", method = { RequestMethod.POST })
+    public ModelAndView moderatorPage(@Valid @ModelAttribute("moderatorForm") final ModeratorForm form, BindingResult errors, Authentication authentication) {
+        if (errors.hasErrors()) {
+            return moderatorPage(form);
+        }
+        LOGGER.info("user {} requested moderator status because reason: {}", authentication.getName(), form.getReason());
+        userService.requestModerator(authentication.getName(), form.getReason());
+        return new ModelAndView("redirect:/debates");
     }
 
     @RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.HEAD })
