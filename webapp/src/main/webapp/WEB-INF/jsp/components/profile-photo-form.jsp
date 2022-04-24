@@ -25,7 +25,9 @@
           </div>
       </div>
       <div class="modal-footer">
-        <a href="" class="modal-close waves-effect btn-flat">Close</a>
+        <a href="" class="modal-close waves-effect btn-flat">
+          <spring:message code="pages.profile.close"/>
+        </a>
         <button class="modal-close waves-effect btn-flat" type="submit" form="photoForm"
                 id="photoForm" onclick="this.form.submit();" name="action">
           <spring:message code="pages.profile.edit"/>
