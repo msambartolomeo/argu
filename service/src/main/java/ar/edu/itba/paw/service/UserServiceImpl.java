@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         user = userDao.getUserByEmail(email);
         if (user.isPresent()) {
             if (user.get().getUsername() == null) {
-                return userDao.updateLegacyUser(user.get().getId(), username, passwordEncoder.encode(password), email);
+                return userDao.updateLegacyUser(user.get().getUserId(), username, passwordEncoder.encode(password), email);
             }
             else  {
                 // TODO: verificar excepciones correctas

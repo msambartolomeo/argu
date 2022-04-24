@@ -7,15 +7,19 @@
 <body>
 <div class="speech-bubble sb-left">
     <p class="comment-owner">
-        <c:out value="${post.userEmail}" />
+        <c:out value="${post.username}" />
         <spring:message code="components.user-comment" />
     </p>
     <br>
     <p>
         <c:out value="${post.content}" />
     </p>
+    <c:if test="${post.imageId != 0}">
+        <img src="<c:url value="/images/${post.imageId}"/>" alt="<spring:message code="components.user-image-alt"/>"
+             class="responsive-img"/>
+    </c:if>
     <br>
-    <span class="new badge blue-grey darken-2" data-badge-caption="16:00 15/05/22"></span>
+    <span class="new badge blue-grey darken-2 badge-margin" data-badge-caption="${post.createdDate}"></span>
 </div>
 </body>
 

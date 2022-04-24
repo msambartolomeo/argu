@@ -25,6 +25,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private Environment env;
     @Autowired
     private PawUserDetailsService userDetailsService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -40,7 +41,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                     .invalidSessionUrl("/login")
                 .and().authorizeRequests()
-                    .antMatchers("/").permitAll()
+                    .antMatchers("/", "/debates", "/debates/{debateId}").permitAll()
                     .antMatchers("/login", "/register").anonymous()
                     .antMatchers("/**").authenticated()
                 .and().formLogin()

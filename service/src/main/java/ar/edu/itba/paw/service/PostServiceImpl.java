@@ -33,16 +33,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post create(long userId, long debateId, String content) {
-        Post createdPost = postDao.create(userId, debateId, content,null);
+    public Post create(long userId, long debateId, String content, byte[] image) {
+        Post createdPost;
+        if (image.length == 0) {
+            createdPost = postDao.create(userId, debateId, content,null);
+        } else {
+            long imageId = imageService.createImage(image);
+            createdPost = postDao.create(userId, debateId, content, imageId);
+        }
         sendEmailToSubscribedUsers(debateId, userId);
         return createdPost;
-    }
-
-    @Override
-    public Post create(long userId, long debateId, String content, byte[] image) {
-        long imageId = imageService.createImage(image);
-        return postDao.create(userId, debateId, content, imageId);
     }
 
     private void sendEmailToSubscribedUsers(long debateId, long userId) {

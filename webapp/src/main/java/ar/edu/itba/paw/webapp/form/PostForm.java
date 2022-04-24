@@ -1,27 +1,15 @@
 package ar.edu.itba.paw.webapp.form;
 
-import org.hibernate.validator.constraints.Email;
+import ar.edu.itba.paw.webapp.validators.Image;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public class PostForm {
-
-    @Size(max = 100)
-    @Email
-    @NotEmpty
-    private String email;
-
     @NotEmpty
     private String content;
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    @Image
+    private MultipartFile file;
 
     public String getContent() {
         return content;
@@ -29,5 +17,13 @@ public class PostForm {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 }
