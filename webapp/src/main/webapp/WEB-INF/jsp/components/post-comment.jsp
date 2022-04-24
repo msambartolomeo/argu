@@ -10,7 +10,7 @@
             <c:choose>
                 <c:when test="${pageContext.request.userPrincipal.name != null}">
                     <c:url value="/debates/${debate.debateId}" var="postPath" />
-                    <form:form modelAttribute="postForm" action="${postPath}" method="post" acceptCharset="utf-8" id="myForm">
+                    <form:form enctype="multipart/form-data" modelAttribute="postForm" action="${postPath}" method="post" acceptCharset="utf-8" id="myForm">
                         <div class="card-content">
                             <span class="card-title"><spring:message code="components.post-comment.title"/></span>
                             <div class="input-field">
@@ -21,16 +21,16 @@
                             </div>
 
     <%--                        TODO : Correctly implement image input--%>
-    <%--                        <div class="file-field input-field">--%>
-    <%--                            <div class="btn">--%>
-    <%--                                <span>File</span>--%>
-    <%--                                <input type="file" accept="image/jpeg, image/png">--%>
-    <%--                            </div>--%>
-    <%--                            <div class="file-path-wrapper">--%>
-    <%--                                <form:label></form:label>--%>
-    <%--                                <form:input class="file-path validate" type="text"/>--%>
-    <%--                            </div>--%>
-    <%--                        </div>--%>
+                            <div class="file-field input-field">
+                                <div class="btn">
+                                    <form:label path="file" for="file"><spring:message code="components.user-image-button"/></form:label>
+                                    <form:input id="file" path="file" type="file" accept="image/jpeg, image/png"/>
+                                    <form:errors path="file" cssClass="helper-text error"/>
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text"/>
+                                </div>
+                            </div>
 
 
     <%--                        TODO : Deprecate the following--%>

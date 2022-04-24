@@ -353,3 +353,7 @@ a.card {
     margin: 5%;
     padding: 5% 0;
 }
+
+.badge-margin {
+    margin-top: 1%;
+}

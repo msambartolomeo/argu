@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 public class WebController {
@@ -58,15 +59,16 @@ public class WebController {
     }
 
     @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST })
-    public ModelAndView createPost(@PathVariable("debateId") final long debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors) {
+    public ModelAndView createPost(@PathVariable("debateId") final long debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors) throws IOException {
         if (errors.hasErrors()) {
             return debate(debateId, form);
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
-        // TODO: check if post includes image
-        // TODO: remove email from frontend, only users can post
-        postService.create(user.getUserId(), debateId, form.getContent());
+        if (form.getFile().getContentType().equals("image/jpeg") || form.getFile().getContentType().equals("image/png")) {
+            postService.create(user.getUserId(), debateId, form.getContent(), form.getFile().getBytes());
+        }
+
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
