@@ -47,6 +47,11 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
+    public List<Debate> getQuery(int page, String query) {
+        return jdbcTemplate.query("SELECT * FROM debates WHERE name ILIKE ? LIMIT 15 OFFSET ?", new Object[]{ "%" + query + "%", page }, ROW_MAPPER);
+    }
+
+    @Override
     public Debate create(String name, String description, Long imageId) {
         final Map<String, Object> data = new HashMap<>();
         LocalDateTime created = LocalDateTime.now();

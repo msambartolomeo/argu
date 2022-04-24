@@ -50,9 +50,10 @@ public class WebController {
     }
 
     @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debatesList() {
+    public ModelAndView debatesList(@RequestParam(value = "search", required = false) String search) {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
-        mav.addObject("debates", debateService.getAll(0));
+        LOGGER.info("search is " + search);
+        mav.addObject("debates", debateService.get(0, search));
         return mav;
     }
 

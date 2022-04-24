@@ -9,6 +9,6 @@ public interface DebateService {
     Optional<Debate> getDebateById(long id);
     Debate create(String name, String description);
     Debate create(String name, String description, byte[] image);
-    List<Debate> getAll(int page);
     List<Debate> getSubscribedDebatesByUsername(long userid, int page);
+    List<Debate> get(int page, String search);
 }

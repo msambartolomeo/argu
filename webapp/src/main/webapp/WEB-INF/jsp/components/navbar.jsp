@@ -46,14 +46,16 @@
                     </c:choose>
 
                     <li>
-                        <div class="input-field search-size">
-                            <input placeholder="<spring:message code="components.navbar.search"/>" id="search"
-                                   type="search" required>
-                            <label class="label-icon" for="search">
-                                <i class="material-icons">search</i>
-                            </label>
-                            <i class="material-icons">close</i>
-                        </div>
+                        <form method="get" action="<c:url value="/debates"/>">
+                            <div class="input-field search-size">
+                                <input placeholder="<spring:message code="components.navbar.search"/>" id="search"
+                                       type="search" required name="search">
+                                <label class="label-icon" for="search">
+                                    <i class="material-icons">search</i>
+                                </label>
+                                <i class="material-icons">close</i>
+                            </div>
+                        </form>
                     </li>
                 </ul>
             </nav>
