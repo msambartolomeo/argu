@@ -59,9 +59,8 @@
                 </c:if>
             </div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <%@include file="../components/JS_imports.jsp" %>
         <script>
-            M.AutoInit();
             $(document).ready(function(){
                 $('.modal').modal();
             });

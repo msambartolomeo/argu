@@ -11,5 +11,6 @@
 <body>
 <%@include file="../components/navbar.jsp"%>
 <%@include file="../components/register-form.jsp"%>
+<%@include file="../components/JS_imports.jsp" %>
 </body>
 </html>

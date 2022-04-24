@@ -38,5 +38,6 @@
             </div>
 
         </div>
+        <%@include file="../components/JS_imports.jsp" %>
     </body>
 </html>

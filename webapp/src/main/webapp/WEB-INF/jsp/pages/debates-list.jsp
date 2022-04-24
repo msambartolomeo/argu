@@ -23,5 +23,6 @@
                 <h3 class="center"><spring:message code="pages.debates-list.no-debates"/></h3>
             </c:if>
         </div>
+    <%@include file="../components/JS_imports.jsp" %>
     </body>
 </html>
