@@ -33,11 +33,12 @@ public class PostJdbcDao implements PostDao {
 
     private static final RowMapper<PublicPost> PUBLIC_POST_ROW_MAPPER = (rs, rowNum) ->
             new PublicPost(rs.getLong("postid"),
-                    rs.getString("email"),
+                    rs.getString("username"),
                     rs.getLong("debateid"),
                     rs.getString("content"),
                     rs.getInt("likes"),
-                    rs.getObject("created_date", LocalDateTime.class));
+                    rs.getObject("created_date", LocalDateTime.class),
+                    rs.getLong("imageid"));
 
     @Autowired
     public PostJdbcDao(final DataSource ds) {
@@ -64,7 +65,7 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public Optional<PublicPost> getPublicPostById(long id) {
-        return jdbcTemplate.query("SELECT postid, email, debateid, content, likes, created_date FROM public_posts NATURAL JOIN users WHERE postId = ?",
+        return jdbcTemplate.query("SELECT * FROM public_posts WHERE postId = ?",
                 new Object[]{id},
                 PUBLIC_POST_ROW_MAPPER)
                 .stream().findFirst();
@@ -72,8 +73,8 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT postid, email, debateid, content, likes, created_date FROM public_posts NATURAL JOIN users WHERE debateid = ? ORDER BY postid LIMIT 30 OFFSET ?",
-                new Object[]{debateId, page * 10},
+        return jdbcTemplate.query("SELECT * FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 30 OFFSET ?",
+                new Object[]{debateId, page},
                 PUBLIC_POST_ROW_MAPPER);
     }
 

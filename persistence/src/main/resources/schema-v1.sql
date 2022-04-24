@@ -36,6 +36,6 @@ CREATE TABLE IF NOT EXISTS likes
 );
 
 CREATE OR REPLACE VIEW public_posts AS
-    SELECT posts.postid, posts.debateid, posts.userid, posts.content, COUNT(likes.userid) AS likes, posts.created_date
-    FROM posts LEFT JOIN likes ON posts.postid = likes.postid
-    GROUP BY posts.postid, posts.debateid, posts.userid, posts.content;
+    SELECT posts.postid, users.username, posts.debateid, posts.content, COUNT(likes.userid) AS likes, posts.created_date, posts.imageid
+    FROM posts LEFT JOIN likes ON posts.postid = likes.postid LEFT JOIN users ON posts.userid = users.userid
+    GROUP BY posts.postid, users.username;

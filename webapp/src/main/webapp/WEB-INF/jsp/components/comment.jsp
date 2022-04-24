@@ -7,7 +7,7 @@
 <body>
 <div class="speech-bubble sb-left">
     <p class="comment-owner">
-        <c:out value="${post.userEmail}" />
+        <c:out value="${post.username}" />
         <spring:message code="components.user-comment" />
     </p>
     <br>
