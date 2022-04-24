@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -19,6 +20,9 @@ import java.util.concurrent.TimeUnit;
 @EnableWebSecurity
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private Environment env;
     @Autowired
     private PawUserDetailsService userDetailsService;
     @Bean
@@ -40,15 +44,14 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/login", "/register").anonymous()
                     .antMatchers("/**").authenticated()
                 .and().formLogin()
-                    .usernameParameter("j_username")
-                    .passwordParameter("j_password")
+                    .usernameParameter("username")
+                    .passwordParameter("password")
                     .defaultSuccessUrl("/debates", false)
                     .loginPage("/login")
                 .and().rememberMe()
-                    .rememberMeParameter("j_rememberme")
+                    .rememberMeParameter("rememberme")
                     .userDetailsService(userDetailsService)
-                    // TODO: Usar OpenSSL para generar un String aleatorio de 4K u 8K para usar como key
-                    .key("mysupersecretketthatnobodyknowsabout")
+                    .key(env.getProperty("spring.security.rememberme.key"))
                     .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
                 .and().logout()
                     .logoutUrl("/logout")

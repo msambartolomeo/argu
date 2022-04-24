@@ -11,11 +11,11 @@
                 <span class="card-title center"><spring:message code="components.login-welcome-back"/></span>
                 <div class="input-field">
                     <label for="username"><spring:message code="components.login-username"/></label>
-                    <input type="text" name="j_username" id="username" />
+                    <input type="text" name="username" id="username" />
                 </div>
                 <div class="input-field">
                     <label for="password"><spring:message code="components.login-password"/></label>
-                    <input type="password" name="j_password" id="password" />
+                    <input type="password" name="password" id="password" />
                 </div>
                 <div>
                     <label>
