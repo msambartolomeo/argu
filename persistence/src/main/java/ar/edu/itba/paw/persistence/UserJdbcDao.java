@@ -78,6 +78,13 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public User updateLegacyUser(long userId, String username, String password, String email) {
+        LocalDate created = LocalDate.now();
+        jdbcTemplate.update("UPDATE users SET username = ?, password = ?, created_date = ? WHERE email = ?", username, password, created, email);
+        return new User(userId, username, password, email, created);
+    }
+
+    @Override
     public List<User> getAll(int page) {
         return jdbcTemplate.query("SELECT * FROM users LIMIT 10 OFFSET ?", new Object[] { page * 10 }, ROW_MAPPER);
     }

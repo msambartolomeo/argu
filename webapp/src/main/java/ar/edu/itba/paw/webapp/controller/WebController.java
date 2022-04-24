@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.services.*;
+import ar.edu.itba.paw.interfaces.UserAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.services.DebateService;
+import ar.edu.itba.paw.interfaces.services.ImageService;
+import ar.edu.itba.paw.interfaces.services.PostService;
+import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.DebateNotFoundException;
@@ -100,7 +104,11 @@ public class WebController {
             LOGGER.info("Error registering new user {}", errors);
             return registerPage(form);
         }
-        userService.create(form.getUsername(), form.getPassword(), form.getEmail());
+        try {
+            userService.create(form.getUsername(), form.getPassword(), form.getEmail());
+        } catch (UserAlreadyExistsException e) {
+            // TODO: informar al usuario que ya existe un usuario con esos datos
+        }
         return new ModelAndView("redirect:/");
     }
 
