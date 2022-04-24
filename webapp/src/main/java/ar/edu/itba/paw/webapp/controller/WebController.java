@@ -1,15 +1,15 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.UserAlreadyExistsException;
+import ar.edu.itba.paw.model.exceptions.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.webapp.exception.DebateNotFoundException;
-import ar.edu.itba.paw.webapp.exception.ImageNotFoundException;
-import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
+import ar.edu.itba.paw.model.exceptions.ImageNotFoundException;
+import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ModeratorForm;
 import ar.edu.itba.paw.webapp.form.PostForm;
 import ar.edu.itba.paw.webapp.form.ProfileImageForm;
