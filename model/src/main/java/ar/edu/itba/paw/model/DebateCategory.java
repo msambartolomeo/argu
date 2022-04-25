@@ -11,7 +11,8 @@ public enum DebateCategory {
     RELIGION,
     SCIENCE,
     TECHNOLOGY,
-    WORLD;
+    WORLD,
+    OTHER;
 
     // Get category from integer
     public static DebateCategory getFromInt(Integer i) {

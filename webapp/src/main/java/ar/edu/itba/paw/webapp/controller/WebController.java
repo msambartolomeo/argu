@@ -1,14 +1,15 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.exceptions.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.model.DebateCategory;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ImageNotFoundException;
+import ar.edu.itba.paw.model.exceptions.UserAlreadyExistsException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ModeratorForm;
 import ar.edu.itba.paw.webapp.form.PostForm;
@@ -46,7 +47,9 @@ public class WebController {
     }
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView home() {
-        return new ModelAndView("pages/landing-page");
+        ModelAndView mav = new ModelAndView("pages/landing-page");
+        mav.addObject("categories", DebateCategory.values());
+        return mav;
     }
 
     @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
