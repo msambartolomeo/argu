@@ -53,7 +53,7 @@ public class WebController {
     public ModelAndView debatesList(@RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "0") int page) {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
         LOGGER.info(String.valueOf(page));
-        mav.addObject("total_pages", debateService.getCount(search));
+        mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getCount(search) / 10)));
         mav.addObject("debates", debateService.get(page, search));
         return mav;
     }
@@ -61,7 +61,7 @@ public class WebController {
     @RequestMapping(value = "/debates/category/{category}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debatesCategoryList(@PathVariable("category") String category, @RequestParam(value = "page", defaultValue = "0") int page) {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
-        mav.addObject("total_pages", debateService.getFromCategoryCount(DebateCategory.valueOf(category.toUpperCase())));
+        mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getFromCategoryCount(DebateCategory.valueOf(category.toUpperCase())) / 15)));
         mav.addObject("debates", debateService.getFromCategory(DebateCategory.valueOf(category.toUpperCase()),page));
         return mav;
     }
@@ -70,7 +70,7 @@ public class WebController {
     public ModelAndView debate(@PathVariable("debateId") final long debateId, @ModelAttribute("postForm") final PostForm form, @RequestParam(value = "page", defaultValue = "0") int page) {
         final ModelAndView mav = new ModelAndView("pages/debate");
         mav.addObject("debate", debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new));
-        mav.addObject("total_pages", postService.getPostsByDebateCount(debateId));
+        mav.addObject("total_pages", (int) Math.ceil( (double) (postService.getPostsByDebateCount(debateId) / 15)));
         mav.addObject("posts", postService.getPublicPostsByDebate(debateId, page));
         return mav;
     }
@@ -127,8 +127,8 @@ public class WebController {
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         mav.addObject("user", user);
-        mav.addObject("total_pages", debateService.getSubscribedDebatesByUsernameCount(user.getUserId()));
-        mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), 0));
+        mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getSubscribedDebatesByUsernameCount(user.getUserId()) / 10)));
+        mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), page));
         return mav;
     }
 

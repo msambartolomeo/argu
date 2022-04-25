@@ -164,6 +164,14 @@ a.card {
     flex-direction: column;
 }
 
+.debate-list>h2 {
+    margin-left: 3%;
+}
+
+.page-number {
+    background-color: var(--primary-color) !important;
+}
+
 /* debate.jsp */
 
 .debate-title {
@@ -296,26 +304,6 @@ a.card {
     flex-direction: row;
 }
 
-/*
-.profile-img {
-    margin-top: 5%;
-    margin-left: 5% !important;
-}
-
-.profile-img>img {
-    width: 90%;
-}
-
-.profile-data {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-.profile-data>h5 {
-    font-weight: bold;
-}*/
 .profile-container {
     display: flex;
     flex-direction: row;

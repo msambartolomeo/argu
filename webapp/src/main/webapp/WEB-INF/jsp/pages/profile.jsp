@@ -52,6 +52,15 @@
                         </div>
                     </c:forEach>
                 </c:if>
+                <div class="center">
+                    <ul class="pagination">
+                        <c:forEach var="page" begin="0" end="${total_pages}">
+                            <li class="active page-number">
+                                <a href="${pageContext.request.contextPath}/profile?page=${page}">${page + 1}</a>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
             </div>
         </div>
         <%@include file="../components/JS_imports.jsp" %>

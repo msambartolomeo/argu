@@ -31,6 +31,15 @@
                 <c:if test="${posts.size() == 0}">
                     <h3 class="center"><spring:message code="pages.debate.no-posts"/></h3>
                 </c:if>
+                <div class="center">
+                    <ul class="pagination">
+                        <c:forEach var="page" begin="0" end="${total_pages}">
+                            <li class="active page-number">
+                                <a href="${pageContext.request.contextPath}/debates/${debateId}?page=${page}">${page + 1}</a>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
             </div>
 
             <div class="post-comments">
