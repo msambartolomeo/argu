@@ -8,17 +8,19 @@ public class Debate {
     private final String description;
     private final Long imageId;
     private final LocalDateTime createdDate;
+    private final DebateCategory debateCategory;
 
-    public Debate(long id, String name, String description, LocalDateTime createdDate, Long imageId) {
+    public Debate(long id, String name, String description, LocalDateTime createdDate, Long imageId, DebateCategory category) {
         this.debateId = id;
         this.name = name;
         this.description = description;
         this.createdDate = createdDate;
         this.imageId = imageId;
+        this.debateCategory = category;
     }
 
-    public Debate(long id, String name, String description, LocalDateTime createdDate) {
-        this(id, name, description, createdDate, null);
+    public Debate(long id, String name, String description, LocalDateTime createdDate, DebateCategory category) {
+        this(id, name, description, createdDate, null, category);
     }
 
     public long getDebateId() {
@@ -39,5 +41,9 @@ public class Debate {
 
     public Long getImageId() {
         return imageId;
+    }
+
+    public DebateCategory getCategory() {
+        return debateCategory;
     }
 }

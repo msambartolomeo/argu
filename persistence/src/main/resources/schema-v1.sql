@@ -3,6 +3,7 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS password VARCHAR(100);
 ALTER TABLE users ADD COLUMN IF NOT EXISTS created_date DATE;
 
 ALTER TABLE debates ADD COLUMN IF NOT EXISTS created_date timestamp;
+ALTER TABLE debates ADD COLUMN IF NOT EXISTS category INTEGER;
 
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS created_date timestamp;
 

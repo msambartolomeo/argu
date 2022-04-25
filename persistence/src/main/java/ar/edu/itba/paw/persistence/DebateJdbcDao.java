@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.DebateCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,7 +26,8 @@ public class DebateJdbcDao implements DebateDao {
                     rs.getString("name"),
                     rs.getString("description"),
                     rs.getObject("created_date", LocalDateTime.class),
-                    rs.getLong("imageid"));
+                    rs.getLong("imageid"),
+                    DebateCategory.getFromInt(rs.getInt("category")));
 
     @Autowired
     public DebateJdbcDao(final DataSource ds) {
@@ -52,17 +54,18 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public Debate create(String name, String description, Long imageId) {
+    public Debate create(String name, String description, Long imageId, DebateCategory category) {
         final Map<String, Object> data = new HashMap<>();
         LocalDateTime created = LocalDateTime.now();
         data.put("name", name);
         data.put("description", description);
         data.put("created_date", created);
         data.put("imageid", imageId);
+        data.put("category", DebateCategory.getFromCategory(category));
 
         final Number debateId = jdbcInsert.executeAndReturnKey(data);
 
-        return new Debate(debateId.longValue(), name, description, created, imageId);
+        return new Debate(debateId.longValue(), name, description, created, imageId, category);
     }
     @Override
     public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
