@@ -1,18 +1,28 @@
 package ar.edu.itba.paw.model;
 
 public enum DebateCategory {
-    CULTURE,
-    ECONOMICS,
-    EDUCATION,
-    ENTERTAINMENT,
-    HISTORY,
-    LITERATURE,
-    POLITICS,
-    RELIGION,
-    SCIENCE,
-    TECHNOLOGY,
-    WORLD,
-    OTHER;
+    CULTURE("culture"),
+    ECONOMICS("economics"),
+    EDUCATION("education"),
+    ENTERTAINMENT("entertainment"),
+    HISTORY("history"),
+    LITERATURE("literature"),
+    POLITICS("politics"),
+    RELIGION("religion"),
+    SCIENCE("science"),
+    TECHNOLOGY("technology"),
+    WORLD("world"),
+    OTHER("other");
+
+    private final String name;
+
+    DebateCategory(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     // Get category from integer
     public static DebateCategory getFromInt(Integer i) {

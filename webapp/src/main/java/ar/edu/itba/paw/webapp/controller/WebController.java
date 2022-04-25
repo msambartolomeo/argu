@@ -55,8 +55,14 @@ public class WebController {
     @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debatesList(@RequestParam(value = "search", required = false) String search) {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
-        LOGGER.info("search is " + search);
         mav.addObject("debates", debateService.get(0, search));
+        return mav;
+    }
+
+    @RequestMapping(value = "/debates/category/{category}", method = { RequestMethod.GET, RequestMethod.HEAD })
+    public ModelAndView debatesCategoryList(@PathVariable("category") String category) {
+        final ModelAndView mav = new ModelAndView("pages/debates-list");
+        mav.addObject("debates", debateService.getFromCategory(DebateCategory.valueOf(category.toUpperCase()),0));
         return mav;
     }
 
