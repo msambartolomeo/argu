@@ -1,14 +1,15 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.exceptions.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.model.DebateCategory;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ImageNotFoundException;
+import ar.edu.itba.paw.model.exceptions.UserAlreadyExistsException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ModeratorForm;
 import ar.edu.itba.paw.webapp.form.PostForm;
@@ -47,14 +48,21 @@ public class WebController {
     public ModelAndView home() {
         final ModelAndView mav = new ModelAndView("pages/landing-page");
         mav.addObject("debates", debateService.getMostSubscribed());
+        mav.addObject("categories", DebateCategory.values());
         return mav;
     }
 
     @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debatesList(@RequestParam(value = "search", required = false) String search) {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
-        LOGGER.info("search is " + search);
         mav.addObject("debates", debateService.get(0, search));
+        return mav;
+    }
+
+    @RequestMapping(value = "/debates/category/{category}", method = { RequestMethod.GET, RequestMethod.HEAD })
+    public ModelAndView debatesCategoryList(@PathVariable("category") String category) {
+        final ModelAndView mav = new ModelAndView("pages/debates-list");
+        mav.addObject("debates", debateService.getFromCategory(DebateCategory.valueOf(category.toUpperCase()),0));
         return mav;
     }
 

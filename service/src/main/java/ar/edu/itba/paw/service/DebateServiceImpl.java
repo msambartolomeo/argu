@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.DebateCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +25,14 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public Debate create(String name, String description) {
-        return debateDao.create(name, description, null);
+    public Debate create(String name, String description, DebateCategory category) {
+        return debateDao.create(name, description, null, category);
     }
 
     @Override
-    public Debate create(String name, String description, byte[] image) {
+    public Debate create(String name, String description, byte[] image, DebateCategory category) {
         long imageId = imageService.createImage(image);
-        return debateDao.create(name, description, imageId);
+        return debateDao.create(name, description, imageId, category);
     }
 
     @Override
@@ -41,11 +42,16 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public List<Debate> get(int page, String search) {
-        if (search != null) {
+        if (search != null)
             return debateDao.getQuery(page, search);
-        } else {
-            return debateDao.getAll(page);
-        }
+         else
+             return debateDao.getAll(page);
+
+    }
+
+    @Override
+    public List<Debate> getFromCategory(DebateCategory category, int page) {
+        return debateDao.getAllFromCategory(category, page);
     }
 
     @Override

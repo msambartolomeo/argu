@@ -20,22 +20,12 @@
                         </h2>
                     </a>
                     <div class="row center">
-                        <a class="waves-effect btn-small">Culture</a>
-                        <a class="waves-effect btn-small">Economics</a>
-                        <a class="waves-effect btn-small">Education</a>
-                        <a class="waves-effect btn-small">Entertainment</a>
-                        <a class="waves-effect btn-small">History</a>
-                        <a class="waves-effect btn-small">Literature</a>
+                        <c:forEach items="${categories}" var="category">
+                            <a href="<c:url value="/debates/category/${category.name}" />" class="waves-effect btn-small">
+                                <spring:message code="category.${category.name}"/>
+                            </a>
+                        </c:forEach>
                     </div>
-                    <div class="row center">
-                        <a class="waves-effect btn-small">Politics</a>
-                        <a class="waves-effect btn-small">Religion</a>
-                        <a class="waves-effect btn-small">Science</a>
-                        <a class="waves-effect btn-small">Technology</a>
-                        <a class="waves-effect btn-small">World</a>
-                    </div>
-                    <br><br>
-
                 </div>
             </div>
             <div class="parallax"><img src="${pageContext.request.contextPath}/resources/images/speech-bubbles.jpeg" alt="Debate background image"></div>

@@ -4,6 +4,7 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS created_date DATE;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS role INTEGER;
 
 ALTER TABLE debates ADD COLUMN IF NOT EXISTS created_date timestamp;
+ALTER TABLE debates ADD COLUMN IF NOT EXISTS category INTEGER;
 
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS created_date timestamp;
 
