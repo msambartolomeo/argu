@@ -78,6 +78,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public int getPostsByDebateCount(long debateId) {
+        return postDao.getPostsByDebateCount(debateId);
+    }
+
+    @Override
     public void likePost(long postId, long userId) {
         postDao.likePost(postId, userId);
     }

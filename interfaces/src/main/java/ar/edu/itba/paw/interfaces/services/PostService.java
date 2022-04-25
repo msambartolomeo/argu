@@ -13,6 +13,7 @@ public interface PostService {
     // TODO: Deprecated
     Post createWithEmail(String userEmail, long debateId, String content);
     List<Post> getPostsByDebate(long debateId, int page);
+    int getPostsByDebateCount(long debateId);
     Optional<PublicPost> getPublicPostById(long id);
     List<PublicPost> getPublicPostsByDebate(long debateId, int page);
     void likePost(long postId, long userId);

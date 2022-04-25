@@ -50,31 +50,35 @@ public class WebController {
     }
 
     @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debatesList(@RequestParam(value = "search", required = false) String search) {
+    public ModelAndView debatesList(@RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "0") int page) {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
-        mav.addObject("debates", debateService.get(0, search));
+        LOGGER.info(String.valueOf(page));
+        mav.addObject("total_pages", debateService.getCount(search));
+        mav.addObject("debates", debateService.get(page, search));
         return mav;
     }
 
     @RequestMapping(value = "/debates/category/{category}", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debatesCategoryList(@PathVariable("category") String category) {
+    public ModelAndView debatesCategoryList(@PathVariable("category") String category, @RequestParam(value = "page", defaultValue = "0") int page) {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
-        mav.addObject("debates", debateService.getFromCategory(DebateCategory.valueOf(category.toUpperCase()),0));
+        mav.addObject("total_pages", debateService.getFromCategoryCount(DebateCategory.valueOf(category.toUpperCase())));
+        mav.addObject("debates", debateService.getFromCategory(DebateCategory.valueOf(category.toUpperCase()),page));
         return mav;
     }
 
     @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debate(@PathVariable("debateId") final long debateId, @ModelAttribute("postForm") final PostForm form) {
+    public ModelAndView debate(@PathVariable("debateId") final long debateId, @ModelAttribute("postForm") final PostForm form, @RequestParam(value = "page", defaultValue = "0") int page) {
         final ModelAndView mav = new ModelAndView("pages/debate");
         mav.addObject("debate", debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new));
-        mav.addObject("posts", postService.getPublicPostsByDebate(debateId, 0));
+        mav.addObject("total_pages", postService.getPostsByDebateCount(debateId));
+        mav.addObject("posts", postService.getPublicPostsByDebate(debateId, page));
         return mav;
     }
 
     @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST })
     public ModelAndView createPost(@PathVariable("debateId") final long debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
         if (errors.hasErrors()) {
-            return debate(debateId, form);
+            return debate(debateId, form, 0);
         }
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         postService.create(user.getUserId(), debateId, form.getContent(), form.getFile().getBytes());
@@ -118,11 +122,12 @@ public class WebController {
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth) {
+    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth, @RequestParam(value = "page", defaultValue = "0") int page) {
         final ModelAndView mav = new ModelAndView("/pages/profile");
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         mav.addObject("user", user);
+        mav.addObject("total_pages", debateService.getSubscribedDebatesByUsernameCount(user.getUserId()));
         mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), 0));
         return mav;
     }
@@ -131,7 +136,7 @@ public class WebController {
     public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {
             LOGGER.info("Error uploading file {}", errors);
-            return profilePage(form, auth);
+            return profilePage(form, auth, 0);
         }
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
