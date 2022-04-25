@@ -280,6 +280,12 @@ a.card {
     padding-bottom: 1%;
 }
 
+.debate-form-container {
+    width: 40%;
+    margin: 1% auto;
+    padding-bottom: 1%;
+}
+
 @media screen and (max-width: 900px) {
     .login-container {
         width: 95%;
@@ -356,4 +362,8 @@ a.card {
 
 .badge-margin {
     margin-top: 1%;
+}
+
+.no-borders {
+    border-collapse: collapse;
 }
