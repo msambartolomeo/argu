@@ -20,7 +20,6 @@
                                 <form:errors path="content" element="span" cssClass="error" />
                             </div>
 
-    <%--                        TODO : Correctly implement image input--%>
                             <div class="file-field input-field">
                                 <div class="btn">
                                     <form:label path="file" for="file"><spring:message code="components.user-image-button"/></form:label>
@@ -32,13 +31,6 @@
                                 <form:errors path="file" cssClass="helper-text error"/>
                             </div>
 
-
-    <%--                        TODO : Deprecate the following--%>
-    <%--                        <div class="input-field">--%>
-    <%--                            <form:label path="email"><spring:message code="components.post-comment.email"/></form:label>--%>
-    <%--                            <form:input type="text" path="email" />--%>
-    <%--                            <form:errors path="email" element="p" cssClass="error" />--%>
-    <%--                        </div>--%>
                             <button class="btn waves-effect center-block" type="submit" form="myForm" id="myForm"
                                     onclick="this.form.submit(); this.disabled=true; this.value='Sending...';"
                                     name="action"><spring:message code="components.post-comment.submit"/>

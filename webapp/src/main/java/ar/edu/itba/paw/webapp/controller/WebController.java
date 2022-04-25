@@ -143,6 +143,11 @@ public class WebController {
         return image.getData();
     }
 
+    @RequestMapping(value = "/create-debate", method = { RequestMethod.GET, RequestMethod.HEAD })
+    public ModelAndView createDebate() {
+        return new ModelAndView("pages/create-debate");
+    }
+
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ModelAndView handleUserNotFoundException(UserAlreadyExistsException e) {
         ModelAndView mav = new ModelAndView("pages/register");
