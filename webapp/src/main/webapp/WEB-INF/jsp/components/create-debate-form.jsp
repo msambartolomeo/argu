@@ -13,13 +13,13 @@
                 <span class="card-title center"><spring:message code="components.create-debate"/></span>
                 <div class="input-field">
                     <form:label path="title" for="title"><spring:message code="components.create-debate-title"/></form:label>
-                    <form:textarea path="title" id="title" maxlength="64"/>
+                    <form:textarea path="title" id="title" maxlength="64" cssClass="materialize-textarea"/>
                     <form:errors path="title" element="span" cssClass="error" />
                 </div>
 
                 <div class="input-field">
                     <form:label path="description" for="description"><spring:message code="components.create-debate-description"/></form:label>
-                    <form:textarea path="description" id="description" maxlength="280"/>
+                    <form:textarea path="description" id="description" maxlength="280" cssClass="materialize-textarea"/>
                     <form:errors path="description" element="span" cssClass="error" />
                 </div>
 

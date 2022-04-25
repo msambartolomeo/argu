@@ -9,6 +9,7 @@
 </head>
 <body>
     <%@include file="../components/navbar.jsp"%>
+    <%@include file="../components/create-debate-form.jsp"%>
     <%@include file="../components/JS_imports.jsp" %>
 </body>
 </html>
