@@ -4,11 +4,12 @@ import ar.edu.itba.paw.webapp.validators.Image;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class CreateDebateForm {
 
-    @Size(max = 64)
+    @Size(max = 100)
     @NotEmpty
     private String title;
 
@@ -16,8 +17,8 @@ public class CreateDebateForm {
     @NotEmpty
     private String description;
 
-    @NotEmpty
-    private int categoryId;
+    @NotNull
+    private Integer categoryId;
 
     @Size(max = 64)
     @NotEmpty
@@ -42,11 +43,11 @@ public class CreateDebateForm {
         this.description = description;
     }
 
-    public int getCategoryId() {
+    public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
 
