@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -26,7 +27,8 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("email"),
                     //TODO: check whether LocalDateTime, Date, or Instant is more useful
                     rs.getObject("created_date", LocalDate.class),
-                    rs.getLong("imageid"));
+                    rs.getLong("imageid"),
+                    UserRole.getRole(rs.getInt("role")));
 
     @Autowired
     public UserJdbcDao(final DataSource ds){
@@ -71,17 +73,18 @@ public class UserJdbcDao implements UserDao {
         userData.put("password", password);
         userData.put("email", email);
         userData.put("created_date", created);
+        userData.put("role", UserRole.getValue(UserRole.USER));
 
         final Number userId = jdbcInsert.executeAndReturnKey(userData);
 
-        return new User(userId.longValue(), username, password, email, created);
+        return new User(userId.longValue(), username, password, email, created, UserRole.USER);
     }
 
     @Override
     public User updateLegacyUser(long userId, String username, String password, String email) {
         LocalDate created = LocalDate.now();
         jdbcTemplate.update("UPDATE users SET username = ?, password = ?, created_date = ? WHERE email = ?", username, password, created, email);
-        return new User(userId, username, password, email, created);
+        return new User(userId, username, password, email, created, UserRole.USER);
     }
 
     @Override

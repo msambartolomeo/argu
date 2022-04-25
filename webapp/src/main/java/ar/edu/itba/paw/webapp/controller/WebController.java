@@ -136,6 +136,11 @@ public class WebController {
         return new ModelAndView("redirect:/profile");
     }
 
+    @RequestMapping(value = "/create_debate", method = { RequestMethod.GET, RequestMethod.HEAD})
+    public ModelAndView createDebatePage() {
+        return new ModelAndView("pages/login");
+    }
+
     @ResponseBody
     @RequestMapping(value = "/images/{imageId}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public byte[] getImage(@PathVariable("imageId") final long imageId) {
@@ -165,6 +170,11 @@ public class WebController {
 
     @RequestMapping(value = "/404", method = { RequestMethod.GET})
     public ModelAndView error() {
+        return new ModelAndView("error/404");
+    }
+    // TODO: implement 403 error page
+    @RequestMapping(value = "/403", method = { RequestMethod.GET})
+    public ModelAndView error403() {
         return new ModelAndView("error/404");
     }
 }
