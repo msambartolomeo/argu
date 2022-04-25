@@ -7,7 +7,7 @@
         <title>Argu | <spring:message code="pages.profile"/></title>
         <%@include file="../components/imports.jsp"%>
     </head>
-    <body>
+    <body class="profile-wrapper">
         <%@include file="../components/navbar.jsp" %>
         <div class="profile-container">
             <div class="card profile-data">

@@ -80,7 +80,7 @@ public class DebateJdbcDao implements DebateDao {
     
     @Override
     public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
-        return jdbcTemplate.query("SELECT * FROM debates WHERE debateid IN (SELECT debateid FROM suscribed WHERE userid = ?) LIMIT 10 OFFSET ?", new Object[]{userid, page * 10}, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM debates WHERE debateid IN (SELECT debateid FROM suscribed WHERE userid = ?) LIMIT 5 OFFSET ?", new Object[]{userid, page * 5}, ROW_MAPPER);
     }
 
     @Override

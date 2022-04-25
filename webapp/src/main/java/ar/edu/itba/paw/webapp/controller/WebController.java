@@ -127,7 +127,7 @@ public class WebController {
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         mav.addObject("user", user);
-        mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getSubscribedDebatesByUsernameCount(user.getUserId()) / 10)));
+        mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getSubscribedDebatesByUsernameCount(user.getUserId()) / 5)));
         mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), page));
         return mav;
     }
