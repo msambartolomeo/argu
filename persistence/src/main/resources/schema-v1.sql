@@ -39,3 +39,8 @@ CREATE OR REPLACE VIEW public_posts AS
     SELECT posts.postid, users.username, posts.debateid, posts.content, COUNT(likes.userid) AS likes, posts.created_date, posts.imageid
     FROM posts LEFT JOIN likes ON posts.postid = likes.postid LEFT JOIN users ON posts.userid = users.userid
     GROUP BY posts.postid, users.username;
+
+SELECT debateid, name, description, created_date, imageid
+FROM debates NATURAL JOIN suscribed
+GROUP BY debateid
+ORDER BY COUNT(userid) DESC LIMIT 3;

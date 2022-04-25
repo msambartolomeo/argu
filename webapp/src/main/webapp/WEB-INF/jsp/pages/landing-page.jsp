@@ -62,7 +62,13 @@
                         <i class="medium material-icons">local_fire_department</i>
                         <spring:message code="pages.landing.page.hottest.debates"/>
                     </h2>
-                    <div class="card">
+                    <c:forEach var="debate" items="${debates}">
+                        <div class="list-item">
+                            <c:set var="debate" value="${debates}" scope="request"/>
+                            <%@include file="../components/debates-list-item.jsp" %>
+                        </div>
+                    </c:forEach>
+                    <%--<div class="card">
                         <div class="card-content black-text">
                             <span class="card-title">
                                 Debate 1
@@ -94,7 +100,7 @@
                             <p>I am a very simple card. I am good at containing small bits of information.
                                 I am convenient because I require little markup to use effectively.</p>
                         </div>
-                    </div>
+                    </div>--%>
                 </div>
             </div>
             <div class="parallax"><img src="${pageContext.request.contextPath}/resources/images/group-discussion.jpeg" alt="Unsplashed background img 3"></div>

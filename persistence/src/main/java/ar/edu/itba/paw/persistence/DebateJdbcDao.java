@@ -68,4 +68,12 @@ public class DebateJdbcDao implements DebateDao {
     public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
         return jdbcTemplate.query("SELECT * FROM debates WHERE debateid IN (SELECT debateid FROM suscribed WHERE userid = ?) LIMIT 15 OFFSET ?", new Object[]{userid, page}, ROW_MAPPER);
     }
+
+    @Override
+    public List<Debate> getMostSubscribed() {
+        return jdbcTemplate.query("SELECT debateid, name, description, created_date, imageid \n" +
+                "FROM debates NATURAL JOIN suscribed\n" +
+                "GROUP BY debateid\n" +
+                "ORDER BY COUNT(userid) DESC LIMIT 3;", ROW_MAPPER);
+    }
 }

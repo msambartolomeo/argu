@@ -45,7 +45,9 @@ public class WebController {
     }
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView home() {
-        return new ModelAndView("pages/landing-page");
+        final ModelAndView mav = new ModelAndView("pages/landing-page");
+        mav.addObject("debates", debateService.getMostSubscribed());
+        return mav;
     }
 
     @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })

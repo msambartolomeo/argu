@@ -47,4 +47,9 @@ public class DebateServiceImpl implements DebateService {
             return debateDao.getAll(page);
         }
     }
+
+    @Override
+    public List<Debate> getMostSubscribed() {
+        return debateDao.getMostSubscribed();
+    }
 }
