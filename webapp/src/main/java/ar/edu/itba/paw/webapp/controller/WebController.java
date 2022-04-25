@@ -92,7 +92,8 @@ public class WebController {
     }
 
     @RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView loginPage() {
+    public ModelAndView loginPage(@RequestParam(value = "error", required = false) final String error) {
+        LOGGER.error("error logging in: {}", error);
         return new ModelAndView("pages/login");
     }
 
@@ -107,11 +108,7 @@ public class WebController {
             LOGGER.info("Error registering new user {}", errors);
             return registerPage(form);
         }
-        try {
-            userService.create(form.getUsername(), form.getPassword(), form.getEmail());
-        } catch (UserAlreadyExistsException e) {
-            // TODO: informar al usuario que ya existe un usuario con esos datos
-        }
+        userService.create(form.getUsername(), form.getPassword(), form.getEmail());
         return new ModelAndView("redirect:/");
     }
 
@@ -144,6 +141,14 @@ public class WebController {
     public byte[] getImage(@PathVariable("imageId") final long imageId) {
         Image image = imageService.getImage(imageId).orElseThrow(ImageNotFoundException::new);
         return image.getData();
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ModelAndView handleUserNotFoundException(UserAlreadyExistsException e) {
+        ModelAndView mav = new ModelAndView("pages/register");
+        mav.addObject("registerForm", new RegisterForm());
+        mav.addObject("userNotFound", e);
+        return mav;
     }
 
     @ExceptionHandler(ImageNotFoundException.class)

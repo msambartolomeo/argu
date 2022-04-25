@@ -11,11 +11,11 @@
                 <span class="card-title center"><spring:message code="components.login-welcome-back"/></span>
                 <div class="input-field">
                     <label for="username"><spring:message code="components.login-username"/></label>
-                    <input type="text" name="username" id="username" />
+                    <input class="${param.error != null ? "invalid" : ''}" type="text" name="username" id="username" />
                 </div>
                 <div class="input-field">
                     <label for="password"><spring:message code="components.login-password"/></label>
-                    <input type="password" name="password" id="password" />
+                    <input class="${param.error != null ? "invalid" : ''}" type="password" name="password" id="password" />
                 </div>
                 <div>
                     <label>
@@ -23,6 +23,11 @@
                         <span><spring:message code="components.login-remember-me"/></span>
                     </label>
                 </div>
+                <c:if test="${param.error != null}">
+                    <div class="error" id="error">
+                        <br/><spring:message code="components.login-error"/><br/>
+                    </div>
+                </c:if>
                 <button class="btn waves-effect center-block" type="submit"
                         name="action"><spring:message code="components.login"/>
                     <i class="material-icons right">send</i>
