@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
@@ -48,6 +49,7 @@ public class EmailServiceImpl implements EmailService {
     @Value("classpath:new-noti-email.html")
     private Resource notificationEmail;
 
+    @Async
     @Override
     public void notifyNewPost(String to) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
