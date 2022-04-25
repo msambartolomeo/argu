@@ -40,6 +40,12 @@
                     </form:select>
                 </div>
 
+                <div class="input-field">
+                    <form:label path="opponentUsername" for="opponentUsername"><spring:message code="components.create-debate-opponentUsername"/></form:label>
+                    <form:textarea path="opponentUsername" id="opponentUsername" maxlength="64" cssClass="materialize-textarea"/>
+                    <form:errors path="opponentUsername" element="span" cssClass="error" />
+                </div>
+
                 <div class="file-field input-field">
                     <div class="btn">
                         <form:label path="image" for="image"><spring:message code="components.user-image-button"/></form:label>

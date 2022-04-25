@@ -141,11 +141,6 @@ public class WebController {
         return new ModelAndView("redirect:/profile");
     }
 
-    @RequestMapping(value = "/create_debate", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView createDebatePage() {
-        return new ModelAndView("pages/login");
-    }
-
     @ResponseBody
     @RequestMapping(value = "/images/{imageId}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public byte[] getImage(@PathVariable("imageId") final long imageId) {

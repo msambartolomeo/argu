@@ -19,6 +19,10 @@ public class CreateDebateForm {
     @NotEmpty
     private int categoryId;
 
+    @Size(max = 64)
+    @NotEmpty
+    private String opponentUsername;
+
     @Image
     private MultipartFile image;
 
@@ -44,6 +48,14 @@ public class CreateDebateForm {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getOpponentUsername() {
+        return opponentUsername;
+    }
+
+    public void setOpponentUsername(String opponentUsername) {
+        this.opponentUsername = opponentUsername;
     }
 
     public MultipartFile getImage() {
