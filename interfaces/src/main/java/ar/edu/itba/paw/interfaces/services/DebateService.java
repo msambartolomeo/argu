@@ -11,4 +11,5 @@ public interface DebateService {
     Debate create(String name, String description, byte[] image);
     List<Debate> getSubscribedDebatesByUsername(long userid, int page);
     List<Debate> get(int page, String search);
+    List<Debate> getMostSubscribed();
 }

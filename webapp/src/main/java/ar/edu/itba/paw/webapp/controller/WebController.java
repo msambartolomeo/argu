@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +45,9 @@ public class WebController {
     }
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView home() {
-        return new ModelAndView("pages/landing-page");
+        final ModelAndView mav = new ModelAndView("pages/landing-page");
+        mav.addObject("debates", debateService.getMostSubscribed());
+        return mav;
     }
 
     @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
@@ -115,10 +116,9 @@ public class WebController {
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form) {
+    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth) {
         final ModelAndView mav = new ModelAndView("/pages/profile");
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         mav.addObject("user", user);
         mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), 0));
@@ -126,13 +126,12 @@ public class WebController {
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.POST})
-    public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors) throws IOException {
+    public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {
             LOGGER.info("Error uploading file {}", errors);
-            return profilePage(form);
+            return profilePage(form, auth);
         }
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
 
         userService.updateImage(user.getUserId(), form.getFile().getBytes());

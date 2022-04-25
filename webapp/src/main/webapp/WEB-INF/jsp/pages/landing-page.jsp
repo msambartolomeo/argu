@@ -62,39 +62,12 @@
                         <i class="medium material-icons">local_fire_department</i>
                         <spring:message code="pages.landing.page.hottest.debates"/>
                     </h2>
-                    <div class="card">
-                        <div class="card-content black-text">
-                            <span class="card-title">
-                                Debate 1
-                                <span class="new badge blue-grey darken-2" data-badge-caption="16:00 15/05/22"></span>
-                                <span class="new badge blue-grey darken-2" data-badge-caption="Politics"></span>
-                            </span>
-                            <p>I am a very simple card. I am good at containing small bits of information.
-                                I am convenient because I require little markup to use effectively.</p>
+                    <c:forEach var="debate" items="${debates}">
+                        <div class="list-item">
+                            <c:set var="debate" value="${debates}" scope="request"/>
+                            <%@include file="../components/debates-list-item.jsp" %>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-content black-text">
-                            <span class="card-title">
-                                Debate 2
-                                <span class="new badge blue-grey darken-2" data-badge-caption="10:00 29/04/22"></span>
-                                <span class="new badge blue-grey darken-2" data-badge-caption="Literature"></span>
-                            </span>
-                            <p>I am a very simple card. I am good at containing small bits of information.
-                                I am convenient because I require little markup to use effectively.</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-content black-text">
-                            <span class="card-title">
-                                Debate 3
-                                <span class="new badge blue-grey darken-2" data-badge-caption="18:00 09/06/22"></span>
-                                <span class="new badge blue-grey darken-2" data-badge-caption="Entertainment"></span>
-                            </span>
-                            <p>I am a very simple card. I am good at containing small bits of information.
-                                I am convenient because I require little markup to use effectively.</p>
-                        </div>
-                    </div>
+                    </c:forEach>
                 </div>
             </div>
             <div class="parallax"><img src="${pageContext.request.contextPath}/resources/images/group-discussion.jpeg" alt="Unsplashed background img 3"></div>

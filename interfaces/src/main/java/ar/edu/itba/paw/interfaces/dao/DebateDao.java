@@ -13,4 +13,5 @@ public interface DebateDao {
 
     Debate create(String name, String description, Long imageId);
     List<Debate> getSubscribedDebatesByUsername(long userid, int page);
+    List<Debate> getMostSubscribed();
 }
