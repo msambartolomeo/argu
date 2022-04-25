@@ -6,9 +6,9 @@
 <html>
 <body>
     <div class="card debate-form-container">
-        <c:url value="/create-debate" var="postPath" />
+        <c:url value="/create_debate" var="postPath" />
         <%--@elvariable id="createDebateForm" type="ar.edu.itba.paw.webapp.form.CreateDebateForm"--%>
-        <form:form method="post" action="${postPath}" modelAttribute="createDebateForm" acceptCharset="utf-8">
+        <form:form method="post" action="${postPath}" modelAttribute="createDebateForm" acceptCharset="utf-8" enctype="multipart/form-data">
             <div class="card-content">
                 <c:set var="globalErrors"><form:errors/></c:set>
                 <span class="card-title center"><spring:message code="components.create-debate"/></span>
