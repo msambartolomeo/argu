@@ -148,17 +148,22 @@ public class WebController {
         return image.getData();
     }
 
-    @RequestMapping(value = "/create-debate", method = { RequestMethod.GET, RequestMethod.HEAD })
+    @RequestMapping(value = "/create_debate", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView createDebatePage(@ModelAttribute("createDebateForm") final CreateDebateForm form) {
         return new ModelAndView("pages/create-debate");
     }
 
-    @RequestMapping(value = "/create-debate", method = { RequestMethod.POST })
-    public ModelAndView createDebate(@Valid @ModelAttribute("createDebateForm") final CreateDebateForm form, BindingResult errors) throws IOException {
+    @RequestMapping(value = "/create_debate", method = { RequestMethod.POST })
+    public ModelAndView createDebate(@Valid @ModelAttribute("createDebateForm") final CreateDebateForm form, BindingResult errors, Authentication auth) throws IOException {
         if (errors.hasErrors()) {
             return createDebatePage(form);
         }
-//        userService.create(form.getTitle(), form.getDescription(), form.getCategoryId(), form.getImage().getBytes());
+        debateService.create(form.getTitle(),
+                form.getDescription(),
+                auth.getName(),
+                form.getOpponentUsername(),
+                form.getImage().getBytes(),
+                DebateCategory.getFromInt(form.getCategoryId()));
         return new ModelAndView("redirect:/");
     }
 

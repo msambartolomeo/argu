@@ -25,6 +25,8 @@ public class DebateJdbcDao implements DebateDao {
             new Debate(rs.getLong("debateid"),
                     rs.getString("name"),
                     rs.getString("description"),
+                    rs.getLong("creatorid"),
+                    rs.getLong("opponentid"),
                     rs.getObject("created_date", LocalDateTime.class),
                     rs.getLong("imageid"),
                     DebateCategory.getFromInt(rs.getInt("category")));
@@ -54,18 +56,20 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public Debate create(String name, String description, Long imageId, DebateCategory category) {
+    public Debate create(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category) {
         final Map<String, Object> data = new HashMap<>();
         LocalDateTime created = LocalDateTime.now();
         data.put("name", name);
         data.put("description", description);
+        data.put("creatorid", creatorId);
+        data.put("opponentid", opponentId);
         data.put("created_date", created);
         data.put("imageid", imageId);
         data.put("category", DebateCategory.getFromCategory(category));
 
         final Number debateId = jdbcInsert.executeAndReturnKey(data);
 
-        return new Debate(debateId.longValue(), name, description, created, imageId, category);
+        return new Debate(debateId.longValue(), name, description, creatorId, opponentId, created, imageId, category);
     }
     
     @Override
