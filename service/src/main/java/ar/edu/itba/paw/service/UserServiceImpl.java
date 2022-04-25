@@ -36,22 +36,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(String username, String password, String email) {
-        Optional<User> user = userDao.getUserByUsername(username);
-        if (user.isPresent())
-            //TODO: verificar excepciones correctas (quizás dos excepciones distintas para cada caso)
-            throw new UserAlreadyExistsException();
-        user = userDao.getUserByEmail(email);
-        if (user.isPresent()) {
-            if (user.get().getUsername() == null) {
-                return userDao.updateLegacyUser(user.get().getUserId(), username, passwordEncoder.encode(password), email);
-            }
-            else  {
-                // TODO: verificar excepciones correctas
-                throw new UserAlreadyExistsException();
-            }
+        Optional<User> userByUsername = userDao.getUserByUsername(username);
+        Optional<User> userByEmail = userDao.getUserByEmail(email);
+
+        if (userByUsername.isPresent()) {
+            throw new UserAlreadyExistsException(userByEmail.isPresent(), true);
         }
-        else
+
+        if (userByEmail.isPresent()) {
+            if (userByEmail.get().getUsername() == null) {
+                return userDao.updateLegacyUser(userByEmail.get().getUserId(), username, passwordEncoder.encode(password), email);
+            } else {
+                throw new UserAlreadyExistsException(true, false);
+            }
+        } else {
             return userDao.create(username, passwordEncoder.encode(password), email);
+        }
     }
 
     @Override
