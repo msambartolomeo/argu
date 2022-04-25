@@ -11,10 +11,7 @@ import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserAlreadyExistsException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
-import ar.edu.itba.paw.webapp.form.ModeratorForm;
-import ar.edu.itba.paw.webapp.form.PostForm;
-import ar.edu.itba.paw.webapp.form.ProfileImageForm;
-import ar.edu.itba.paw.webapp.form.RegisterForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,6 +151,20 @@ public class WebController {
     public byte[] getImage(@PathVariable("imageId") final long imageId) {
         Image image = imageService.getImage(imageId).orElseThrow(ImageNotFoundException::new);
         return image.getData();
+    }
+
+    @RequestMapping(value = "/create-debate", method = { RequestMethod.GET, RequestMethod.HEAD })
+    public ModelAndView createDebatePage(@ModelAttribute("createDebateForm") final CreateDebateForm form) {
+        return new ModelAndView("pages/create-debate");
+    }
+
+    @RequestMapping(value = "/create-debate", method = { RequestMethod.POST })
+    public ModelAndView createDebate(@Valid @ModelAttribute("createDebateForm") final CreateDebateForm form, BindingResult errors) throws IOException {
+        if (errors.hasErrors()) {
+            return createDebatePage(form);
+        }
+//        userService.create(form.getTitle(), form.getDescription(), form.getCategoryId(), form.getImage().getBytes());
+        return new ModelAndView("redirect:/");
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
