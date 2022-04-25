@@ -48,4 +48,9 @@ public class DebateServiceImpl implements DebateService {
              return debateDao.getAll(page);
 
     }
+
+    @Override
+    public List<Debate> getFromCategory(DebateCategory category, int page) {
+        return debateDao.getAllFromCategory(category, page);
+    }
 }

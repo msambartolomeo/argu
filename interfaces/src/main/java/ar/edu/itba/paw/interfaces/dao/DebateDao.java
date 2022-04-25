@@ -13,4 +13,5 @@ public interface DebateDao {
     List<Debate> getQuery(int page, String query);
     Debate create(String name, String description, Long imageId, DebateCategory category);
     List<Debate> getSubscribedDebatesByUsername(long userid, int page);
+    List<Debate> getAllFromCategory(DebateCategory category, int page);
 }
