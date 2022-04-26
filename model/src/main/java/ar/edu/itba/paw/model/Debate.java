@@ -1,26 +1,32 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.enums.DebateCategory;
+
 import java.time.LocalDateTime;
 
 public class Debate {
     private final long debateId;
     private final String name;
     private final String description;
+    private final Long creatorId;
+    private final Long opponentId;
     private final Long imageId;
     private final LocalDateTime createdDate;
     private final DebateCategory debateCategory;
 
-    public Debate(long id, String name, String description, LocalDateTime createdDate, Long imageId, DebateCategory category) {
+    public Debate(long id, String name, String description, Long creatorId, Long opponentId, LocalDateTime createdDate, Long imageId, DebateCategory category) {
         this.debateId = id;
         this.name = name;
         this.description = description;
+        this.creatorId = creatorId;
+        this.opponentId = opponentId;
         this.createdDate = createdDate;
         this.imageId = imageId;
         this.debateCategory = category;
     }
 
-    public Debate(long id, String name, String description, LocalDateTime createdDate, DebateCategory category) {
-        this(id, name, description, createdDate, null, category);
+    public Debate(long id, String name, String description, Long creatorId, Long opponentId, LocalDateTime createdDate, DebateCategory category) {
+        this(id, name, description, creatorId, opponentId, createdDate, null, category);
     }
 
     public long getDebateId() {
@@ -35,6 +41,14 @@ public class Debate {
         return description;
     }
 
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public Long getOpponentId() {
+        return opponentId;
+    }
+
     public LocalDateTime getCreatedDate() {
         return createdDate;
     }
@@ -43,7 +57,7 @@ public class Debate {
         return imageId;
     }
 
-    public DebateCategory getCategory() {
+    public DebateCategory getDebateCategory() {
         return debateCategory;
     }
 }

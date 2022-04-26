@@ -4,7 +4,7 @@ import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.model.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.*;
@@ -76,7 +76,7 @@ public class WebController {
         if (!page.matches("\\d+")) throw new PostNotFoundException();
         long id = Long.parseLong(debateId);
         final ModelAndView mav = new ModelAndView("pages/debate");
-        mav.addObject("debate", debateService.getDebateById(id).orElseThrow(DebateNotFoundException::new));
+        mav.addObject("debate", debateService.getPublicDebateById(id).orElseThrow(DebateNotFoundException::new));
         mav.addObject("total_pages", (int) Math.ceil( (double) (postService.getPostsByDebateCount(id) / 15)));
         mav.addObject("posts", postService.getPublicPostsByDebate(id, Integer.parseInt(page)));
         return mav;
@@ -157,11 +157,6 @@ public class WebController {
         return new ModelAndView("redirect:/profile");
     }
 
-    @RequestMapping(value = "/create_debate", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView createDebatePage() {
-        return new ModelAndView("pages/login");
-    }
-
     @ResponseBody
     @RequestMapping(value = "/images/{imageId}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public byte[] getImage(@PathVariable("imageId") final long imageId) {
@@ -169,17 +164,22 @@ public class WebController {
         return image.getData();
     }
 
-    @RequestMapping(value = "/create-debate", method = { RequestMethod.GET, RequestMethod.HEAD })
+    @RequestMapping(value = "/create_debate", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView createDebatePage(@ModelAttribute("createDebateForm") final CreateDebateForm form) {
         return new ModelAndView("pages/create-debate");
     }
 
-    @RequestMapping(value = "/create-debate", method = { RequestMethod.POST })
-    public ModelAndView createDebate(@Valid @ModelAttribute("createDebateForm") final CreateDebateForm form, BindingResult errors) throws IOException {
+    @RequestMapping(value = "/create_debate", method = { RequestMethod.POST })
+    public ModelAndView createDebate(@Valid @ModelAttribute("createDebateForm") final CreateDebateForm form, BindingResult errors, Authentication auth) throws IOException {
         if (errors.hasErrors()) {
             return createDebatePage(form);
         }
-//        userService.create(form.getTitle(), form.getDescription(), form.getCategoryId(), form.getImage().getBytes());
+        debateService.create(form.getTitle(),
+                form.getDescription(),
+                auth.getName(),
+                form.getOpponentUsername(),
+                form.getImage().getBytes(),
+                DebateCategory.getFromInt(form.getCategoryId()));
         return new ModelAndView("redirect:/");
     }
 

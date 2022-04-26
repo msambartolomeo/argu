@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.PublicDebate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,7 +88,7 @@ public class DebateJdbcDaoTest {
         debateData.put("description", DEBATE_DESCRIPTION);
         jdbcInsert.execute(debateData);
 
-        List<Debate> debates = debateDao.getAll(DEBATES_PAGE);
+        List<PublicDebate> debates = debateDao.getAll(DEBATES_PAGE);
 
         assertEquals(1, debates.size());
         assertEquals(DEBATE_NAME, debates.get(0).getName());
@@ -96,7 +97,7 @@ public class DebateJdbcDaoTest {
 
     @Test
     public void testGetAllEmpty() {
-        List<Debate> debates = debateDao.getAll(DEBATES_PAGE);
+        List<PublicDebate> debates = debateDao.getAll(DEBATES_PAGE);
 
         assertTrue(debates.isEmpty());
     }

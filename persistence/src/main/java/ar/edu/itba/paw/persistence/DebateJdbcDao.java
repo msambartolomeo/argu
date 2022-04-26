@@ -2,7 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.DebateCategory;
+import ar.edu.itba.paw.model.PublicDebate;
+import ar.edu.itba.paw.model.enums.DebateCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,9 +26,23 @@ public class DebateJdbcDao implements DebateDao {
             new Debate(rs.getLong("debateid"),
                     rs.getString("name"),
                     rs.getString("description"),
+                    rs.getLong("creatorid"),
+                    rs.getLong("opponentid"),
                     rs.getObject("created_date", LocalDateTime.class),
                     rs.getLong("imageid"),
                     DebateCategory.getFromInt(rs.getInt("category")));
+
+    private static final RowMapper<PublicDebate> PUBLIC_ROW_MAPPER = (rs, rowNum) ->
+            new PublicDebate(
+                    rs.getLong("debateid"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getString("creatorusername"),
+                    rs.getString("opponentusername"),
+                    rs.getLong("imageid"),
+                    rs.getObject("created_date", LocalDateTime.class),
+                    DebateCategory.getFromInt(rs.getInt("category")),
+                    rs.getInt("subscribedcount"));
 
     @Autowired
     public DebateJdbcDao(final DataSource ds) {
@@ -44,59 +59,69 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public List<Debate> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM debates LIMIT 10 OFFSET ?", new Object[]{ page * 10 }, ROW_MAPPER);
+    public Optional<PublicDebate> getPublicDebateById(long id) {
+        return jdbcTemplate.query("SELECT * FROM public_debates WHERE debateId = ?", PUBLIC_ROW_MAPPER, id)
+                .stream().findFirst();
     }
 
+    @Override
+    public List<PublicDebate> getAll(int page) {
+        return jdbcTemplate.query("SELECT * FROM public_debates LIMIT 10 OFFSET ?", new Object[]{ page * 10 }, PUBLIC_ROW_MAPPER);
+    }
+    
     @Override
     public int getAllcount() {
         return jdbcTemplate.query("SELECT COUNT(*) FROM debates", new Object[]{}, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
+    
 
     @Override
-    public List<Debate> getQuery(int page, String query) {
-        return jdbcTemplate.query("SELECT * FROM debates WHERE name ILIKE ? LIMIT 10 OFFSET ?", new Object[]{ "%" + query + "%", page * 10}, ROW_MAPPER);
+    public List<PublicDebate> getQuery(int page, String query) {
+        return jdbcTemplate.query("SELECT * FROM public_debates WHERE name ILIKE ? LIMIT 10 OFFSET ?", new Object[]{ "%" + query + "%", page * 10 }, PUBLIC_ROW_MAPPER);
     }
 
     @Override
     public int getQueryCount(String query) {
         return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE name ILIKE ?", new Object[]{ "%" + query + "%" }, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
-
+    
     @Override
-    public Debate create(String name, String description, Long imageId, DebateCategory category) {
+    public Debate create(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category) {
         final Map<String, Object> data = new HashMap<>();
         LocalDateTime created = LocalDateTime.now();
         data.put("name", name);
         data.put("description", description);
+        data.put("creatorid", creatorId);
+        data.put("opponentid", opponentId);
         data.put("created_date", created);
         data.put("imageid", imageId);
         data.put("category", DebateCategory.getFromCategory(category));
 
         final Number debateId = jdbcInsert.executeAndReturnKey(data);
 
-        return new Debate(debateId.longValue(), name, description, created, imageId, category);
+        return new Debate(debateId.longValue(), name, description, creatorId, opponentId, created, imageId, category);
     }
     
     @Override
-    public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
-        return jdbcTemplate.query("SELECT * FROM debates WHERE debateid IN (SELECT debateid FROM suscribed WHERE userid = ?) LIMIT 5 OFFSET ?", new Object[]{userid, page * 5}, ROW_MAPPER);
+    public List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page) {
+        return jdbcTemplate.query("SELECT * FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = ?) LIMIT 5 OFFSET ?", new Object[]{userid, page * 5}, PUBLIC_ROW_MAPPER);
     }
 
     @Override
     public int getSubscribedDebatesByUsernameCount(long userid) {
-        return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE debateid IN (SELECT debateid FROM suscribed WHERE userid = ?)", new Object[]{userid}, (rs, rowNum) -> rs.getInt(1)).get(0);
+        return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = ?)", new Object[]{userid}, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
     @Override
-    public List<Debate> getMostSubscribed() {
-        return jdbcTemplate.query("SELECT debateid, name, description, created_date, imageid, category FROM debates NATURAL JOIN suscribed GROUP BY debateid ORDER BY COUNT(userid) DESC LIMIT 3;", ROW_MAPPER);
+    public List<PublicDebate> getMostSubscribed() {
+        return jdbcTemplate.query("SELECT * FROM public_debates ORDER BY subscribedcount DESC LIMIT 3", PUBLIC_ROW_MAPPER);
     }
 
     @Override
-    public List<Debate> getAllFromCategory(DebateCategory category, int page) {
+    public List<PublicDebate> getAllFromCategory(DebateCategory category, int page) {
         return jdbcTemplate.query("SELECT * FROM debates WHERE category = ? LIMIT 10 OFFSET ?",
-                new Object[]{DebateCategory.getFromCategory(category), page * 10},ROW_MAPPER);
+                new Object[]{DebateCategory.getFromCategory(category), page * 10},
+                PUBLIC_ROW_MAPPER);
     }
 
     @Override

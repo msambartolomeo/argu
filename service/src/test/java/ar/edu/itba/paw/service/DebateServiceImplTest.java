@@ -75,12 +75,12 @@ public class DebateServiceImplTest {
 //        assertEquals(debate, dl.get(0));
 //    }
 
-    @Test
-    public void testGetEmpty() {
-        Mockito.when(debateDao.getAll(Mockito.anyInt())).thenReturn(new ArrayList<>());
-
-        List<Debate> dl = debateService.get(PAGE, null);
-
-        assertTrue(dl.isEmpty());
-    }
+//    @Test
+//    public void testGetEmpty() {
+//        Mockito.when(debateDao.getAll(Mockito.anyInt())).thenReturn(new ArrayList<>());
+//
+//        List<Debate> dl = debateService.get(PAGE, null);
+//
+//        assertTrue(dl.isEmpty());
+//    }
 }
