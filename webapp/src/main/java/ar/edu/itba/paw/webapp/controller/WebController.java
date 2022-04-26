@@ -12,6 +12,7 @@ import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -166,7 +167,9 @@ public class WebController {
 
     @RequestMapping(value = "/create_debate", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView createDebatePage(@ModelAttribute("createDebateForm") final CreateDebateForm form) {
-        return new ModelAndView("pages/create-debate");
+        ModelAndView mav = new ModelAndView("pages/create-debate");
+        mav.addObject("categories", DebateCategory.values());
+        return mav;
     }
 
     @RequestMapping(value = "/create_debate", method = { RequestMethod.POST })
@@ -179,15 +182,20 @@ public class WebController {
                 auth.getName(),
                 form.getOpponentUsername(),
                 form.getImage().getBytes(),
-                DebateCategory.getFromInt(form.getCategoryId()));
+                form.getCategory());
         return new ModelAndView("redirect:/");
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ModelAndView handleUserNotFoundException(UserAlreadyExistsException e) {
+    public ModelAndView UserAlreadyExistsException(UserAlreadyExistsException e) {
         ModelAndView mav = new ModelAndView("pages/register");
-        mav.addObject("registerForm", new RegisterForm());
-        mav.addObject("userNotFound", e);
+        RegisterForm form = new RegisterForm();
+        form.setEmail(e.getEmail());
+        form.setUsername(e.getUsername());
+        form.setPassword(e.getPassword());
+        form.setPasswordConfirmation(e.getPassword());
+        mav.addObject("registerForm", form);
+        mav.addObject("userAlreadyExists", e);
         return mav;
     }
 
@@ -211,8 +219,27 @@ public class WebController {
 
     @ExceptionHandler(DebateNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView handleUserNotFoundException() {
+    public ModelAndView handleDebateNotFoundException() {
         return new ModelAndView("error/404");
+    }
+
+    @ExceptionHandler(DebateOponentException.class)
+    public ModelAndView handleDebateOponentException(DebateOponentException e) {
+        ModelAndView mav = new ModelAndView("pages/create-debate");
+        CreateDebateForm form = new CreateDebateForm();
+        form.setTitle(e.getDebateTitle());
+        form.setDescription(e.getDebateDescription());
+        form.setCategory(e.getDebateCategory());
+        form.setOpponentUsername(e.getOponent());
+        mav.addObject("createDebateForm", form);
+        mav.addObject("debateOponentException", e);
+        mav.addObject("categories", DebateCategory.values());
+        return mav;
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ModelAndView handleUserNotFoundException() {
+        return new ModelAndView("redirect:/logout");
     }
 
     @RequestMapping(value = "/404", method = { RequestMethod.GET})

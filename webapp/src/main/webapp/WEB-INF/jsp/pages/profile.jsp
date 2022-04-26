@@ -65,9 +65,10 @@
         </div>
         <%@include file="../components/JS_imports.jsp" %>
         <script>
-            $(document).ready(function(){
-                $('.modal').modal();
-            });
+            const elem = document.getElementById('edit-profile-image');
+            const instance = M.Modal.init(elem);
+            if (${not empty imageError})
+                instance.open();
         </script>
     </body>
 </html>

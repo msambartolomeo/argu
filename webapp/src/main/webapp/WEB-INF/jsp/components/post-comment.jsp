@@ -14,19 +14,21 @@
                         <div class="card-content">
                             <span class="card-title"><spring:message code="components.post-comment.title"/></span>
                             <div class="input-field">
-                                <form:label for="comment" path="content"><spring:message code="components.post-comment.content"/></form:label>
-                                <form:textarea id="comment" maxlength="280" class="materialize-textarea" rows="5" cols="30"
-                                               path="content"/>
+                                <c:set var="contentError"><form:errors path="content"/></c:set>
+                                <form:label path="content"><spring:message code="components.post-comment.content"/></form:label>
+                                <form:textarea maxlength="280" class="materialize-textarea ${not empty contentError ? 'invalid' : ''}"
+                                               rows="5" cols="30" path="content"/>
                                 <form:errors path="content" element="span" cssClass="error" />
                             </div>
 
                             <div class="file-field input-field">
                                 <div class="btn">
+                                    <c:set var="imageError"><form:errors path="file"/></c:set>
                                     <form:label path="file" for="file"><spring:message code="components.user-image-button"/></form:label>
                                     <form:input id="file" path="file" type="file"/>
                                 </div>
                                 <div class="file-path-wrapper">
-                                    <input class="file-path validate" type="text"/>
+                                    <form:input path="fileName" class="file-path validate ${not empty imageError ? 'invalid' : ''}" type="text"/>
                                 </div>
                                 <form:errors path="file" cssClass="helper-text error"/>
                             </div>

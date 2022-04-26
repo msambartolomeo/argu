@@ -40,14 +40,14 @@ public class UserServiceImpl implements UserService {
         Optional<User> userByEmail = userDao.getUserByEmail(email);
 
         if (userByUsername.isPresent()) {
-            throw new UserAlreadyExistsException(userByEmail.isPresent(), true);
+            throw new UserAlreadyExistsException(userByEmail.isPresent(), true, username, email, password);
         }
 
         if (userByEmail.isPresent()) {
             if (userByEmail.get().getUsername() == null) {
                 return userDao.updateLegacyUser(userByEmail.get().getUserId(), username, passwordEncoder.encode(password), email);
             } else {
-                throw new UserAlreadyExistsException(true, false);
+                throw new UserAlreadyExistsException(true, false, username, email, password);
             }
         } else {
             return userDao.create(username, passwordEncoder.encode(password), email);
@@ -56,11 +56,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateImage(long id, byte[] image) {
-        getUserById(id).ifPresent(user -> {
-            if (user.getImageId() != null) imageService.deleteImage(user.getImageId());
-        });
+        Optional<User> user = getUserById(id);
         long imageId = imageService.createImage(image);
         userDao.updateImage(id, imageId);
+        user.ifPresent(u -> {
+            if (u.getImageId() != null ) imageService.deleteImage(u.getImageId());
+        });
     }
 
     @Override

@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.webapp.validators.Image;
+import ar.edu.itba.paw.webapp.validators.ImageSize;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,14 +20,17 @@ public class CreateDebateForm {
     private String description;
 
     @NotNull
-    private Integer categoryId;
+    private DebateCategory category;
 
     @Size(max = 64)
     @NotEmpty
     private String opponentUsername;
 
+    @ImageSize
     @Image
     private MultipartFile image;
+
+    private String imageName;
 
     public String getTitle() {
         return title;
@@ -43,12 +48,12 @@ public class CreateDebateForm {
         this.description = description;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public DebateCategory getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(DebateCategory category) {
+        this.category = category;
     }
 
     public String getOpponentUsername() {
@@ -65,5 +70,13 @@ public class CreateDebateForm {
 
     public void setImage(MultipartFile image) {
         this.image = image;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }
