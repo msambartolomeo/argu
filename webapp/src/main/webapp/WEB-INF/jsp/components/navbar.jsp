@@ -1,11 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <html>
     <body>
         <div class="navbar-fixed">
-<%--            <nav>--%>
             <nav class="nav-wrapper nav-bar">
                 <a href="<c:url value="/"/>" class="brand-logo">
                     <img src="<c:url value="/resources/images/argu-logo-2.jpeg"/>" class="logo-image" alt="Argu Logo">
@@ -15,6 +15,22 @@
                 <ul class="right hide-on-med-and-down">
                     <c:choose>
                         <c:when test="${pageContext.request.userPrincipal.name != null}">
+                            <sec:authorize access="hasAuthority('MODERATOR')">
+                                <li>
+                                    <a href="<c:url value="/create_debate"/>">
+                                        <i class="material-icons left">add</i>
+                                        <spring:message code="components.navbar.create-debate"/>
+                                    </a>
+                                </li>
+                            </sec:authorize>
+                            <sec:authorize access="hasAuthority('USER')">
+                                <li>
+                                    <a href="<c:url value="/moderator"/>">
+                                        <i class="material-icons left">supervisor_account</i>
+                                        <spring:message code="components.navbar.become-mod"/>
+                                    </a>
+                                </li>
+                            </sec:authorize>
                             <li>
                                 <a href="<c:url value="/profile"/>">
                                     <i class="material-icons left">account_circle</i>
@@ -59,7 +75,6 @@
                     </li>
                 </ul>
             </nav>
-<%--            </nav>--%>
         </div>
 
         <ul class="sidenav" id="mobile-links">

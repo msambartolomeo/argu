@@ -5,10 +5,11 @@
 <html>
 
 <body>
-<div class="speech-bubble sb-left">
+<div class="speech-bubble ${pageContext.request.userPrincipal != null && post.username == pageContext.request.userPrincipal.name ? "sb-right" : "sb-left" }">
     <p class="comment-owner">
-        <c:out value="${post.username}" />
-        <spring:message code="components.user-comment" />
+        <c:set var="arg" value="${post.username != null ? post.username : ''}" />
+        <c:set var="code" value="${post.username != null ? 'components.user-comment' : 'components.user-comment.anonymous'}" />
+        <spring:message code="${code}" arguments="${arg}"/>
     </p>
     <br>
     <p>
