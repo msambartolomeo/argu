@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <html>
@@ -35,6 +36,22 @@
                             </div>
                             <div class="col s2">
                                 <div class="row">
+                                    <c:url value="/debates/${debateId}" var="debatePath"/>
+                                    <sec:authorize access="hasAuthority('USER')">
+                                        <c:if test="${isSubscribed == false}">
+                                            <%--@elvariable id="subscribeForm" type="ar.edu.itba.paw.webapp.form.SubscribeForm"--%>
+                                            <form:form id="subscribeForm" method="post" modelAttribute="subscribeForm"
+                                                       action="${debatePath}" acceptCharset="utf-8">
+                                                <button class="btn waves-effect" type="submit" form="subscribeForm"
+                                                        id="subscribeForm"
+                                                        onclick="this.form.submit();" name="subscribe">
+                                                    <i class="material-icons right">notifications</i>
+                                                </button>
+                                            </form:form>
+                                        </c:if>
+                                    </sec:authorize>
+                                </div>
+                                <div class="row">
                                     <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="category.${debate.debateCategory.name}"/>"></span>
                                 </div>
                                 <div class="row">
@@ -56,6 +73,22 @@
                             </div>
                                 <div class="col s2">
                                     <div class="row">
+                                        <c:url value="/debates/${debateId}" var="debatePath"/>
+                                        <sec:authorize access="hasAuthority('USER')">
+                                            <c:if test="${isSubscribed == false}">
+                                                <%--@elvariable id="subscribeForm" type="ar.edu.itba.paw.webapp.form.SubscribeForm"--%>
+                                                <form:form id="subscribeForm" method="post" modelAttribute="subscribeForm"
+                                                           action="${debatePath}" acceptCharset="utf-8">
+                                                    <button class="btn waves-effect" type="submit" form="subscribeForm"
+                                                            id="subscribeForm"
+                                                            onclick="this.form.submit();" name="subscribe">
+                                                        <i class="material-icons right">notifications</i>
+                                                    </button>
+                                                </form:form>
+                                            </c:if>
+                                        </sec:authorize>
+                                    </div>
+                                    <div class="row">
                                         <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="category.${debate.debateCategory.name}"/>"></span>
                                     </div>
                                     <div class="row">
@@ -69,10 +102,6 @@
                     </div>
                 </c:otherwise>
             </c:choose>
-<%--            <div class="card-content">--%>
-<%--                <span class="card-title debate-title"><c:out value="${debate.name}"/></span>--%>
-<%--                <p class="debate-description"><c:out value="${debate.description}"/></p>--%>
-<%--            </div>--%>
         </div>
 
         <div class="debate-content">

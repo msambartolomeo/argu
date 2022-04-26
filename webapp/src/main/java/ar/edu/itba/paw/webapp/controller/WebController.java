@@ -72,26 +72,48 @@ public class WebController {
     }
 
     @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debate(@PathVariable("debateId") final String debateId, @ModelAttribute("postForm") final PostForm form, @RequestParam(value = "page", defaultValue = "0") String page) {
+    public ModelAndView debate(@PathVariable("debateId") final String debateId, @ModelAttribute("postForm") final PostForm form, @RequestParam(value = "page", defaultValue = "0") String page, Authentication auth) {
         if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
         if (!page.matches("\\d+")) throw new PostNotFoundException();
+
         long id = Long.parseLong(debateId);
+        User user;
+        Long userid = null;
+        if(auth != null) {
+            user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
+            userid = user.getUserId();
+        }
+
         final ModelAndView mav = new ModelAndView("pages/debate");
+
         mav.addObject("debate", debateService.getPublicDebateById(id).orElseThrow(DebateNotFoundException::new));
         mav.addObject("total_pages", (int) Math.ceil( (double) (postService.getPostsByDebateCount(id) / 15)));
         mav.addObject("posts", postService.getPublicPostsByDebate(id, Integer.parseInt(page)));
+
+        if(userid != null) mav.addObject("isSubscribed", debateService.isUserSubscribed(userid, id));
         return mav;
     }
 
-    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST })
+    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST }, params = "action")
     public ModelAndView createPost(@PathVariable("debateId") final String debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
         if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
         long id = Long.parseLong(debateId);
+
         if (errors.hasErrors()) {
-            return debate(debateId, form, "0");
+            return debate(debateId, form, "0", auth);
         }
+
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         postService.create(user.getUserId(), id, form.getContent(), form.getFile().getBytes());
+        return new ModelAndView("redirect:/debates/" + debateId);
+    }
+
+    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST }, params = "subscribe")
+    public ModelAndView subscribe(@PathVariable("debateId") final String debateId, @Valid @ModelAttribute("subscribeForm") final SubscribeForm form, BindingResult errors, Authentication auth) {
+        long id = Long.parseLong(debateId);
+        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
+
+        debateService.subscribeToDebate(user.getUserId(), id);
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
