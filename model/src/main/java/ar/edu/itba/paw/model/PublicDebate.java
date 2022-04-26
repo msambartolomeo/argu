@@ -4,6 +4,7 @@ import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class PublicDebate {
     private final long debateId;
@@ -12,7 +13,7 @@ public class PublicDebate {
     private final String creatorUsername;
     private final String opponentUsername;
     private final Long imageId;
-    private final LocalDateTime createdDate;
+    private final String createdDate;
     private final DebateCategory debateCategory;
     private final DebateStatus debateStatus;
     private final Integer subscribedUsers;
@@ -26,7 +27,7 @@ public class PublicDebate {
         this.creatorUsername = creatorUsername;
         this.opponentUsername = opponentUsername;
         this.imageId = imageId;
-        this.createdDate = createdDate;
+        this.createdDate = createdDate.format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yy"));;
         this.debateCategory = debateCategory;
         this.subscribedUsers = subscribedUsers;
         this.debateStatus = debateStatus;
@@ -62,7 +63,7 @@ public class PublicDebate {
         return imageId;
     }
 
-    public LocalDateTime getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
