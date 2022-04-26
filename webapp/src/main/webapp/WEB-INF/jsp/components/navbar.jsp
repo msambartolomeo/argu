@@ -7,8 +7,8 @@
         <div class="navbar-fixed">
 <%--            <nav>--%>
             <nav class="nav-wrapper nav-bar">
-                <a href="${pageContext.request.contextPath}/" class="brand-logo">
-                    <img src="${pageContext.request.contextPath}/resources/images/argu-logo-2.jpeg" class="logo-image" alt="Argu Logo">
+                <a href="<c:url value="/"/>" class="brand-logo">
+                    <img src="<c:url value="/resources/images/argu-logo-2.jpeg"/>" class="logo-image" alt="Argu Logo">
                     &#8205
                 </a>
                 <a href="" data-target="mobile-links" class="sidenav-trigger right"><i class="material-icons">menu</i></a>

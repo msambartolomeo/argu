@@ -4,7 +4,7 @@
 
 <html>
     <body>
-        <a class="card black-text" href="${pageContext.request.contextPath}/debates/${debate.debateId}">
+        <a class="card black-text" href="<c:url value="/debates/${debate.debateId}"/>">
             <div class="card-content">
                 <span class="card-title word-wrap">
                     <c:out value="${debate.name}"/>

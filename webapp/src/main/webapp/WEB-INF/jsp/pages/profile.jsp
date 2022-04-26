@@ -16,7 +16,7 @@
                         <img src="<c:url value="/images/${user.imageId}"/>" class="circle responsive-img"/>
                     </c:when>
                     <c:otherwise>
-                        <img src="${pageContext.request.contextPath}/resources/images/user-profile-default.png" class="responsive-img">
+                        <img src="<c:url value="/resources/images/user-profile-default.png"/>" class="responsive-img">
                     </c:otherwise>
                 </c:choose>
                 <!-- Modal Trigger -->
@@ -56,7 +56,7 @@
                     <ul class="pagination">
                         <c:forEach var="page" begin="0" end="${total_pages}">
                             <li class="active page-number">
-                                <a href="${pageContext.request.contextPath}/profile?page=${page}">${page + 1}</a>
+                                <a href="<c:url value="/profile?page=${page}"/>">${page + 1}</a>
                             </li>
                         </c:forEach>
                     </ul>

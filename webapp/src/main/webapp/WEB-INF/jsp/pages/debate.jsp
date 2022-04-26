@@ -35,7 +35,7 @@
                     <ul class="pagination">
                         <c:forEach var="page" begin="0" end="${total_pages}">
                             <li class="active page-number">
-                                <a href="${pageContext.request.contextPath}/debates/${debateId}?page=${page}">${page + 1}</a>
+                                <a href="<c:url value="/debates/${debateId}?page=${page}"/>">${page + 1}</a>
                             </li>
                         </c:forEach>
                     </ul>

@@ -7,10 +7,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.DebateCategory;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ImageNotFoundException;
-import ar.edu.itba.paw.model.exceptions.UserAlreadyExistsException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Controller
 public class WebController {
@@ -50,41 +48,49 @@ public class WebController {
     }
 
     @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debatesList(@RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "0") int page) {
+    public ModelAndView debatesList(@RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "0") String page) {
+        if (!page.matches("\\d+")) throw new DebateNotFoundException();
         final ModelAndView mav = new ModelAndView("pages/debates-list");
         mav.addObject("search", search);
         mav.addObject("categories", DebateCategory.values());
         mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getCount(search) / 10)));
-        mav.addObject("debates", debateService.get(page, search));
+        mav.addObject("debates", debateService.get(Integer.parseInt(page), search));
         return mav;
     }
 
     @RequestMapping(value = "/debates/category/{category}", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debatesCategoryList(@PathVariable("category") String category, @RequestParam(value = "page", defaultValue = "0") int page) {
+    public ModelAndView debatesCategoryList(@PathVariable("category") String category, @RequestParam(value = "page", defaultValue = "0") String page) {
+        if (!page.matches("\\d+")) throw new DebateNotFoundException();
+        if (Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category))) throw new CategoryNotFoundException();
         final ModelAndView mav = new ModelAndView("pages/debates-list");
         mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getFromCategoryCount(DebateCategory.valueOf(category.toUpperCase())) / 15)));
         mav.addObject("currentCategory", category);
         mav.addObject("categories", DebateCategory.values());
-        mav.addObject("debates", debateService.getFromCategory(DebateCategory.valueOf(category.toUpperCase()),page));
+        mav.addObject("debates", debateService.getFromCategory(DebateCategory.valueOf(category.toUpperCase()),Integer.parseInt(page)));
         return mav;
     }
 
     @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debate(@PathVariable("debateId") final long debateId, @ModelAttribute("postForm") final PostForm form, @RequestParam(value = "page", defaultValue = "0") int page) {
+    public ModelAndView debate(@PathVariable("debateId") final String debateId, @ModelAttribute("postForm") final PostForm form, @RequestParam(value = "page", defaultValue = "0") String page) {
+        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (!page.matches("\\d+")) throw new PostNotFoundException();
+        long id = Long.parseLong(debateId);
         final ModelAndView mav = new ModelAndView("pages/debate");
-        mav.addObject("debate", debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new));
-        mav.addObject("total_pages", (int) Math.ceil( (double) (postService.getPostsByDebateCount(debateId) / 15)));
-        mav.addObject("posts", postService.getPublicPostsByDebate(debateId, page));
+        mav.addObject("debate", debateService.getDebateById(id).orElseThrow(DebateNotFoundException::new));
+        mav.addObject("total_pages", (int) Math.ceil( (double) (postService.getPostsByDebateCount(id) / 15)));
+        mav.addObject("posts", postService.getPublicPostsByDebate(id, Integer.parseInt(page)));
         return mav;
     }
 
     @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST })
-    public ModelAndView createPost(@PathVariable("debateId") final long debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
+    public ModelAndView createPost(@PathVariable("debateId") final String debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
+        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        long id = Long.parseLong(debateId);
         if (errors.hasErrors()) {
-            return debate(debateId, form, 0);
+            return debate(debateId, form, "0");
         }
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
-        postService.create(user.getUserId(), debateId, form.getContent(), form.getFile().getBytes());
+        postService.create(user.getUserId(), id, form.getContent(), form.getFile().getBytes());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
@@ -125,13 +131,15 @@ public class WebController {
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth, @RequestParam(value = "page", defaultValue = "0") int page) {
+    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth, @RequestParam(value = "page", defaultValue = "0") String page) {
+        if (!page.matches("\\d+")) throw new DebateNotFoundException();
+
         final ModelAndView mav = new ModelAndView("/pages/profile");
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         mav.addObject("user", user);
         mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getSubscribedDebatesByUsernameCount(user.getUserId()) / 5)));
-        mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), page));
+        mav.addObject("suscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), Integer.parseInt(page)));
         return mav;
     }
 
@@ -139,7 +147,7 @@ public class WebController {
     public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {
             LOGGER.info("Error uploading file {}", errors);
-            return profilePage(form, auth, 0);
+            return profilePage(form, auth, "0");
         }
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
@@ -186,6 +194,18 @@ public class WebController {
     @ExceptionHandler(ImageNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView handleImageNotFoundException() {
+        return new ModelAndView("error/404");
+    }
+
+    @ExceptionHandler(PostNotFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ModelAndView handlePostNotFoundException() {
+        return new ModelAndView("error/404");
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ModelAndView handleCategoryNotFoundException() {
         return new ModelAndView("error/404");
     }
 

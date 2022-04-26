@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <div class="parallax"><img src="${pageContext.request.contextPath}/resources/images/speech-bubbles.jpeg" alt="Debate background image"></div>
+            <div class="parallax"><img src="<c:url value="/resources/images/speech-bubbles.jpeg"/>" alt="Debate background image"></div>
         </div>
 
         <div class="container">
@@ -40,7 +40,7 @@
                     <p>Argu cuts through the noise typically associated with social and online media, making it easy to engage in focused discussion.</p>
                     <p>One can only comment as long as the moderator gave their permission.</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/resources/images/debate-icon.png">
+                <img src="<c:url value="/resources/images/debate-icon.png"/>">
 
             </div>
         </div>
@@ -60,7 +60,7 @@
                     </c:forEach>
                 </div>
             </div>
-            <div class="parallax"><img src="${pageContext.request.contextPath}/resources/images/group-discussion.jpeg" alt="Unsplashed background img 3"></div>
+            <div class="parallax"><img src="<c:url value="/resources/images/group-discussion.jpeg"/>" alt="Unsplashed background img 3"></div>
         </div>
 
         <footer class="page-footer">
