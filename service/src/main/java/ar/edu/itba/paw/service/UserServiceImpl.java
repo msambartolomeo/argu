@@ -56,11 +56,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateImage(long id, byte[] image) {
-        getUserById(id).ifPresent(user -> {
-            if (user.getImageId() != null) imageService.deleteImage(user.getImageId());
-        });
+        Optional<User> user = getUserById(id);
         long imageId = imageService.createImage(image);
         userDao.updateImage(id, imageId);
+        user.ifPresent(u -> {
+            if (u.getImageId() != null ) imageService.deleteImage(u.getImageId());
+        });
     }
 
     @Override

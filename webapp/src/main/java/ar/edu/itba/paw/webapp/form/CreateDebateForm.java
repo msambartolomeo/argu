@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.validators.Image;
+import ar.edu.itba.paw.webapp.validators.ImageSize;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ public class CreateDebateForm {
     @NotEmpty
     private String opponentUsername;
 
+    @ImageSize
     @Image
     private MultipartFile image;
 
