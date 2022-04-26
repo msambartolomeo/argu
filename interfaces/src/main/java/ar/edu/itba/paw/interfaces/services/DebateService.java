@@ -18,4 +18,10 @@ public interface DebateService {
     int getSubscribedDebatesByUsernameCount(long userid);
     int getCount(String search);
     int getFromCategoryCount(DebateCategory category);
+
+    void subscribeToDebate(long userid, long debateid);
+
+    void unsubscribeToDebate(long userid, long debateid);
+
+    boolean isUserSubscribed(long userid, long debateid);
 }

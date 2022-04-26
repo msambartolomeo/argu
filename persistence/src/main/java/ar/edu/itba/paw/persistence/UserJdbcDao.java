@@ -24,7 +24,6 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("username"),
                     rs.getString("password"),
                     rs.getString("email"),
-                    //TODO: check whether LocalDateTime, Date, or Instant is more useful
                     rs.getObject("created_date", LocalDate.class),
                     rs.getLong("imageid"),
                     UserRole.getRole(rs.getInt("role")));

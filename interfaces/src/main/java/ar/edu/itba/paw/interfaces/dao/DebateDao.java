@@ -20,4 +20,10 @@ public interface DebateDao {
     int getQueryCount(String query);
     int getSubscribedDebatesByUsernameCount(long userid);
     int getAllFromCategoryCount(DebateCategory category);
+
+    void subscribeToDebate(long userid, long debateid);
+
+    void unsubscribeToDebate(long userid, long debateid);
+
+    boolean isUserSubscribed(long userid, long debateid);
 }

@@ -132,4 +132,18 @@ public class DebateJdbcDao implements DebateDao {
     public int getAllFromCategoryCount(DebateCategory category) {
         return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE category = ?", new Object[]{DebateCategory.getFromCategory(category)}, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
+    @Override
+    public void subscribeToDebate(long userid, long debateid) {
+        jdbcTemplate.update("INSERT INTO subscribed (userid, debateid) VALUES (?, ?)", userid, debateid);
+    }
+    @Override
+    public void unsubscribeToDebate(long userid, long debateid) {
+        jdbcTemplate.update("DELETE FROM subscribed WHERE userid = ? AND debateid = ?", userid, debateid);
+    }
+    @Override
+    public boolean isUserSubscribed(long userid, long debateid) {
+        return jdbcTemplate.query("SELECT COUNT(*) FROM subscribed WHERE userid = ? AND debateid = ?",
+                new Object[]{userid, debateid},
+                (rs, rowNum) -> rs.getInt(1)).get(0) > 0;
+    }
 }
