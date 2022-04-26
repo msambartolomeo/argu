@@ -60,7 +60,12 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<Post> getPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? LIMIT 30 OFFSET ?", new Object[]{debateId, page * 10}, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? LIMIT 15 OFFSET ?", new Object[]{debateId, page * 15}, ROW_MAPPER);
+    }
+
+    @Override
+    public int getPostsByDebateCount(long debateId) {
+        return jdbcTemplate.query("SELECT COUNT(*) FROM posts WHERE debateId = ?", new Object[]{debateId}, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
     @Override
@@ -73,8 +78,8 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT * FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 30 OFFSET ?",
-                new Object[]{debateId, page},
+        return jdbcTemplate.query("SELECT * FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 15 OFFSET ?",
+                new Object[]{debateId, page * 15},
                 PUBLIC_POST_ROW_MAPPER);
     }
 

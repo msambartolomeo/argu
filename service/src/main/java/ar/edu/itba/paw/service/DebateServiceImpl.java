@@ -41,17 +41,34 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
+    public int getSubscribedDebatesByUsernameCount(long userid) {
+        return debateDao.getSubscribedDebatesByUsernameCount(userid);
+    }
+
+    @Override
     public List<Debate> get(int page, String search) {
         if (search != null)
             return debateDao.getQuery(page, search);
          else
              return debateDao.getAll(page);
+    }
 
+    @Override
+    public int getCount(String search) {
+        if (search != null)
+            return debateDao.getQueryCount(search);
+        else
+            return debateDao.getAllcount();
     }
 
     @Override
     public List<Debate> getFromCategory(DebateCategory category, int page) {
         return debateDao.getAllFromCategory(category, page);
+    }
+
+    @Override
+    public int getFromCategoryCount(DebateCategory category) {
+        return debateDao.getAllFromCategoryCount(category);
     }
 
     @Override

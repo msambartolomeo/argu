@@ -44,6 +44,15 @@
             </c:if>
         </div>
     </div>
+        <div class="center">
+            <ul class="pagination">
+                <c:forEach var="page" begin="0" end="${total_pages}">
+                    <li class="active page-number">
+                        <a href="${pageContext.request.contextPath}/debates?page=${page}">${page + 1}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </div>
     <%@include file="../components/JS_imports.jsp" %>
     </body>
 </html>

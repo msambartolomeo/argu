@@ -45,12 +45,22 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public List<Debate> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM debates LIMIT 15 OFFSET ?", new Object[]{ page * 10 }, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM debates LIMIT 10 OFFSET ?", new Object[]{ page * 10 }, ROW_MAPPER);
+    }
+
+    @Override
+    public int getAllcount() {
+        return jdbcTemplate.query("SELECT COUNT(*) FROM debates", new Object[]{}, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
     @Override
     public List<Debate> getQuery(int page, String query) {
-        return jdbcTemplate.query("SELECT * FROM debates WHERE name ILIKE ? LIMIT 15 OFFSET ?", new Object[]{ "%" + query + "%", page }, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM debates WHERE name ILIKE ? LIMIT 10 OFFSET ?", new Object[]{ "%" + query + "%", page * 10}, ROW_MAPPER);
+    }
+
+    @Override
+    public int getQueryCount(String query) {
+        return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE name ILIKE ?", new Object[]{ "%" + query + "%" }, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
     @Override
@@ -70,21 +80,27 @@ public class DebateJdbcDao implements DebateDao {
     
     @Override
     public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
-        return jdbcTemplate.query("SELECT * FROM debates WHERE debateid IN (SELECT debateid FROM suscribed WHERE userid = ?) LIMIT 15 OFFSET ?", new Object[]{userid, page}, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM debates WHERE debateid IN (SELECT debateid FROM suscribed WHERE userid = ?) LIMIT 5 OFFSET ?", new Object[]{userid, page * 5}, ROW_MAPPER);
+    }
+
+    @Override
+    public int getSubscribedDebatesByUsernameCount(long userid) {
+        return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE debateid IN (SELECT debateid FROM suscribed WHERE userid = ?)", new Object[]{userid}, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
     @Override
     public List<Debate> getMostSubscribed() {
-        return jdbcTemplate.query("SELECT debateid, name, description, created_date, imageid \n" +
-                "FROM debates NATURAL JOIN suscribed\n" +
-                "GROUP BY debateid\n" +
-                "ORDER BY COUNT(userid) DESC LIMIT 3;", ROW_MAPPER);
+        return jdbcTemplate.query("SELECT debateid, name, description, created_date, imageid, category FROM debates NATURAL JOIN suscribed GROUP BY debateid ORDER BY COUNT(userid) DESC LIMIT 3;", ROW_MAPPER);
     }
 
     @Override
     public List<Debate> getAllFromCategory(DebateCategory category, int page) {
-        return jdbcTemplate.query("SELECT * FROM debates WHERE category = ? LIMIT 15 OFFSET ?",
-                new Object[]{DebateCategory.getFromCategory(category), page},
-                ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM debates WHERE category = ? LIMIT 10 OFFSET ?",
+                new Object[]{DebateCategory.getFromCategory(category), page * 10},ROW_MAPPER);
+    }
+
+    @Override
+    public int getAllFromCategoryCount(DebateCategory category) {
+        return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE category = ?", new Object[]{DebateCategory.getFromCategory(category)}, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 }

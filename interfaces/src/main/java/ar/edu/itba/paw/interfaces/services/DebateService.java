@@ -11,7 +11,10 @@ public interface DebateService {
     Debate create(String name, String description, DebateCategory category);
     Debate create(String name, String description, byte[] image, DebateCategory category);
     List<Debate> getSubscribedDebatesByUsername(long userid, int page);
+    int getSubscribedDebatesByUsernameCount(long userid);
     List<Debate> get(int page, String search);
+    int getCount(String search);
     List<Debate> getMostSubscribed();
     List<Debate> getFromCategory(DebateCategory category, int page);
+    int getFromCategoryCount(DebateCategory category);
 }
