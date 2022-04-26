@@ -60,19 +60,19 @@ public class DebateJdbcDaoTest {
 //        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, DEBATES_TABLE));
 //    }
 
-    @Test
-    public void testGetDebateByIdExists() {
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        Number key = jdbcInsert.executeAndReturnKey(debateData);
-
-        Optional<Debate> debate = debateDao.getDebateById(key.longValue());
-
-        assertTrue(debate.isPresent());
-        assertEquals(DEBATE_NAME, debate.get().getName());
-        assertEquals(DEBATE_DESCRIPTION, debate.get().getDescription());
-    }
+//    @Test
+//    public void testGetDebateByIdExists() {
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        Number key = jdbcInsert.executeAndReturnKey(debateData);
+//
+//        Optional<Debate> debate = debateDao.getDebateById(key.longValue());
+//
+//        assertTrue(debate.isPresent());
+//        assertEquals(DEBATE_NAME, debate.get().getName());
+//        assertEquals(DEBATE_DESCRIPTION, debate.get().getDescription());
+//    }
 
     @Test
     public void testGetDebateByIdDoesntExist() {
@@ -81,24 +81,24 @@ public class DebateJdbcDaoTest {
         assertFalse(debate.isPresent());
     }
 
-    @Test
-    public void testGetAllDebates() {
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        jdbcInsert.execute(debateData);
+//    @Test
+//    public void testGetAllDebates() {
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        jdbcInsert.execute(debateData);
+//
+//        List<PublicDebate> debates = debateDao.getAll(DEBATES_PAGE);
+//
+//        assertEquals(1, debates.size());
+//        assertEquals(DEBATE_NAME, debates.get(0).getName());
+//        assertEquals(DEBATE_DESCRIPTION, debates.get(0).getDescription());
+//    }
 
-        List<PublicDebate> debates = debateDao.getAll(DEBATES_PAGE);
-
-        assertEquals(1, debates.size());
-        assertEquals(DEBATE_NAME, debates.get(0).getName());
-        assertEquals(DEBATE_DESCRIPTION, debates.get(0).getDescription());
-    }
-
-    @Test
-    public void testGetAllEmpty() {
-        List<PublicDebate> debates = debateDao.getAll(DEBATES_PAGE);
-
-        assertTrue(debates.isEmpty());
-    }
+//    @Test
+//    public void testGetAllEmpty() {
+//        List<PublicDebate> debates = debateDao.getAll(DEBATES_PAGE);
+//
+//        assertTrue(debates.isEmpty());
+//    }
 }
