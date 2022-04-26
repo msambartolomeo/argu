@@ -183,7 +183,7 @@ public class WebController {
                 form.getOpponentUsername(),
                 form.getImage().getBytes(),
                 form.getCategory());
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/debates");
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)

@@ -11,7 +11,7 @@
                     <img src="<c:url value="/resources/images/argu-logo-2.jpeg"/>" class="logo-image" alt="Argu Logo">
                     &#8205
                 </a>
-                <a href="" data-target="mobile-links" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+                <a href="" data-target="mobile-links" class="sidenav-trigger left"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
                     <c:choose>
                         <c:when test="${pageContext.request.userPrincipal.name != null}">
@@ -79,19 +79,35 @@
 
         <ul class="sidenav" id="mobile-links">
             <li>
-                <div class="row">
+                <form method="get" action="<c:url value="/debates"/>">
                     <div class="input-field search-size">
                         <input placeholder="<spring:message code="components.navbar.search"/>" id="search-mobile"
-                               type="search" required>
+                               type="search" required name="search">
                         <label class="label-icon" for="search-mobile">
                             <i class="material-icons">search</i>
                         </label>
                         <i class="material-icons">close</i>
                     </div>
-                </div>
+                </form>
             </li>
             <c:choose>
                 <c:when test="${pageContext.request.userPrincipal.name != null}">
+                    <sec:authorize access="hasAuthority('MODERATOR')">
+                        <li>
+                            <a href="<c:url value="/create_debate"/>">
+                                <i class="material-icons left">add</i>
+                                <spring:message code="components.navbar.create-debate"/>
+                            </a>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="!hasAuthority('MODERATOR')">
+                        <li>
+                            <a href="<c:url value="/moderator"/>">
+                                <i class="material-icons left">supervisor_account</i>
+                                <spring:message code="components.navbar.become-mod"/>
+                            </a>
+                        </li>
+                    </sec:authorize>
                     <li>
                         <a href="<c:url value="/profile"/>">
                             <i class="material-icons left">account_circle</i>
