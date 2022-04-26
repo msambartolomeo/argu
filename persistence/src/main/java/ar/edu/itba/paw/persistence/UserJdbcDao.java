@@ -82,7 +82,7 @@ public class UserJdbcDao implements UserDao {
     @Override
     public User updateLegacyUser(long userId, String username, String password, String email) {
         LocalDate created = LocalDate.now();
-        jdbcTemplate.update("UPDATE users SET username = ?, password = ?, created_date = ? WHERE email = ?", username, password, created, email);
+        jdbcTemplate.update("UPDATE users SET username = ?, password = ?, created_date = ?, role = ? WHERE email = ?", username, password, created, UserRole.USER.ordinal(), email);
         return new User(userId, username, password, email, created, UserRole.USER);
     }
 
