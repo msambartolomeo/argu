@@ -13,10 +13,12 @@
             <div class="card profile-data">
                 <c:choose>
                     <c:when test="${user.imageId != 0}">
-                        <img src="<c:url value="/images/${user.imageId}"/>" class="circle responsive-img"/>
+                        <img src="<c:url value="/images/${user.imageId}"/>" class="circle responsive-img" alt="<spring:message
+                        code="pages.profile.picture"/>"/>
                     </c:when>
                     <c:otherwise>
-                        <img src="<c:url value="/resources/images/user-profile-default.png"/>" class="responsive-img">
+                        <img src="<c:url value="/resources/images/user-profile-default.png"/>" class="responsive-img" alt="<spring:message
+                        code="pages.profile.picture"/>">
                     </c:otherwise>
                 </c:choose>
                 <!-- Modal Trigger -->

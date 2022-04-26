@@ -10,11 +10,69 @@
 
     <body>
         <%@include file="../components/navbar.jsp" %>
+<%--        <c:choose>--%>
+<%--            <c:when test="${debate.imageId != 0}">--%>
+<%--                <img src="<c:url value="/images/${debate.imageId}"/>" class="circle responsive-img" alt="<spring:message --%>
+<%--                        code="pages.debate-picture"/>"/>--%>
+<%--            </c:when>--%>
+<%--            <c:otherwise>--%>
+<%--                <img src="<c:url value="/resources/images/user-profile-default.png"/>" class="responsive-img" alt="<spring:message --%>
+<%--                        code="pages.debate-picture"/>">--%>
+<%--            </c:otherwise>--%>
+<%--        </c:choose>--%>
         <div class="card normalized-margins">
-            <div class="card-content">
-                <span class="card-title debate-title"><c:out value="${debate.name}"/></span>
-                <p class="debate-description"><c:out value="${debate.description}"/></p>
-            </div>
+            <c:choose>
+                <c:when test="${debate.imageId != 0}">
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col s3">
+                                <img src="<c:url value="/images/${debate.imageId}"/>" class="circle responsive-img" alt="<spring:message
+                                    code="pages.debate-picture"/>"/>
+                            </div>
+                            <div class="col s7">
+                                <span class="card-title debate-title"><c:out value="${debate.name}"/></span>
+                                <p class="debate-description"><c:out value="${debate.description}"/></p>
+                            </div>
+                            <div class="col s2">
+                                <div class="row">
+                                    <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="category.${debate.debateCategory.name}"/>"></span>
+                                </div>
+                                <div class="row">
+                                    <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="components.debate-created-on"/> ${debate.createdDate}"></span>
+                                </div>
+                                <div class="row">
+                                    <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="status.${debate.debateStatus.name}"/>"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col s10">
+                                <span class="card-title debate-title"><c:out value="${debate.name}"/></span>
+                                <p class="debate-description"><c:out value="${debate.description}"/></p>
+                            </div>
+                                <div class="col s2">
+                                    <div class="row">
+                                        <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="category.${debate.debateCategory.name}"/>"></span>
+                                    </div>
+                                    <div class="row">
+                                        <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="components.debate-created-on"/> ${debate.createdDate}"></span>
+                                    </div>
+                                    <div class="row">
+                                        <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="status.${debate.debateStatus.name}"/>"></span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+<%--            <div class="card-content">--%>
+<%--                <span class="card-title debate-title"><c:out value="${debate.name}"/></span>--%>
+<%--                <p class="debate-description"><c:out value="${debate.description}"/></p>--%>
+<%--            </div>--%>
         </div>
 
         <div class="debate-content">
