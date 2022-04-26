@@ -23,7 +23,7 @@
                                     </a>
                                 </li>
                             </sec:authorize>
-                            <sec:authorize access="hasAuthority('USER')">
+                            <sec:authorize access="!hasAuthority('MODERATOR')">
                                 <li>
                                     <a href="<c:url value="/moderator"/>">
                                         <i class="material-icons left">supervisor_account</i>
