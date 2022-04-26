@@ -10,7 +10,27 @@
 
     <body>
     <%@include file="../components/navbar.jsp" %>
-        <div class="z-depth-3 debate-list normalized-margins">
+    <div class="debates-separator">
+        <div class="category-list z-depth-3">
+            <h3><spring:message code="pages.debates-list.categories"/></h3>
+            <c:forEach items="${categories}" var="category">
+                <a href="<c:url value="/debates/category/${category.name}" />" class="waves-effect btn-large badge-margin category-button ${category.name == currentCategory ? "selected-button" : ""}">
+                    <spring:message code="category.${category.name}"/>
+                </a>
+            </c:forEach>
+        </div>
+        <div class="z-depth-3 debate-list">
+            <c:if test="${search != null}">
+                <h3 class="center"><spring:message code="pages.debates-list.search-results" arguments="${search}"/></h3>
+            </c:if>
+            <c:if test="${currentCategory != null}">
+                <spring:message code="category.${currentCategory}" var="categoryCode"/>
+                <h3 class="center"><spring:message code="pages.debates-list.category-results" arguments="${categoryCode}"/></h3>
+            </c:if>
+            <c:if test="${search == null && currentCategory == null}">
+                <h3 class="center"><spring:message code="pages.debates-list.all-debates"/></h3>
+            </c:if>
+
             <c:if test="${debates.size() > 0}">
                 <c:forEach var="debate" items="${debates}">
                     <div class="list-item">
@@ -23,6 +43,7 @@
                 <h3 class="center"><spring:message code="pages.debates-list.no-debates"/></h3>
             </c:if>
         </div>
+    </div>
     <%@include file="../components/JS_imports.jsp" %>
     </body>
 </html>

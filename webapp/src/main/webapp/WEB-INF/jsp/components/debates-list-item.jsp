@@ -8,8 +8,8 @@
             <div class="card-content">
                 <span class="card-title word-wrap">
                     <c:out value="${debate.name}"/>
-<%--                    <span class="new badge blue-grey darken-2" data-badge-caption="16:00 15/04/22"></span>--%>
-<%--                    <span class="new badge blue-grey darken-2" data-badge-caption="Category1"></span>--%>
+                    <span class="new badge blue-grey darken-2" data-badge-caption="${debate.createdDate}"></span>
+                    <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="category.${debate.category.name}"/>"></span>
                 </span>
                 <p class="word-wrap"><c:out value="${debate.description}"/></p>
             </div>
