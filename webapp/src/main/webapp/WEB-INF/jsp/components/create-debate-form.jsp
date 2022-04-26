@@ -10,49 +10,45 @@
         <%--@elvariable id="createDebateForm" type="ar.edu.itba.paw.webapp.form.CreateDebateForm"--%>
         <form:form method="post" action="${postPath}" modelAttribute="createDebateForm" acceptCharset="utf-8" enctype="multipart/form-data">
             <div class="card-content">
-                <c:set var="globalErrors"><form:errors/></c:set>
                 <span class="card-title center"><spring:message code="components.create-debate"/></span>
                 <div class="input-field">
-                    <form:label path="title" for="title">* <spring:message code="components.create-debate-title"/></form:label>
-                    <form:textarea path="title" id="title" maxlength="64" cssClass="materialize-textarea"/>
+                    <c:set var="titleErrors" ><form:errors path="title"/></c:set>
+                    <form:label path="title"><spring:message code="components.create-debate-title"/></form:label>
+                    <form:textarea path="title" maxlength="64" cssClass="materialize-textarea ${not empty titleErrors ? 'invalid' : ''}"/>
                     <form:errors path="title" element="span" cssClass="error" />
                 </div>
 
                 <div class="input-field">
-                    <form:label path="description" for="description">* <spring:message code="components.create-debate-description"/>
-                    </form:label>
-                    <form:textarea path="description" id="description" maxlength="280" cssClass="materialize-textarea"/>
+                    <c:set var="descriptionErrors" ><form:errors path="description"/></c:set>
+                    <form:label path="description"><spring:message code="components.create-debate-description"/></form:label>
+                    <form:textarea path="description" maxlength="280" cssClass="materialize-textarea ${not empty descriptionErrors ? 'invalid' : ''}"/>
                     <form:errors path="description" element="span" cssClass="error" />
                 </div>
 
                 <div class="input-field">
                     <c:set var="usernameError"><form:errors path="opponentUsername"/></c:set>
-                    <form:label path="opponentUsername" for="opponentUsername">* <spring:message
-                            code="components.create-debate-opponentUsername"/></form:label>
-                    <form:input path="opponentUsername" id="opponentUsername" maxlength="64"
-                                cssClass="${not empty usernameError ? 'invalid' : ''}"/>
+                    <form:label path="opponentUsername">
+                        <spring:message code="components.create-debate-opponentUsername"/>
+                    </form:label>
+                    <form:input path="opponentUsername" maxlength="64" cssClass="${not empty usernameError || debateOponentException != null ? 'invalid' : ''}"/>
                     <form:errors path="opponentUsername" element="span" cssClass="helper-text error" />
+                    <c:if test="${debateOponentException != null}">
+                        <p class="error"><spring:message code="components.create-debate.oponentUsername-not-found"/></p>
+                    </c:if>
                 </div>
 
                 <table class="no-borders">
                     <tr>
-                        <td>* <spring:message code="components.create-debate-category"/></td>
+                        <td><spring:message code="components.create-debate-category"/></td>
                         <td>
                             <div class="input-field">
-                                <form:select id="categoryId" path="categoryId">
-                                    <form:option value="0"><spring:message code="components.debate-category-00"/></form:option>
-                                    <form:option value="1"><spring:message code="components.debate-category-01"/></form:option>
-                                    <form:option value="2"><spring:message code="components.debate-category-02"/></form:option>
-                                    <form:option value="3"><spring:message code="components.debate-category-03"/></form:option>
-                                    <form:option value="4"><spring:message code="components.debate-category-04"/></form:option>
-                                    <form:option value="5"><spring:message code="components.debate-category-05"/></form:option>
-                                    <form:option value="6"><spring:message code="components.debate-category-06"/></form:option>
-                                    <form:option value="7"><spring:message code="components.debate-category-07"/></form:option>
-                                    <form:option value="8"><spring:message code="components.debate-category-08"/></form:option>
-                                    <form:option value="9"><spring:message code="components.debate-category-09"/></form:option>
-                                    <form:option value="10"><spring:message code="components.debate-category-10"/></form:option>
-                                    <form:option value="11"><spring:message code="components.debate-category-11"/></form:option>
+                                <form:select path="category">
+                                    <option disabled selected value> <spring:message code="category.select-category" /> </option>
+                                    <c:forEach var="category" items="${categories}">
+                                        <form:option value="${category}"><spring:message code="category.${category.name}"/></form:option>
+                                    </c:forEach>
                                 </form:select>
+                                <form:errors path="category" element="span" cssClass="helper-text error" />
                             </div>
                         </td>
                     </tr>
@@ -68,7 +64,8 @@
                                     <form:input id="image" path="image" type="file"/>
                                 </div>
                                 <div class="file-path-wrapper">
-                                    <input class="file-path validate" type="text"/>
+                                    <c:set var="imageErrors"><form:errors path="image"/></c:set>
+                                    <form:input path="imageName" class="file-path validate ${not empty imageErrors ? 'invalid' : ''}" type="text"/>
                                 </div>
                                 <form:errors path="image" cssClass="helper-text error"/>
                             </div>
@@ -82,8 +79,6 @@
                 </button>
             </div>
         </form:form>
-
-        <h6 class="center">(*) <spring:message code="components.mandatory-field"/></h6>
     </div>
 </body>
 </html>

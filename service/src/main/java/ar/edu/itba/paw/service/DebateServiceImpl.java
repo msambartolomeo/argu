@@ -8,6 +8,8 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
+import ar.edu.itba.paw.model.exceptions.DebateOponentException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,10 +34,9 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
-        if (creatorUsername.equals(opponentUsername)) // TODO: Change proper Exceptions
-            throw new IllegalArgumentException("The creator and opponent cannot be the same");
+        if (creatorUsername.equals(opponentUsername)) throw new DebateOponentException(opponentUsername, name, description, category);
         User creator = userDao.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
-        User opponent = userDao.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
+        User opponent = userDao.getUserByUsername(opponentUsername).orElseThrow(() -> new DebateOponentException(opponentUsername, name, description, category));
         if (image.length == 0)
             return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
         else
