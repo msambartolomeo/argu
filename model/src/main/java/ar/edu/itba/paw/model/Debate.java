@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.enums.DebateCategory;
+
 import java.time.LocalDateTime;
 
 public class Debate {

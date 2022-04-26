@@ -5,14 +5,14 @@ import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.DebateCategory;
+import ar.edu.itba.paw.model.PublicDebate;
+import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -43,12 +43,12 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
+    public List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page) {
         return debateDao.getSubscribedDebatesByUsername(userid, page);
     }
 
     @Override
-    public List<Debate> get(int page, String search) {
+    public List<PublicDebate> get(int page, String search) {
         if (search != null)
             return debateDao.getQuery(page, search);
          else
@@ -57,12 +57,12 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<Debate> getFromCategory(DebateCategory category, int page) {
+    public List<PublicDebate> getFromCategory(DebateCategory category, int page) {
         return debateDao.getAllFromCategory(category, page);
     }
 
     @Override
-    public List<Debate> getMostSubscribed() {
+    public List<PublicDebate> getMostSubscribed() {
         return debateDao.getMostSubscribed();
     }
 }

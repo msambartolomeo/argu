@@ -2,7 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.DebateCategory;
+import ar.edu.itba.paw.model.PublicDebate;
+import ar.edu.itba.paw.model.enums.DebateCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -31,6 +32,18 @@ public class DebateJdbcDao implements DebateDao {
                     rs.getLong("imageid"),
                     DebateCategory.getFromInt(rs.getInt("category")));
 
+    private static final RowMapper<PublicDebate> PUBLIC_ROW_MAPPER = (rs, rowNum) ->
+            new PublicDebate(
+                    rs.getLong("debateid"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getString("creatorusername"),
+                    rs.getString("opponentusername"),
+                    rs.getLong("imageid"),
+                    rs.getObject("created_date", LocalDateTime.class),
+                    DebateCategory.getFromInt(rs.getInt("category")),
+                    rs.getInt("subscribedcount"));
+
     @Autowired
     public DebateJdbcDao(final DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -46,13 +59,13 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public List<Debate> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM debates LIMIT 15 OFFSET ?", new Object[]{ page * 10 }, ROW_MAPPER);
+    public List<PublicDebate> getAll(int page) {
+        return jdbcTemplate.query("SELECT * FROM public_debates LIMIT 15 OFFSET ?", new Object[]{ page * 10 }, PUBLIC_ROW_MAPPER);
     }
 
     @Override
-    public List<Debate> getQuery(int page, String query) {
-        return jdbcTemplate.query("SELECT * FROM debates WHERE name ILIKE ? LIMIT 15 OFFSET ?", new Object[]{ "%" + query + "%", page }, ROW_MAPPER);
+    public List<PublicDebate> getQuery(int page, String query) {
+        return jdbcTemplate.query("SELECT * FROM public_debates WHERE name ILIKE ? LIMIT 15 OFFSET ?", new Object[]{ "%" + query + "%", page }, PUBLIC_ROW_MAPPER);
     }
 
     @Override
@@ -73,22 +86,19 @@ public class DebateJdbcDao implements DebateDao {
     }
     
     @Override
-    public List<Debate> getSubscribedDebatesByUsername(long userid, int page) {
-        return jdbcTemplate.query("SELECT * FROM debates WHERE debateid IN (SELECT debateid FROM suscribed WHERE userid = ?) LIMIT 15 OFFSET ?", new Object[]{userid, page}, ROW_MAPPER);
+    public List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page) {
+        return jdbcTemplate.query("SELECT * FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = ?) LIMIT 15 OFFSET ?", new Object[]{userid, page}, PUBLIC_ROW_MAPPER);
     }
 
     @Override
-    public List<Debate> getMostSubscribed() {
-        return jdbcTemplate.query("SELECT debateid, name, description, created_date, imageid \n" +
-                "FROM debates NATURAL JOIN suscribed\n" +
-                "GROUP BY debateid\n" +
-                "ORDER BY COUNT(userid) DESC LIMIT 3;", ROW_MAPPER);
+    public List<PublicDebate> getMostSubscribed() {
+        return jdbcTemplate.query("SELECT * FROM public_debates ORDER BY subscribedcount DESC LIMIT 3", PUBLIC_ROW_MAPPER);
     }
 
     @Override
-    public List<Debate> getAllFromCategory(DebateCategory category, int page) {
+    public List<PublicDebate> getAllFromCategory(DebateCategory category, int page) {
         return jdbcTemplate.query("SELECT * FROM debates WHERE category = ? LIMIT 15 OFFSET ?",
                 new Object[]{DebateCategory.getFromCategory(category), page},
-                ROW_MAPPER);
+                PUBLIC_ROW_MAPPER);
     }
 }
