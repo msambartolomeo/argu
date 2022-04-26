@@ -43,9 +43,22 @@
                 </c:when>
 
                 <c:otherwise>
-                    <div class="card-title card-title-margins">
-                        <spring:message code="components.post-need-to-log-in"/>
-                    </div>
+                    <c:choose>
+                        <c:when test="${pageContext.request.userPrincipal.name != null}">
+                            <div class="card-title card-title-margins">
+                                <spring:message code="components.post-not-participant"/>
+                            </div>
+                        </c:when>
+
+                        <c:otherwise>
+                            <div class="card-title card-title-margins">
+                                <spring:message code="components.post-need-to-log-in"/>
+                                <a href="<c:url value="/login"/>">
+                                    <spring:message code="components.first-log-in"/>
+                                </a>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </c:otherwise>
             </c:choose>
 
