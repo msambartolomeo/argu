@@ -1,13 +1,18 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.interfaces.dao.PostDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
+import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Post;
 import ar.edu.itba.paw.model.PublicPost;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
+import ar.edu.itba.paw.model.exceptions.ForbiddenPostException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +27,8 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private UserDao userDao;
     @Autowired
+    private DebateDao debateDao;
+    @Autowired
     private EmailService emailService;
     @Autowired
     private ImageService imageService;
@@ -34,6 +41,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post create(long userId, long debateId, String content, byte[] image) {
         Post createdPost;
+        Debate debate = debateDao.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
+        if (debate.getDebateStatus() != DebateStatus.OPEN || (debate.getCreatorId() != userId && debate.getOpponentId() != userId))
+            throw new ForbiddenPostException();
         if (image.length == 0) {
             createdPost = postDao.create(userId, debateId, content,null);
         } else {

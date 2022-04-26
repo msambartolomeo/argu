@@ -24,7 +24,6 @@ public enum DebateCategory {
         return name;
     }
 
-    // Get category from integer
     public static DebateCategory getFromInt(Integer i) {
         return DebateCategory.values()[i];
     }

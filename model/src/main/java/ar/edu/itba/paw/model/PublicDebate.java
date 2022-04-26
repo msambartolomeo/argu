@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateStatus;
 
 import java.time.LocalDateTime;
 
@@ -13,9 +14,12 @@ public class PublicDebate {
     private final Long imageId;
     private final LocalDateTime createdDate;
     private final DebateCategory debateCategory;
+    private final DebateStatus debateStatus;
     private final Integer subscribedUsers;
 
-    public PublicDebate(long debateId, String name, String description, String creatorUsername, String opponentUsername, Long imageId, LocalDateTime createdDate, DebateCategory debateCategory, Integer subscribedUsers) {
+    public PublicDebate(long debateId, String name, String description, String creatorUsername,
+                        String opponentUsername, Long imageId, LocalDateTime createdDate,
+                        DebateCategory debateCategory, Integer subscribedUsers, DebateStatus debateStatus) {
         this.debateId = debateId;
         this.name = name;
         this.description = description;
@@ -25,10 +29,13 @@ public class PublicDebate {
         this.createdDate = createdDate;
         this.debateCategory = debateCategory;
         this.subscribedUsers = subscribedUsers;
+        this.debateStatus = debateStatus;
     }
 
-    public PublicDebate(long debateId, String name, String description, String creatorUsername, String opponentUsername, LocalDateTime createdDate, DebateCategory debateCategory, Integer subscribedUsers) {
-        this(debateId, name, description, creatorUsername, opponentUsername, null, createdDate, debateCategory, subscribedUsers);
+    public PublicDebate(long debateId, String name, String description, String creatorUsername,
+                        String opponentUsername, LocalDateTime createdDate,
+                        DebateCategory debateCategory, Integer subscribedUsers, DebateStatus debateStatus) {
+        this(debateId, name, description, creatorUsername, opponentUsername, null, createdDate, debateCategory, subscribedUsers, debateStatus);
     }
 
     public long getDebateId() {
@@ -65,5 +72,9 @@ public class PublicDebate {
 
     public Integer getSubscribedUsers() {
         return subscribedUsers;
+    }
+
+    public DebateStatus getDebateStatus() {
+        return debateStatus;
     }
 }
