@@ -184,10 +184,15 @@ public class WebController {
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ModelAndView handleUserNotFoundException(UserAlreadyExistsException e) {
+    public ModelAndView UserAlreadyExistsException(UserAlreadyExistsException e) {
         ModelAndView mav = new ModelAndView("pages/register");
-        mav.addObject("registerForm", new RegisterForm());
-        mav.addObject("userNotFound", e);
+        RegisterForm form = new RegisterForm();
+        form.setEmail(e.getEmail());
+        form.setUsername(e.getUsername());
+        form.setPassword(e.getPassword());
+        form.setPasswordConfirmation(e.getPassword());
+        mav.addObject("registerForm", form);
+        mav.addObject("userAlreadyExists", e);
         return mav;
     }
 

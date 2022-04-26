@@ -9,6 +9,7 @@
     <%--@elvariable id="profileImageForm" type="ar.edu.itba.paw.webapp.form.ProfileImageForm"--%>
     <form:form modelAttribute="profileImageForm" method="post" action="${imagePostPath}"
                acceptCharset="utf-8" id="photoForm" enctype="multipart/form-data">
+      <c:set var="imageError" scope="request" ><form:errors path="file"/></c:set>
       <div class="modal-content">
         <h4>
           <spring:message code="pages.profile.edit-profile-image"/>
@@ -19,7 +20,7 @@
               <form:input path="file" type="file"/>
             </div>
             <div class="file-path-wrapper">
-              <input class="file-path validate" type="text"/>
+              <form:input path="fileName" class="file-path validate ${not empty imageError? 'invalid' : ''}" type="text"/>
             </div>
             <form:errors path="file" cssClass="helper-text error"/>
           </div>

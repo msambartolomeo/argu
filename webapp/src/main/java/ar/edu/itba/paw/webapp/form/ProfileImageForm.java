@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ProfileImageForm {
 
+    private String fileName;
     @Image
     private MultipartFile file;
 
@@ -14,5 +15,13 @@ public class ProfileImageForm {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
