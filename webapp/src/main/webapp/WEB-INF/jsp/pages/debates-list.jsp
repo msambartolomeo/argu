@@ -38,7 +38,7 @@
                         <%@include file="../components/debates-list-item.jsp" %>
                     </div>
                 </c:forEach>
-                <div class="center">
+                <div class="center pagination-margin">
                     <ul class="pagination">
                         <c:forEach var="page" begin="0" end="${total_pages}">
                             <li class="active page-number">

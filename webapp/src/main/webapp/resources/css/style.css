@@ -200,6 +200,10 @@ a.card {
     background-color: var(--primary-color) !important;
 }
 
+.pagination-margin {
+    margin-bottom: 2%;
+}
+
 /* debate.jsp */
 
 .debate-title {
