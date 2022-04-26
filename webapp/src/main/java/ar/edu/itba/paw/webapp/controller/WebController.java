@@ -215,6 +215,12 @@ public class WebController {
         return new ModelAndView("error/404");
     }
 
+    @ExceptionHandler(ForbiddenPostException.class)
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
+    public ModelAndView handleForbiddenPostException() {
+        return error403();
+    }
+
     @RequestMapping(value = "/404", method = { RequestMethod.GET})
     public ModelAndView error() {
         return new ModelAndView("error/404");

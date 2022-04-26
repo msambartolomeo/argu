@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -30,7 +31,8 @@ public class DebateJdbcDao implements DebateDao {
                     rs.getLong("opponentid"),
                     rs.getObject("created_date", LocalDateTime.class),
                     rs.getLong("imageid"),
-                    DebateCategory.getFromInt(rs.getInt("category")));
+                    DebateCategory.getFromInt(rs.getInt("category")),
+                    DebateStatus.getFromInt(rs.getInt("status")));
 
     private static final RowMapper<PublicDebate> PUBLIC_ROW_MAPPER = (rs, rowNum) ->
             new PublicDebate(
@@ -42,7 +44,8 @@ public class DebateJdbcDao implements DebateDao {
                     rs.getLong("imageid"),
                     rs.getObject("created_date", LocalDateTime.class),
                     DebateCategory.getFromInt(rs.getInt("category")),
-                    rs.getInt("subscribedcount"));
+                    rs.getInt("subscribedcount"),
+                    DebateStatus.getFromInt(rs.getInt("status")));
 
     @Autowired
     public DebateJdbcDao(final DataSource ds) {
@@ -96,10 +99,11 @@ public class DebateJdbcDao implements DebateDao {
         data.put("created_date", created);
         data.put("imageid", imageId);
         data.put("category", DebateCategory.getFromCategory(category));
+        data.put("status", DebateStatus.getFromStatus(DebateStatus.OPEN));
 
         final Number debateId = jdbcInsert.executeAndReturnKey(data);
 
-        return new Debate(debateId.longValue(), name, description, creatorId, opponentId, created, imageId, category);
+        return new Debate(debateId.longValue(), name, description, creatorId, opponentId, created, imageId, category, DebateStatus.OPEN);
     }
     
     @Override

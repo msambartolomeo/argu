@@ -5,6 +5,7 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS role INTEGER;
 
 ALTER TABLE debates ADD COLUMN IF NOT EXISTS created_date timestamp;
 ALTER TABLE debates ADD COLUMN IF NOT EXISTS category INTEGER;
+ALTER TABLE debates ADD COLUMN IF NOT EXISTS status INTEGER;
 ALTER TABLE debates ADD COLUMN IF NOT EXISTS creatorid INTEGER REFERENCES users(userid);
 ALTER TABLE debates ADD COLUMN IF NOT EXISTS opponentid INTEGER REFERENCES users(userid);
 
@@ -42,6 +43,6 @@ CREATE OR REPLACE VIEW public_posts AS
     GROUP BY posts.postid, users.username;
 
 CREATE OR REPLACE VIEW public_debates AS
-    SELECT debates.debateid, debates.name, debates.description, debates.category, debates.created_date, debates.imageid, u1.username AS creatorusername, u2.username AS opponentusername, COUNT(DISTINCT s.userid) AS subscribedcount
+    SELECT debates.debateid, debates.name, debates.description, debates.category, debates.created_date, debates.imageid, u1.username AS creatorusername, u2.username AS opponentusername, COUNT(DISTINCT s.userid) AS subscribedcount, debates.status
     FROM debates LEFT JOIN users u1 ON debates.creatorid = u1.userid LEFT JOIN users u2 ON debates.opponentid = u2.userid LEFT JOIN subscribed s on debates.debateid = s.debateid
     GROUP BY debates.debateid, u1.userid, u2.userid;
