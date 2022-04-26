@@ -4,7 +4,7 @@
 
 <html>
     <head>
-        <title>Argu</title>
+        <title>Argu | Debates</title>
         <%@include file="../components/imports.jsp"%>
     </head>
 

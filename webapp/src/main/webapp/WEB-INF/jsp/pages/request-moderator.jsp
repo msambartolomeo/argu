@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Argu</title>
+    <title>Argu | <spring:message code="components.navbar.become-mod"/></title>
     <%@include file="../components/imports.jsp"%>
 </head>
 <body>
