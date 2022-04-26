@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface DebateService {
     Optional<Debate> getDebateById(long id);
+    Optional<PublicDebate> getPublicDebateById(long id);
     Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category);
     List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page);
     List<PublicDebate> get(int page, String search);

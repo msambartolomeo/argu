@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface DebateDao {
     Optional<Debate> getDebateById(long id);
+    Optional<PublicDebate> getPublicDebateById(long id);
     List<PublicDebate> getAll(int page);
     List<PublicDebate> getQuery(int page, String query);
     Debate create(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category);

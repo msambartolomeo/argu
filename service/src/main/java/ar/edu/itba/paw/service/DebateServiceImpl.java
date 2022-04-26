@@ -65,4 +65,9 @@ public class DebateServiceImpl implements DebateService {
     public List<PublicDebate> getMostSubscribed() {
         return debateDao.getMostSubscribed();
     }
+
+    @Override
+    public Optional<PublicDebate> getPublicDebateById(long id) {
+        return debateDao.getPublicDebateById(id);
+    }
 }

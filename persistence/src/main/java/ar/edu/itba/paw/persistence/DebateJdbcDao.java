@@ -59,6 +59,12 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
+    public Optional<PublicDebate> getPublicDebateById(long id) {
+        return jdbcTemplate.query("SELECT * FROM public_debates WHERE debateId = ?", PUBLIC_ROW_MAPPER, id)
+                .stream().findFirst();
+    }
+
+    @Override
     public List<PublicDebate> getAll(int page) {
         return jdbcTemplate.query("SELECT * FROM public_debates LIMIT 15 OFFSET ?", new Object[]{ page * 10 }, PUBLIC_ROW_MAPPER);
     }
