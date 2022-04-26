@@ -66,7 +66,7 @@ public class WebController {
     @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debate(@PathVariable("debateId") final long debateId, @ModelAttribute("postForm") final PostForm form) {
         final ModelAndView mav = new ModelAndView("pages/debate");
-        mav.addObject("debate", debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new));
+        mav.addObject("debate", debateService.getPublicDebateById(debateId).orElseThrow(DebateNotFoundException::new));
         mav.addObject("posts", postService.getPublicPostsByDebate(debateId, 0));
         return mav;
     }
