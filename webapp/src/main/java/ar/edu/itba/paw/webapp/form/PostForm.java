@@ -13,6 +13,8 @@ public class PostForm {
     @Image
     private MultipartFile file;
 
+    private String fileName;
+
     public String getContent() {
         return content;
     }
@@ -27,5 +29,13 @@ public class PostForm {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
