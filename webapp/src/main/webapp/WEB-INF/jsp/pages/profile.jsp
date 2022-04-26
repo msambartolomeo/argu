@@ -44,20 +44,30 @@
                 <h5>
                     <spring:message code="pages.profile.debates-subscribed"/>
                 </h5>
-                <c:if test="${subscribed_debates.size() > 0}">
-                    <c:forEach var="debate" items="${subscribed_debates}">
-                        <div class="list-item">
-                            <c:set var="debate" value="${subscribed_debates}" scope="request"/>
-                            <%@include file="../components/debates-list-item.jsp" %>
-                        </div>
-                    </c:forEach>
-                </c:if>
+                <c:choose>
+                    <c:when test="${subscribed_debates.size() > 0}">
+                        <c:forEach var="debate" items="${subscribed_debates}">
+                            <div class="list-item">
+                                <c:set var="debate" value="${subscribed_debates}" scope="request"/>
+                                <%@include file="../components/debates-list-item.jsp" %>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <h6 class="center">
+                            <spring:message code="pages.profile.no-debates-subscribed"/>
+                        </h6>
+                    </c:otherwise>
+                </c:choose>
+
                 <div class="center">
                     <ul class="pagination">
                         <c:forEach var="page" begin="0" end="${total_pages}">
-                            <li class="active page-number">
-                                <a href="<c:url value="/profile?page=${page}"/>">${page + 1}</a>
-                            </li>
+                            <c:if test="${total_pages > 0}">
+                                <li class="active page-number">
+                                    <a href="<c:url value="/profile?page=${page}"/>">${page + 1}</a>
+                                </li>
+                            </c:if>
                         </c:forEach>
                     </ul>
                 </div>

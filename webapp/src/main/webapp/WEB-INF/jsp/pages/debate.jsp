@@ -4,7 +4,7 @@
 
 <html>
     <head>
-        <title><c:out value="${debate.name}"/></title>
+        <title>Argu | <c:out value="${debate.name}"/></title>
         <%@include file="../components/imports.jsp"%>
     </head>
 
@@ -28,15 +28,19 @@
                             </div>
                         </c:forEach>
                 </c:if>
+
                 <c:if test="${posts.size() == 0}">
                     <h3 class="center"><spring:message code="pages.debate.no-posts"/></h3>
                 </c:if>
-                <div class="center">
+
+                <div class="center pagination-margin">
                     <ul class="pagination">
                         <c:forEach var="page" begin="0" end="${total_pages}">
-                            <li class="active page-number">
-                                <a href="<c:url value="/debates/${debateId}?page=${page}"/>">${page + 1}</a>
-                            </li>
+                            <c:if test="${total_pages > 0}">
+                                <li class="active page-number">
+                                    <a href="<c:url value="/debates/${debateId}?page=${page}"/>">${page + 1}</a>
+                                </li>
+                            </c:if>
                         </c:forEach>
                     </ul>
                 </div>
