@@ -5,14 +5,14 @@ public enum DebateStatus {
     CLOSED("closed"),
     DELETED("deleted");
 
-    private final String status;
+    private final String name;
 
-    DebateStatus(String status) {
-        this.status = status;
+    DebateStatus(String name) {
+        this.name = name;
     }
 
-    public String getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
     public static DebateStatus getFromInt(int i) {
         return DebateStatus.values()[i];
