@@ -5,7 +5,6 @@ import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
-import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Post;
 import ar.edu.itba.paw.model.PublicPost;
 import ar.edu.itba.paw.model.User;
@@ -46,7 +45,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private void sendEmailToSubscribedUsers(long debateId, long userId) {
-        for (User user : userDao.getSuscribedUsersByDebate(debateId)) {
+        for (User user : userDao.getSubscribedUsersByDebate(debateId)) {
             if (user.getUserId() != userId) // Si no es el usuario que creo el post
                 emailService.notifyNewPost(user.getEmail());
         }

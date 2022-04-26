@@ -9,7 +9,7 @@
                 <span class="card-title word-wrap">
                     <c:out value="${debate.name}"/>
                     <span class="new badge blue-grey darken-2" data-badge-caption="${debate.createdDate}"></span>
-                    <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="category.${debate.category.name}"/>"></span>
+                    <span class="new badge blue-grey darken-2" data-badge-caption="<spring:message code="category.${debate.debateCategory.name}"/>"></span>
                 </span>
                 <p class="word-wrap"><c:out value="${debate.description}"/></p>
             </div>

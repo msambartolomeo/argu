@@ -44,10 +44,10 @@
                 <h5>
                     <spring:message code="pages.profile.debates-subscribed"/>
                 </h5>
-                <c:if test="${suscribed_debates.size() > 0}">
-                    <c:forEach var="debate" items="${suscribed_debates}">
+                <c:if test="${subscribed_debates.size() > 0}">
+                    <c:forEach var="debate" items="${subscribed_debates}">
                         <div class="list-item">
-                            <c:set var="debate" value="${suscribed_debates}" scope="request"/>
+                            <c:set var="debate" value="${subscribed_debates}" scope="request"/>
                             <%@include file="../components/debates-list-item.jsp" %>
                         </div>
                     </c:forEach>
