@@ -118,7 +118,7 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public List<PublicDebate> getMostSubscribed() {
-        return jdbcTemplate.query("SELECT * FROM public_debates ORDER BY subscribedcount DESC LIMIT 3", PUBLIC_ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM public_debates WHERE status = ? ORDER BY subscribedcount DESC LIMIT 3", new Object[]{DebateStatus.OPEN.ordinal()}, PUBLIC_ROW_MAPPER);
     }
 
     @Override
