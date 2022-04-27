@@ -50,6 +50,8 @@
                       data-badge-caption="<spring:message code="components.debate-created-on"/> ${debate.createdDate}"></span>
                 <span class="new badge blue-grey darken-2"
                       data-badge-caption="<spring:message code="status.${debate.debateStatus.name}"/>"></span>
+                <span class="new badge blue-grey darken-2"
+                      data-badge-caption="<spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsers}"/>"></span>
             </div>
         </div>
         <c:if test="${debate.imageId != 0}">

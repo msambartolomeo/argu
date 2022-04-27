@@ -250,12 +250,13 @@ a.card {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    height: fit-content;
+    padding-bottom: 4%;
 }
 
 .debate-holder-separator {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     justify-content: space-between;
 }
 
