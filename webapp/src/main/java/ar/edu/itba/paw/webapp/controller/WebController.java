@@ -117,9 +117,10 @@ public class WebController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.DELETE }, params = "unsubscribe")
+    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST }, params = "unsubscribe")
     public ModelAndView unsubscribe(@PathVariable("debateId") final String debateId,
-                                   @Valid @ModelAttribute("unsubscribeForm") final UnsubscribeForm form, Authentication auth) {
+                                   @Valid @ModelAttribute("unsubscribeForm") final UnsubscribeForm form,
+                                    BindingResult errors, Authentication auth) {
         long id = Long.parseLong(debateId);
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
 

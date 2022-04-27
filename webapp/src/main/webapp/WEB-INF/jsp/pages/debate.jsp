@@ -11,16 +11,6 @@
 
     <body>
         <%@include file="../components/navbar.jsp" %>
-<%--        <c:choose>--%>
-<%--            <c:when test="${debate.imageId != 0}">--%>
-<%--                <img src="<c:url value="/images/${debate.imageId}"/>" class="circle responsive-img" alt="<spring:message --%>
-<%--                        code="pages.debate-picture"/>"/>--%>
-<%--            </c:when>--%>
-<%--            <c:otherwise>--%>
-<%--                <img src="<c:url value="/resources/images/user-profile-default.png"/>" class="responsive-img" alt="<spring:message --%>
-<%--                        code="pages.debate-picture"/>">--%>
-<%--            </c:otherwise>--%>
-<%--        </c:choose>--%>
         <div class="card normalized-margins">
             <c:choose>
                 <c:when test="${debate.imageId != 0}">
@@ -44,22 +34,21 @@
                                                 <form:form id="subscribeForm" method="post" modelAttribute="subscribeForm"
                                                            action="${debatePath}" acceptCharset="utf-8">
                                                     <button class="btn waves-effect" type="submit" form="subscribeForm"
-                                                            id="subscribeForm"
-                                                            onclick="this.form.submit();" name="subscribe">
-                                                        <i class="material-icons right">notifications_active</i>
+                                                            id="subscribeForm" onclick="this.form.submit();" name="subscribe">
                                                         <spring:message code="pages.debate-subscribe"/>
+                                                        <i class="material-icons right">notifications_active</i>
                                                     </button>
                                                 </form:form>
                                             </c:when>
                                             <c:otherwise>
                                                 <%--@elvariable id="unsubscribeForm" type=""--%>
-                                                <form:form id="unsubscribeForm" method="delete" modelAttribute="unsubscribeForm"
+                                                <form:form id="unsubscribeForm" method="post" modelAttribute="unsubscribeForm"
                                                            action="${debatePath}" acceptCharset="utf-8">
                                                     <button class="btn waves-effect" type="submit" form="unsubscribeForm"
                                                             id="unsubscribeForm"
                                                             onclick="this.form.submit();" name="unsubscribe">
-                                                        <i class="material-icons">notifications_off</i>
                                                         <spring:message code="pages.debate-unsubscribe"/>
+                                                        <i class="material-icons right">notifications_off</i>
                                                     </button>
                                                 </form:form>
                                             </c:otherwise>
@@ -98,20 +87,20 @@
                                                         <button class="btn waves-effect" type="submit" form="subscribeForm"
                                                                 id="subscribeForm"
                                                                 onclick="this.form.submit();" name="subscribe">
-                                                            <i class="material-icons right">notifications_active</i>
                                                             <spring:message code="pages.debate-subscribe"/>
+                                                            <i class="material-icons right">notifications_active</i>
                                                         </button>
                                                     </form:form>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <%--@elvariable id="unsubscribeForm" type=""--%>
-                                                    <form:form id="unsubscribeForm" method="delete" modelAttribute="unsubscribeForm"
+                                                    <form:form id="unsubscribeForm" method="post" modelAttribute="unsubscribeForm"
                                                                action="${debatePath}" acceptCharset="utf-8">
                                                         <button class="btn waves-effect" type="submit" form="unsubscribeForm"
                                                                 id="unsubscribeForm"
                                                                 onclick="this.form.submit();" name="unsubscribe">
-                                                            <i class="material-icons">notifications_off</i>
                                                             <spring:message code="pages.debate-unsubscribe"/>
+                                                            <i class="material-icons right">notifications_off</i>
                                                         </button>
                                                     </form:form>
                                                 </c:otherwise>
