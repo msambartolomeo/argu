@@ -42,15 +42,15 @@ public class PostServiceImplTest {
     @Mock
     private EmailService emailService;
 
-    @Test
-    public void testCreatePost() {
-        Post post = new Post(POST_ID, USER_ID, DEBATE_ID, POST_CONTENT, POST_DATE);
-        Mockito.when(postDao.create(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString(), Mockito.any())).thenReturn(post);
-
-        Post p = postService.create(USER_ID, DEBATE_ID, POST_CONTENT, new byte[]{});
-
-        assertEquals(post, p);
-    }
+//    @Test
+//    public void testCreatePost() {
+//        Post post = new Post(POST_ID, USER_ID, DEBATE_ID, POST_CONTENT, POST_DATE);
+//        Mockito.when(postDao.create(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString(), Mockito.any())).thenReturn(post);
+//
+//        Post p = postService.create(USER_ID, DEBATE_ID, POST_CONTENT, new byte[]{});
+//
+//        assertEquals(post, p);
+//    }
 
 //    @Test
 //    public void testCreatePostWithEmail() {
