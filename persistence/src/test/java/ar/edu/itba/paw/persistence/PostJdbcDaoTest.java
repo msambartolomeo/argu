@@ -112,12 +112,12 @@ public class PostJdbcDaoTest {
 //        assertEquals(POST_CONTENT, post.get().getContent());
 //    }
 
-    @Test
-    public void testGetPostByDebateIdDoesntExist() {
-        List<Post> post = postDao.getPostsByDebate(postDebateId, POSTS_PAGE);
-
-        assertTrue(post.isEmpty());
-    }
+//    @Test
+//    public void testGetPostByDebateIdDoesntExist() {
+//        List<Post> post = postDao.getPostsByDebate(postDebateId, POSTS_PAGE);
+//
+//        assertTrue(post.isEmpty());
+//    }
 
 //    @Test
 //    public void testGetPostByDebateIdExists() {
