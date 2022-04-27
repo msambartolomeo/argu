@@ -71,7 +71,7 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<Post> getPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? LIMIT 15 OFFSET ?", new Object[]{debateId, page * 15}, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? ORDER BY created_date LIMIT 15 OFFSET ?", new Object[]{debateId, page * 15}, ROW_MAPPER);
     }
 
     @Override
