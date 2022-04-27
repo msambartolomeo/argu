@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.model.PublicPost;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class WebController {
@@ -83,14 +85,17 @@ public class WebController {
             user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
             userid = user.getUserId();
         }
-
+        // TODO sacar logica de aca plis
         final ModelAndView mav = new ModelAndView("pages/debate");
 
         mav.addObject("debate", debateService.getPublicDebateById(id).orElseThrow(DebateNotFoundException::new));
         mav.addObject("total_pages", (int) Math.ceil(postService.getPostsByDebateCount(id) / 15.0));
-        mav.addObject("posts", postService.getPublicPostsByDebate(id, Integer.parseInt(page)));
-
-        if(userid != null) mav.addObject("isSubscribed", debateService.isUserSubscribed(userid, id));
+        List<PublicPost> posts = postService.getPublicPostsByDebate(id, Integer.parseInt(page));
+        mav.addObject("posts", posts);
+        if (userid != null) {
+            mav.addObject("hasLiked", postService.hasLiked(, userid));
+            mav.addObject("isSubscribed", debateService.isUserSubscribed(userid, id));
+        }
         return mav;
     }
 
@@ -125,6 +130,23 @@ public class WebController {
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
 
         debateService.unsubscribeToDebate(user.getUserId(), id);
+        return new ModelAndView("redirect:/debates/" + debateId);
+    }
+
+    @RequestMapping(value = "/like/{debateId}/{postId}", method = { RequestMethod.POST}, params = "like")
+    public ModelAndView like(@PathVariable("postId") final String postId, @PathVariable("debateId") final String debateId ,Authentication auth) {
+        long id = Long.parseLong(postId);
+        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
+        postService.likePost(id, user.getUserId());
+        return new ModelAndView("redirect:/debates/" + debateId);
+    }
+
+    @RequestMapping(value = "/like/{debateId}/{postId}", method = { RequestMethod.POST}, params = "unlike")
+    public ModelAndView unlike(@PathVariable("postId") final String postId, @PathVariable("debateId") final String debateId ,Authentication auth) {
+        long id = Long.parseLong(postId);
+        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
+
+        postService.unlikePost(id, user.getUserId());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 

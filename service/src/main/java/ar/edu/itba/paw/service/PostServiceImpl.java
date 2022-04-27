@@ -100,4 +100,9 @@ public class PostServiceImpl implements PostService {
     public void unlikePost(long postId, long userId) {
         postDao.unlikePost(postId, userId);
     }
+
+    @Override
+    public boolean hasLiked(long postId, long userId) {
+        return postDao.hasLiked(postId, userId);
+    }
 }

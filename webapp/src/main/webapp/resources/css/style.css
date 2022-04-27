@@ -291,6 +291,8 @@ a.card {
     font-weight: 500;
     word-break: break-all;
     position: relative;
+    display: flex;
+    justify-content: space-between;
 }
 
 /* speech bubble right */
@@ -325,6 +327,12 @@ a.card {
 
 .comment-owner {
     color: slategrey !important;
+}
+
+.comment-extra {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
 }
 
 /* login.jsp */

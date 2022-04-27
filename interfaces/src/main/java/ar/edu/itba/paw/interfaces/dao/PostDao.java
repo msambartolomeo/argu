@@ -15,4 +15,6 @@ public interface PostDao {
     List<PublicPost> getPublicPostsByDebate(long debateId, int page);
     void likePost(long postId, long userId);
     void unlikePost(long postId, long userId);
+
+    boolean hasLiked(long postId, long userId);
 }

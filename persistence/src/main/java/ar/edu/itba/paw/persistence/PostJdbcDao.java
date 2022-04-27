@@ -111,4 +111,9 @@ public class PostJdbcDao implements PostDao {
     public void unlikePost(long postId, long userId) {
         jdbcTemplate.update("DELETE FROM likes WHERE postId = ? AND userId = ?", postId, userId);
     }
+
+    @Override
+    public boolean hasLiked(long postId, long userId) {
+        return jdbcTemplate.query("SELECT * FROM likes WHERE postId = ? AND userId = ?", new Object[]{postId, userId}, (rs, rowNum) -> rs.getLong("postId")).size() > 0;
+    }
 }
