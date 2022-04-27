@@ -62,17 +62,7 @@
                     </c:otherwise>
                 </c:choose>
 
-                <div class="center">
-                    <ul class="pagination">
-                        <c:forEach var="page" begin="0" end="${total_pages}">
-                            <c:if test="${total_pages > 0}">
-                                <li class="active page-number">
-                                    <a href="<c:url value="/profile?page=${page}"/>">${page + 1}</a>
-                                </li>
-                            </c:if>
-                        </c:forEach>
-                    </ul>
-                </div>
+                <%@include file="../components/pagination.jsp"%>
             </div>
         </div>
         <%@include file="../components/JS_imports.jsp" %>

@@ -139,17 +139,7 @@
                     <h3 class="center"><spring:message code="pages.debate.no-posts"/></h3>
                 </c:if>
 
-                <div class="center pagination-margin">
-                    <ul class="pagination">
-                        <c:forEach var="page" begin="0" end="${total_pages}">
-                            <c:if test="${total_pages > 0}">
-                                <li class="active page-number">
-                                    <a href="<c:url value="/debates/${debateId}?page=${page}"/>">${page + 1}</a>
-                                </li>
-                            </c:if>
-                        </c:forEach>
-                    </ul>
-                </div>
+                <%@include file="../components/pagination.jsp"%>
             </div>
 
             <div class="post-comments">
