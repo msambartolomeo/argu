@@ -54,7 +54,7 @@ public class WebController {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
         mav.addObject("search", search);
         mav.addObject("categories", DebateCategory.values());
-        mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getCount(search) / 10)));
+        mav.addObject("total_pages", (int) Math.ceil(debateService.getCount(search) / 10.0));
         mav.addObject("debates", debateService.get(Integer.parseInt(page), search));
         return mav;
     }
@@ -64,7 +64,7 @@ public class WebController {
         if (!page.matches("\\d+")) throw new DebateNotFoundException();
         if (Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category))) throw new CategoryNotFoundException();
         final ModelAndView mav = new ModelAndView("pages/debates-list");
-        mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getFromCategoryCount(DebateCategory.valueOf(category.toUpperCase())) / 15)));
+        mav.addObject("total_pages", (int) Math.ceil(debateService.getFromCategoryCount(DebateCategory.valueOf(category.toUpperCase())) / 10.0));
         mav.addObject("currentCategory", category);
         mav.addObject("categories", DebateCategory.values());
         mav.addObject("debates", debateService.getFromCategory(DebateCategory.valueOf(category.toUpperCase()),Integer.parseInt(page)));
@@ -87,7 +87,7 @@ public class WebController {
         final ModelAndView mav = new ModelAndView("pages/debate");
 
         mav.addObject("debate", debateService.getPublicDebateById(id).orElseThrow(DebateNotFoundException::new));
-        mav.addObject("total_pages", (int) Math.ceil( (double) (postService.getPostsByDebateCount(id) / 15)));
+        mav.addObject("total_pages", (int) Math.ceil(postService.getPostsByDebateCount(id) / 15.0));
         mav.addObject("posts", postService.getPublicPostsByDebate(id, Integer.parseInt(page)));
 
         if(userid != null) mav.addObject("isSubscribed", debateService.isUserSubscribed(userid, id));
@@ -161,7 +161,7 @@ public class WebController {
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         mav.addObject("user", user);
-        mav.addObject("total_pages", (int) Math.ceil( (double) (debateService.getSubscribedDebatesByUsernameCount(user.getUserId()) / 5)));
+        mav.addObject("total_pages", (int) Math.ceil(debateService.getSubscribedDebatesByUsernameCount(user.getUserId()) / 5.0));
         mav.addObject("subscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), Integer.parseInt(page)));
         return mav;
     }
