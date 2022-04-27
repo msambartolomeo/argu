@@ -59,6 +59,11 @@ a.card {
     padding-right: 3%;
 }
 
+.search-close {
+    position: absolute;
+    background-color: transparent;
+}
+
 .search-color {
     background: var(--white);
 }

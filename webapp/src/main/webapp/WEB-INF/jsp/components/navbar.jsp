@@ -69,7 +69,7 @@
                                 <label class="label-icon" for="search">
                                     <i class="material-icons">search</i>
                                 </label>
-                                <i class="material-icons">close</i>
+                                <i class="material-icons"><input type="reset" value="" class="search-close">close</i>
                             </div>
                         </form>
                     </li>
