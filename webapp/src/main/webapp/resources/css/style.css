@@ -50,7 +50,7 @@ a.card {
 }
 
 .word-wrap {
-    word-wrap: break-word;
+    word-wrap: anywhere;
 }
 
 /* NavBar */
@@ -222,12 +222,48 @@ a.card {
 /* debate.jsp */
 
 .debate-title {
-    font-size: 50px !important;
     padding-bottom: 1%;
+    margin: 0;
+}
+
+.image-width {
+    min-width: 20%;
+    display: flex;
+    justify-content: center;
+}
+
+.limit-img {
+    max-height: 30vh;
 }
 
 .debate-description {
     font-size: 20px;
+}
+
+.debate-info-holder {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1%;
+}
+
+.debate-text-holder {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.debate-holder-separator {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.debate-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    padding-top: 1%;
 }
 
 .debate-content {
