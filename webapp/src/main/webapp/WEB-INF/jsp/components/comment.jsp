@@ -22,9 +22,10 @@
         </c:if>
     </div>
     <div class="comment-extra">
+        <sec:authorize access="hasAuthority('USER')">
         <form method="post" action="/like/${post.debateId}/${post.postId}">
             <c:choose>
-                <c:when test="${hasLiked}">
+                <c:when test="${post.liked}">
                     <button type="submit" class="btn-flat" name="unlike">
                         <i class="large material-icons">favorite</i>
                     </button>
@@ -35,8 +36,9 @@
                     </button>
                 </c:otherwise>
             </c:choose>
-            <span class="new badge blue-grey darken-2 badge-margin" data-badge-caption="${post.createdDate}"></span>
         </form>
+        </sec:authorize>
+        <span class="new badge blue-grey darken-2 badge-margin" data-badge-caption="${post.createdDate}"></span>
     </div>
 </div>
 </body>

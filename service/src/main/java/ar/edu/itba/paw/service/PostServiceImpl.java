@@ -6,10 +6,7 @@ import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Post;
-import ar.edu.itba.paw.model.PublicPost;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenPostException;
@@ -104,5 +101,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public boolean hasLiked(long postId, long userId) {
         return postDao.hasLiked(postId, userId);
+    }
+
+    @Override
+    public List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, long userId, int page) {
+        return postDao.getPublicPostsByDebateWithIsLiked(debateId, userId, page);
     }
 }

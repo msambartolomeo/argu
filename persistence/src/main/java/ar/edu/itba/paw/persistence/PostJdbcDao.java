@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.dao.PostDao;
 import ar.edu.itba.paw.model.Post;
 import ar.edu.itba.paw.model.PublicPost;
+import ar.edu.itba.paw.model.PublicPostWithUserLike;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -39,6 +40,16 @@ public class PostJdbcDao implements PostDao {
                     rs.getInt("likes"),
                     rs.getObject("created_date", LocalDateTime.class),
                     rs.getLong("imageid"));
+
+    private static final RowMapper<PublicPostWithUserLike> PUBLIC_POST_WITH_LIKES_ROW_MAPPER = (rs, rowNum) ->
+            new PublicPostWithUserLike(rs.getLong("postid"),
+                    rs.getString("username"),
+                    rs.getLong("debateid"),
+                    rs.getString("content"),
+                    rs.getInt("likes"),
+                    rs.getObject("created_date", LocalDateTime.class),
+                    rs.getLong("imageid"),
+                    rs.getInt("isliked") != 0);
 
     @Autowired
     public PostJdbcDao(final DataSource ds) {
@@ -81,6 +92,13 @@ public class PostJdbcDao implements PostDao {
         return jdbcTemplate.query("SELECT * FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 15 OFFSET ?",
                 new Object[]{debateId, page * 15},
                 PUBLIC_POST_ROW_MAPPER);
+    }
+
+    @Override
+    public List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, long userId, int page) {
+        return jdbcTemplate.query("SELECT postid, username, debateid, content, likes, created_date, imageid, " +
+                "(SELECT COUNT(*) FROM likes WHERE userid = ? AND postid = public_posts.postid) as isliked " +
+                "FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 15 OFFSET ?", new Object[]{userId, debateId, page * 15}, PUBLIC_POST_WITH_LIKES_ROW_MAPPER);
     }
 
     @Override

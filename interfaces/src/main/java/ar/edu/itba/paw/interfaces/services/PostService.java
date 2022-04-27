@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.model.Post;
 import ar.edu.itba.paw.model.PublicPost;
+import ar.edu.itba.paw.model.PublicPostWithUserLike;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +21,6 @@ public interface PostService {
     void unlikePost(long postId, long userId);
 
     boolean hasLiked(long postId, long userId);
+
+    List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, long userId, int page);
 }

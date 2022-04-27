@@ -50,4 +50,5 @@ public class PublicPost {
     public Long getImageId() {
         return imageId;
     }
+
 }

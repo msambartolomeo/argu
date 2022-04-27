@@ -90,11 +90,12 @@ public class WebController {
 
         mav.addObject("debate", debateService.getPublicDebateById(id).orElseThrow(DebateNotFoundException::new));
         mav.addObject("total_pages", (int) Math.ceil(postService.getPostsByDebateCount(id) / 15.0));
-        List<PublicPost> posts = postService.getPublicPostsByDebate(id, Integer.parseInt(page));
-        mav.addObject("posts", posts);
         if (userid != null) {
-            //mav.addObject("hasLiked", postService.hasLiked(, userid));
             mav.addObject("isSubscribed", debateService.isUserSubscribed(userid, id));
+            mav.addObject("posts", postService.getPublicPostsByDebateWithIsLiked(id, userid, Integer.parseInt(page)));
+        }
+        else {
+            mav.addObject("posts", postService.getPublicPostsByDebate(id, Integer.parseInt(page)));
         }
         return mav;
     }
