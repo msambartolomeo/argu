@@ -69,7 +69,7 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public List<PublicDebate> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM public_debates LIMIT 10 OFFSET ?", new Object[]{ page * 10 }, PUBLIC_ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM public_debates LIMIT 5 OFFSET ?", new Object[]{ page * 5 }, PUBLIC_ROW_MAPPER);
     }
     
     @Override
@@ -80,7 +80,7 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public List<PublicDebate> getQuery(int page, String query) {
-        return jdbcTemplate.query("SELECT * FROM public_debates WHERE name ILIKE ? LIMIT 10 OFFSET ?", new Object[]{ "%" + query + "%", page * 10 }, PUBLIC_ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM public_debates WHERE name ILIKE ? LIMIT 5 OFFSET ?", new Object[]{ "%" + query + "%", page * 5 }, PUBLIC_ROW_MAPPER);
     }
 
     @Override
@@ -123,8 +123,8 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public List<PublicDebate> getAllFromCategory(DebateCategory category, int page) {
-        return jdbcTemplate.query("SELECT * FROM public_debates WHERE category = ? LIMIT 10 OFFSET ?",
-                new Object[]{DebateCategory.getFromCategory(category), page * 10},
+        return jdbcTemplate.query("SELECT * FROM public_debates WHERE category = ? LIMIT 5 OFFSET ?",
+                new Object[]{DebateCategory.getFromCategory(category), page * 5},
                 PUBLIC_ROW_MAPPER);
     }
 

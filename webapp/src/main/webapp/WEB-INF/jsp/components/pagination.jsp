@@ -13,7 +13,7 @@
                 </li>
             </c:if>
             <c:forEach var="page" begin="1" end="${total_pages}">
-                <li class="active page-number ${page-1 == param.page ? 'selected-button' : ''}">
+                <li class="active page-number ${(page == 1 && empty param.page) || page-1 == param.page ? 'selected-button' : ''}">
                     <a href="<c:url value="?page=${page-1}"/>">${page}</a>
                 </li>
             </c:forEach>
