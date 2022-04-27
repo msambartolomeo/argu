@@ -93,13 +93,13 @@ public class WebController {
         List<PublicPost> posts = postService.getPublicPostsByDebate(id, Integer.parseInt(page));
         mav.addObject("posts", posts);
         if (userid != null) {
-            mav.addObject("hasLiked", postService.hasLiked(, userid));
+            //mav.addObject("hasLiked", postService.hasLiked(, userid));
             mav.addObject("isSubscribed", debateService.isUserSubscribed(userid, id));
         }
         return mav;
     }
 
-    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST }, params = "action")
+    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST })
     public ModelAndView createPost(@PathVariable("debateId") final String debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
         if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
         long id = Long.parseLong(debateId);
@@ -113,8 +113,8 @@ public class WebController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST }, params = "subscribe")
-    public ModelAndView subscribe(@PathVariable("debateId") final String debateId, @Valid @ModelAttribute("subscribeForm") final SubscribeForm form, BindingResult errors, Authentication auth) {
+    @RequestMapping(value = "/subscribe/{debateId}", method = { RequestMethod.POST }, params = "subscribe")
+    public ModelAndView subscribe(@PathVariable("debateId") final String debateId, Authentication auth) {
         long id = Long.parseLong(debateId);
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
 
@@ -122,10 +122,8 @@ public class WebController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST }, params = "unsubscribe")
-    public ModelAndView unsubscribe(@PathVariable("debateId") final String debateId,
-                                   @Valid @ModelAttribute("unsubscribeForm") final UnsubscribeForm form,
-                                    BindingResult errors, Authentication auth) {
+    @RequestMapping(value = "/subscribe/{debateId}", method = { RequestMethod.POST }, params = "unsubscribe")
+    public ModelAndView unsubscribe(@PathVariable("debateId") final String debateId, Authentication auth) {
         long id = Long.parseLong(debateId);
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
 

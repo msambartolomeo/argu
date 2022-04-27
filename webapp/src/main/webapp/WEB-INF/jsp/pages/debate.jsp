@@ -26,33 +26,23 @@
                             </div>
                             <div class="col s2">
                                 <div class="row">
-                                    <c:url value="/debates/${debateId}" var="debatePath"/>
                                     <sec:authorize access="hasAuthority('USER')">
+                                        <form id="subscribeForm" method="post" action="/subscribe/${debate.debateId}">
                                         <c:choose>
                                             <c:when test="${isSubscribed == false}">
-                                                <%--@elvariable id="subscribeForm" type="ar.edu.itba.paw.webapp.form.SubscribeForm"--%>
-                                                <form:form id="subscribeForm" method="post" modelAttribute="subscribeForm"
-                                                           action="${debatePath}" acceptCharset="utf-8">
-                                                    <button class="btn waves-effect" type="submit" form="subscribeForm"
-                                                            id="subscribeForm" onclick="this.form.submit();" name="subscribe">
+                                                    <button class="btn waves-effect" type="submit" name="subscribe">
                                                         <spring:message code="pages.debate-subscribe"/>
                                                         <i class="material-icons right">notifications_active</i>
                                                     </button>
-                                                </form:form>
                                             </c:when>
                                             <c:otherwise>
-                                                <%--@elvariable id="unsubscribeForm" type=""--%>
-                                                <form:form id="unsubscribeForm" method="post" modelAttribute="unsubscribeForm"
-                                                           action="${debatePath}" acceptCharset="utf-8">
-                                                    <button class="btn waves-effect" type="submit" form="unsubscribeForm"
-                                                            id="unsubscribeForm"
-                                                            onclick="this.form.submit();" name="unsubscribe">
+                                                    <button class="btn waves-effect" type="submit" name="unsubscribe">
                                                         <spring:message code="pages.debate-unsubscribe"/>
                                                         <i class="material-icons right">notifications_off</i>
                                                     </button>
-                                                </form:form>
                                             </c:otherwise>
                                         </c:choose>
+                                        </form>
                                     </sec:authorize>
                                 </div>
                                 <div class="row">
@@ -77,34 +67,23 @@
                             </div>
                                 <div class="col s2">
                                     <div class="row">
-                                        <c:url value="/debates/${debateId}" var="debatePath"/>
                                         <sec:authorize access="hasAuthority('USER')">
-                                            <c:choose>
-                                                <c:when test="${isSubscribed == false}">
-                                                    <%--@elvariable id="subscribeForm" type="ar.edu.itba.paw.webapp.form.SubscribeForm"--%>
-                                                    <form:form id="subscribeForm" method="post" modelAttribute="subscribeForm"
-                                                               action="${debatePath}" acceptCharset="utf-8">
-                                                        <button class="btn waves-effect" type="submit" form="subscribeForm"
-                                                                id="subscribeForm"
-                                                                onclick="this.form.submit();" name="subscribe">
+                                            <form id="subscribeForm" method="post" action="/subscribe/${debate.debateId}">
+                                                <c:choose>
+                                                    <c:when test="${isSubscribed == false}">
+                                                        <button class="btn waves-effect" type="submit" name="subscribe">
                                                             <spring:message code="pages.debate-subscribe"/>
                                                             <i class="material-icons right">notifications_active</i>
                                                         </button>
-                                                    </form:form>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <%--@elvariable id="unsubscribeForm" type=""--%>
-                                                    <form:form id="unsubscribeForm" method="post" modelAttribute="unsubscribeForm"
-                                                               action="${debatePath}" acceptCharset="utf-8">
-                                                        <button class="btn waves-effect" type="submit" form="unsubscribeForm"
-                                                                id="unsubscribeForm"
-                                                                onclick="this.form.submit();" name="unsubscribe">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <button class="btn waves-effect" type="submit" name="unsubscribe">
                                                             <spring:message code="pages.debate-unsubscribe"/>
                                                             <i class="material-icons right">notifications_off</i>
                                                         </button>
-                                                    </form:form>
-                                                </c:otherwise>
-                                            </c:choose>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </form>
                                         </sec:authorize>
                                     </div>
                                     <div class="row">
