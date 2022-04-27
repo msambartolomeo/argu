@@ -219,6 +219,11 @@ a.card {
     margin-bottom: 2%;
 }
 
+.limit-img-sm {
+    max-height: 17vh;
+}
+
+
 /* debate.jsp */
 
 .debate-title {
@@ -234,10 +239,6 @@ a.card {
 
 .limit-img {
     max-height: 30vh;
-}
-
-.debate-description {
-    font-size: 20px;
 }
 
 .debate-info-holder {
