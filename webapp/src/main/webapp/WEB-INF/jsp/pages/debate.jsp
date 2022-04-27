@@ -27,7 +27,8 @@
             </div>
             <div class="debate-footer">
                 <sec:authorize access="hasAuthority('USER')">
-                    <form id="subscribeForm" method="post" action="/subscribe/${debate.debateId}">
+                    <c:url var="subscribePath" value="/subscribe/${debate.debateId}"/>
+                    <form id="subscribeForm" method="post" action="${subscribePath}">
                         <c:choose>
                             <c:when test="${isSubscribed == false}">
                                 <button class="btn waves-effect" type="submit" name="subscribe">

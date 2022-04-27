@@ -23,7 +23,8 @@
     </div>
     <div class="comment-extra">
         <sec:authorize access="hasAuthority('USER')">
-        <form method="post" action="/like/${post.debateId}/${post.postId}">
+            <c:url var="likePath" value="/like/${post.debateId}/${post.postId}"/>
+        <form method="post" action="${likePath}">
             <c:choose>
                 <c:when test="${post.liked}">
                     <button type="submit" class="btn-flat" name="unlike">
