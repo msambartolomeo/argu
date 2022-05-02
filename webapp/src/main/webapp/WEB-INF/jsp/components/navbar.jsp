@@ -43,12 +43,6 @@
                                     <spring:message code="components.navbar.profile"/>
                                 </a>
                             </li>
-                            <li>
-                                <a href="<c:url value="/logout"/>">
-                                    <i class="material-icons left">logout</i>
-                                    <spring:message code="components.navbar.logout"/>
-                                </a>
-                            </li>
                         </c:when>
 
                         <c:otherwise>
@@ -116,12 +110,6 @@
                         <a href="<c:url value="/profile"/>">
                             <i class="material-icons left">account_circle</i>
                             <spring:message code="components.navbar.profile"/>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<c:url value="/logout"/>">
-                            <i class="material-icons left">logout</i>
-                            <spring:message code="components.navbar.logout"/>
                         </a>
                     </li>
                 </c:when>

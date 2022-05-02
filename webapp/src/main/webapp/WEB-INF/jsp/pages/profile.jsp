@@ -41,6 +41,10 @@
                 <p>
                     <spring:message code="pages.profile.created-in"/> <c:out value="${user.createdDate}"/>
                 </p>
+                <a class="waves-effect waves-light btn logout-btn" href="<c:url value="/logout"/>">
+                    <i class="material-icons left">logout</i>
+                    <spring:message code="pages.profile.logout"/>
+                </a>
             </div>
             <div class="card user-debates">
                 <h5>

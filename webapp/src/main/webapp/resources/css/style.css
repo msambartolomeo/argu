@@ -415,6 +415,7 @@ a.card {
 .profile-container {
     display: flex;
     flex-direction: row;
+    height: 100%;
 }
 
 .email-format {
@@ -438,6 +439,10 @@ a.card {
 .profile-data>h5 {
     margin-top: 10%;
     font-weight: bold;
+}
+
+.logout-btn {
+    margin: 5%;
 }
 
 .user-debates {
