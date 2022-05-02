@@ -53,29 +53,30 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<PublicDebate> get(int page, String search) {
+    public List<PublicDebate> get(int page, String search, String category) {
+        if (search != null && category != null)
+            return debateDao.getAll(page);
+            // TODO: Implement search and category
+//            return debateDao.getSearchCategory(page, search, DebateCategory.valueOf(category.toUpperCase()));
         if (search != null)
             return debateDao.getQuery(page, search);
-         else
-             return debateDao.getAll(page);
+        if (category != null)
+            return debateDao.getAllFromCategory(DebateCategory.valueOf(category.toUpperCase()), page);
+        return debateDao.getAll(page);
     }
 
     @Override
-    public int getCount(String search) {
-        if (search != null)
-            return debateDao.getQueryCount(search);
-        else
-            return debateDao.getAllcount();
-    }
-
-    @Override
-    public List<PublicDebate> getFromCategory(DebateCategory category, int page) {
-        return debateDao.getAllFromCategory(category, page);
-    }
-
-    @Override
-    public int getFromCategoryCount(DebateCategory category) {
-        return debateDao.getAllFromCategoryCount(category);
+    public int getPages(String search, String category) {
+        int count;
+        if (search != null && category != null)
+            count = debateDao.getAllcount();
+            // TODO count = debateDao.getSearchCategoryCount(search, DebateCategory.valueOf(category.toUpperCase()));
+        else if (search != null)
+            count = debateDao.getQueryCount(search);
+        else if (category != null)
+            count = debateDao.getAllFromCategoryCount(DebateCategory.valueOf(category.toUpperCase()));
+        else count = debateDao.getAllcount();
+        return (int) Math.ceil(count / 5.0);
     }
 
     @Override

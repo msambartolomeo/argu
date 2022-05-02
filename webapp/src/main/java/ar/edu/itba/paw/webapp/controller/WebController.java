@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.model.PublicPost;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
@@ -13,7 +12,6 @@ import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -24,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
 @Controller
 public class WebController {
@@ -51,25 +48,14 @@ public class WebController {
     }
 
     @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debatesList(@RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "0") String page) {
-        if (!page.matches("\\d+")) throw new DebateNotFoundException();
+    public ModelAndView debatesList(@RequestParam(value = "category", required = false) String category, @RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "0") String page) {
+        if (!page.matches("-?\\d+")) throw new DebateNotFoundException();
+        if (category != null && Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category)))
+            throw new CategoryNotFoundException();
         final ModelAndView mav = new ModelAndView("pages/debates-list");
-        mav.addObject("search", search);
         mav.addObject("categories", DebateCategory.values());
-        mav.addObject("total_pages", (int) Math.ceil(debateService.getCount(search) / 5.0));
-        mav.addObject("debates", debateService.get(Integer.parseInt(page), search));
-        return mav;
-    }
-
-    @RequestMapping(value = "/debates/category/{category}", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debatesCategoryList(@PathVariable("category") String category, @RequestParam(value = "page", defaultValue = "0") String page) {
-        if (!page.matches("\\d+")) throw new DebateNotFoundException();
-        if (Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category))) throw new CategoryNotFoundException();
-        final ModelAndView mav = new ModelAndView("pages/debates-list");
-        mav.addObject("total_pages", (int) Math.ceil(debateService.getFromCategoryCount(DebateCategory.valueOf(category.toUpperCase())) / 5.0));
-        mav.addObject("currentCategory", category);
-        mav.addObject("categories", DebateCategory.values());
-        mav.addObject("debates", debateService.getFromCategory(DebateCategory.valueOf(category.toUpperCase()),Integer.parseInt(page)));
+        mav.addObject("total_pages", debateService.getPages(search, category));
+        mav.addObject("debates", debateService.get(Integer.parseInt(page), search, category));
         return mav;
     }
 

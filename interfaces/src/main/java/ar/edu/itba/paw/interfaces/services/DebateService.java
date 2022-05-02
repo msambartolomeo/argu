@@ -12,12 +12,11 @@ public interface DebateService {
     Optional<PublicDebate> getPublicDebateById(long id);
     Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category);
     List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page);
-    List<PublicDebate> get(int page, String search);
+    List<PublicDebate> get(int page, String search, String category);
     List<PublicDebate> getMostSubscribed();
-    List<PublicDebate> getFromCategory(DebateCategory category, int page);
+
     int getSubscribedDebatesByUsernameCount(long userid);
-    int getCount(String search);
-    int getFromCategoryCount(DebateCategory category);
+    int getPages(String search, String category);
 
     void subscribeToDebate(long userid, long debateid);
 
