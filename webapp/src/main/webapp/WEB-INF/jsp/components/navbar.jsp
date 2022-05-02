@@ -13,6 +13,12 @@
                 </a>
                 <a href="" data-target="mobile-links" class="sidenav-trigger left"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
+                    <li>
+                        <a href="<c:url value="/debates"/>">
+                            <i class="material-icons left">explore</i>
+                            <spring:message code="components.navbar.explore"/>
+                        </a>
+                    </li>
                     <c:choose>
                         <c:when test="${pageContext.request.userPrincipal.name != null}">
                             <sec:authorize access="hasAuthority('MODERATOR')">
@@ -61,19 +67,17 @@
                         </c:otherwise>
                     </c:choose>
 
-                    <li>
-                        <form method="get" action="<c:url value="/debates"/>">
-                            <div class="input-field search-size">
-                                <input placeholder="<spring:message code="components.navbar.search"/>" id="search"
-                                       type="search" required name="search">
-                                <label class="label-icon" for="search">
-                                    <i class="material-icons">search</i>
-                                </label>
-                                <i class="material-icons"><input type="reset" value="" class="search-close">close</i>
-                            </div>
-                        </form>
-                    </li>
                 </ul>
+                <form method="get" action="<c:url value="/debates"/>">
+                    <div class="input-field search-size hide-on-med-and-down">
+                        <input placeholder="<spring:message code="components.navbar.search"/>" id="search"
+                               type="search" required name="search">
+                        <label class="label-icon" for="search">
+                            <i class="material-icons">search</i>
+                        </label>
+                        <i class="material-icons"><input type="reset" value="" class="search-close">close</i>
+                    </div>
+                </form>
             </nav>
         </div>
 

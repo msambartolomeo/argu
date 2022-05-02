@@ -81,8 +81,15 @@ a.card {
 }
 
 .search-size {
-    max-width: 80%;
+    max-width: 35%;
     max-height: 95%;
+    margin-left: 15% !important;
+}
+
+.responsive-navbar {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
 }
 
 /*landing-page.jsp*/
