@@ -424,8 +424,14 @@ a.card {
 }
 
 .profile-data>img {
+    max-width: 250px;
+    max-height: 250px;
+    min-width: 100px;
+    min-height: 100px;
     margin: 5%;
     width: 50%;
+    height: 30%;
+    border-radius: 50%;
 }
 
 .profile-data>h5 {

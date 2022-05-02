@@ -13,7 +13,7 @@
             <div class="card profile-data">
                 <c:choose>
                     <c:when test="${user.imageId != 0}">
-                        <img src="<c:url value="/images/${user.imageId}"/>" class="circle responsive-img" alt="<spring:message
+                        <img src="<c:url value="/images/${user.imageId}"/>" class="center circle responsive-img" alt="<spring:message
                         code="pages.profile.picture"/>"/>
                     </c:when>
                     <c:otherwise>
