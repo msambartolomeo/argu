@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ar.edu.itba.paw</groupId>
   <artifactId>PAW-webapp</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
   <packaging>pom</packaging>
     
   <properties>
