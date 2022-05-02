@@ -8,6 +8,7 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.exceptions.DebateOponentException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,7 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public List<PublicDebate> getMostSubscribed() {
         return debateDao.getMostSubscribed();
+        // return debateDao.getPublicDebatesGeneral(0, 3, null, null, DebateOrder.SUBS.setDescending());
     }
 
     @Override

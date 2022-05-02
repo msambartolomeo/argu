@@ -3,6 +3,8 @@ package ar.edu.itba.paw.interfaces.dao;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateOrder;
+import com.sun.istack.internal.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,4 +28,8 @@ public interface DebateDao {
     void unsubscribeToDebate(long userid, long debateid);
 
     boolean isUserSubscribed(long userid, long debateid);
+
+    List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, DebateCategory category, @NotNull DebateOrder order);
+
+    int getPublicDebatesCount(String searchQuery, DebateCategory category);
 }
