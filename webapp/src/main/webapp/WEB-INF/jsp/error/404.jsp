@@ -10,10 +10,10 @@
     <body>
     <div class="error-container">
         <div class="error-div">
-            <img src="${pageContext.request.contextPath}/resources/images/error-404.png" alt="404 error image">
+            <img src="<c:url value="/resources/images/error-404.png"/>" alt="404 error image">
             <h1><spring:message code="error.404.title"/></h1>
             <h6><spring:message code="error.404.message"/></h6>
-            <a href="${pageContext.request.contextPath}/"><spring:message code="errpr.404.back"/></a>
+            <a href="<c:url value="/"/>"><spring:message code="errpr.404.back"/></a>
         </div>
     </div>
     </body>
