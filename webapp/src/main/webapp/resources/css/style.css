@@ -329,7 +329,6 @@ a.card {
     padding: 2% 2% 5%;
     text-align: left;
     font-weight: 500;
-    word-break: break-all;
     position: relative;
     display: flex;
     justify-content: space-between;

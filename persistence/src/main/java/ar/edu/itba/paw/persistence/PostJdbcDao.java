@@ -71,7 +71,7 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<Post> getPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? ORDER BY created_date LIMIT 15 OFFSET ?", new Object[]{debateId, page * 15}, ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? ORDER BY created_date LIMIT 5 OFFSET ?", new Object[]{debateId, page * 5}, ROW_MAPPER);
     }
 
     @Override
@@ -89,8 +89,8 @@ public class PostJdbcDao implements PostDao {
 
     @Override
     public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
-        return jdbcTemplate.query("SELECT * FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 15 OFFSET ?",
-                new Object[]{debateId, page * 15},
+        return jdbcTemplate.query("SELECT * FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 5 OFFSET ?",
+                new Object[]{debateId, page * 5},
                 PUBLIC_POST_ROW_MAPPER);
     }
 
@@ -98,7 +98,7 @@ public class PostJdbcDao implements PostDao {
     public List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, long userId, int page) {
         return jdbcTemplate.query("SELECT postid, username, debateid, content, likes, created_date, imageid, " +
                 "(SELECT COUNT(*) FROM likes WHERE userid = ? AND postid = public_posts.postid) as isliked " +
-                "FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 15 OFFSET ?", new Object[]{userId, debateId, page * 15}, PUBLIC_POST_WITH_LIKES_ROW_MAPPER);
+                "FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 5 OFFSET ?", new Object[]{userId, debateId, page * 5}, PUBLIC_POST_WITH_LIKES_ROW_MAPPER);
     }
 
     @Override
