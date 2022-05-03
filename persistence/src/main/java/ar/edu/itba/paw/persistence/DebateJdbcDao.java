@@ -146,12 +146,18 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, DebateCategory category, @NotNull DebateOrder order) {
+    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order) {
         StringBuilder queryString = new StringBuilder("SELECT * FROM public_debates WHERE TRUE");
         List<Object> params = setUpQuery(searchQuery, category, queryString);
 
         queryString.append(" ORDER BY");
-        switch(order) {
+        DebateOrder orderBy;
+        if (order == null)
+            orderBy = DebateOrder.DATE_DESC;
+        else
+            orderBy = DebateOrder.valueOf(order.toUpperCase());
+
+        switch(orderBy) {
             case DATE_ASC:
                 queryString.append(" created_date ASC");
                 break;
@@ -181,13 +187,13 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public int getPublicDebatesCount(String searchQuery, DebateCategory category) {
+    public int getPublicDebatesCount(String searchQuery, String category) {
         StringBuilder queryString = new StringBuilder("SELECT COUNT(*) FROM public_debates WHERE TRUE");
         List<Object> params = setUpQuery(searchQuery, category, queryString);
         return jdbcTemplate.query(queryString.toString(), params.toArray(), (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
-    private List<Object> setUpQuery(String searchQuery, DebateCategory category, StringBuilder queryString) {
+    private List<Object> setUpQuery(String searchQuery, String category, StringBuilder queryString) {
         List<Object> params = new ArrayList<>();
 
         if(searchQuery != null) {
@@ -196,7 +202,7 @@ public class DebateJdbcDao implements DebateDao {
         }
         if(category != null) {
             queryString.append(" AND category = ?");
-            params.add(DebateCategory.getFromCategory(category));
+            params.add(DebateCategory.getFromCategory(DebateCategory.valueOf(category.toUpperCase())));
         }
         // TODO: Filters
         return params;

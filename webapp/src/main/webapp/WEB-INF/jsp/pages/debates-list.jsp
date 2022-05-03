@@ -39,13 +39,13 @@
                     <c:forEach items="${orders}" var="order">
                         <spring:url value="" var="option">
                             <c:forEach items="${param}" var="curParam">
-                                <c:if test="${curParam.key != 'order'}">
+                                <c:if test="${curParam.key != 'order' && curParam.key != 'page'}">
                                     <spring:param name="${curParam.key}" value="${curParam.value}"/>
                                 </c:if>
                             </c:forEach>
-                            <spring:param name="order" value="${order}"/>
+                            <spring:param name="order" value="${order.name}"/>
                         </spring:url>
-                        <option value="${option}" ${order == param.order ? "selected" : ""}>
+                        <option value="${option}" ${order.name == param.order ? "selected" : ""}>
                             <spring:message code="orders.${order.name}"/>
                         </option>
                     </c:forEach>
