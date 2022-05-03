@@ -152,20 +152,25 @@ public class DebateJdbcDao implements DebateDao {
 
         queryString.append(" ORDER BY");
         switch(order) {
-            case DATE:
-                queryString.append(" created_date");
+            case DATE_ASC:
+                queryString.append(" created_date ASC");
                 break;
-            case ALPHA:
-                queryString.append(" name");
+            case DATE_DESC:
+                queryString.append(" created_date DESC");
                 break;
-            case SUBS:
-                queryString.append(" subscribedcount");
+            case ALPHA_ASC:
+                queryString.append(" name ASC");
+                break;
+            case ALPHA_DESC:
+                queryString.append(" name DESC");
+                break;
+            case SUBS_ASC:
+                queryString.append(" subscribedcount ASC");
+                break;
+            case SUBS_DESC:
+                queryString.append(" subscribedcount DESC");
                 break;
         }
-        if (order.getOrder())
-            queryString.append(" ASC");
-        else
-            queryString.append(" DESC");
 
         queryString.append(" LIMIT ? OFFSET ?");
         params.add(pageSize);
