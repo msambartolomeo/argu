@@ -20,7 +20,16 @@
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
                 <c:if test="${debate.creatorUsername != null}">
                     <c:set var="creator"><c:out value="${debate.creatorUsername}"/></c:set>
-                    <c:set var="opponent"><c:out value="${debate.opponentUsername}"/></c:set>
+                    <c:set var="opponent">
+                        <c:choose>
+                            <c:when test="${debate.opponentUsername != null}">
+                                <c:out value="${debate.opponentUsername}"/>
+                            </c:when>
+                            <c:otherwise>
+                                <spring:message code="pages.debate.no-opponent"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:set>
                     <h6><spring:message code="pages.debate.for" arguments="${creator}"/></h6>
                     <h6><spring:message code="pages.debate.against" arguments='${opponent}'/></h6>
                 </c:if>
