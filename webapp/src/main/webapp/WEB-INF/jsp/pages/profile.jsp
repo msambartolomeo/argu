@@ -29,23 +29,23 @@
                 <div id="edit-profile-image" class="modal">
                     <%@include file="../components/profile-photo-form.jsp"%>
                 </div>
-                <h5>
+                <h4>
                     <c:out value="${user.username}"/>
-                </h5>
+                </h4>
                 <div class="email-format">
                     <i class="material-icons">email</i>
-                    <p>
+                    <h6>
                         <c:out value="${user.email}"/>
-                    </p>
+                    </h6>
                 </div>
-                <p>
+                <h6>
                     <spring:message code="pages.profile.created-in"/> <c:out value="${user.createdDate}"/>
-                </p>
+                </h6>
             </div>
             <div class="card user-debates">
-                <h5>
+                <h3>
                     <spring:message code="pages.profile.debates-subscribed"/>
-                </h5>
+                </h3>
                 <c:choose>
                     <c:when test="${subscribed_debates.size() > 0}">
                         <c:forEach var="debate" items="${subscribed_debates}">
@@ -56,9 +56,9 @@
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
-                        <h6 class="center">
+                        <h5 class="center">
                             <spring:message code="pages.profile.no-debates-subscribed"/>
-                        </h6>
+                        </h5>
                     </c:otherwise>
                 </c:choose>
 

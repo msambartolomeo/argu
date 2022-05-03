@@ -15,14 +15,14 @@
     <div class="card-content debate-info-holder">
         <div class="debate-holder-separator">
             <div class="debate-text-holder">
-                <h1 class="debate-title word-wrap"><c:out value="${debate.name}"/></h1>
+                <h3 class="debate-title word-wrap"><c:out value="${debate.name}"/></h3>
                 <hr class="dashed">
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
                 <c:if test="${debate.creatorUsername != null}">
                     <c:set var="creator"><c:out value="${debate.creatorUsername}"/></c:set>
                     <c:set var="opponent"><c:out value="${debate.opponentUsername}"/></c:set>
-                    <p><spring:message code="pages.debate.for" arguments="${creator}"/></p>
-                    <p><spring:message code="pages.debate.against" arguments='${opponent}'/></p>
+                    <h6><spring:message code="pages.debate.for" arguments="${creator}"/></h6>
+                    <h6><spring:message code="pages.debate.against" arguments='${opponent}'/></h6>
                 </c:if>
             </div>
             <div class="debate-footer">
@@ -77,7 +77,7 @@
         </c:if>
 
         <c:if test="${posts.size() == 0}">
-            <h3 class="center"><spring:message code="pages.debate.no-posts"/></h3>
+            <h5 class="center"><spring:message code="pages.debate.no-posts"/></h5>
         </c:if>
 
         <%@include file="../components/pagination.jsp" %>
