@@ -7,6 +7,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
@@ -54,6 +55,7 @@ public class WebController {
             throw new CategoryNotFoundException();
         final ModelAndView mav = new ModelAndView("pages/debates-list");
         mav.addObject("categories", DebateCategory.values());
+        mav.addObject("orders", DebateOrder.values());
         mav.addObject("total_pages", debateService.getPages(search, category));
         mav.addObject("debates", debateService.get(Integer.parseInt(page), search, category));
         return mav;

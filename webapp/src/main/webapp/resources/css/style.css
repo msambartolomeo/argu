@@ -225,6 +225,18 @@ a.card {
     max-height: 17vh;
 }
 
+.order-div {
+    display: flex;
+    align-items: baseline;
+}
+
+.order-text {
+    margin-left: 3%;
+    margin-right: 2%;
+    font-size: larger;
+    color: black;
+}
+
 
 /* debate.jsp */
 
