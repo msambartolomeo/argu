@@ -6,7 +6,6 @@ import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
-import com.sun.istack.internal.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -146,9 +145,9 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order) {
+    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String status) {
         StringBuilder queryString = new StringBuilder("SELECT * FROM public_debates WHERE TRUE");
-        List<Object> params = setUpQuery(searchQuery, category, queryString);
+        List<Object> params = setUpQuery(searchQuery, category, queryString, status);
 
         queryString.append(" ORDER BY");
         DebateOrder orderBy;
@@ -187,13 +186,13 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public int getPublicDebatesCount(String searchQuery, String category) {
+    public int getPublicDebatesCount(String searchQuery, String category, String status) {
         StringBuilder queryString = new StringBuilder("SELECT COUNT(*) FROM public_debates WHERE TRUE");
-        List<Object> params = setUpQuery(searchQuery, category, queryString);
+        List<Object> params = setUpQuery(searchQuery, category, queryString, status);
         return jdbcTemplate.query(queryString.toString(), params.toArray(), (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
-    private List<Object> setUpQuery(String searchQuery, String category, StringBuilder queryString) {
+    private List<Object> setUpQuery(String searchQuery, String category, StringBuilder queryString, String status) {
         List<Object> params = new ArrayList<>();
 
         if(searchQuery != null) {
@@ -203,6 +202,10 @@ public class DebateJdbcDao implements DebateDao {
         if(category != null) {
             queryString.append(" AND category = ?");
             params.add(DebateCategory.getFromCategory(DebateCategory.valueOf(category.toUpperCase())));
+        }
+        if (status != null) {
+            queryString.append(" AND status = ?");
+            params.add(DebateStatus.getFromStatus(DebateStatus.valueOf(status.toUpperCase())));
         }
         // TODO: Filters
         return params;

@@ -49,12 +49,12 @@ public class WebController {
     }
 
     @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debatesList(@RequestParam(value = "category", required = false) String category, @RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "0") String page, @RequestParam(value = "order", required = false) String order) {
+    public ModelAndView debatesList(@RequestParam(value = "category", required = false) String category, @RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "0") String page, @RequestParam(value = "order", required = false) String order, @RequestParam(value = "status", required = false) String status) {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
         mav.addObject("categories", DebateCategory.values());
         mav.addObject("orders", DebateOrder.values());
-        mav.addObject("total_pages", debateService.getPages(search, category));
-        mav.addObject("debates", debateService.get(page, search, category, order));
+        mav.addObject("total_pages", debateService.getPages(search, category, status));
+        mav.addObject("debates", debateService.get(page, search, category, order, status));
         return mav;
     }
 

@@ -58,18 +58,20 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<PublicDebate> get(String page, String search, String category, String order) {
+    public List<PublicDebate> get(String page, String search, String category, String order, String status) {
+        if (status != null && !status.equals("open") && !status.equals("closed"))
+            throw new DebateNotFoundException(); // TODO change exception (?)
         if (!page.matches("-?\\d+")) throw new DebateNotFoundException();
         if (category != null && Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category)))
             throw new CategoryNotFoundException();
         if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(order)))
             throw new DebateNotFoundException(); // TODO change exception (?)
-        return debateDao.getPublicDebatesGeneral(Integer.parseInt(page), PAGE_SIZE, search, category, order);
+        return debateDao.getPublicDebatesGeneral(Integer.parseInt(page), PAGE_SIZE, search, category, order, status);
     }
 
     @Override
-    public int getPages(String search, String category) {
-        return (int) Math.ceil(debateDao.getPublicDebatesCount(search, category) / (double) PAGE_SIZE);
+    public int getPages(String search, String category, String status) {
+        return (int) Math.ceil(debateDao.getPublicDebatesCount(search, category, status) / (double) PAGE_SIZE);
     }
 
     @Override
