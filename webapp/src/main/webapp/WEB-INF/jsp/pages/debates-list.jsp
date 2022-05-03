@@ -31,6 +31,27 @@
                 <h3 class="center"><spring:message code="pages.debates-list.all-debates"/></h3>
             </c:if>
 
+            <div class="order-div">
+                <label for="select-order" class="order-text">
+                    <h6><b>Order by</b></h6>
+                </label>
+                <select id="select-order" onchange="location.href=this.value">
+                    <c:forEach items="${orders}" var="order">
+                        <spring:url value="" var="option">
+                            <c:forEach items="${param}" var="curParam">
+                                <c:if test="${curParam.key != 'order' && curParam.key != 'page'}">
+                                    <spring:param name="${curParam.key}" value="${curParam.value}"/>
+                                </c:if>
+                            </c:forEach>
+                            <spring:param name="order" value="${order.name}"/>
+                        </spring:url>
+                        <option value="${option}" ${order.name == param.order ? "selected" : ""}>
+                            <spring:message code="orders.${order.name}"/>
+                        </option>
+                    </c:forEach>
+                </select>
+            </div>
+
             <c:if test="${debates.size() > 0}">
                 <c:forEach var="debate" items="${debates}">
                     <div class="list-item">

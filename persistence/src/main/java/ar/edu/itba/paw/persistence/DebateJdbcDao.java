@@ -4,7 +4,9 @@ import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
+import com.sun.istack.internal.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,10 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class DebateJdbcDao implements DebateDao {
@@ -54,6 +53,23 @@ public class DebateJdbcDao implements DebateDao {
                 .withTableName("debates")
                 .usingGeneratedKeyColumns("debateid");
     }
+    @Override
+    public Debate create(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category) {
+        final Map<String, Object> data = new HashMap<>();
+        LocalDateTime created = LocalDateTime.now();
+        data.put("name", name);
+        data.put("description", description);
+        data.put("creatorid", creatorId);
+        data.put("opponentid", opponentId);
+        data.put("created_date", created);
+        data.put("imageid", imageId);
+        data.put("category", DebateCategory.getFromCategory(category));
+        data.put("status", DebateStatus.getFromStatus(DebateStatus.OPEN));
+
+        final Number debateId = jdbcInsert.executeAndReturnKey(data);
+
+        return new Debate(debateId.longValue(), name, description, creatorId, opponentId, created, imageId, category, DebateStatus.OPEN);
+    }
 
     @Override
     public Optional<Debate> getDebateById(long id) {
@@ -87,25 +103,7 @@ public class DebateJdbcDao implements DebateDao {
     public int getQueryCount(String query) {
         return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE name ILIKE ?", new Object[]{ "%" + query + "%" }, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
-    
-    @Override
-    public Debate create(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category) {
-        final Map<String, Object> data = new HashMap<>();
-        LocalDateTime created = LocalDateTime.now();
-        data.put("name", name);
-        data.put("description", description);
-        data.put("creatorid", creatorId);
-        data.put("opponentid", opponentId);
-        data.put("created_date", created);
-        data.put("imageid", imageId);
-        data.put("category", DebateCategory.getFromCategory(category));
-        data.put("status", DebateStatus.getFromStatus(DebateStatus.OPEN));
 
-        final Number debateId = jdbcInsert.executeAndReturnKey(data);
-
-        return new Debate(debateId.longValue(), name, description, creatorId, opponentId, created, imageId, category, DebateStatus.OPEN);
-    }
-    
     @Override
     public List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page) {
         return jdbcTemplate.query("SELECT * FROM public_debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = ?) ORDER BY created_date DESC LIMIT 5 OFFSET ?", new Object[]{userid, page * 5}, PUBLIC_ROW_MAPPER);
@@ -145,5 +143,68 @@ public class DebateJdbcDao implements DebateDao {
         return jdbcTemplate.query("SELECT COUNT(*) FROM subscribed WHERE userid = ? AND debateid = ?",
                 new Object[]{userid, debateid},
                 (rs, rowNum) -> rs.getInt(1)).get(0) > 0;
+    }
+
+    @Override
+    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order) {
+        StringBuilder queryString = new StringBuilder("SELECT * FROM public_debates WHERE TRUE");
+        List<Object> params = setUpQuery(searchQuery, category, queryString);
+
+        queryString.append(" ORDER BY");
+        DebateOrder orderBy;
+        if (order == null)
+            orderBy = DebateOrder.DATE_DESC;
+        else
+            orderBy = DebateOrder.valueOf(order.toUpperCase());
+
+        switch(orderBy) {
+            case DATE_ASC:
+                queryString.append(" created_date ASC");
+                break;
+            case DATE_DESC:
+                queryString.append(" created_date DESC");
+                break;
+            case ALPHA_ASC:
+                queryString.append(" name ASC");
+                break;
+            case ALPHA_DESC:
+                queryString.append(" name DESC");
+                break;
+            case SUBS_ASC:
+                queryString.append(" subscribedcount ASC");
+                break;
+            case SUBS_DESC:
+                queryString.append(" subscribedcount DESC");
+                break;
+        }
+
+        queryString.append(" LIMIT ? OFFSET ?");
+        params.add(pageSize);
+        params.add(page * pageSize);
+
+        System.out.println(queryString);
+        return jdbcTemplate.query(queryString.toString(), params.toArray(), PUBLIC_ROW_MAPPER);
+    }
+
+    @Override
+    public int getPublicDebatesCount(String searchQuery, String category) {
+        StringBuilder queryString = new StringBuilder("SELECT COUNT(*) FROM public_debates WHERE TRUE");
+        List<Object> params = setUpQuery(searchQuery, category, queryString);
+        return jdbcTemplate.query(queryString.toString(), params.toArray(), (rs, rowNum) -> rs.getInt(1)).get(0);
+    }
+
+    private List<Object> setUpQuery(String searchQuery, String category, StringBuilder queryString) {
+        List<Object> params = new ArrayList<>();
+
+        if(searchQuery != null) {
+            queryString.append(" AND name ILIKE ?");
+            params.add("%" + searchQuery + "%");
+        }
+        if(category != null) {
+            queryString.append(" AND category = ?");
+            params.add(DebateCategory.getFromCategory(DebateCategory.valueOf(category.toUpperCase())));
+        }
+        // TODO: Filters
+        return params;
     }
 }

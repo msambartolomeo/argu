@@ -8,17 +8,22 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.enums.DebateOrder;
+import ar.edu.itba.paw.model.exceptions.CategoryNotFoundException;
+import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.DebateOponentException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class DebateServiceImpl implements DebateService {
 
+    private static final int PAGE_SIZE = 5;
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -53,35 +58,24 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<PublicDebate> get(int page, String search, String category) {
-        if (search != null && category != null)
-            return debateDao.getAll(page);
-            // TODO: Implement search and category
-//            return debateDao.getSearchCategory(page, search, DebateCategory.valueOf(category.toUpperCase()));
-        if (search != null)
-            return debateDao.getQuery(page, search);
-        if (category != null)
-            return debateDao.getAllFromCategory(DebateCategory.valueOf(category.toUpperCase()), page);
-        return debateDao.getAll(page);
+    public List<PublicDebate> get(String page, String search, String category, String order) {
+        if (!page.matches("-?\\d+")) throw new DebateNotFoundException();
+        if (category != null && Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category)))
+            throw new CategoryNotFoundException();
+        if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(order)))
+            throw new DebateNotFoundException(); // TODO change exception (?)
+        return debateDao.getPublicDebatesGeneral(Integer.parseInt(page), PAGE_SIZE, search, category, order);
     }
 
     @Override
     public int getPages(String search, String category) {
-        int count;
-        if (search != null && category != null)
-            count = debateDao.getAllcount();
-            // TODO count = debateDao.getSearchCategoryCount(search, DebateCategory.valueOf(category.toUpperCase()));
-        else if (search != null)
-            count = debateDao.getQueryCount(search);
-        else if (category != null)
-            count = debateDao.getAllFromCategoryCount(DebateCategory.valueOf(category.toUpperCase()));
-        else count = debateDao.getAllcount();
-        return (int) Math.ceil(count / 5.0);
+        return (int) Math.ceil(debateDao.getPublicDebatesCount(search, category) / (double) PAGE_SIZE);
     }
 
     @Override
     public List<PublicDebate> getMostSubscribed() {
         return debateDao.getMostSubscribed();
+        // return debateDao.getPublicDebatesGeneral(0, 3, null, null, DebateOrder.SUBS.setDescending());
     }
 
     @Override
