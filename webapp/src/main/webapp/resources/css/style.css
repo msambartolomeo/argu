@@ -230,11 +230,17 @@ a.card {
     align-items: baseline;
 }
 
-.order-text {
+.margin-left {
     margin-left: 3%;
-    margin-right: 2%;
-    font-size: larger;
-    color: black;
+}
+
+.flex {
+    display: flex;
+    align-items: baseline;
+}
+
+.x:hover {
+    cursor: pointer;
 }
 
 

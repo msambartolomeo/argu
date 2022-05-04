@@ -57,21 +57,28 @@ public class DebateServiceImpl implements DebateService {
         return debateDao.getSubscribedDebatesByUsernameCount(userid);
     }
 
-    @Override
-    public List<PublicDebate> get(String page, String search, String category, String order, String status) {
+    private void verifyDebateFilters(String category, String status, String date) {
         if (status != null && !status.equals("open") && !status.equals("closed"))
             throw new DebateNotFoundException(); // TODO change exception (?)
-        if (!page.matches("-?\\d+")) throw new DebateNotFoundException();
         if (category != null && Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category)))
             throw new CategoryNotFoundException();
-        if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(order)))
+        if (date != null && !date.matches("\\d{2}-\\d{2}-\\d{4}"))
             throw new DebateNotFoundException(); // TODO change exception (?)
-        return debateDao.getPublicDebatesGeneral(Integer.parseInt(page), PAGE_SIZE, search, category, order, status);
     }
 
     @Override
-    public int getPages(String search, String category, String status) {
-        return (int) Math.ceil(debateDao.getPublicDebatesCount(search, category, status) / (double) PAGE_SIZE);
+    public List<PublicDebate> get(String page, String search, String category, String order, String status, String date) {
+        if (!page.matches("-?\\d+")) throw new DebateNotFoundException();
+        if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(order)))
+            throw new DebateNotFoundException(); // TODO change exception (?)
+        verifyDebateFilters(category, status, date);
+        return debateDao.getPublicDebatesGeneral(Integer.parseInt(page), PAGE_SIZE, search, category, order, status, date);
+    }
+
+    @Override
+    public int getPages(String search, String category, String status, String date) {
+        verifyDebateFilters(category, status, date);
+        return (int) Math.ceil(debateDao.getPublicDebatesCount(search, category, status, date) / (double) PAGE_SIZE);
     }
 
     @Override

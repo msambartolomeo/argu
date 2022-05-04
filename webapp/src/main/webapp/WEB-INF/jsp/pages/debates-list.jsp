@@ -32,24 +32,27 @@
             </c:if>
 
             <div class="order-div">
-                <label for="select-order" class="order-text">
-                    <h6><b>Order by</b></h6>
-                </label>
-                <select id="select-order" onchange="location.href=this.value">
-                    <c:forEach items="${orders}" var="order">
-                        <spring:url value="" var="option">
-                            <c:forEach items="${param}" var="curParam">
-                                <c:if test="${curParam.key != 'order' && curParam.key != 'page'}">
-                                    <spring:param name="${curParam.key}" value="${curParam.value}"/>
-                                </c:if>
-                            </c:forEach>
-                            <spring:param name="order" value="${order.name}"/>
-                        </spring:url>
-                        <option value="${option}" ${order.name == param.order ? "selected" : ""}>
-                            <spring:message code="orders.${order.name}"/>
-                        </option>
-                    </c:forEach>
-                </select>
+                <div class="input-field margin-left">
+                    <select id="select-order" onchange="addParamToUrlAndRedirect('order', this.value)">
+                        <c:forEach items="${orders}" var="order">--%>
+                            <option value="${order.name}" ${order.name == param.order ? "selected" : ""}><spring:message code="orders.${order.name}"/></option>
+                        </c:forEach>
+                    </select>
+                    <label for="select-order"><spring:message code="pages.debates-list.order-by"/></label>
+                </div>
+                <div class="input-field margin-left">
+                    <select id="select-status" onchange="addParamToUrlAndRedirect('status', this.value)">
+                        <option value="" selected ><spring:message code="status.all"/></option>
+                        <option value="open" ${ 'open' == param.status ? "selected" : ""}><spring:message code="status.open"/></option>
+                        <option value="closed" ${ 'closed' == param.status ? "selected" : ""}><spring:message code="status.closed"/></option>
+                    </select>
+                    <label for="select-status"><spring:message code="pages.debates-list.status"/></label>
+                </div>
+                <div class="input-field margin-left flex">
+                    <label for="datepicker"><spring:message code="pages.debates-list.created-date"/></label>
+                    <input placeholder="date" id="datepicker" type="text" class="datepicker" value="${param.date}" onchange="addParamToUrlAndRedirect('date', this.value)">
+                    <i class="material-icons x" onclick="addParamToUrlAndRedirect('date', '')">close</i>
+                </div>
             </div>
 
             <c:if test="${debates.size() > 0}">

@@ -4,6 +4,7 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public interface DebateDao {
 
     boolean isUserSubscribed(long userid, long debateid);
 
-    List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String open);
+    List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String open, String date);
 
-    int getPublicDebatesCount(String searchQuery, String category, String status);
+    int getPublicDebatesCount(String searchQuery, String category, String status, String date);
 }

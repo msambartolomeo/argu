@@ -13,7 +13,9 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Repository
@@ -145,9 +147,9 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String status) {
+    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String status, String date) {
         StringBuilder queryString = new StringBuilder("SELECT * FROM public_debates WHERE TRUE");
-        List<Object> params = setUpQuery(searchQuery, category, queryString, status);
+        List<Object> params = setUpQuery(searchQuery, category, queryString, status, date);
 
         queryString.append(" ORDER BY");
         DebateOrder orderBy;
@@ -186,13 +188,13 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public int getPublicDebatesCount(String searchQuery, String category, String status) {
+    public int getPublicDebatesCount(String searchQuery, String category, String status, String date) {
         StringBuilder queryString = new StringBuilder("SELECT COUNT(*) FROM public_debates WHERE TRUE");
-        List<Object> params = setUpQuery(searchQuery, category, queryString, status);
+        List<Object> params = setUpQuery(searchQuery, category, queryString, status, date);
         return jdbcTemplate.query(queryString.toString(), params.toArray(), (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
-    private List<Object> setUpQuery(String searchQuery, String category, StringBuilder queryString, String status) {
+    private List<Object> setUpQuery(String searchQuery, String category, StringBuilder queryString, String status, String date) {
         List<Object> params = new ArrayList<>();
 
         if(searchQuery != null) {
@@ -207,7 +209,13 @@ public class DebateJdbcDao implements DebateDao {
             queryString.append(" AND status = ?");
             params.add(DebateStatus.getFromStatus(DebateStatus.valueOf(status.toUpperCase())));
         }
-        // TODO: Filters
+        if (date != null) {
+            LocalDateTime dateTime = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).atStartOfDay();
+            queryString.append(" AND created_date >= ?");
+            params.add(dateTime);
+            queryString.append(" AND created_date <= ?");
+            params.add(dateTime.plusDays(1));
+        }
         return params;
     }
 }
