@@ -146,4 +146,11 @@ public class DebateJdbcDao implements DebateDao {
                 new Object[]{userid, debateid},
                 (rs, rowNum) -> rs.getInt(1)).get(0) > 0;
     }
+
+    @Override
+    public List<PublicDebate> getMyDebates(String username, int page) {
+        return jdbcTemplate.query("SELECT * FROM public_debates WHERE creatorusername = ? OR opponentusername = ? ORDER BY created_date DESC LIMIT 5 OFFSET ?",
+                new Object[] {username, username, page * 5},
+                PUBLIC_ROW_MAPPER);
+    }
 }

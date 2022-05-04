@@ -100,4 +100,8 @@ public class DebateServiceImpl implements DebateService {
     public boolean isUserSubscribed(long userid, long debateid) {
         return debateDao.isUserSubscribed(userid, debateid);
     }
+    @Override
+    public List<PublicDebate> getMyDebates(String username, int page) {
+        return debateDao.getMyDebates(username, page);
+    }
 }

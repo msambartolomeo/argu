@@ -24,4 +24,6 @@ public interface DebateService {
     void unsubscribeToDebate(long userid, long debateid);
 
     boolean isUserSubscribed(long userid, long debateid);
+
+    List<PublicDebate> getMyDebates(String username, int page);
 }
