@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target( { ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ImageSize {
-    String message() default "The uploaded image is too big, max size is 4MB";
+    String message() default "The uploaded image is too big, max size is 10MB";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }

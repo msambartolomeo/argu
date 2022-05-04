@@ -14,6 +14,6 @@ public class ImageSizeValidator implements ConstraintValidator<ImageSize, Multip
     @Override
     public boolean isValid(MultipartFile value, ConstraintValidatorContext context) {
         if (value.isEmpty()) return true;
-        return value.getSize() < 1024*1024*4;
+        return value.getSize() < 1024*1024*10;
     }
 }

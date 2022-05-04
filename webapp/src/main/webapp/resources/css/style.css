@@ -282,6 +282,7 @@ a.card {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: flex-start;
 }
 
 .comment-list {
@@ -337,10 +338,14 @@ a.card {
     padding: 2% 2% 5%;
     text-align: left;
     font-weight: 500;
-    word-break: break-all;
     position: relative;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.comment-bubble>img {
+    max-height: 20vh;
 }
 
 /* speech bubble right */
@@ -381,6 +386,13 @@ a.card {
     display: flex;
     flex-direction: row;
     align-items: stretch;
+}
+
+.comment-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
 }
 
 /* login.jsp */
@@ -429,11 +441,17 @@ a.card {
 }
 
 .profile-data>img {
+    max-width: 250px;
+    max-height: 250px;
+    min-width: 100px;
+    min-height: 100px;
     margin: 5%;
-    width: 50%;
+    width: 15vw;
+    height: 15vw;
+    border-radius: 50%;
 }
 
-.profile-data>h5 {
+.profile-data>h4 {
     margin-top: 10%;
     font-weight: bold;
 }
@@ -453,6 +471,10 @@ a.card {
 .card-title-margins {
     margin: 5%;
     padding: 5% 0;
+}
+
+.no-top-margin {
+    margin-top: 0;
 }
 
 .badge-margin {
