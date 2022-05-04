@@ -331,7 +331,12 @@ a.card {
     font-weight: 500;
     position: relative;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.comment-bubble>img {
+    max-height: 20vh;
 }
 
 /* speech bubble right */
@@ -372,6 +377,13 @@ a.card {
     display: flex;
     flex-direction: row;
     align-items: stretch;
+}
+
+.comment-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
 }
 
 /* login.jsp */
@@ -428,8 +440,8 @@ a.card {
     min-width: 100px;
     min-height: 100px;
     margin: 5%;
-    width: 50%;
-    height: 30%;
+    width: 15vw;
+    height: 15vw;
     border-radius: 50%;
 }
 
