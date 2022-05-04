@@ -46,7 +46,7 @@
                                 </button>
                             </c:when>
                             <c:otherwise>
-                                <button class="btn waves-effect" type="submit" name="unsubscribe">
+                                <button class="btn waves-effect chip" type="submit" name="unsubscribe">
                                     <spring:message code="pages.debate-unsubscribe"/>
                                     <i class="material-icons right">notifications_off</i>
                                 </button>
