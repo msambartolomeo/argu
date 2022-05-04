@@ -14,22 +14,46 @@
         <div class="category-list z-depth-3">
             <h2><spring:message code="pages.debates-list.categories"/></h2>
             <c:forEach items="${categories}" var="category">
-                <a href="<c:url value="/debates/category/${category.name}" />" class="waves-effect btn-large badge-margin category-button ${category.name == currentCategory ? "selected-button" : ""}">
+                <a href="<c:url value="?category=${category.name}" />" class="waves-effect btn-large badge-margin category-button ${category.name == param.category ? "selected-button" : ""}">
                     <spring:message code="category.${category.name}"/>
                 </a>
             </c:forEach>
         </div>
         <div class="z-depth-3 debate-list">
-            <c:if test="${search != null}">
-                <h2 class="center"><spring:message code="pages.debates-list.search-results" arguments="${search}"/></h2>
+            <c:if test="${param.search != null}">
+                <h3 class="center"><spring:message code="pages.debates-list.search-results" arguments="${param.search}"/></h3>
             </c:if>
-            <c:if test="${currentCategory != null}">
-                <spring:message code="category.${currentCategory}" var="categoryCode"/>
-                <h2 class="center"><spring:message code="pages.debates-list.category-results" arguments="${categoryCode}"/></h2>
+            <c:if test="${param.category != null}">
+                <spring:message code="category.${param.category}" var="categoryCode"/>
+                <h3 class="center"><spring:message code="pages.debates-list.category-results" arguments="${categoryCode}"/></h3>
             </c:if>
-            <c:if test="${search == null && currentCategory == null}">
-                <h2 class="center"><spring:message code="pages.debates-list.all-debates"/></h2>
+            <c:if test="${param.search == null && param.category == null}">
+                <h3 class="center"><spring:message code="pages.debates-list.all-debates"/></h3>
             </c:if>
+
+            <div class="order-div">
+                <div class="input-field margin-left">
+                    <select id="select-order" onchange="addParamToUrlAndRedirect('order', this.value)">
+                        <c:forEach items="${orders}" var="order">--%>
+                            <option value="${order.name}" ${order.name == param.order ? "selected" : ""}><spring:message code="orders.${order.name}"/></option>
+                        </c:forEach>
+                    </select>
+                    <label for="select-order"><spring:message code="pages.debates-list.order-by"/></label>
+                </div>
+                <div class="input-field margin-left">
+                    <select id="select-status" onchange="addParamToUrlAndRedirect('status', this.value)">
+                        <option value="" selected ><spring:message code="status.all"/></option>
+                        <option value="open" ${ 'open' == param.status ? "selected" : ""}><spring:message code="status.open"/></option>
+                        <option value="closed" ${ 'closed' == param.status ? "selected" : ""}><spring:message code="status.closed"/></option>
+                    </select>
+                    <label for="select-status"><spring:message code="pages.debates-list.status"/></label>
+                </div>
+                <div class="input-field margin-left flex">
+                    <label for="datepicker"><spring:message code="pages.debates-list.created-date"/></label>
+                    <input placeholder="date" id="datepicker" type="text" class="datepicker" value="${param.date}" onchange="addParamToUrlAndRedirect('date', this.value)">
+                    <i class="material-icons x" onclick="addParamToUrlAndRedirect('date', '')">close</i>
+                </div>
+            </div>
 
             <c:if test="${debates.size() > 0}">
                 <c:forEach var="debate" items="${debates}">

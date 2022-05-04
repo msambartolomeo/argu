@@ -232,6 +232,24 @@ a.card {
     max-height: 17vh;
 }
 
+.order-div {
+    display: flex;
+    align-items: baseline;
+}
+
+.margin-left {
+    margin-left: 3%;
+}
+
+.flex {
+    display: flex;
+    align-items: baseline;
+}
+
+.x:hover {
+    cursor: pointer;
+}
+
 
 /* debate.jsp */
 
