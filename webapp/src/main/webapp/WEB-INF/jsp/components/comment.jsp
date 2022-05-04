@@ -13,23 +13,28 @@
             <spring:message code="${code}" arguments="${arg}"/>
         </h6>
         <div class="comment-extra">
-            <sec:authorize access="hasAuthority('USER')">
-                <c:url var="likePath" value="/like/${post.debateId}/${post.postId}"/>
-                <form method="post" action="${likePath}">
-                    <c:choose>
-                        <c:when test="${post.liked}">
-                            <button type="submit" class="btn-flat" name="unlike">
-                                <i class="large material-icons">favorite</i>
-                            </button>
-                        </c:when>
-                        <c:otherwise>
-                            <button type="submit" class="btn-flat" name="like">
-                                <i class="large material-icons">favorite_border</i>
-                            </button>
-                        </c:otherwise>
-                    </c:choose>
-                </form>
-            </sec:authorize>
+            <c:if test="${pageContext.request.userPrincipal.name != post.username}">
+                <sec:authorize access="hasAuthority('USER')">
+                    <c:url var="likePath" value="/like/${post.debateId}/${post.postId}"/>
+                    <form method="post" action="${likePath}">
+                        <c:choose>
+                            <c:when test="${post.liked}">
+                                <button type="submit" class="btn-flat" name="unlike">
+                                    <i class="large material-icons">favorite</i>
+                                </button>
+                            </c:when>
+                            <c:otherwise>
+                                <button type="submit" class="btn-flat" name="like">
+                                    <i class="large material-icons">favorite_border</i>
+                                </button>
+                            </c:otherwise>
+                        </c:choose>
+                    </form>
+                    <div>
+                        <p><c:out value="${post.likes}"/></p>
+                    </div>
+                </sec:authorize>
+            </c:if>
             <span class="new badge blue-grey darken-2 badge-margin" data-badge-caption="${post.createdDate}"></span>
         </div>
     </div>

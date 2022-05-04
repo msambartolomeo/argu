@@ -385,7 +385,7 @@ a.card {
 .comment-extra {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: baseline;
 }
 
 .comment-info {
@@ -469,8 +469,7 @@ a.card {
 }
 
 .card-title-margins {
-    margin: 5%;
-    padding: 5% 0;
+    padding: 5%;
 }
 
 .no-top-margin {
