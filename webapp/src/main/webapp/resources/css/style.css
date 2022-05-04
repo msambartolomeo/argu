@@ -81,8 +81,15 @@ a.card {
 }
 
 .search-size {
-    max-width: 80%;
+    max-width: 35%;
     max-height: 95%;
+    margin-left: 15% !important;
+}
+
+.responsive-navbar {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
 }
 
 /*landing-page.jsp*/
@@ -266,6 +273,7 @@ a.card {
 .debate-footer {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: baseline;
     padding-top: 1%;
 }
@@ -399,16 +407,12 @@ a.card {
 
 .profile-container {
     width: 80%;
-    height: 80%;
+    height: 100%;
     margin: 1% auto;
     display: flex;
     flex-direction: row;
 }
 
-.profile-container {
-    display: flex;
-    flex-direction: row;
-}
 
 .email-format {
     display: flex;
@@ -420,6 +424,7 @@ a.card {
     flex-direction: column;
     align-items: center;
     width: 30%;
+    height: fit-content;
     margin-right: 10%;
 }
 
@@ -433,9 +438,16 @@ a.card {
     font-weight: bold;
 }
 
+.logout-btn {
+    margin: 5%;
+}
+
 .user-debates {
     width: 60%;
+    height: fit-content;
     padding: 2%;
+    display: flex;
+    flex-direction: column;
 }
 
 .card-title-margins {

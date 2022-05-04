@@ -13,12 +13,10 @@
             <div class="section no-pad-bot">
                 <div class="container">
                     <br><br>
-                    <a class="to-debates" href="<c:url value="/debates" />">
-                        <h2 class="header center">
-                            <i class="medium material-icons">explore</i>
-                            <spring:message code="pages.landing.page.explore"/>
-                        </h2>
-                    </a>
+                    <h2 class="header center">
+                        <i class="medium material-icons">explore</i>
+                        <spring:message code="pages.landing.page.explore"/>
+                    </h2>
                     <div class="row center">
                         <c:forEach items="${categories}" var="category">
                             <a href="<c:url value="/debates/category/${category.name}" />" class="waves-effect btn-small">
