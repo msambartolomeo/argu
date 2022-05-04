@@ -266,6 +266,7 @@ a.card {
 
 .debate-holder-separator {
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -297,6 +298,11 @@ a.card {
 .post-comments {
     width: 34%;
     margin-left: 1%;
+}
+
+.chip{
+    background: var(--primary-color);
+    color: white;
 }
 
 /* 404.jsp */

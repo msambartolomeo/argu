@@ -15,13 +15,10 @@
                 </c:if>
             </div>
             <div class="debate-footer">
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="status.${debate.debateStatus.name}"/>"></span>
-                <span class="new badge blue-grey darken-2" data-badge-caption="${debate.createdDate}"></span>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="category.${debate.debateCategory.name}"/>"></span>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsers}"/>"></span>
+                <div class="chip"><spring:message code="category.${debate.debateCategory.name}"/></div>
+                <div class="chip"><spring:message code="components.debate-created-on"/> ${debate.createdDate}</div>
+                <div class="chip"><spring:message code="status.${debate.debateStatus.name}"/></div>
+                <div class="chip"><spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsers}"/></div>
             </div>
         </div>
         <c:if test="${debate.imageId != 0}">

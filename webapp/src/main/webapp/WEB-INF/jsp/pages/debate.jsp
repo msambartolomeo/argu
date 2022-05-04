@@ -40,7 +40,7 @@
                     <form id="subscribeForm" method="post" action="${subscribePath}">
                         <c:choose>
                             <c:when test="${isSubscribed == false}">
-                                <button class="btn waves-effect" type="submit" name="subscribe">
+                                <button class="btn waves-effect chip" type="submit" name="subscribe">
                                     <spring:message code="pages.debate-subscribe"/>
                                     <i class="material-icons right">notifications_active</i>
                                 </button>
@@ -54,14 +54,10 @@
                         </c:choose>
                     </form>
                 </sec:authorize>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="category.${debate.debateCategory.name}"/>"></span>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="components.debate-created-on"/> ${debate.createdDate}"></span>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="status.${debate.debateStatus.name}"/>"></span>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsers}"/>"></span>
+                <div class="chip"><spring:message code="category.${debate.debateCategory.name}"/></div>
+                <div class="chip"><spring:message code="components.debate-created-on"/> ${debate.createdDate}</div>
+                <div class="chip"><spring:message code="status.${debate.debateStatus.name}"/></div>
+                <div class="chip"><spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsers}"/></div>
             </div>
         </div>
         <c:if test="${debate.imageId != 0}">
