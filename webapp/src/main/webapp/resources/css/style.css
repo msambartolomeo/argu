@@ -274,6 +274,7 @@ a.card {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: flex-start;
 }
 
 .comment-list {
@@ -458,6 +459,10 @@ a.card {
 .card-title-margins {
     margin: 5%;
     padding: 5% 0;
+}
+
+.no-top-margin {
+    margin-top: 0;
 }
 
 .badge-margin {

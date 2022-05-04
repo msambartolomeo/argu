@@ -5,7 +5,7 @@
 
 <html>
 <body>
-<div class="card">
+<div class="card no-top-margin">
     <c:choose>
     <c:when test="${pageContext.request.userPrincipal.name == null}">
         <div class="card-title card-title-margins">
