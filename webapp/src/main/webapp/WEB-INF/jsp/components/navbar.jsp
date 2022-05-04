@@ -77,16 +77,10 @@
 
         <ul class="sidenav" id="mobile-links">
             <li>
-                <form method="get" action="<c:url value="/debates"/>">
-                    <div class="input-field search-size">
-                        <input placeholder="<spring:message code="components.navbar.search"/>" id="search-mobile"
-                               type="search" required name="search">
-                        <label class="label-icon" for="search-mobile">
-                            <i class="material-icons">search</i>
-                        </label>
-                        <i class="material-icons">close</i>
-                    </div>
-                </form>
+                <a href="<c:url value="/debates"/>">
+                    <i class="material-icons left">explore</i>
+                    <spring:message code="components.navbar.explore"/>
+                </a>
             </li>
             <c:choose>
                 <c:when test="${pageContext.request.userPrincipal.name != null}">
