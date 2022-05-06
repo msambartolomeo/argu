@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces.dao;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateVote;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,4 +32,10 @@ public interface DebateDao {
     List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String open, String date);
 
     int getPublicDebatesCount(String searchQuery, String category, String status, String date);
+
+    void addVote(long debateId, long userId, DebateVote vote);
+
+    void removeVote(long debateId, long userId);
+
+    Boolean hasUserVoted(long debateId, long userId);
 }

@@ -4,22 +4,19 @@ import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
+import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateOrder;
-import ar.edu.itba.paw.model.exceptions.CategoryNotFoundException;
-import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.DebateOponentException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.enums.DebateVote;
+import ar.edu.itba.paw.model.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DebateServiceImpl implements DebateService {
@@ -31,6 +28,8 @@ public class DebateServiceImpl implements DebateService {
     private DebateDao debateDao;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private UserService userService;
 
     @Override
     public Optional<Debate> getDebateById(long id) {
@@ -107,5 +106,19 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public boolean isUserSubscribed(long userid, long debateid) {
         return debateDao.isUserSubscribed(userid, debateid);
+    }
+
+    @Override
+    public void addVote(long debateId, String username, DebateVote vote) {
+        User user = userService.getRealUserByUsername(username);
+        if (debateDao.hasUserVoted(debateId, user.getUserId()))
+            throw new UserAlreadyVotedException();
+        debateDao.addVote(debateId, user.getUserId(), vote);
+    }
+
+    @Override
+    public void removeVote(long debateId, String username) {
+        User user = userService.getRealUserByUsername(username);
+        debateDao.removeVote(debateId, user.getUserId());
     }
 }

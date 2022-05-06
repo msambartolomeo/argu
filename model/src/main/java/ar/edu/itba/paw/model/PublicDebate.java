@@ -18,9 +18,13 @@ public class PublicDebate {
     private final DebateStatus debateStatus;
     private final Integer subscribedUsers;
 
+    private final Integer forCount;
+    private final Integer againstCount;
+
     public PublicDebate(long debateId, String name, String description, String creatorUsername,
                         String opponentUsername, Long imageId, LocalDateTime createdDate,
-                        DebateCategory debateCategory, Integer subscribedUsers, DebateStatus debateStatus) {
+                        DebateCategory debateCategory, Integer subscribedUsers, DebateStatus debateStatus,
+                        Integer forCount, Integer againstCount) {
         this.debateId = debateId;
         this.name = name;
         this.description = description;
@@ -31,12 +35,14 @@ public class PublicDebate {
         this.debateCategory = debateCategory;
         this.subscribedUsers = subscribedUsers;
         this.debateStatus = debateStatus;
+        this.forCount = forCount;
+        this.againstCount = againstCount;
     }
 
     public PublicDebate(long debateId, String name, String description, String creatorUsername,
                         String opponentUsername, LocalDateTime createdDate,
-                        DebateCategory debateCategory, Integer subscribedUsers, DebateStatus debateStatus) {
-        this(debateId, name, description, creatorUsername, opponentUsername, null, createdDate, debateCategory, subscribedUsers, debateStatus);
+                        DebateCategory debateCategory, Integer subscribedUsers, DebateStatus debateStatus, Integer forCount, Integer againstCount) {
+        this(debateId, name, description, creatorUsername, opponentUsername, null, createdDate, debateCategory, subscribedUsers, debateStatus, forCount, againstCount);
     }
 
     public long getDebateId() {
@@ -77,5 +83,13 @@ public class PublicDebate {
 
     public DebateStatus getDebateStatus() {
         return debateStatus;
+    }
+
+    public Integer getForCount() {
+        return forCount;
+    }
+
+    public Integer getAgainstCount() {
+        return againstCount;
     }
 }
