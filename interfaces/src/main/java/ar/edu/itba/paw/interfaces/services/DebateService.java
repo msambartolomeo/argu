@@ -11,11 +11,9 @@ public interface DebateService {
     Optional<Debate> getDebateById(long id);
     Optional<PublicDebate> getPublicDebateById(long id);
     Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category);
-    List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page);
     List<PublicDebate> get(int page, String search);
     List<PublicDebate> getMostSubscribed();
     List<PublicDebate> getFromCategory(DebateCategory category, int page);
-    int getSubscribedDebatesByUsernameCount(long userid);
     int getCount(String search);
     int getFromCategoryCount(DebateCategory category);
 
@@ -25,5 +23,8 @@ public interface DebateService {
 
     boolean isUserSubscribed(long userid, long debateid);
 
-    List<PublicDebate> getMyDebates(String username, int page);
+
+    List<PublicDebate> getProfileDebates(String list, long userid, int page);
+
+    int getProfileDebatesPageCount(String list, long userid);
 }

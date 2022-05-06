@@ -27,5 +27,7 @@ public interface DebateDao {
 
     boolean isUserSubscribed(long userid, long debateid);
 
-    List<PublicDebate> getMyDebates(String username, int page);
+    List<PublicDebate> getMyDebates(long userid, int page);
+
+    int getMyDebatesCount(long userid);
 }

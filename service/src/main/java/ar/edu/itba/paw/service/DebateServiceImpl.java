@@ -43,16 +43,6 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page) {
-        return debateDao.getSubscribedDebatesByUsername(userid, page);
-    }
-
-    @Override
-    public int getSubscribedDebatesByUsernameCount(long userid) {
-        return debateDao.getSubscribedDebatesByUsernameCount(userid);
-    }
-
-    @Override
     public List<PublicDebate> get(int page, String search) {
         if (search != null)
             return debateDao.getQuery(page, search);
@@ -100,8 +90,28 @@ public class DebateServiceImpl implements DebateService {
     public boolean isUserSubscribed(long userid, long debateid) {
         return debateDao.isUserSubscribed(userid, debateid);
     }
+
     @Override
-    public List<PublicDebate> getMyDebates(String username, int page) {
-        return debateDao.getMyDebates(username, page);
+    public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
+        if(list == null)
+            return debateDao.getSubscribedDebatesByUsername(userid, page);
+        else if(list.compareTo("mydebates") == 0)
+            return debateDao.getMyDebates(userid, page);
+        else if(list.compareTo("subscribed") == 0)
+            return debateDao.getSubscribedDebatesByUsername(userid, page);
+
+        return debateDao.getSubscribedDebatesByUsername(userid, page);
+    }
+
+    @Override
+    public int getProfileDebatesPageCount(String list, long userid) {
+        int count;
+        if(list == null)
+            count = debateDao.getSubscribedDebatesByUsernameCount(userid);
+        else if(list.compareTo("mydebates") == 0)
+            count = debateDao.getMyDebatesCount(userid);
+        else
+            count = debateDao.getSubscribedDebatesByUsernameCount(userid);
+        return (int) Math.ceil(count / 5.0);
     }
 }

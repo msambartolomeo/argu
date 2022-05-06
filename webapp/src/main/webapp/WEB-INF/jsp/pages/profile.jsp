@@ -46,27 +46,44 @@
                     <spring:message code="pages.profile.logout"/>
                 </a>
             </div>
-            <div class="card user-debates">
-                <h3>
-                    <spring:message code="pages.profile.debates-subscribed"/>
-                </h3>
-                <c:choose>
-                    <c:when test="${subscribed_debates.size() > 0}">
-                        <c:forEach var="debate" items="${subscribed_debates}">
-                            <div class="list-item">
-                                <c:set var="debate" value="${subscribed_debates}" scope="request"/>
-                                <%@include file="../components/debates-list-item.jsp" %>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <h5 class="center">
-                            <spring:message code="pages.profile.no-debates-subscribed"/>
-                        </h5>
-                    </c:otherwise>
-                </c:choose>
+            <div class="debates-column">
+                <div class="section">
+                    <a href="<c:url value="/profile?list=subscribed"/>" class="waves-effect btn-large ${(param.list == null || param.list == "subscribed")? "selected-button" : ""}">
+                        <spring:message code="pages.profile.debates-subscribed"/>
+                    </a>
+                    <a href="<c:url value="/profile?list=mydebates"/>" class="waves-effect btn-large ${(param.list == "mydebates")? "selected-button" : ""}">
+                        My Debates
+                    </a>
+                </div>
+                <div class="card user-debates">
+                    <h3>
+                        <c:choose>
+                            <c:when test="${param.list == null || param.list == 'subscribed'}">
+                                <spring:message code="pages.profile.debates-subscribed"/>
+                            </c:when>
+                            <c:otherwise>
+                                <spring:message code="pages.profile.my-debates"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </h3>
+                    <c:choose>
+                        <c:when test="${debates.size() > 0}">
+                            <c:forEach var="debate" items="${debates}">
+                                <div class="list-item">
+                                    <c:set var="debate" value="${debates}" scope="request"/>
+                                    <%@include file="../components/debates-list-item.jsp" %>
+                                </div>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <h5 class="center">
+                                <spring:message code="pages.profile.no-debates-subscribed"/>
+                            </h5>
+                        </c:otherwise>
+                    </c:choose>
 
-                <%@include file="../components/pagination.jsp"%>
+                    <%@include file="../components/pagination.jsp"%>
+                </div>
             </div>
         </div>
         <%@include file="../components/JS_imports.jsp" %>
@@ -75,6 +92,7 @@
             const instance = M.Modal.init(elem);
             if (${not empty imageError})
                 instance.open();
+            var instance = M.Tabs.init(el, options);
         </script>
     </body>
 </html>

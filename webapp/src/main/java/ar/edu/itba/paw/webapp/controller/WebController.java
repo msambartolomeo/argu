@@ -186,15 +186,15 @@ public class WebController {
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth, @RequestParam(value = "page", defaultValue = "0") String page) {
-        if (!page.matches("\\d+")) throw new DebateNotFoundException();
+    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth, @RequestParam(value = "list", required = false) String list, @RequestParam(value = "page", defaultValue = "0") String page) {
+        if (!page.matches("-?\\d+")) throw new DebateNotFoundException();
 
         final ModelAndView mav = new ModelAndView("/pages/profile");
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         mav.addObject("user", user);
-        mav.addObject("total_pages", (int) Math.ceil(debateService.getSubscribedDebatesByUsernameCount(user.getUserId()) / 5.0));
-        mav.addObject("subscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), Integer.parseInt(page)));
+        mav.addObject("total_pages", debateService.getProfileDebatesPageCount(list, user.getUserId()));
+        mav.addObject("debates", debateService.getProfileDebates(list, user.getUserId(), Integer.parseInt(page)));
         return mav;
     }
 
@@ -202,7 +202,7 @@ public class WebController {
     public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {
             LOGGER.info("Error uploading file {}", errors);
-            return profilePage(form, auth, "0");
+            return profilePage(form, auth, "Debates Subscribed", "0");
         }
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
