@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserByUsername(username);
     }
 
+    @Transactional
     @Override
     public User create(String username, String password, String email) {
         Optional<User> userByUsername = userDao.getUserByUsername(username);
@@ -54,6 +56,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional
     @Override
     public void updateImage(long id, byte[] image) {
         Optional<User> user = getUserById(id);

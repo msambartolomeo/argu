@@ -12,6 +12,7 @@ import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenPostException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,7 @@ public class PostServiceImpl implements PostService {
         return postDao.getPostById(id);
     }
 
+    @Transactional
     @Override
     public Post create(long userId, long debateId, String content, byte[] image) {
         Post createdPost;
@@ -88,11 +90,13 @@ public class PostServiceImpl implements PostService {
         return postDao.getPostsByDebateCount(debateId);
     }
 
+    @Transactional
     @Override
     public void likePost(long postId, long userId) {
         postDao.likePost(postId, userId);
     }
 
+    @Transactional
     @Override
     public void unlikePost(long postId, long userId) {
         postDao.unlikePost(postId, userId);

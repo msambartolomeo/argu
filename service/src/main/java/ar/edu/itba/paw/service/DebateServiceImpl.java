@@ -15,6 +15,7 @@ import ar.edu.itba.paw.model.exceptions.DebateOponentException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +37,7 @@ public class DebateServiceImpl implements DebateService {
         return debateDao.getDebateById(id);
     }
 
+    @Transactional
     @Override
     public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
         if (creatorUsername.equals(opponentUsername)) throw new DebateOponentException(opponentUsername, name, description, category);
@@ -92,10 +94,12 @@ public class DebateServiceImpl implements DebateService {
         return debateDao.getPublicDebateById(id);
     }
 
+    @Transactional
     @Override
     public void subscribeToDebate(long userid, long debateid) {
         debateDao.subscribeToDebate(userid, debateid);
     }
+    @Transactional
     @Override
     public void unsubscribeToDebate(long userid, long debateid) {
         debateDao.unsubscribeToDebate(userid, debateid);

@@ -26,6 +26,7 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     Environment env;
 
+    @Async
     @Override
     public void sendEmailSelf(String subject, String body) {
         sendEmail(env.getProperty("spring.mail.username"), subject, body);
