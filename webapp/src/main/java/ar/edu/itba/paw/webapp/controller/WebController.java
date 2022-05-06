@@ -225,19 +225,6 @@ public class WebController {
         return new ModelAndView("redirect:/debates");
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ModelAndView UserAlreadyExistsException(UserAlreadyExistsException e) {
-        ModelAndView mav = new ModelAndView("pages/register");
-        RegisterForm form = new RegisterForm();
-        form.setEmail(e.getEmail());
-        form.setUsername(e.getUsername());
-        form.setPassword(e.getPassword());
-        form.setPasswordConfirmation(e.getPassword());
-        mav.addObject("registerForm", form);
-        mav.addObject("userAlreadyExists", e);
-        return mav;
-    }
-
     @ExceptionHandler(ImageNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView handleImageNotFoundException() {
@@ -260,20 +247,6 @@ public class WebController {
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView handleDebateNotFoundException() {
         return new ModelAndView("error/404");
-    }
-
-    @ExceptionHandler(DebateOponentException.class)
-    public ModelAndView handleDebateOponentException(DebateOponentException e) {
-        ModelAndView mav = new ModelAndView("pages/create-debate");
-        CreateDebateForm form = new CreateDebateForm();
-        form.setTitle(e.getDebateTitle());
-        form.setDescription(e.getDebateDescription());
-        form.setCategory(e.getDebateCategory());
-        form.setOpponentUsername(e.getOponent());
-        mav.addObject("createDebateForm", form);
-        mav.addObject("debateOponentException", e);
-        mav.addObject("categories", DebateCategory.values());
-        return mav;
     }
 
     @ExceptionHandler(UserNotFoundException.class)

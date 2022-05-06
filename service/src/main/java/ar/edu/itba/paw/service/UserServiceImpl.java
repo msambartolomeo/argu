@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.exceptions.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
@@ -36,22 +35,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(String username, String password, String email) {
-        Optional<User> userByUsername = userDao.getUserByUsername(username);
-        Optional<User> userByEmail = userDao.getUserByEmail(email);
+        Optional<User> user = getUserByEmail(email);
+        if (user.isPresent())
+            return userDao.updateLegacyUser(user.get().getUserId(), username, passwordEncoder.encode(password), email);
+        return userDao.create(username, passwordEncoder.encode(password), email);
+    }
 
-        if (userByUsername.isPresent()) {
-            throw new UserAlreadyExistsException(userByEmail.isPresent(), true, username, email, password);
-        }
-
-        if (userByEmail.isPresent()) {
-            if (userByEmail.get().getUsername() == null) {
-                return userDao.updateLegacyUser(userByEmail.get().getUserId(), username, passwordEncoder.encode(password), email);
-            } else {
-                throw new UserAlreadyExistsException(true, false, username, email, password);
-            }
-        } else {
-            return userDao.create(username, passwordEncoder.encode(password), email);
-        }
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
     }
 
     @Override

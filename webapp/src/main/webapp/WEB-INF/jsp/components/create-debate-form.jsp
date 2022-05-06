@@ -30,11 +30,8 @@
                     <form:label path="opponentUsername">
                         <spring:message code="components.create-debate-opponentUsername"/>
                     </form:label>
-                    <form:input path="opponentUsername" maxlength="64" cssClass="${not empty usernameError || debateOponentException != null ? 'invalid' : ''}"/>
+                    <form:input path="opponentUsername" maxlength="64" cssClass="${not empty usernameError ? 'invalid' : ''}"/>
                     <form:errors path="opponentUsername" element="span" cssClass="helper-text error" />
-                    <c:if test="${debateOponentException != null}">
-                        <p class="error"><spring:message code="components.create-debate.oponentUsername-not-found"/></p>
-                    </c:if>
                 </div>
 
                 <table class="no-borders">

@@ -15,20 +15,14 @@
             <div class="input-field">
                 <c:set var="emailError"><form:errors path="email"/></c:set>
                 <form:label path="email"><spring:message code="components.register-email"/></form:label>
-                <form:input type="text" path="email" cssClass="${not empty emailError || userAlreadyExists.isEmail() ? 'invalid' : ''}" />
+                <form:input type="text" path="email" cssClass="${not empty emailError ? 'invalid' : ''}" />
                 <form:errors path="email" cssClass="helper-text error"/>
-                <c:if test="${userAlreadyExists.isEmail()}">
-                    <p class="error"><spring:message code="error.email-already-exists.message"/></p>
-                </c:if>
             </div>
             <div class="input-field">
                 <c:set var="usernameError"><form:errors path="username"/></c:set>
                 <form:label path="username"><spring:message code="components.login-username"/></form:label>
-                <form:input type="text" path="username" cssClass="${not empty usernameError || userAlreadyExists.isUsername() ? 'invalid' : ''}"/>
+                <form:input type="text" path="username" cssClass="${not empty usernameError ? 'invalid' : ''}"/>
                 <form:errors path="username" cssClass="helper-text error" />
-                <c:if test="${userAlreadyExists.isUsername()}">
-                    <p class="error"><spring:message code="error.username-already-exists.message"/></p>
-                </c:if>
             </div>
             <div class="input-field">
                 <c:set var="passwordError"><form:errors path="password"/></c:set>
