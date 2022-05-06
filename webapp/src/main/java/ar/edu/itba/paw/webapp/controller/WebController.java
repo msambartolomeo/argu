@@ -225,41 +225,6 @@ public class WebController {
         return new ModelAndView("redirect:/debates");
     }
 
-    @ExceptionHandler(ImageNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView handleImageNotFoundException() {
-        return new ModelAndView("error/404");
-    }
-
-    @ExceptionHandler(PostNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView handlePostNotFoundException() {
-        return new ModelAndView("error/404");
-    }
-
-    @ExceptionHandler(CategoryNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView handleCategoryNotFoundException() {
-        return new ModelAndView("error/404");
-    }
-
-    @ExceptionHandler(DebateNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView handleDebateNotFoundException() {
-        return new ModelAndView("error/404");
-    }
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public ModelAndView handleUserNotFoundException() {
-        return new ModelAndView("redirect:/logout");
-    }
-
-    @ExceptionHandler(ForbiddenPostException.class)
-    @ResponseStatus(code = HttpStatus.FORBIDDEN)
-    public ModelAndView handleForbiddenPostException() {
-        return error403();
-    }
-
     @RequestMapping(value = "/404", method = { RequestMethod.GET})
     public ModelAndView error() {
         return new ModelAndView("error/404");

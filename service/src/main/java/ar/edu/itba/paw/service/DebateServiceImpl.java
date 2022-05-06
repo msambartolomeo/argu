@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
-import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
+import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.User;
@@ -24,7 +24,7 @@ public class DebateServiceImpl implements DebateService {
 
     private static final int PAGE_SIZE = 5;
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
     @Autowired
     private DebateDao debateDao;
     @Autowired
@@ -37,8 +37,8 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
-        User creator = userDao.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
-        User opponent = userDao.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
+        User creator = userService.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
+        User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
         if (image.length == 0)
             return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
         else
