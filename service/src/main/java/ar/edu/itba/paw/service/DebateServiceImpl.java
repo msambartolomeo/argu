@@ -111,4 +111,9 @@ public class DebateServiceImpl implements DebateService {
         User user = userService.getRealUserByUsername(username);
         debateDao.removeVote(debateId, user.getUserId());
     }
+
+    @Override
+    public void closeDebate(long id) {
+        debateDao.closeDebate(id);
+    }
 }

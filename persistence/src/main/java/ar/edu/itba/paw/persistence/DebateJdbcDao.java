@@ -229,4 +229,9 @@ public class DebateJdbcDao implements DebateDao {
         return jdbcTemplate.query("SELECT COUNT(*) FROM votes WHERE debateid = ? AND userid = ?", new Object[] {debateId, userId},
                 (rs, rowNum) -> rs.getInt(1) > 0).get(0);
     }
+
+    @Override
+    public void closeDebate(long id) {
+        jdbcTemplate.update("UPDATE debates SET status = ? WHERE debateid = ?", DebateStatus.getFromStatus(DebateStatus.CLOSED), id);
+    }
 }
