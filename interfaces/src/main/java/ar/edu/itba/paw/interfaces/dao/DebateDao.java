@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DebateDao {
-    Optional<Debate> getDebateById(long id);
     Optional<PublicDebate> getPublicDebateById(long id);
     Debate create(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category);
     List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page);

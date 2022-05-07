@@ -82,12 +82,6 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public Optional<Debate> getDebateById(long id) {
-        return jdbcTemplate.query("SELECT * FROM debates WHERE debateId = ?", ROW_MAPPER, id)
-                .stream().findFirst();
-    }
-
-    @Override
     public Optional<PublicDebate> getPublicDebateById(long id) {
         return jdbcTemplate.query("SELECT * FROM public_debates WHERE debateId = ?", PUBLIC_ROW_MAPPER, id)
                 .stream().findFirst();
