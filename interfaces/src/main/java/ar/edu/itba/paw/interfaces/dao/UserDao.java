@@ -12,6 +12,5 @@ public interface UserDao {
     User create(String username, String password, String email);
     void updateImage(long userId, long imageId);
     User updateLegacyUser(long userId, String username, String password, String email);
-    List<User> getAll(int page); // TODO Deprecated
     List<User> getSubscribedUsersByDebate(long debateId);
 }

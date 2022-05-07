@@ -50,6 +50,11 @@ public class DebateJdbcDaoTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, DEBATES_TABLE);
     }
 
+    @Test
+    public void testCreate() {
+        System.out.println("create");
+    }
+
 //    @Test
 //    public void testCreateDebate() {
 //        Debate debate = debateDao.create(DEBATE_NAME, DEBATE_DESCRIPTION, null);
@@ -73,13 +78,6 @@ public class DebateJdbcDaoTest {
 //        assertEquals(DEBATE_NAME, debate.get().getName());
 //        assertEquals(DEBATE_DESCRIPTION, debate.get().getDescription());
 //    }
-
-    @Test
-    public void testGetDebateByIdDoesntExist() {
-        Optional<Debate> debate = debateDao.getDebateById(DEBATE_ID);
-
-        assertFalse(debate.isPresent());
-    }
 
 //    @Test
 //    public void testGetAllDebates() {

@@ -78,16 +78,16 @@ public class PostJdbcDaoTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE, DEBATES_TABLE);
     }
 
-    @Test
-    public void testCreatePost() {
-        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, null);
-
-        assertNotNull(post);
-        assertEquals(postUserId, post.getUserId());
-        assertEquals(postDebateId, post.getDebateId());
-        assertEquals(POST_CONTENT, post.getContent());
-        assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate, POSTS_TABLE), 1);
-    }
+//    @Test
+//    public void testCreatePost() {
+//        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, null);
+//
+//        assertNotNull(post);
+//        assertEquals(postUserId, post.getUserId());
+//        assertEquals(postDebateId, post.getDebateId());
+//        assertEquals(POST_CONTENT, post.getContent());
+//        assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate, POSTS_TABLE), 1);
+//    }
 
     @Test
     public void testGetPostByIdDoesntExist() {

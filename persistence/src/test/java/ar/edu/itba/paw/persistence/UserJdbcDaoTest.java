@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.enums.UserRole;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -33,6 +37,8 @@ public class UserJdbcDaoTest {
     private final static String USER_USERNAME = "username";
     private final static String USER_PASSWORD = "password";
     private final static String USER_EMAIL = "test@test.com";
+    private final static LocalDate USER_DATE = LocalDate.parse("2022-01-01");
+    private final static UserRole USER_ROLE = UserRole.USER;
     private final static String USER_TABLE = "users";
     private final static String ID = "userid";
     private final static int USERS_PAGE = 0;
@@ -66,36 +72,41 @@ public class UserJdbcDaoTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, DEBATES_TABLE, USER_TABLE);
     }
 
-    //TODO: Test with according Timestamps
-//    @Test
-//    public void testCreateUser() {
-//        User user = userDao.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
-//
-//        assertNotNull(user);
-//        assertEquals(USER_USERNAME, user.getUsername());
-//        assertEquals(USER_PASSWORD, user.getPassword());
-//        assertEquals(USER_EMAIL, user.getEmail());
-//        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, USER_TABLE));
-//    }
+    @Test
+    public void testCreateUser() {
+        User user = userDao.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
 
-//    @Test
-//    public void testGetUserByIdExists() {
-//        final Map<String, Object> userData = new HashMap<>();
-//        userData.put("username", USER_USERNAME);
-//        userData.put("password", USER_PASSWORD);
-//        userData.put("email", USER_EMAIL);
-//        Number key = jdbcInsert.executeAndReturnKey(userData);
-//
-//        Optional<User> user = userDao.getUserById(key.longValue());
-//
-//        assertTrue(user.isPresent());
-//        assertEquals(USER_USERNAME, user.get().getUsername());
-//        assertEquals(USER_PASSWORD, user.get().getPassword());
-//        assertEquals(USER_EMAIL, user.get().getEmail());
-//    }
+        assertNotNull(user);
+        assertEquals(USER_USERNAME, user.getUsername());
+        assertEquals(USER_PASSWORD, user.getPassword());
+        assertEquals(USER_EMAIL, user.getEmail());
+        assertEquals(UserRole.USER, user.getRole());
+        assertNull(user.getImageId());
+        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, USER_TABLE));
+    }
+
+    @Test
+    public void testGetUserByIdExists() {
+        final Map<String, Object> userData = new HashMap<>();
+        userData.put("username", USER_USERNAME);
+        userData.put("password", USER_PASSWORD);
+        userData.put("email", USER_EMAIL);
+        userData.put("created_date", USER_DATE.toString());
+        userData.put("role", UserRole.getValue(USER_ROLE));
+        Number key = jdbcInsert.executeAndReturnKey(userData);
+
+        Optional<User> user = userDao.getUserById(key.longValue());
+
+        assertTrue(user.isPresent());
+        assertEquals(USER_USERNAME, user.get().getUsername());
+        assertEquals(USER_PASSWORD, user.get().getPassword());
+        assertEquals(USER_EMAIL, user.get().getEmail());
+        assertEquals(USER_DATE.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), user.get().getCreatedDate());
+        assertEquals(USER_ROLE, user.get().getRole());
+    }
+
     @Test
     public void testGetUserByIdDoesntExist() {
-
         Optional<User> user = userDao.getUserById(USER_ID);
 
         assertFalse(user.isPresent());
@@ -108,70 +119,41 @@ public class UserJdbcDaoTest {
         assertFalse(user.isPresent());
     }
 
-//    @Test
-//    public void testGetUserByEmailExists() {
-//        final Map<String, Object> userData = new HashMap<>();
-//        userData.put("email", USER_EMAIL);
-//        jdbcInsert.execute(userData);
-//
-//        Optional<User> user = userDao.getUserByEmail(USER_EMAIL);
-//
-//        assertTrue(user.isPresent());
-//        assertEquals(USER_EMAIL, user.get().getEmail());
-//    }
-
     @Test
-    public void testGetAllUsersEmpty() {
+    public void testGetUserByEmailExists() {
+        final Map<String, Object> userData = new HashMap<>();
+        userData.put("username", USER_USERNAME);
+        userData.put("password", USER_PASSWORD);
+        userData.put("email", USER_EMAIL);
+        userData.put("created_date", USER_DATE.toString());
+        userData.put("role", UserRole.getValue(USER_ROLE));
+        Number key = jdbcInsert.executeAndReturnKey(userData);
 
-        List<User> noUsers = userDao.getAll(USERS_PAGE);
+        Optional<User> user = userDao.getUserByEmail(USER_EMAIL);
 
-        assertTrue(noUsers.isEmpty());
+        assertTrue(user.isPresent());
+        assertEquals(USER_USERNAME, user.get().getUsername());
+        assertEquals(USER_PASSWORD, user.get().getPassword());
+        assertEquals(USER_EMAIL, user.get().getEmail());
+        assertEquals(USER_DATE.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), user.get().getCreatedDate());
+        assertEquals(USER_ROLE, user.get().getRole());
     }
 
-//    @Test
-//    public void testGetAllUsers() {
-//        final Map<String, Object> userData = new HashMap<>();
-//        userData.put("email", USER_EMAIL);
-//        jdbcInsert.execute(userData);
-//
-//        List<User> users = userDao.getAll(USERS_PAGE);
-//
-//        assertEquals(1, users.size());
-//        assertEquals(USER_EMAIL, users.get(0).getEmail());
-//    }
+    @Test
+    public void testUpdateLegacyUser() {
+        final Map<String, Object> userData = new HashMap<>();
+        userData.put("email", USER_EMAIL);
+        Number key = jdbcInsert.executeAndReturnKey(userData);
 
-//    @Test
-//    public void testGetAllUsersByDebateEmpty() {
-//        List<User> users = userDao.getSubscribedUsersByDebate(1);
-//        assertTrue(users.isEmpty());
-//    }
+        User user = userDao.updateLegacyUser(key.longValue(), USER_USERNAME, USER_PASSWORD, USER_EMAIL);
 
-//    @Test
-//    public void testGetAllUsersByDebate() {
-//        final Map<String, Object> debateData = new HashMap<>();
-//        debateData.put("name", DEBATE_NAME);
-//        debateData.put("description", DEBATE_DESCRIPTION);
-//        long debateId = jdbcInsertDebates.executeAndReturnKey(debateData).longValue();
-//
-//        final Map<String, Object> userData = new HashMap<>();
-//        userData.put("username", USER_USERNAME);
-//        userData.put("password", USER_PASSWORD);
-//        userData.put("email", USER_EMAIL);
-//        long userId = jdbcInsert.executeAndReturnKey(userData).longValue();
-//
-//        final Map<String, Object> postData = new HashMap<>();
-//        postData.put("userid", userId);
-//        postData.put("debateid", debateId);
-//        postData.put("content", POST_CONTENT);
-//        jdbcInsertPosts.execute(postData);
-//
-//
-//
-//        List<User> users = userDao.getSubscribedUsersByDebate(debateId);
-//
-//        assertEquals(1, users.size());
-//        assertEquals(USER_USERNAME, users.get(0).getUsername());
-//        assertEquals(USER_PASSWORD, users.get(0).getPassword());
-//        assertEquals(USER_EMAIL, users.get(0).getEmail());
-//    }
+        assertNotNull(user);
+        assertEquals(USER_USERNAME, user.getUsername());
+        assertEquals(USER_PASSWORD, user.getPassword());
+        assertEquals(USER_EMAIL, user.getEmail());
+        assertEquals(UserRole.USER, user.getRole());
+        assertNull(user.getImageId());
+        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, USER_TABLE));
+    }
+
 }

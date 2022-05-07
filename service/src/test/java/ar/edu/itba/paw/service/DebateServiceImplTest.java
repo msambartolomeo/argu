@@ -53,14 +53,14 @@ public class DebateServiceImplTest {
 //        assertEquals(debate, d.get());
 //    }
 
-    @Test
-    public void testGetDebateDoesntExist() {
-        Mockito.when(debateDao.getDebateById(DEBATE_ID)).thenReturn(Optional.empty());
-
-        Optional<Debate> d = debateService.getDebateById(DEBATE_ID);
-
-        assertFalse(d.isPresent());
-    }
+//    @Test
+//    public void testGetDebateDoesntExist() {
+//        Mockito.when(debateDao.getDebateById(DEBATE_ID)).thenReturn(Optional.empty());
+//
+//        Optional<Debate> d = debateService.getDebateById(DEBATE_ID);
+//
+//        assertFalse(d.isPresent());
+//    }
 
 //    @Test
 //    public void testGet() {

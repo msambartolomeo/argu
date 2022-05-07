@@ -36,11 +36,6 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserByUsername(username);
     }
 
-    @Override
-    public User getRealUserByUsername(String username) {
-        return getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-    }
-
     @Transactional
     @Override
     public User create(String username, String password, String email) {

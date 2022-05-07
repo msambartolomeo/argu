@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -24,7 +25,7 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("username"),
                     rs.getString("password"),
                     rs.getString("email"),
-                    rs.getObject("created_date", LocalDate.class),
+                    rs.getObject("created_date", Date.class).toLocalDate(),
                     rs.getLong("imageid"),
                     UserRole.getRole(rs.getInt("role")));
 
@@ -70,7 +71,7 @@ public class UserJdbcDao implements UserDao {
         userData.put("username", username);
         userData.put("password", password);
         userData.put("email", email);
-        userData.put("created_date", created);
+        userData.put("created_date", created.toString());
         userData.put("role", UserRole.getValue(UserRole.USER));
 
         final Number userId = jdbcInsert.executeAndReturnKey(userData);
@@ -81,16 +82,8 @@ public class UserJdbcDao implements UserDao {
     @Override
     public User updateLegacyUser(long userId, String username, String password, String email) {
         LocalDate created = LocalDate.now();
-        jdbcTemplate.update("UPDATE users SET username = ?, password = ?, created_date = ?, role = ? WHERE email = ?", username, password, created, UserRole.USER.ordinal(), email);
+        jdbcTemplate.update("UPDATE users SET username = ?, password = ?, created_date = ?, role = ? WHERE email = ?", username, password, created.toString(), UserRole.USER.ordinal(), email);
         return new User(userId, username, password, email, created, UserRole.USER);
-    }
-
-    @Override
-    public List<User> getAll(int page) {
-        if (page < 0) {
-            return new ArrayList<>();
-        }
-        return jdbcTemplate.query("SELECT * FROM users LIMIT 10 OFFSET ?", new Object[] { page * 10 }, ROW_MAPPER);
     }
 
     @Override
