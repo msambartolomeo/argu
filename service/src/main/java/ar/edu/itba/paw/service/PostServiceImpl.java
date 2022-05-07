@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -36,9 +37,9 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public Post create(String username, long debateId, String content, byte[] image) {
+        PublicDebate debate = debateService.getPublicDebateById(debateId).orElseThrow(DebateNotFoundException::new);
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
-        if (debate.getDebateStatus() != DebateStatus.OPEN || (debate.getCreatorId() != user.getUserId() && debate.getOpponentId() != user.getUserId())) {
+        if (debate.getDebateStatus() != DebateStatus.OPEN || !debate.getCreatorUsername().equals(username) && !debate.getOpponentUsername().equals(username)) {
             throw new ForbiddenPostException();
         }
 

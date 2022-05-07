@@ -8,10 +8,7 @@ import java.util.Optional;
 public interface UserService {
     Optional<User> getUserById(long id);
 
-    // TODO: Change method names when merged
     Optional<User> getUserByUsername(String username);
-    User getRealUserByUsername(String username);
-
 
     User create(String username, String password, String email);
 

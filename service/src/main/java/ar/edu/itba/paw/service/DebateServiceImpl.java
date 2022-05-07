@@ -95,7 +95,7 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public void addVote(long debateId, String username, DebateVote vote) {
-        User user = userService.getRealUserByUsername(username);
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         if (debateDao.hasUserVoted(debateId, user.getUserId()))
             throw new UserAlreadyVotedException();
         debateDao.addVote(debateId, user.getUserId(), vote);
@@ -103,7 +103,7 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public void removeVote(long debateId, String username) {
-        User user = userService.getRealUserByUsername(username);
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         debateDao.removeVote(debateId, user.getUserId());
     }
 }
