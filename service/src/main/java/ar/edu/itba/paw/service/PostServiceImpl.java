@@ -44,7 +44,7 @@ public class PostServiceImpl implements PostService {
             throw new ForbiddenPostException();
         }
 
-        Optional<Post> lastArgument = postDao.getLastArgument(debateId);
+        Optional<PublicPost> lastArgument = postDao.getLastArgument(debateId);
         ArgumentStatus status;
 
         if (!lastArgument.isPresent()) {
@@ -52,7 +52,7 @@ public class PostServiceImpl implements PostService {
                 throw new ForbiddenPostException();
             status = ArgumentStatus.INTRODUCTION;
         } else {
-            if (user.getUserId() == lastArgument.get().getUserId())
+            if (user.getUsername().equals(lastArgument.get().getUsername()))
                 throw new ForbiddenPostException();
 
             switch (lastArgument.get().getStatus()) {
@@ -139,5 +139,10 @@ public class PostServiceImpl implements PostService {
     public List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, String username, int page) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         return postDao.getPublicPostsByDebateWithIsLiked(debateId, user.getUserId(), page);
+    }
+
+    @Override
+    public Optional<PublicPost> getLastArgument(long debateIdNum) {
+        return postDao.getLastArgument(debateIdNum);
     }
 }

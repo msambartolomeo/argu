@@ -70,6 +70,7 @@ public class DebateController {
         if(auth != null && auth.getPrincipal() != null) {
             mav.addObject("isSubscribed", debateService.isUserSubscribed(auth.getName(), debateIdNum));
             mav.addObject("posts", postService.getPublicPostsByDebateWithIsLiked(debateIdNum, auth.getName(), pageNum));
+            mav.addObject("lastArgument", postService.getLastArgument(debateIdNum));
         } else {
             mav.addObject("posts", postService.getPublicPostsByDebate(debateIdNum, pageNum));
         }

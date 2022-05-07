@@ -147,7 +147,7 @@ public class PostJdbcDao implements PostDao {
     }
 
     @Override
-    public Optional<Post> getLastArgument(long debateId) {
-        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? ORDER BY created_date DESC LIMIT 1", new Object[]{debateId}, ROW_MAPPER).stream().findFirst();
+    public Optional<PublicPost> getLastArgument(long debateId) {
+        return jdbcTemplate.query("SELECT * FROM public_posts WHERE debateId = ? ORDER BY created_date DESC LIMIT 1", new Object[]{debateId}, PUBLIC_POST_ROW_MAPPER).stream().findFirst();
     }
 }

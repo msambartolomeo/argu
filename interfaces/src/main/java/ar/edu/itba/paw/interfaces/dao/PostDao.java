@@ -21,5 +21,5 @@ public interface PostDao {
     void unlikePost(long postId, long userId);
 
     boolean hasLiked(long postId, long userId);
-    Optional<Post> getLastArgument(long debateId);
+    Optional<PublicPost> getLastArgument(long debateId);
 }
