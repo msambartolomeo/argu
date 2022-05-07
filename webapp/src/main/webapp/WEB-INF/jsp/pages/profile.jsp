@@ -52,7 +52,7 @@
                         <spring:message code="pages.profile.debates-subscribed"/>
                     </a>
                     <a href="<c:url value="/profile?list=mydebates"/>" class="waves-effect btn-large ${(param.list == "mydebates")? "selected-button" : ""}">
-                        My Debates
+                        <spring:message code="pages.profile.my-debates"/>
                     </a>
                 </div>
                 <div class="card user-debates">
@@ -92,7 +92,6 @@
             const instance = M.Modal.init(elem);
             if (${not empty imageError})
                 instance.open();
-            var instance = M.Tabs.init(el, options);
         </script>
     </body>
 </html>
