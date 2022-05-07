@@ -15,7 +15,18 @@
     <div class="card-content debate-info-holder">
         <div class="debate-holder-separator">
             <div class="debate-text-holder">
-                <h3 class="debate-title word-wrap"><c:out value="${debate.name}"/></h3>
+                <div class="debate-info-holder">
+                    <h3 class="debate-title word-wrap"><c:out value="${debate.name}"/></h3>
+                    <c:if test="${debate.debateStatus.name != 'closed' && (pageContext.request.userPrincipal.name == debate.creatorUsername || pageContext.request.userPrincipal.name == debate.opponentUsername)}">
+                        <c:url var="closeDebatePath" value="/debates/${debate.debateId}/close"/>
+                        <form:form method="post" action="${closeDebatePath}">
+                            <button type="submit" class="btn waves-effect">
+                                <spring:message code="pages.debate-close"/>
+                                <i class="large material-icons right">close</i>
+                            </button>
+                        </form:form>
+                    </c:if>
+                </div>
                 <hr class="dashed">
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
                 <c:if test="${debate.creatorUsername != null}">

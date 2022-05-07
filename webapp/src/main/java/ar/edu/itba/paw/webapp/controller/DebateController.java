@@ -77,6 +77,14 @@ public class DebateController {
         return mav;
     }
 
+    @RequestMapping(value = "/{debateId}/close", method = { RequestMethod.POST })
+    public ModelAndView closeDebate(@PathVariable("debateId") final String debateId) {
+        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+
+        debateService.closeDebate(Long.parseLong(debateId));
+        return new ModelAndView("redirect:/debates/" + debateId);
+    }
+
     @RequestMapping(value = "/{debateId}", method = { RequestMethod.POST })
     public ModelAndView createPost(@PathVariable("debateId") final String debateId,
                                    @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
