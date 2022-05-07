@@ -485,11 +485,16 @@ a.card {
 }
 
 .user-debates {
-    width: 60%;
     height: fit-content;
     padding: 2%;
     display: flex;
     flex-direction: column;
+}
+
+.debates-column {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
 }
 
 .card-title-margins {

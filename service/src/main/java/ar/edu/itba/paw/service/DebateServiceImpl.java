@@ -49,16 +49,6 @@ public class DebateServiceImpl implements DebateService {
             return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image), category);
     }
 
-    @Override
-    public List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page) {
-        return debateDao.getSubscribedDebatesByUsername(userid, page);
-    }
-
-    @Override
-    public int getSubscribedDebatesByUsernameCount(long userid) {
-        return debateDao.getSubscribedDebatesByUsernameCount(userid);
-    }
-
     private void verifyDebateFilters(String category, String status, String date) {
         if (status != null && !status.equals("open") && !status.equals("closed"))
             throw new DebateNotFoundException(); // TODO change exception (?)
@@ -107,5 +97,29 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public boolean isUserSubscribed(long userid, long debateid) {
         return debateDao.isUserSubscribed(userid, debateid);
+    }
+
+    @Override
+    public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
+        if(list == null)
+            return debateDao.getSubscribedDebatesByUsername(userid, page);
+        else if(list.compareTo("mydebates") == 0)
+            return debateDao.getMyDebates(userid, page);
+        else if(list.compareTo("subscribed") == 0)
+            return debateDao.getSubscribedDebatesByUsername(userid, page);
+
+        return debateDao.getSubscribedDebatesByUsername(userid, page);
+    }
+
+    @Override
+    public int getProfileDebatesPageCount(String list, long userid) {
+        int count;
+        if(list == null)
+            count = debateDao.getSubscribedDebatesByUsernameCount(userid);
+        else if(list.compareTo("mydebates") == 0)
+            count = debateDao.getMyDebatesCount(userid);
+        else
+            count = debateDao.getSubscribedDebatesByUsernameCount(userid);
+        return (int) Math.ceil(count / 5.0);
     }
 }

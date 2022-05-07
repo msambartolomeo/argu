@@ -31,4 +31,8 @@ public interface DebateDao {
     List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String open, String date);
 
     int getPublicDebatesCount(String searchQuery, String category, String status, String date);
+
+    List<PublicDebate> getMyDebates(long userid, int page);
+
+    int getMyDebatesCount(long userid);
 }

@@ -218,4 +218,16 @@ public class DebateJdbcDao implements DebateDao {
         }
         return params;
     }
+
+    @Override
+    public List<PublicDebate> getMyDebates(long userid, int page) {
+        return jdbcTemplate.query("SELECT DISTINCT debateid, name, description, category, public_debates.created_date, public_debates.imageid, creatorusername, opponentusername, subscribedcount, status FROM public_debates JOIN users ON username = creatorusername OR username = opponentusername WHERE userid = ? ORDER BY public_debates.created_date DESC LIMIT 5 OFFSET ?",
+                new Object[] {userid, page * 5},
+                PUBLIC_ROW_MAPPER);
+    }
+
+    @Override
+    public int getMyDebatesCount(long userid) {
+        return jdbcTemplate.query("SELECT COUNT(*) FROM public_debates JOIN users ON username = creatorusername OR username = opponentusername WHERE userid = ?", new Object[] {userid}, (rs, rowNum) -> rs.getInt(1)).get(0);
+    }
 }
