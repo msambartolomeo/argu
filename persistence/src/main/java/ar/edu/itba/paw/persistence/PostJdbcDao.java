@@ -107,7 +107,7 @@ public class PostJdbcDao implements PostDao {
             return new ArrayList<>();
         }
         return jdbcTemplate.query("SELECT postid, username, debateid, content, likes, created_date, imageid, " +
-                "(SELECT COUNT(*) FROM likes WHERE userid = ? AND postid = public_posts.postid) as isliked " +
+                "(SELECT COUNT(*) FROM likes WHERE userid = ? AND postid = public_posts.postid) as isliked, status " +
                 "FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 5 OFFSET ?", new Object[]{userId, debateId, page * 5}, PUBLIC_POST_WITH_LIKES_ROW_MAPPER);
     }
 
