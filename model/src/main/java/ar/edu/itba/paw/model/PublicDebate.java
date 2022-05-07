@@ -31,7 +31,7 @@ public class PublicDebate {
         this.creatorUsername = creatorUsername;
         this.opponentUsername = opponentUsername;
         this.imageId = imageId;
-        this.createdDate = createdDate.format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yy"));;
+        this.createdDate = createdDate.format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yy"));;
         this.debateCategory = debateCategory;
         this.subscribedUsers = subscribedUsers;
         this.debateStatus = debateStatus;

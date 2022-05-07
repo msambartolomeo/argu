@@ -19,7 +19,7 @@ public class PublicPost {
         this.debateId = debateId;
         this.content = content;
         this.likes = likes;
-        this.createdDateString = createdDate.format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yy"));
+        this.createdDateString = createdDate.format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yy"));
         this.imageId = imageId;
     }
 
