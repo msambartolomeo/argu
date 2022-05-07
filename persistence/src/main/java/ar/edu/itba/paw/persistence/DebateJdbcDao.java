@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.enums.DebateVote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,6 +24,8 @@ public class DebateJdbcDao implements DebateDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private final SimpleJdbcInsert jdbcInsertSubscribed;
+    private final SimpleJdbcInsert jdbcInsertVotes;
     private static final RowMapper<Debate> ROW_MAPPER = (rs, rowNum) ->
             new Debate(rs.getLong("debateid"),
                     rs.getString("name"),
@@ -45,7 +48,9 @@ public class DebateJdbcDao implements DebateDao {
                     rs.getObject("created_date", LocalDateTime.class),
                     DebateCategory.getFromInt(rs.getInt("category")),
                     rs.getInt("subscribedcount"),
-                    DebateStatus.getFromInt(rs.getInt("status")));
+                    DebateStatus.getFromInt(rs.getInt("status")),
+                    rs.getInt("forcount"),
+                    rs.getInt("againstcount"));
 
     @Autowired
     public DebateJdbcDao(final DataSource ds) {
@@ -53,6 +58,10 @@ public class DebateJdbcDao implements DebateDao {
         this.jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("debates")
                 .usingGeneratedKeyColumns("debateid");
+        this.jdbcInsertSubscribed = new SimpleJdbcInsert(ds)
+                .withTableName("subscribed");
+        this.jdbcInsertVotes = new SimpleJdbcInsert(ds)
+                .withTableName("votes");
     }
     @Override
     public Debate create(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category) {
@@ -133,7 +142,10 @@ public class DebateJdbcDao implements DebateDao {
     }
     @Override
     public void subscribeToDebate(long userid, long debateid) {
-        jdbcTemplate.update("INSERT INTO subscribed (userid, debateid) VALUES (?, ?)", userid, debateid);
+        final Map<String, Object> data = new HashMap<>();
+        data.put("userid", userid);
+        data.put("debateid", debateid);
+        jdbcInsertSubscribed.execute(data);
     }
     @Override
     public void unsubscribeToDebate(long userid, long debateid) {
@@ -229,5 +241,25 @@ public class DebateJdbcDao implements DebateDao {
     @Override
     public int getMyDebatesCount(long userid) {
         return jdbcTemplate.query("SELECT COUNT(*) FROM public_debates JOIN users ON username = creatorusername OR username = opponentusername WHERE userid = ?", new Object[] {userid}, (rs, rowNum) -> rs.getInt(1)).get(0);
+    }
+
+    @Override
+    public void addVote(long debateId, long userId, DebateVote vote) {
+        final Map<String, Object> params = new HashMap<>();
+        params.put("debateid", debateId);
+        params.put("userid", userId);
+        params.put("vote", vote.ordinal());
+        jdbcInsertVotes.execute(params);
+    }
+
+    @Override
+    public void removeVote(long debateId, long userId) {
+        jdbcTemplate.update("DELETE FROM votes WHERE debateid = ? AND userid = ?", debateId, userId);
+    }
+
+    @Override
+    public Boolean hasUserVoted(long debateId, long userId) {
+        return jdbcTemplate.query("SELECT COUNT(*) FROM votes WHERE debateid = ? AND userid = ?", new Object[] {debateId, userId},
+                (rs, rowNum) -> rs.getInt(1) > 0).get(0);
     }
 }

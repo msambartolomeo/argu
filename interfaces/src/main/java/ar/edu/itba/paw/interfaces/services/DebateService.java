@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces.services;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateVote;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,4 +26,8 @@ public interface DebateService {
     List<PublicDebate> getProfileDebates(String list, long userid, int page);
 
     int getProfileDebatesPageCount(String list, long userid);
+
+    void addVote(long debateId, String username, DebateVote vote);
+
+    void removeVote(long debateId, String username);
 }

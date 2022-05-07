@@ -39,6 +39,8 @@ public class WebConfig {
     private Resource schemaV0;
     @Value("classpath:schema-v1.sql")
     private Resource schemaV1;
+    @Value("classpath:schema-v2.sql")
+    private Resource schemaV2;
 
     @Autowired
     private Environment env;
@@ -77,6 +79,7 @@ public class WebConfig {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(schemaV0);
         populator.addScript(schemaV1);
+        populator.addScript(schemaV2);
         return populator;
     }
 
