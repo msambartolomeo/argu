@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.webapp.validators.ExistingUser;
 import ar.edu.itba.paw.webapp.validators.Image;
 import ar.edu.itba.paw.webapp.validators.ImageSize;
+import ar.edu.itba.paw.webapp.validators.UserNotSelf;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +26,8 @@ public class CreateDebateForm {
 
     @Size(max = 64)
     @NotEmpty
+    @ExistingUser
+    @UserNotSelf
     private String opponentUsername;
 
     @ImageSize

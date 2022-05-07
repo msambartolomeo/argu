@@ -36,28 +36,32 @@
             </div>
             <div class="debate-footer">
                 <sec:authorize access="hasAuthority('USER')">
-                    <c:url var="subscribePath" value="/subscribe/${debate.debateId}"/>
-                    <form id="subscribeForm" method="post" action="${subscribePath}">
-                        <c:choose>
-                            <c:when test="${isSubscribed == false}">
-                                <button class="btn waves-effect chip" type="submit" name="subscribe">
+                    <c:choose>
+                        <c:when test="${isSubscribed == false}">
+                            <c:url var="subscribePath" value="/debates/${debate.debateId}/subscribe"/>
+                            <form:form id="subscribeForm" method="post" action="${subscribePath}">
+                                <button class="btn waves-effect chip" type="submit">
                                     <spring:message code="pages.debate-subscribe"/>
                                     <i class="material-icons right">notifications_active</i>
                                 </button>
-                            </c:when>
-                            <c:otherwise>
-                                <button class="btn waves-effect chip" type="submit" name="unsubscribe">
+                            </form:form>
+                        </c:when>
+                        <c:otherwise>
+                            <c:url var="unsubscribePath" value="/debates/${debate.debateId}/unsubscribe"/>
+                            <form:form id="subscribeForm" method="delete" action="${unsubscribePath}">
+                                <button class="btn waves-effect chip" type="submit">
                                     <spring:message code="pages.debate-unsubscribe"/>
                                     <i class="material-icons right">notifications_off</i>
                                 </button>
-                            </c:otherwise>
-                        </c:choose>
-                    </form>
+                            </form:form>
+                        </c:otherwise>
+                    </c:choose>
                 </sec:authorize>
                 <div class="chip"><spring:message code="category.${debate.debateCategory.name}"/></div>
                 <div class="chip"><spring:message code="components.debate-created-on"/> ${debate.createdDate}</div>
                 <div class="chip"><spring:message code="status.${debate.debateStatus.name}"/></div>
-                <div class="chip"><spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsers}"/></div>
+                <div class="chip"><spring:message code="page.debate.subscribed"
+                                                  arguments="${debate.subscribedUsers}"/></div>
             </div>
         </div>
         <c:if test="${debate.imageId != 0}">

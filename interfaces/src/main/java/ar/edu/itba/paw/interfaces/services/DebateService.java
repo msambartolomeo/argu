@@ -12,22 +12,17 @@ public interface DebateService {
     Optional<Debate> getDebateById(long id);
     Optional<PublicDebate> getPublicDebateById(long id);
     Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category);
-    List<PublicDebate> get(String page, String search, String category, String order, String status, String date);
+    List<PublicDebate> get(int page, String search, String category, String order, String status, String date);
     List<PublicDebate> getMostSubscribed();
     int getPages(String search, String category, String status, String date);
 
-    void subscribeToDebate(long userid, long debateid);
+    void subscribeToDebate(String username, long debateid);
 
-    void unsubscribeToDebate(long userid, long debateid);
+    void unsubscribeToDebate(String username, long debateid);
 
-    boolean isUserSubscribed(long userid, long debateid);
-
-
+    boolean isUserSubscribed(String username, long debateid);
     List<PublicDebate> getProfileDebates(String list, long userid, int page);
-
     int getProfileDebatesPageCount(String list, long userid);
-
     void addVote(long debateId, String username, DebateVote vote);
-
     void removeVote(long debateId, String username);
 }

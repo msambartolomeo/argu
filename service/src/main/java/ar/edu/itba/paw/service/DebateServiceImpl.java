@@ -1,14 +1,13 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
-import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
-import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.*;
@@ -22,8 +21,6 @@ import java.util.*;
 public class DebateServiceImpl implements DebateService {
 
     private static final int PAGE_SIZE = 5;
-    @Autowired
-    private UserDao userDao;
     @Autowired
     private DebateDao debateDao;
     @Autowired
@@ -39,43 +36,27 @@ public class DebateServiceImpl implements DebateService {
     @Transactional
     @Override
     public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
-        if (creatorUsername.equals(opponentUsername)) throw new DebateOponentException(opponentUsername, name, description, category);
-        User creator = userDao.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
-        User opponent = userDao.getUserByUsername(opponentUsername).orElseThrow(() -> new DebateOponentException(opponentUsername, name, description, category));
+        User creator = userService.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
+        User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
         if (image.length == 0)
             return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
         else
             return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image), category);
     }
 
-    private void verifyDebateFilters(String category, String status, String date) {
-        if (status != null && !status.equals("open") && !status.equals("closed"))
-            throw new DebateNotFoundException(); // TODO change exception (?)
-        if (category != null && Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category)))
-            throw new CategoryNotFoundException();
-        if (date != null && !date.matches("\\d{2}-\\d{2}-\\d{4}"))
-            throw new DebateNotFoundException(); // TODO change exception (?)
-    }
-
     @Override
-    public List<PublicDebate> get(String page, String search, String category, String order, String status, String date) {
-        if (!page.matches("-?\\d+")) throw new DebateNotFoundException();
-        if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(order)))
-            throw new DebateNotFoundException(); // TODO change exception (?)
-        verifyDebateFilters(category, status, date);
-        return debateDao.getPublicDebatesGeneral(Integer.parseInt(page), PAGE_SIZE, search, category, order, status, date);
+    public List<PublicDebate> get(int page, String search, String category, String order, String status, String date) {
+        return debateDao.getPublicDebatesGeneral(page, PAGE_SIZE, search, category, order, status, date);
     }
 
     @Override
     public int getPages(String search, String category, String status, String date) {
-        verifyDebateFilters(category, status, date);
         return (int) Math.ceil(debateDao.getPublicDebatesCount(search, category, status, date) / (double) PAGE_SIZE);
     }
 
     @Override
     public List<PublicDebate> getMostSubscribed() {
-        return debateDao.getMostSubscribed();
-        // return debateDao.getPublicDebatesGeneral(0, 3, null, null, DebateOrder.SUBS.setDescending());
+        return debateDao.getPublicDebatesGeneral(0, 3, null, null, String.valueOf(DebateOrder.SUBS_DESC), null, null);
     }
 
     @Override
@@ -85,41 +66,36 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
-    public void subscribeToDebate(long userid, long debateid) {
-        debateDao.subscribeToDebate(userid, debateid);
+    public void subscribeToDebate(String username, long debateid) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        debateDao.subscribeToDebate(user.getUserId(), debateid);
     }
     @Transactional
     @Override
-    public void unsubscribeToDebate(long userid, long debateid) {
-        debateDao.unsubscribeToDebate(userid, debateid);
+    public void unsubscribeToDebate(String username, long debateid) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        debateDao.unsubscribeToDebate(user.getUserId(), debateid);
     }
     @Override
-    public boolean isUserSubscribed(long userid, long debateid) {
-        return debateDao.isUserSubscribed(userid, debateid);
+    public boolean isUserSubscribed(String username, long debateid) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        return debateDao.isUserSubscribed(user.getUserId(), debateid);
     }
 
     @Override
     public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
-        if(list == null)
+        if (list.equals("subscribed"))
             return debateDao.getSubscribedDebatesByUsername(userid, page);
-        else if(list.compareTo("mydebates") == 0)
-            return debateDao.getMyDebates(userid, page);
-        else if(list.compareTo("subscribed") == 0)
-            return debateDao.getSubscribedDebatesByUsername(userid, page);
-
-        return debateDao.getSubscribedDebatesByUsername(userid, page);
+        else return debateDao.getMyDebates(userid, page);
     }
 
     @Override
     public int getProfileDebatesPageCount(String list, long userid) {
         int count;
-        if(list == null)
+        if (list.equals("subscribed"))
             count = debateDao.getSubscribedDebatesByUsernameCount(userid);
-        else if(list.compareTo("mydebates") == 0)
-            count = debateDao.getMyDebatesCount(userid);
-        else
-            count = debateDao.getSubscribedDebatesByUsernameCount(userid);
-        return (int) Math.ceil(count / 5.0);
+        else count = debateDao.getMyDebatesCount(userid);
+        return (int) Math.ceil(count / (double) PAGE_SIZE);
     }
 
     @Override

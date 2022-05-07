@@ -93,26 +93,6 @@ public class DebateJdbcDao implements DebateDao {
                 .stream().findFirst();
     }
 
-    @Override
-    public List<PublicDebate> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM public_debates ORDER BY created_date DESC LIMIT 5 OFFSET ?", new Object[]{ page * 5 }, PUBLIC_ROW_MAPPER);
-    }
-    
-    @Override
-    public int getAllcount() {
-        return jdbcTemplate.query("SELECT COUNT(*) FROM debates", new Object[]{}, (rs, rowNum) -> rs.getInt(1)).get(0);
-    }
-    
-
-    @Override
-    public List<PublicDebate> getQuery(int page, String query) {
-        return jdbcTemplate.query("SELECT * FROM public_debates WHERE name ILIKE ? LIMIT 5 OFFSET ?", new Object[]{ "%" + query + "%", page * 5 }, PUBLIC_ROW_MAPPER);
-    }
-
-    @Override
-    public int getQueryCount(String query) {
-        return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE name ILIKE ?", new Object[]{ "%" + query + "%" }, (rs, rowNum) -> rs.getInt(1)).get(0);
-    }
 
     @Override
     public List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page) {
@@ -124,22 +104,6 @@ public class DebateJdbcDao implements DebateDao {
         return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = ?)", new Object[]{userid}, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
-    @Override
-    public List<PublicDebate> getMostSubscribed() {
-        return jdbcTemplate.query("SELECT * FROM public_debates WHERE status = ? ORDER BY subscribedcount DESC LIMIT 3", new Object[]{DebateStatus.OPEN.ordinal()}, PUBLIC_ROW_MAPPER);
-    }
-
-    @Override
-    public List<PublicDebate> getAllFromCategory(DebateCategory category, int page) {
-        return jdbcTemplate.query("SELECT * FROM public_debates WHERE category = ? ORDER BY created_date DESC LIMIT 5 OFFSET ?",
-                new Object[]{DebateCategory.getFromCategory(category), page * 5},
-                PUBLIC_ROW_MAPPER);
-    }
-
-    @Override
-    public int getAllFromCategoryCount(DebateCategory category) {
-        return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE category = ?", new Object[]{DebateCategory.getFromCategory(category)}, (rs, rowNum) -> rs.getInt(1)).get(0);
-    }
     @Override
     public void subscribeToDebate(long userid, long debateid) {
         final Map<String, Object> data = new HashMap<>();
@@ -160,6 +124,9 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String status, String date) {
+        if (page == -1) {
+            return new ArrayList<>();
+        }
         StringBuilder queryString = new StringBuilder("SELECT * FROM public_debates WHERE TRUE");
         List<Object> params = setUpQuery(searchQuery, category, queryString, status, date);
 
@@ -233,7 +200,7 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public List<PublicDebate> getMyDebates(long userid, int page) {
-        return jdbcTemplate.query("SELECT DISTINCT debateid, name, description, category, public_debates.created_date, public_debates.imageid, creatorusername, opponentusername, subscribedcount, status FROM public_debates JOIN users ON username = creatorusername OR username = opponentusername WHERE userid = ? ORDER BY public_debates.created_date DESC LIMIT 5 OFFSET ?",
+        return jdbcTemplate.query("SELECT DISTINCT debateid, name, description, category, public_debates.created_date, public_debates.imageid, creatorusername, opponentusername, subscribedcount, status, forcount, againstcount FROM public_debates JOIN users ON username = creatorusername OR username = opponentusername WHERE userid = ? ORDER BY public_debates.created_date DESC LIMIT 5 OFFSET ?",
                 new Object[] {userid, page * 5},
                 PUBLIC_ROW_MAPPER);
     }

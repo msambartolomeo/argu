@@ -87,6 +87,9 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public List<User> getAll(int page) {
+        if (page < 0) {
+            return new ArrayList<>();
+        }
         return jdbcTemplate.query("SELECT * FROM users LIMIT 10 OFFSET ?", new Object[] { page * 10 }, ROW_MAPPER);
     }
 
