@@ -26,5 +26,5 @@ public interface DebateService {
     void addVote(long debateId, String username, DebateVote vote);
     void removeVote(long debateId, String username);
 
-    void closeDebate(long id);
+    void closeDebate(long id, String username);
 }

@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
+import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +114,12 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public void closeDebate(long id) {
+    public void closeDebate(long id, String username) {
+        PublicDebate debate = getPublicDebateById(id).orElseThrow(DebateNotFoundException::new);
+
+        if(!(username.equals(debate.getCreatorUsername()) || username.equals(debate.getOpponentUsername())))
+            throw new UnauthorizedUserException();
+
         debateDao.closeDebate(id);
     }
 }

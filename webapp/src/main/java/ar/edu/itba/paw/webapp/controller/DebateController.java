@@ -78,10 +78,13 @@ public class DebateController {
     }
 
     @RequestMapping(value = "/{debateId}/close", method = { RequestMethod.POST })
-    public ModelAndView closeDebate(@PathVariable("debateId") final String debateId) {
+    public ModelAndView closeDebate(@PathVariable("debateId") final String debateId, Authentication auth) {
         if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (auth == null || auth.getPrincipal() == null) {
+            throw new UnauthorizedUserException();
+        }
 
-        debateService.closeDebate(Long.parseLong(debateId));
+        debateService.closeDebate(Long.parseLong(debateId), auth.getName());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
