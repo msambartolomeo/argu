@@ -44,7 +44,7 @@ public class PostServiceImpl implements PostService {
             throw new ForbiddenPostException();
         }
 
-        Optional<PublicPost> lastArgument = postDao.getLastArgument(debateId);
+        Optional<PublicPost> lastArgument = getLastArgument(debateId);
         ArgumentStatus status;
 
         if (!lastArgument.isPresent()) {

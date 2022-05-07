@@ -93,7 +93,32 @@
     </div>
 
     <div class="post-comments">
-        <%@include file="../components/post-comment.jsp" %>
+        <c:if test="${debate.debateStatus.name != 'closed' && (pageContext.request.userPrincipal.name == debate.creatorUsername || pageContext.request.userPrincipal.name == debate.opponentUsername)}">
+            <div class="card no-top-margin">
+                <div class="card-content">
+                    <c:choose>
+                        <c:when test="${pageContext.request.userPrincipal.name == null}">
+                            <div class="card-title card-title-margins">
+                                <spring:message code="components.post-need-to-log-in"/>
+                                <a href="<c:url value="/login"/>">
+                                    <spring:message code="components.first-log-in"/>
+                                </a>
+                            </div>
+                        </c:when>
+                        <c:when test="">
+                        </c:when>
+                        <c:when test="${((empty lastArgument && pageContext.request.userPrincipal.name == debate.creatorUsername) || (not empty lastArgument && pageContext.request.userPrincipal.name != lastArgument.username))}">
+                            <%@include file="../components/post-comment.jsp" %>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="card-title card-title-margins">
+                                <spring:message code="components.post-comment.wait-turn"/>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
+        </c:if>
     </div>
 
 </div>
