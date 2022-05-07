@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
 
@@ -15,21 +16,24 @@
         <div class="comment-extra">
             <c:if test="${pageContext.request.userPrincipal.name != post.username}">
                 <sec:authorize access="hasAuthority('USER')">
-                    <c:url var="likePath" value="/like/${post.debateId}/${post.postId}"/>
-                    <form method="post" action="${likePath}">
-                        <c:choose>
-                            <c:when test="${post.liked}">
-                                <button type="submit" class="btn-flat" name="unlike">
-                                    <i class="large material-icons">favorite</i>
-                                </button>
-                            </c:when>
-                            <c:otherwise>
-                                <button type="submit" class="btn-flat" name="like">
+                    <c:choose>
+                        <c:when test="${!post.liked}">
+                            <c:url var="likePath" value="/debates/${post.debateId}/like/${post.postId}"/>
+                            <form:form method="post" action="${likePath}">
+                                <button type="submit" class="btn-flat">
                                     <i class="large material-icons">favorite_border</i>
                                 </button>
-                            </c:otherwise>
-                        </c:choose>
-                    </form>
+                            </form:form>
+                        </c:when>
+                        <c:otherwise>
+                            <c:url var="unlikePath" value="/debates/${post.debateId}/unlike/${post.postId}"/>
+                            <form:form method="delete" action="${unlikePath}">
+                                <button type="submit" class="btn-flat">
+                                    <i class="large material-icons">favorite</i>
+                                </button>
+                            </form:form>
+                        </c:otherwise>
+                    </c:choose>
                     <div>
                         <p><c:out value="${post.likes}"/></p>
                     </div>

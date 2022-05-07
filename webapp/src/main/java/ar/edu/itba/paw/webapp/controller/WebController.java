@@ -4,16 +4,19 @@ import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.model.enums.DebateCategory;
-import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.enums.DebateOrder;
-import ar.edu.itba.paw.model.exceptions.*;
-import ar.edu.itba.paw.webapp.form.*;
+import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.exceptions.ImageNotFoundException;
+import ar.edu.itba.paw.model.exceptions.InvalidPageException;
+import ar.edu.itba.paw.model.exceptions.UnauthorizedUserException;
+import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.webapp.form.CreateDebateForm;
+import ar.edu.itba.paw.webapp.form.ModeratorForm;
+import ar.edu.itba.paw.webapp.form.ProfileImageForm;
+import ar.edu.itba.paw.webapp.form.RegisterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -22,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Arrays;
 
 @Controller
 public class WebController {
@@ -30,14 +32,12 @@ public class WebController {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebController.class);
     private final UserService userService;
     private final DebateService debateService;
-    private final PostService postService;
     private final ImageService imageService;
 
     @Autowired
     public WebController(UserService userService, DebateService debateService, PostService postService, ImageService imageService) {
         this.userService = userService;
         this.debateService = debateService;
-        this.postService = postService;
         this.imageService = imageService;
     }
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })
@@ -46,92 +46,6 @@ public class WebController {
         mav.addObject("debates", debateService.getMostSubscribed());
         mav.addObject("categories", DebateCategory.values());
         return mav;
-    }
-
-    @RequestMapping(value = "/debates", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debatesList(@RequestParam(value = "category", required = false) String category, @RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "0") String page, @RequestParam(value = "order", required = false) String order, @RequestParam(value = "status", required = false) String status, @RequestParam(value = "date", required = false) String date) {
-        final ModelAndView mav = new ModelAndView("pages/debates-list");
-        mav.addObject("categories", DebateCategory.values());
-        mav.addObject("orders", DebateOrder.values());
-        mav.addObject("total_pages", debateService.getPages(search, category, status, date));
-        mav.addObject("debates", debateService.get(page, search, category, order, status, date));
-        return mav;
-    }
-
-    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debate(@PathVariable("debateId") final String debateId, @ModelAttribute("postForm") final PostForm form, @RequestParam(value = "page", defaultValue = "0") String page, Authentication auth) {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
-        if (!page.matches("\\d+")) throw new PostNotFoundException();
-
-        long id = Long.parseLong(debateId);
-        User user;
-        Long userid = null;
-        if(auth != null) {
-            user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
-            userid = user.getUserId();
-        }
-        // TODO sacar logica de aca plis
-        final ModelAndView mav = new ModelAndView("pages/debate");
-
-        mav.addObject("debate", debateService.getPublicDebateById(id).orElseThrow(DebateNotFoundException::new));
-        mav.addObject("total_pages", (int) Math.ceil(postService.getPostsByDebateCount(id) / 15.0));
-        if (userid != null) {
-            mav.addObject("isSubscribed", debateService.isUserSubscribed(userid, id));
-            mav.addObject("posts", postService.getPublicPostsByDebateWithIsLiked(id, userid, Integer.parseInt(page)));
-        }
-        else {
-            mav.addObject("posts", postService.getPublicPostsByDebate(id, Integer.parseInt(page)));
-        }
-        return mav;
-    }
-
-    @RequestMapping(value = "/debates/{debateId}", method = { RequestMethod.POST })
-    public ModelAndView createPost(@PathVariable("debateId") final String debateId, @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
-        long id = Long.parseLong(debateId);
-
-        if (errors.hasErrors()) {
-            return debate(debateId, form, "0", auth);
-        }
-
-        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
-        postService.create(user.getUserId(), id, form.getContent(), form.getFile().getBytes());
-        return new ModelAndView("redirect:/debates/" + debateId);
-    }
-
-    @RequestMapping(value = "/subscribe/{debateId}", method = { RequestMethod.POST }, params = "subscribe")
-    public ModelAndView subscribe(@PathVariable("debateId") final String debateId, Authentication auth) {
-        long id = Long.parseLong(debateId);
-        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
-
-        debateService.subscribeToDebate(user.getUserId(), id);
-        return new ModelAndView("redirect:/debates/" + debateId);
-    }
-
-    @RequestMapping(value = "/subscribe/{debateId}", method = { RequestMethod.POST }, params = "unsubscribe")
-    public ModelAndView unsubscribe(@PathVariable("debateId") final String debateId, Authentication auth) {
-        long id = Long.parseLong(debateId);
-        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
-
-        debateService.unsubscribeToDebate(user.getUserId(), id);
-        return new ModelAndView("redirect:/debates/" + debateId);
-    }
-
-    @RequestMapping(value = "/like/{debateId}/{postId}", method = { RequestMethod.POST}, params = "like")
-    public ModelAndView like(@PathVariable("postId") final String postId, @PathVariable("debateId") final String debateId ,Authentication auth) {
-        long id = Long.parseLong(postId);
-        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
-        postService.likePost(id, user.getUserId());
-        return new ModelAndView("redirect:/debates/" + debateId);
-    }
-
-    @RequestMapping(value = "/like/{debateId}/{postId}", method = { RequestMethod.POST}, params = "unlike")
-    public ModelAndView unlike(@PathVariable("postId") final String postId, @PathVariable("debateId") final String debateId ,Authentication auth) {
-        long id = Long.parseLong(postId);
-        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
-
-        postService.unlikePost(id, user.getUserId());
-        return new ModelAndView("redirect:/debates/" + debateId);
     }
 
     @RequestMapping(value = "/moderator", method = { RequestMethod.GET, RequestMethod.HEAD })
@@ -151,7 +65,6 @@ public class WebController {
 
     @RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView loginPage(@RequestParam(value = "error", required = false) final String error) {
-        LOGGER.error("error logging in: {}", error);
         return new ModelAndView("pages/login");
     }
 
@@ -163,7 +76,6 @@ public class WebController {
     @RequestMapping(value = "/register", method = { RequestMethod.POST })
     public ModelAndView register(@Valid @ModelAttribute("registerForm") final RegisterForm form, BindingResult errors) {
         if (errors.hasErrors()) {
-            LOGGER.info("Error registering new user {}", errors);
             return registerPage(form);
         }
         userService.create(form.getUsername(), form.getPassword(), form.getEmail());
@@ -172,13 +84,17 @@ public class WebController {
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
     public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth, @RequestParam(value = "page", defaultValue = "0") String page) {
-        if (!page.matches("\\d+")) throw new DebateNotFoundException();
+        if (!page.matches("-?\\d+")) throw new InvalidPageException();
 
         final ModelAndView mav = new ModelAndView("/pages/profile");
 
+        if (auth.getPrincipal() == null) {
+            throw new UnauthorizedUserException();
+        }
+
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         mav.addObject("user", user);
-        mav.addObject("total_pages", (int) Math.ceil(debateService.getSubscribedDebatesByUsernameCount(user.getUserId()) / 5.0));
+        mav.addObject("total_pages", (int) Math.ceil(debateService.getSubscribedDebatesByUsernameCount(user.getUserId()) / 5.0)); // TODO: move to service
         mav.addObject("subscribed_debates", debateService.getSubscribedDebatesByUsername(user.getUserId(), Integer.parseInt(page)));
         return mav;
     }
@@ -186,22 +102,22 @@ public class WebController {
     @RequestMapping(value = "/profile", method = { RequestMethod.POST})
     public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {
-            LOGGER.info("Error uploading file {}", errors);
             return profilePage(form, auth, "0");
         }
+        if (auth.getPrincipal() == null) {
+            throw new UnauthorizedUserException();
+        }
 
-        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
-
-        userService.updateImage(user.getUserId(), form.getFile().getBytes());
-
+        userService.updateImage(auth.getName(), form.getFile().getBytes());
         return new ModelAndView("redirect:/profile");
     }
 
     @ResponseBody
     @RequestMapping(value = "/images/{imageId}", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public byte[] getImage(@PathVariable("imageId") final long imageId) {
-        Image image = imageService.getImage(imageId).orElseThrow(ImageNotFoundException::new);
-        return image.getData();
+    public byte[] getImage(@PathVariable("imageId") final String imageId) {
+        if (!imageId.matches("\\d+")) throw new ImageNotFoundException();
+
+        return imageService.getImage(Integer.parseInt(imageId)).orElseThrow(ImageNotFoundException::new).getData();
     }
 
     @RequestMapping(value = "/create_debate", method = { RequestMethod.GET, RequestMethod.HEAD })
@@ -216,6 +132,11 @@ public class WebController {
         if (errors.hasErrors()) {
             return createDebatePage(form);
         }
+
+        if (auth.getPrincipal() == null) {
+            throw new UnauthorizedUserException();
+        }
+
         debateService.create(form.getTitle(),
                 form.getDescription(),
                 auth.getName(),
@@ -225,12 +146,12 @@ public class WebController {
         return new ModelAndView("redirect:/debates");
     }
 
-    @RequestMapping(value = "/404", method = { RequestMethod.GET})
+    @RequestMapping(value = "/404")
     public ModelAndView error() {
         return new ModelAndView("error/404");
     }
     // TODO: implement 403 error page
-    @RequestMapping(value = "/403", method = { RequestMethod.GET})
+    @RequestMapping(value = "/403")
     public ModelAndView error403() {
         return new ModelAndView("error/404");
     }

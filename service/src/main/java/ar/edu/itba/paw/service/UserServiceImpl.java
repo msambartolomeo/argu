@@ -5,10 +5,12 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,17 +49,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateImage(long id, byte[] image) {
-        Optional<User> user = getUserById(id);
+    public void updateImage(String username, byte[] image) {
+        User user = getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         long imageId = imageService.createImage(image);
-        userDao.updateImage(id, imageId);
-        user.ifPresent(u -> {
-            if (u.getImageId() != null ) imageService.deleteImage(u.getImageId());
-        });
+        userDao.updateImage(user.getUserId(), imageId);
+        if (user.getImageId() != null ) imageService.deleteImage(user.getImageId());
     }
 
     @Override
     public void requestModerator(String username, String reason) {
         emailService.sendEmailSelf("New user moderator request for " + username, "reason for request: " + reason);
+    }
+
+    @Override
+    public List<User> getSubscribedUsersByDebate(long debateId) {
+        return userDao.getSubscribedUsersByDebate(debateId);
     }
 }

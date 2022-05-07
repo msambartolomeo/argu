@@ -16,6 +16,12 @@ public class ErrorController {
         return mav;
     }
 
+    @ExceptionHandler(UnauthorizedUserException.class)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    public ModelAndView handleExceptionUnauthorizedUser() {
+        return new ModelAndView("pages/login");
+    }
+
     @ExceptionHandler(ForbiddenPostException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     public ModelAndView handleForbiddenPostException(ForbiddenPostException e) {

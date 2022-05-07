@@ -11,16 +11,9 @@ import java.util.Optional;
 public interface DebateDao {
     Optional<Debate> getDebateById(long id);
     Optional<PublicDebate> getPublicDebateById(long id);
-    List<PublicDebate> getAll(int page);
-    List<PublicDebate> getQuery(int page, String query);
     Debate create(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category);
     List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page);
-    List<PublicDebate> getMostSubscribed();
-    List<PublicDebate> getAllFromCategory(DebateCategory category, int page);
-    int getAllcount();
-    int getQueryCount(String query);
     int getSubscribedDebatesByUsernameCount(long userid);
-    int getAllFromCategoryCount(DebateCategory category);
 
     void subscribeToDebate(long userid, long debateid);
 
