@@ -3,7 +3,8 @@ package ar.edu.itba.paw.model.enums;
 public enum DebateStatus {
     OPEN("open"),
     CLOSED("closed"),
-    DELETED("deleted");
+    DELETED("deleted"),
+    CLOSING("closing");
 
     private final String name;
 

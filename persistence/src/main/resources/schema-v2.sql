@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS votes (
     vote INTEGER NOT NULL
 );
 
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS status INTEGER;
+
 CREATE OR REPLACE VIEW public_debates AS
     SELECT debates.debateid, debates.name, debates.description, debates.category, debates.created_date, debates.imageid,
        u1.username AS creatorusername, u2.username AS opponentusername,

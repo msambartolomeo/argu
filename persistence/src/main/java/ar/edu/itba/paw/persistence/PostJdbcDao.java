@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.PostDao;
 import ar.edu.itba.paw.model.Post;
 import ar.edu.itba.paw.model.PublicPost;
 import ar.edu.itba.paw.model.PublicPostWithUserLike;
+import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -27,7 +28,8 @@ public class PostJdbcDao implements PostDao {
                     rs.getLong("debateid"),
                     rs.getString("content"),
                     rs.getObject("created_date", LocalDateTime.class),
-                    rs.getLong("imageid"));
+                    rs.getLong("imageid"),
+                    ArgumentStatus.getFromInt(rs.getInt("status")));
 
     private static final RowMapper<PublicPost> PUBLIC_POST_ROW_MAPPER = (rs, rowNum) ->
             new PublicPost(rs.getLong("postid"),
@@ -36,7 +38,8 @@ public class PostJdbcDao implements PostDao {
                     rs.getString("content"),
                     rs.getInt("likes"),
                     rs.getObject("created_date", LocalDateTime.class),
-                    rs.getLong("imageid"));
+                    rs.getLong("imageid"),
+                    ArgumentStatus.getFromInt(rs.getInt("status")));
 
     private static final RowMapper<PublicPostWithUserLike> PUBLIC_POST_WITH_LIKES_ROW_MAPPER = (rs, rowNum) ->
             new PublicPostWithUserLike(rs.getLong("postid"),
@@ -46,6 +49,7 @@ public class PostJdbcDao implements PostDao {
                     rs.getInt("likes"),
                     rs.getObject("created_date", LocalDateTime.class),
                     rs.getLong("imageid"),
+                    ArgumentStatus.getFromInt(rs.getInt("status")),
                     rs.getInt("isliked") != 0);
 
     @Autowired
@@ -108,7 +112,7 @@ public class PostJdbcDao implements PostDao {
     }
 
     @Override
-    public Post create(long userId, long debateId, String content, Long imageId) {
+    public Post create(long userId, long debateId, String content, Long imageId, ArgumentStatus status) {
         final Map<String, Object> data = new HashMap<>();
         LocalDateTime created = LocalDateTime.now();
         data.put("userId", userId);
@@ -116,10 +120,11 @@ public class PostJdbcDao implements PostDao {
         data.put("content", content);
         data.put("created_date", created);
         data.put("imageid", imageId);
+        data.put("status", ArgumentStatus.getFromStatus(status));
 
         final Number postId = jdbcInsert.executeAndReturnKey(data);
 
-        return new Post(postId.longValue(), userId, debateId, content, created, imageId);
+        return new Post(postId.longValue(), userId, debateId, content, created, imageId, status);
     }
 
     @Override
@@ -139,5 +144,10 @@ public class PostJdbcDao implements PostDao {
     @Override
     public boolean hasLiked(long postId, long userId) {
         return jdbcTemplate.query("SELECT * FROM likes WHERE postId = ? AND userId = ?", new Object[]{postId, userId}, (rs, rowNum) -> rs.getLong("postId")).size() > 0;
+    }
+
+    @Override
+    public Optional<Post> getLastArgument(long debateId) {
+        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? ORDER BY created_date DESC LIMIT 1", new Object[]{debateId}, ROW_MAPPER).stream().findFirst();
     }
 }
