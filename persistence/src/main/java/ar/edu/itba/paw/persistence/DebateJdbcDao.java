@@ -229,4 +229,24 @@ public class DebateJdbcDao implements DebateDao {
         return jdbcTemplate.query("SELECT COUNT(*) FROM votes WHERE debateid = ? AND userid = ?", new Object[] {debateId, userId},
                 (rs, rowNum) -> rs.getInt(1) > 0).get(0);
     }
+
+    @Override
+    public DebateVote getUserVote(long debateid, long userid) {
+       int debateVoteId =  jdbcTemplate.query("SELECT vote FROM votes WHERE debateid = ? AND userid = ?", new Object[] {debateid, userid},
+                (rs, rowNum) -> rs.getInt(1)).get(0);
+       return DebateVote.getFromInt(debateVoteId);
+    }
+
+    @Override
+    public int getForVotesCount(long debateid) {
+        return jdbcTemplate.query("SELECT forcount FROM public_debates WHERE debateid = ?", new Object[] {
+                debateid}, (rs, rowNum) -> rs.getInt(1)).get(0);
+    }
+
+    @Override
+    public int getAgainstVotesCount(long debateid) {
+        return jdbcTemplate.query("SELECT againstcount FROM public_debates WHERE debateid = ?", new Object[] {
+                debateid}, (rs, rowNum) -> rs.getInt(1)).get(0);
+    }
+
 }

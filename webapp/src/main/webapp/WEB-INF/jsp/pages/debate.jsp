@@ -94,6 +94,50 @@
 
     <div class="post-comments">
         <%@include file="../components/post-comment.jsp" %>
+        <sec:authorize access="hasAuthority('USER')">
+            <c:if test="${debate.creatorUsername != null && debate.opponentUsername != null}">
+                <div class="card vote-section">
+                    <c:choose>
+                        <c:when test="${!hasVoted}">
+                            <h5>Who is the winner of the debate?</h5>
+                            <div class="vote-buttons">
+                                    <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>
+                                    <form:form method="post" action="${voteForPath}">
+                                        <button class="btn waves-effect" type="submit">${debate.creatorUsername}</button>
+                                    </form:form>
+
+                                    <c:url var="voteAgainstPath" value="/debates/${debate.debateId}/vote/against"/>
+                                    <form:form method="post" action="${voteAgainstPath}">
+                                        <button class="btn waves-effect" type="submit">${debate.opponentUsername}</button>
+                                    </form:form>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <h6>Voted: ${userVote}</h6>
+                            <div class="progress red">
+                                <c:if test="${forVotes > 0}">
+                                    <div class="votes-format blue" style="width: ${forVotes}%">
+                                        <span>${debate.creatorUsername}</span>
+                                        <span>${forVotes}%</span>
+                                    </div>
+                                </c:if>
+                                <c:if test="${againstVotes > 0}">
+                                    <div class="votes-format" style="width: ${againstVotes}%">
+                                        <span>${debate.opponentUsername}</span>
+                                        <span>${againstVotes}%</span>
+                                    </div>
+                                </c:if>
+                            </div>
+                            <h6>Changed your mind?</h6>
+                            <c:url var="unvotePath" value="/debates/${debate.debateId}/unvote"/>
+                            <form:form method="post" action="${unvotePath}">
+                                <button class="btn waves-effect" type="submit">Unvote</button>
+                            </form:form>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </c:if>
+        </sec:authorize>
     </div>
 
 </div>

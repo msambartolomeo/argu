@@ -111,4 +111,32 @@ public class DebateServiceImpl implements DebateService {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         debateDao.removeVote(debateId, user.getUserId());
     }
+
+    @Override
+    public Boolean hasUserVoted(long debateid, String username) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        return debateDao.hasUserVoted(debateid, user.getUserId());
+    }
+
+    @Override
+    public String getUserVote(long debateid, String username) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        DebateVote debateVote = debateDao.getUserVote(debateid, user.getUserId());
+        PublicDebate debate = debateDao.getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
+
+        if(debateVote == DebateVote.FOR) {
+            return debate.getCreatorUsername();
+        } else
+            return debate.getOpponentUsername();
+    }
+
+    @Override
+    public int getVotesCount(long id, String debater) {
+        int voteForCount = debateDao.getForVotesCount(id);
+        int voteAgainstCount = debateDao.getAgainstVotesCount(id);
+        int totalVoteCount = voteForCount + voteAgainstCount;
+
+        if(debater.equals("for")) return (int) Math.round((voteForCount * 100.0) / totalVoteCount);
+        else return  (int) Math.round((voteAgainstCount * 100.0) / totalVoteCount);
+    }
 }

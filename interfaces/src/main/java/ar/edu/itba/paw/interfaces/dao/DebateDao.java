@@ -35,4 +35,10 @@ public interface DebateDao {
     void removeVote(long debateId, long userId);
 
     Boolean hasUserVoted(long debateId, long userId);
+
+    DebateVote getUserVote(long debateid, long userid);
+
+    int getForVotesCount(long debateid);
+
+    int getAgainstVotesCount(long debateid);
 }
