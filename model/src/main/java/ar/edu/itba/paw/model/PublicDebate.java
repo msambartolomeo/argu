@@ -35,8 +35,8 @@ public class PublicDebate {
         this.debateCategory = debateCategory;
         this.subscribedUsers = subscribedUsers;
         this.debateStatus = debateStatus;
-        this.forCount = forCount;
-        this.againstCount = againstCount;
+        this.forCount = (int) Math.round((forCount * 100.0) / (forCount + againstCount));
+        this.againstCount = 100 - this.forCount;
     }
 
     public PublicDebate(long debateId, String name, String description, String creatorUsername,

@@ -30,5 +30,4 @@ public interface DebateService {
 
     String getUserVote(long debateid, String username);
 
-    int getVotesCount(long id, String debater);
 }

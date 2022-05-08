@@ -72,8 +72,6 @@ public class DebateController {
             boolean hasVoted = debateService.hasUserVoted(debateIdNum, auth.getName());
             mav.addObject("isSubscribed", debateService.isUserSubscribed(auth.getName(), debateIdNum));
             mav.addObject("hasVoted", hasVoted);
-            mav.addObject("forVotes", debateService.getVotesCount(debateIdNum, "for"));
-            mav.addObject("againstVotes", debateService.getVotesCount(debateIdNum, "against"));
             mav.addObject("posts", postService.getPublicPostsByDebateWithIsLiked(debateIdNum, auth.getName(), pageNum));
             if(hasVoted) mav.addObject("userVote", debateService.getUserVote(debateIdNum, auth.getName()));
         } else {

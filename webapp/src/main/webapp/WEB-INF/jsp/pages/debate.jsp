@@ -115,16 +115,16 @@
                         <c:otherwise>
                             <h6>Voted: ${userVote}</h6>
                             <div class="progress red">
-                                <c:if test="${forVotes > 0}">
-                                    <div class="votes-format blue" style="width: ${forVotes}%">
+                                <c:if test="${debate.forCount > 0}">
+                                    <div class="votes-format blue" style="width: ${debate.forCount}%">
                                         <span>${debate.creatorUsername}</span>
-                                        <span>${forVotes}%</span>
+                                        <span>${debate.forCount}%</span>
                                     </div>
                                 </c:if>
-                                <c:if test="${againstVotes > 0}">
-                                    <div class="votes-format" style="width: ${againstVotes}%">
+                                <c:if test="${debate.againstCount > 0}">
+                                    <div class="votes-format" style="width: ${debate.againstCount}%">
                                         <span>${debate.opponentUsername}</span>
-                                        <span>${againstVotes}%</span>
+                                        <span>${debate.againstCount}%</span>
                                     </div>
                                 </c:if>
                             </div>

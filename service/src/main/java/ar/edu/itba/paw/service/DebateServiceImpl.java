@@ -129,14 +129,4 @@ public class DebateServiceImpl implements DebateService {
         } else
             return debate.getOpponentUsername();
     }
-
-    @Override
-    public int getVotesCount(long id, String debater) {
-        int voteForCount = debateDao.getForVotesCount(id);
-        int voteAgainstCount = debateDao.getAgainstVotesCount(id);
-        int totalVoteCount = voteForCount + voteAgainstCount;
-
-        if(debater.equals("for")) return (int) Math.round((voteForCount * 100.0) / totalVoteCount);
-        else return  (int) Math.round((voteAgainstCount * 100.0) / totalVoteCount);
-    }
 }
