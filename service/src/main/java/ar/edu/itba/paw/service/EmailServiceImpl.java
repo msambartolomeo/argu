@@ -46,18 +46,11 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-
-//    @Value("classpath:new-noti-email.html")
-//    private Resource notificationEmail;
-
     @Async
     @Override
     public void notifyNewPost(String to, String from, long debateId, String debateName) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-
-
-//        String htmlMsg = ResourceReader.asString(notificationEmail);
 
         String htmlMsg = "<!DOCTYPE html\n" +
                 "    PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" +
