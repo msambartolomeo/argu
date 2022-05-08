@@ -174,6 +174,30 @@
                 </div>
             </c:if>
         </sec:authorize>
+        <div class="card vote-section no-top-margin">
+            <c:choose>
+                <c:when test="${debate.forCount + debate.againstCount > 0}">
+                    <h5>Votes</h5>
+                    <div class="progress red">
+                        <c:if test="${debate.forCount > 0}">
+                            <div class="votes-format blue" style="width: ${debate.forCount}%">
+                                <span>${debate.creatorUsername}</span>
+                                <span>${debate.forCount}%</span>
+                            </div>
+                        </c:if>
+                        <c:if test="${debate.againstCount > 0}">
+                            <div class="votes-format" style="width: ${debate.againstCount}%">
+                                <span>${debate.opponentUsername}</span>
+                                <span>${debate.againstCount}%</span>
+                            </div>
+                        </c:if>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <h5 class="center">No votes yet</h5>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </div>
 
 </div>
