@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
         if (image.length == 0) {
             createdPost = postDao.create(user.getUserId(), debateId, content,null);
         } else {
-            long imageId = imageService.createImage(image);
+            long imageId = imageService.createImage(image).getId();
             createdPost = postDao.create(user.getUserId(), debateId, content, imageId);
         }
         sendEmailToSubscribedUsers(debateId, user.getUserId());

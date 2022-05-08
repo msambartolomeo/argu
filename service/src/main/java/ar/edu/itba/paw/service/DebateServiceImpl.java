@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
@@ -30,13 +31,15 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
-    public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
+    public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] imageArray, DebateCategory category) {
         User creator = userService.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
         User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
-        if (image.length == 0)
+        if (imageArray.length == 0)
             return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
-        else
-            return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image), category);
+        else {
+            Image image = imageService.createImage(imageArray);
+            return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), image.getId(), category);
+        }
     }
 
     @Override
