@@ -3,7 +3,7 @@ SET DATABASE SQL SYNTAX PGS TRUE;
 CREATE TABLE IF NOT EXISTS images
 (
     imageid SERIAL PRIMARY KEY,
-    data binary NOT NULL
+    data varbinary(100000) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS users
