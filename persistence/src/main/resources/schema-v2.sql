@@ -5,6 +5,13 @@ CREATE TABLE IF NOT EXISTS votes (
     vote INTEGER NOT NULL
 );
 
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS status INTEGER;
+
+CREATE OR REPLACE VIEW public_posts AS
+SELECT posts.postid, users.username, posts.debateid, posts.content, COUNT(likes.userid) AS likes, posts.created_date, posts.imageid, posts.status
+FROM posts LEFT JOIN likes ON posts.postid = likes.postid LEFT JOIN users ON posts.userid = users.userid
+GROUP BY posts.postid, users.username;
+
 CREATE OR REPLACE VIEW public_debates AS
     SELECT debates.debateid, debates.name, debates.description, debates.category, debates.created_date, debates.imageid,
        u1.username AS creatorusername, u2.username AS opponentusername,

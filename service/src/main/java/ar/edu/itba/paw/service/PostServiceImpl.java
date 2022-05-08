@@ -3,6 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.PostDao;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenPostException;
@@ -38,16 +39,50 @@ public class PostServiceImpl implements PostService {
     public Post create(String username, long debateId, String content, byte[] image) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
-        if (debate.getDebateStatus() != DebateStatus.OPEN || (debate.getCreatorId() != user.getUserId() && debate.getOpponentId() != user.getUserId())) {
+
+        if (debate.getDebateStatus() == DebateStatus.CLOSED || debate.getDebateStatus() == DebateStatus.DELETED || (debate.getCreatorId() != user.getUserId() && debate.getOpponentId() != user.getUserId())) {
             throw new ForbiddenPostException();
+        }
+
+        Optional<PublicPost> lastArgument = getLastArgument(debateId);
+        ArgumentStatus status;
+
+        if (!lastArgument.isPresent()) {
+            if (user.getUserId() != debate.getCreatorId())
+                throw new ForbiddenPostException();
+            status = ArgumentStatus.INTRODUCTION;
+        } else {
+            if (user.getUsername().equals(lastArgument.get().getUsername()))
+                throw new ForbiddenPostException();
+
+            switch (lastArgument.get().getStatus()) {
+                case INTRODUCTION:
+                    if (user.getUserId() != debate.getCreatorId())
+                        status = ArgumentStatus.INTRODUCTION;
+                    else
+                        status = ArgumentStatus.ARGUMENT;
+                    break;
+                case ARGUMENT:
+                    if (debate.getDebateStatus() != DebateStatus.CLOSING)
+                        status = ArgumentStatus.ARGUMENT;
+                    else
+                        status = ArgumentStatus.CONCLUSION;
+                    break;
+                case CONCLUSION:
+                    status = ArgumentStatus.CONCLUSION;
+                    // TODO: change debate status to CLOSED
+                    break;
+                default:
+                    throw new ForbiddenPostException();
+            }
         }
 
         Post createdPost;
         if (image.length == 0) {
-            createdPost = postDao.create(user.getUserId(), debateId, content,null);
+            createdPost = postDao.create(user.getUserId(), debateId, content,null, status);
         } else {
             long imageId = imageService.createImage(image);
-            createdPost = postDao.create(user.getUserId(), debateId, content, imageId);
+            createdPost = postDao.create(user.getUserId(), debateId, content, imageId, status);
         }
         sendEmailToSubscribedUsers(debateId, user.getUserId(), user.getUsername(), debate.getName());
         return createdPost;
@@ -104,5 +139,10 @@ public class PostServiceImpl implements PostService {
     public List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, String username, int page) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         return postDao.getPublicPostsByDebateWithIsLiked(debateId, user.getUserId(), page);
+    }
+
+    @Override
+    public Optional<PublicPost> getLastArgument(long debateIdNum) {
+        return postDao.getLastArgument(debateIdNum);
     }
 }

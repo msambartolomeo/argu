@@ -38,13 +38,6 @@ public class PublicDebate {
         this.forCount = forCount;
         this.againstCount = againstCount;
     }
-
-    public PublicDebate(long debateId, String name, String description, String creatorUsername,
-                        String opponentUsername, LocalDateTime createdDate,
-                        DebateCategory debateCategory, Integer subscribedUsers, DebateStatus debateStatus, Integer forCount, Integer againstCount) {
-        this(debateId, name, description, creatorUsername, opponentUsername, null, createdDate, debateCategory, subscribedUsers, debateStatus, forCount, againstCount);
-    }
-
     public long getDebateId() {
         return debateId;
     }

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.PostService;
+import ar.edu.itba.paw.model.PublicPost;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.exceptions.*;
@@ -70,6 +71,7 @@ public class DebateController {
         if(auth != null && auth.getPrincipal() != null) {
             mav.addObject("isSubscribed", debateService.isUserSubscribed(auth.getName(), debateIdNum));
             mav.addObject("posts", postService.getPublicPostsByDebateWithIsLiked(debateIdNum, auth.getName(), pageNum));
+            postService.getLastArgument(debateIdNum).ifPresent(lastArgument -> mav.addObject("lastArgument", lastArgument));
         } else {
             mav.addObject("posts", postService.getPublicPostsByDebate(debateIdNum, pageNum));
         }

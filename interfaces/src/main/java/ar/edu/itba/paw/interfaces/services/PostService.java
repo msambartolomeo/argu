@@ -21,4 +21,6 @@ public interface PostService {
     boolean hasLiked(long postId, String username);
 
     List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, String username, int page);
+
+    Optional<PublicPost> getLastArgument(long debateIdNum);
 }

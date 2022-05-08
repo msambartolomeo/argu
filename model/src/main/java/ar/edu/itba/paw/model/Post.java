@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.enums.ArgumentStatus;
+
 import java.time.LocalDateTime;
 
 public class Post {
@@ -9,18 +11,16 @@ public class Post {
     private final String content;
     private final LocalDateTime creationDate;
     private final Long imageId;
+    private final ArgumentStatus status;
 
-    public Post(long postId, long userId, long debateId, String content, LocalDateTime creationDate, Long imageId) {
+    public Post(long postId, long userId, long debateId, String content, LocalDateTime creationDate, Long imageId, ArgumentStatus status) {
         this.postId = postId;
         this.userId = userId;
         this.debateId = debateId;
         this.content = content;
         this.creationDate = creationDate;
         this.imageId = imageId;
-    }
-
-    public Post(long postId, long userId, long debateId, String content, LocalDateTime creationDate) {
-        this(postId, userId, debateId, content, creationDate, null);
+        this.status = status;
     }
 
     public long getPostId() {
@@ -45,5 +45,9 @@ public class Post {
 
     public Long getImageId() {
         return imageId;
+    }
+
+    public ArgumentStatus getStatus() {
+        return status;
     }
 }

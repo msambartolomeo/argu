@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS likes
     PRIMARY KEY (userid, postid)
 );
 
+DROP VIEW IF EXISTS public_posts;
 CREATE OR REPLACE VIEW public_posts AS
     SELECT posts.postid, users.username, posts.debateid, posts.content, COUNT(likes.userid) AS likes, posts.created_date, posts.imageid
     FROM posts LEFT JOIN likes ON posts.postid = likes.postid LEFT JOIN users ON posts.userid = users.userid
