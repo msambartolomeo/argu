@@ -231,6 +231,13 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
+    public DebateVote getUserVote(long debateid, long userid) {
+       int debateVoteId =  jdbcTemplate.query("SELECT vote FROM votes WHERE debateid = ? AND userid = ?", new Object[] {debateid, userid},
+                (rs, rowNum) -> rs.getInt(1)).get(0);
+       return DebateVote.getFromInt(debateVoteId);
+    }
+
+    @Override
     public void closeDebate(long id) {
         jdbcTemplate.update("UPDATE debates SET status = ? WHERE debateid = ?", DebateStatus.getFromStatus(DebateStatus.CLOSED), id);
     }

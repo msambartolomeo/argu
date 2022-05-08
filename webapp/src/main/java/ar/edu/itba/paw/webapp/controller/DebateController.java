@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.model.PublicPost;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
+import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.form.PostForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,7 @@ public class DebateController {
         if(auth != null && auth.getPrincipal() != null) {
             mav.addObject("isSubscribed", debateService.isUserSubscribed(auth.getName(), debateIdNum));
             mav.addObject("posts", postService.getPublicPostsByDebateWithIsLiked(debateIdNum, auth.getName(), pageNum));
+            mav.addObject("userVote", debateService.getUserVote(debateIdNum, auth.getName()));
             postService.getLastArgument(debateIdNum).ifPresent(lastArgument -> mav.addObject("lastArgument", lastArgument));
         } else {
             mav.addObject("posts", postService.getPublicPostsByDebate(debateIdNum, pageNum));
@@ -106,6 +108,40 @@ public class DebateController {
         postService.create(auth.getName(), Long.parseLong(debateId), form.getContent(), form.getFile().getBytes());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
+
+    @RequestMapping(value = "/{debateId}/vote/for", method = {RequestMethod.POST})
+    public ModelAndView voteFor(@PathVariable("debateId") final String debateId, Authentication auth) {
+        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (auth == null || auth.getPrincipal() == null) {
+            throw new UnauthorizedUserException();
+        }
+
+        debateService.addVote(Long.parseLong(debateId), auth.getName(), DebateVote.FOR);
+        return new ModelAndView("redirect:/debates/" + debateId);
+    }
+
+    @RequestMapping(value = "/{debateId}/vote/against", method = {RequestMethod.POST})
+    public ModelAndView voteAgainst(@PathVariable("debateId") final String debateId, Authentication auth) {
+        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (auth == null || auth.getPrincipal() == null) {
+            throw new UnauthorizedUserException();
+        }
+
+        debateService.addVote(Long.parseLong(debateId), auth.getName(), DebateVote.AGAINST);
+        return new ModelAndView("redirect:/debates/" + debateId);
+    }
+
+    @RequestMapping(value = "/{debateId}/unvote", method = {RequestMethod.POST})
+    public ModelAndView unvoteAgainst(@PathVariable("debateId") final String debateId, Authentication auth) {
+        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (auth == null || auth.getPrincipal() == null) {
+            throw new UnauthorizedUserException();
+        }
+
+        debateService.removeVote(Long.parseLong(debateId), auth.getName());
+        return new ModelAndView("redirect:/debates/" + debateId);
+    }
+
 
     @RequestMapping(value = "/{debateId}/subscribe", method = { RequestMethod.POST })
     public ModelAndView subscribe(@PathVariable("debateId") final String debateId, Authentication auth) {

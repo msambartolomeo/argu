@@ -36,5 +36,7 @@ public interface DebateDao {
 
     Boolean hasUserVoted(long debateId, long userId);
 
+    DebateVote getUserVote(long debateid, long userid);
+
     void closeDebate(long id);
 }
