@@ -10,8 +10,8 @@
     <body>
     <div class="error-container">
         <div class="error-div">
-            <img src="<c:url value="/resources/images/error-404.png"/>" alt="404 error image">
-            <h1><spring:message code="error.404.title"/></h1>
+            <img src="<c:url value="/resources/images/error404.png"/>" alt="404 error image">
+            <h1><spring:message code="error.page.title"/></h1>
             <c:choose>
                 <c:when test="${empty exception}">
                     <h6><spring:message code="error.404.message"/></h6>
@@ -20,7 +20,7 @@
                     <h6><spring:message code="${exception}"/></h6>
                 </c:otherwise>
             </c:choose>
-            <a href="<c:url value="/"/>"><spring:message code="errpr.404.back"/></a>
+            <a href="<c:url value="/"/>"><spring:message code="error.go.back"/></a>
         </div>
     </div>
     </body>

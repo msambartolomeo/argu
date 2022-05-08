@@ -153,9 +153,13 @@ public class WebController {
     public ModelAndView error() {
         return new ModelAndView("error/404");
     }
+
     // TODO: implement 403 error page
     @RequestMapping(value = "/403")
     public ModelAndView error403() {
         return new ModelAndView("error/404");
     }
+
+    @RequestMapping(value = "/500")
+    public ModelAndView error500() { return new ModelAndView("error/500"); }
 }

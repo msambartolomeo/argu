@@ -28,4 +28,12 @@ public class ErrorController {
         return new ModelAndView("error/404");
         // TODO: change to 403
     }
+
+    @ExceptionHandler(Exception500.class)
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+    public ModelAndView handleException500(Exception500 e) {
+        ModelAndView mav = new ModelAndView("error/500");
+        mav.addObject("exception", e.getMessageCode());
+        return mav;
+    }
 }
