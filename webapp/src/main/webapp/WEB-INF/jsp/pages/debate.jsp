@@ -99,7 +99,7 @@
                 <div class="card vote-section">
                     <c:choose>
                         <c:when test="${userVote == null}">
-                            <h5>Who is the winner of the debate?</h5>
+                            <h5><spring:message code="pages.debate.who-wins"/></h5>
                             <div class="vote-buttons">
                                     <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>
                                     <form:form method="post" action="${voteForPath}">
@@ -113,7 +113,7 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <h6>Voted: ${userVote}</h6>
+                            <h6><spring:message code="pages.debate.voted"/> ${userVote}</h6>
                             <div class="progress red">
                                 <c:if test="${debate.forCount > 0}">
                                     <div class="votes-format blue" style="width: ${debate.forCount}%">
@@ -128,10 +128,10 @@
                                     </div>
                                 </c:if>
                             </div>
-                            <h6>Changed your mind?</h6>
+                            <h6><spring:message code="page.debate.change-vote"/></h6>
                             <c:url var="unvotePath" value="/debates/${debate.debateId}/unvote"/>
                             <form:form method="post" action="${unvotePath}">
-                                <button class="btn waves-effect" type="submit">Unvote</button>
+                                <button class="btn waves-effect" type="submit"><spring:message code="page.debate.unvote"/></button>
                             </form:form>
                         </c:otherwise>
                     </c:choose>
