@@ -37,8 +37,4 @@ public interface DebateDao {
     Boolean hasUserVoted(long debateId, long userId);
 
     DebateVote getUserVote(long debateid, long userid);
-
-    int getForVotesCount(long debateid);
-
-    int getAgainstVotesCount(long debateid);
 }
