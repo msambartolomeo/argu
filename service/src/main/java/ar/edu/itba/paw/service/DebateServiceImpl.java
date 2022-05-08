@@ -128,12 +128,17 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public void closeDebate(long id, String username) {
+    public void startConclusion(long id, String username) {
         PublicDebate debate = getPublicDebateById(id).orElseThrow(DebateNotFoundException::new);
 
-        if(!(username.equals(debate.getCreatorUsername()) || username.equals(debate.getOpponentUsername())))
-            throw new UnauthorizedUserException();
+        if (debate.getDebateStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreatorUsername()) || username.equals(debate.getOpponentUsername())))
+            throw new ForbiddenPostException(); // TODO change to ForbiddenDebate ?
 
-        debateDao.closeDebate(id);
+        debateDao.changeDebateStatus(id, DebateStatus.CLOSING);
+    }
+
+    @Override
+    public void closeDebate(long id) {
+        debateDao.changeDebateStatus(id, DebateStatus.CLOSED);
     }
 }

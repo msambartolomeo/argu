@@ -88,7 +88,7 @@ public class DebateController {
             throw new UnauthorizedUserException();
         }
 
-        debateService.closeDebate(Long.parseLong(debateId), auth.getName());
+        debateService.startConclusion(Long.parseLong(debateId), auth.getName());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 

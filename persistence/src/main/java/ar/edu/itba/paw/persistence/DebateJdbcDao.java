@@ -185,8 +185,14 @@ public class DebateJdbcDao implements DebateDao {
             params.add(DebateCategory.getFromCategory(DebateCategory.valueOf(category.toUpperCase())));
         }
         if (status != null) {
-            queryString.append(" AND status = ?");
+            // TODO buscar mejor solucion (si busco por open necesito tambien ver los que estan closing) (o sino diferenciar la busqueda pero me parece raro)
             params.add(DebateStatus.getFromStatus(DebateStatus.valueOf(status.toUpperCase())));
+            if (status.equals("open")) {
+                queryString.append(" AND (status = ? OR status = ?)");
+                params.add(DebateStatus.getFromStatus(DebateStatus.CLOSING));
+            } else {
+                queryString.append(" AND status = ?");
+            }
         }
         if (date != null) {
             LocalDateTime dateTime = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).atStartOfDay();
@@ -238,7 +244,7 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public void closeDebate(long id) {
-        jdbcTemplate.update("UPDATE debates SET status = ? WHERE debateid = ?", DebateStatus.getFromStatus(DebateStatus.CLOSED), id);
+    public void changeDebateStatus(long id, DebateStatus status) {
+        jdbcTemplate.update("UPDATE debates SET status = ? WHERE debateid = ?", DebateStatus.getFromStatus(status), id);
     }
 }

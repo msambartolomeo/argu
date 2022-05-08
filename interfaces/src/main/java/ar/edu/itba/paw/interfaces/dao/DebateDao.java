@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces.dao;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.DebateVote;
 
 import java.time.LocalDateTime;
@@ -38,5 +39,5 @@ public interface DebateDao {
 
     DebateVote getUserVote(long debateid, long userid);
 
-    void closeDebate(long id);
+    void changeDebateStatus(long id, DebateStatus status);
 }

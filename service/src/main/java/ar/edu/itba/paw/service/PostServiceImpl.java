@@ -70,7 +70,7 @@ public class PostServiceImpl implements PostService {
                     break;
                 case CONCLUSION:
                     status = ArgumentStatus.CONCLUSION;
-                    // TODO: change debate status to CLOSED
+                    debateService.closeDebate(debateId);
                     break;
                 default:
                     throw new ForbiddenPostException();
