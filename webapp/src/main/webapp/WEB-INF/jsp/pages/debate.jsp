@@ -98,7 +98,7 @@
             <c:if test="${debate.creatorUsername != null && debate.opponentUsername != null}">
                 <div class="card vote-section">
                     <c:choose>
-                        <c:when test="${!hasVoted}">
+                        <c:when test="${userVote == null}">
                             <h5>Who is the winner of the debate?</h5>
                             <div class="vote-buttons">
                                     <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>

@@ -26,8 +26,6 @@ public interface DebateService {
     void addVote(long debateId, String username, DebateVote vote);
     void removeVote(long debateId, String username);
 
-    Boolean hasUserVoted(long debateid, String username);
-
     String getUserVote(long debateid, String username);
 
 }

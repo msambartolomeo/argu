@@ -113,14 +113,10 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public Boolean hasUserVoted(long debateid, String username) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        return debateDao.hasUserVoted(debateid, user.getUserId());
-    }
-
-    @Override
     public String getUserVote(long debateid, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        if(!debateDao.hasUserVoted(debateid, user.getUserId()))
+            return null;
         DebateVote debateVote = debateDao.getUserVote(debateid, user.getUserId());
         PublicDebate debate = debateDao.getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
 

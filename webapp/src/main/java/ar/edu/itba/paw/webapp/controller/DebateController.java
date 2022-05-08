@@ -69,11 +69,9 @@ public class DebateController {
         mav.addObject("total_pages", postService.getPostsByDebateCount(debateIdNum));
 
         if(auth != null && auth.getPrincipal() != null) {
-            boolean hasVoted = debateService.hasUserVoted(debateIdNum, auth.getName());
             mav.addObject("isSubscribed", debateService.isUserSubscribed(auth.getName(), debateIdNum));
-            mav.addObject("hasVoted", hasVoted);
             mav.addObject("posts", postService.getPublicPostsByDebateWithIsLiked(debateIdNum, auth.getName(), pageNum));
-            if(hasVoted) mav.addObject("userVote", debateService.getUserVote(debateIdNum, auth.getName()));
+            mav.addObject("userVote", debateService.getUserVote(debateIdNum, auth.getName()));
         } else {
             mav.addObject("posts", postService.getPublicPostsByDebate(debateIdNum, pageNum));
         }
