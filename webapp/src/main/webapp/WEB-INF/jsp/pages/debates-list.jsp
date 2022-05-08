@@ -13,6 +13,9 @@
     <div class="debates-separator">
         <div class="category-list z-depth-3">
             <h2><spring:message code="pages.debates-list.categories"/></h2>
+            <a href="<c:url value="/debates" />" class="waves-effect btn-large badge-margin category-button ${ empty param.category ? "selected-button" : ""}">
+                <spring:message code="category.all"/>
+            </a>
             <c:forEach items="${categories}" var="category">
                 <a href="<c:url value="?category=${category.name}" />" class="waves-effect btn-large badge-margin category-button ${category.name == param.category ? "selected-button" : ""}">
                     <spring:message code="category.${category.name}"/>
