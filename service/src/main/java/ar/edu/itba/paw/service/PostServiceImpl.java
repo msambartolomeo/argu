@@ -49,14 +49,14 @@ public class PostServiceImpl implements PostService {
             long imageId = imageService.createImage(image);
             createdPost = postDao.create(user.getUserId(), debateId, content, imageId);
         }
-        sendEmailToSubscribedUsers(debateId, user.getUserId());
+        sendEmailToSubscribedUsers(debateId, user.getUserId(), user.getUsername(), debate.getName());
         return createdPost;
     }
 
-    private void sendEmailToSubscribedUsers(long debateId, long userId) {
+    private void sendEmailToSubscribedUsers(long debateId, long userId, String fromUsername, String debateName) {
         for (User user : userService.getSubscribedUsersByDebate(debateId)) {
             if (user.getUserId() != userId) // Si no es el usuario que creo el post
-                emailService.notifyNewPost(user.getEmail());
+                emailService.notifyNewPost(user.getEmail(), fromUsername, debateId, debateName);
         }
     }
 
