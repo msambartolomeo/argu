@@ -68,11 +68,11 @@
                         </c:otherwise>
                     </c:choose>
                 </sec:authorize>
-                <div class="chip"><spring:message code="category.${debate.debateCategory.name}"/></div>
-                <div class="chip"><spring:message code="components.debate-created-on"/> ${debate.createdDate}</div>
-                <div class="chip"><spring:message code="status.${debate.debateStatus.name}"/></div>
-                <div class="chip"><spring:message code="page.debate.subscribed"
-                                                  arguments="${debate.subscribedUsers}"/></div>
+                <a class="chip btn" href="<c:url value="/debates?category=${debate.debateCategory.name}"/>"><spring:message code="category.${debate.debateCategory.name}"/></a>
+                <button class="chip btn" onclick="dateFilter('${debate.createdDate}')"><spring:message code="components.debate-created-on"/> ${debate.createdDate}</button>
+                <a class="chip btn" href="<c:url value="/debates?status=${debate.debateStatus.name == 'closed' ? 'closed' : 'open'}"/>"><spring:message code="status.${debate.debateStatus.name}"/></a>
+                <a class="chip btn" href="<c:url value="/debates?order=subs_desc"/>"><spring:message code="page.debate.subscribed"
+                                                  arguments="${debate.subscribedUsers}"/></a>
             </div>
         </div>
         <c:if test="${debate.imageId != 0}">
