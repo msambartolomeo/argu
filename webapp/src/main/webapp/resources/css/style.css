@@ -7,6 +7,8 @@
     --champagne-pink: #f1ddcf;
     --charcoal: #364156;
     --selected-button: #4076bd;
+    --forColor: #abcbe5;
+    --againstColor: var(--champagne-pink);
 }
 
 body {
@@ -480,7 +482,6 @@ div.category-list div.collection.with-header {
     width: 80%;
     margin: 1% 10%;
     border-radius: 15px;
-    background: var(--champagne-pink);
     color: black;
     padding: 2% 2% 5%;
     text-align: left;
@@ -489,6 +490,14 @@ div.category-list div.collection.with-header {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+}
+
+.speech-bubble.sb-right {
+    background: var(--againstColor);
+}
+
+.speech-bubble.sb-left {
+    background: var(--forColor);
 }
 
 .comment-bubble>img {
@@ -508,9 +517,9 @@ div.category-list div.collection.with-header {
     width: 0;
     height: 0;
     position: absolute;
-    border-left: 15px solid var(--champagne-pink);
+    border-left: 15px solid var(--againstColor);
     border-right: 15px solid transparent;
-    border-top: 15px solid var(--champagne-pink);
+    border-top: 15px solid var(--againstColor);
     border-bottom: 15px solid transparent;
     right: -16px;
     top: 0;
@@ -524,8 +533,8 @@ div.category-list div.collection.with-header {
     height: 0;
     position: absolute;
     border-left: 15px solid transparent;
-    border-right: 15px solid var(--champagne-pink);
-    border-top: 15px solid var(--champagne-pink);
+    border-right: 15px solid var(--forColor);
+    border-top: 15px solid var(--forColor);
     border-bottom: 15px solid transparent;
     left: -16px;
     top: 0;

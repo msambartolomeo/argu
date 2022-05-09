@@ -17,7 +17,7 @@
             <div class="debate-text-holder">
                 <div class="debate-info-holder">
                     <h3 class="debate-title word-wrap"><c:out value="${debate.name}"/></h3>
-                    <c:if test="${debate.debateStatus.name != 'closed' && (pageContext.request.userPrincipal.name == debate.creatorUsername || pageContext.request.userPrincipal.name == debate.opponentUsername)}">
+                    <c:if test="${debate.debateStatus.name == 'open' && (pageContext.request.userPrincipal.name == debate.creatorUsername || pageContext.request.userPrincipal.name == debate.opponentUsername)}">
                         <c:url var="closeDebatePath" value="/debates/${debate.debateId}/close"/>
                         <form:form method="post" action="${closeDebatePath}">
                             <button type="submit" class="btn waves-effect">
@@ -41,8 +41,8 @@
                             </c:otherwise>
                         </c:choose>
                     </c:set>
-                    <h6><spring:message code="pages.debate.for" arguments="${creator}"/></h6>
-                    <h6><spring:message code="pages.debate.against" arguments='${opponent}'/></h6>
+                    <h6><b><spring:message code="pages.debate.for"/></b> ${creator}</h6>
+                    <h6><b><spring:message code="pages.debate.against"/></b> ${opponent}</h6>
                 </c:if>
             </div>
             <div class="debate-footer">
@@ -88,7 +88,18 @@
 
     <div class="z-depth-3 comment-list">
         <c:if test="${posts.size() > 0}">
-            <c:forEach var="post" items="${posts}">
+            <c:forEach var="post" items="${posts}" varStatus="status">
+                <c:choose>
+                    <c:when test="${post.status.name == 'introduction' && status.first}">
+                        <h5 class="center">TODO mensaje de que es introduccion</h5>
+                    </c:when>
+                    <c:when test="${post.status.name == 'argument' && (posts[status.index - 1].status.name == 'introduction' || status.index.first)}">
+                        <h5 class="center">TODO mensaje de que es argumentacion</h5>
+                    </c:when>
+                    <c:when test="${(debate.debateStatus.name == 'closing' && post.status.name == 'conclusion') || (debate.debateStatus.name == 'closed' && post.status.name == 'conclusion' && (status.index == 0 || posts[status.index - 1].status.name == 'argument'))}">
+                        <h5 class="center">TODO mensaje de que es conclusion</h5>
+                    </c:when>
+                </c:choose>
                 <div class="list-item">
                     <c:set var="post" value="${post}" scope="request"/>
                     <%@include file="../components/comment.jsp" %>
@@ -130,22 +141,22 @@
                 </div>
             </div>
         </c:if>
-        <sec:authorize access="hasAuthority('USER')">
-            <c:if test="${debate.creatorUsername != null && debate.opponentUsername != null}">
-                <div class="card vote-section">
+        <c:choose>
+            <c:when test="${pageContext.request.userPrincipal.name != null && debate.creatorUsername != null && debate.opponentUsername != null}">
+                <div class="card vote-section no-top-margin">
                     <c:choose>
                         <c:when test="${userVote == null}">
                             <h5><spring:message code="pages.debate.who-wins"/></h5>
                             <div class="vote-buttons">
-                                    <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>
-                                    <form:form method="post" action="${voteForPath}">
-                                        <button class="btn waves-effect" type="submit">${debate.creatorUsername}</button>
-                                    </form:form>
+                                <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>
+                                <form:form method="post" action="${voteForPath}">
+                                    <button class="btn waves-effect" type="submit">${debate.creatorUsername}</button>
+                                </form:form>
 
-                                    <c:url var="voteAgainstPath" value="/debates/${debate.debateId}/vote/against"/>
-                                    <form:form method="post" action="${voteAgainstPath}">
-                                        <button class="btn waves-effect" type="submit">${debate.opponentUsername}</button>
-                                    </form:form>
+                                <c:url var="voteAgainstPath" value="/debates/${debate.debateId}/vote/against"/>
+                                <form:form method="post" action="${voteAgainstPath}">
+                                    <button class="btn waves-effect" type="submit">${debate.opponentUsername}</button>
+                                </form:form>
                             </div>
                         </c:when>
                         <c:otherwise>
@@ -172,32 +183,34 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
-            </c:if>
-        </sec:authorize>
-        <div class="card vote-section no-top-margin">
-            <c:choose>
-                <c:when test="${debate.forCount + debate.againstCount > 0}">
-                    <h5>Votes</h5>
-                    <div class="progress red">
-                        <c:if test="${debate.forCount > 0}">
-                            <div class="votes-format blue" style="width: ${debate.forCount}%">
-                                <span>${debate.creatorUsername}</span>
-                                <span>${debate.forCount}%</span>
+            </c:when>
+            <c:otherwise>
+                <div class="card vote-section no-top-margin">
+                    <c:choose>
+                        <c:when test="${debate.forCount + debate.againstCount > 0}">
+                            <h5>Votes</h5>
+                            <div class="progress red">
+                                <c:if test="${debate.forCount > 0}">
+                                    <div class="votes-format blue" style="width: ${debate.forCount}%">
+                                        <span>${debate.creatorUsername}</span>
+                                        <span>${debate.forCount}%</span>
+                                    </div>
+                                </c:if>
+                                <c:if test="${debate.againstCount > 0}">
+                                    <div class="votes-format" style="width: ${debate.againstCount}%">
+                                        <span>${debate.opponentUsername}</span>
+                                        <span>${debate.againstCount}%</span>
+                                    </div>
+                                </c:if>
                             </div>
-                        </c:if>
-                        <c:if test="${debate.againstCount > 0}">
-                            <div class="votes-format" style="width: ${debate.againstCount}%">
-                                <span>${debate.opponentUsername}</span>
-                                <span>${debate.againstCount}%</span>
-                            </div>
-                        </c:if>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <h5 class="center">No votes yet</h5>
-                </c:otherwise>
-            </c:choose>
-        </div>
+                        </c:when>
+                        <c:otherwise>
+                            <h5 class="center">No votes yet</h5>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 
 </div>

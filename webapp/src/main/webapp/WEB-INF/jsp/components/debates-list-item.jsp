@@ -11,7 +11,7 @@
                 <h5 class="debate-title word-wrap"><c:out value="${debate.name}"/></h5>
                 <c:if test="${debate.creatorUsername != null}">
                     <c:set var="creator"><c:out value="${debate.creatorUsername}"/></c:set>
-                    <h6><spring:message code="components.debate-list-item.creator" arguments="${creator}"/></h6>
+                    <h6><b><spring:message code="components.debate-list-item.creator"/></b> ${creator}</h6>
                 </c:if>
             </div>
             <div class="debate-footer">
