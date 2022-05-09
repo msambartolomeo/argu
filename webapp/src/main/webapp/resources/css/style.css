@@ -55,10 +55,6 @@ a.card {
     margin: 1% 3%;
 }
 
-.word-wrap {
-    word-wrap: anywhere;
-}
-
 div.input-field.margin-left label {
     color: white !important;
 }
@@ -359,7 +355,6 @@ div.category-list div.collection.with-header {
 .debate-title {
     padding-bottom: 1%;
     margin: 0;
-    text-align: left !important;
 }
 
 .image-width {
