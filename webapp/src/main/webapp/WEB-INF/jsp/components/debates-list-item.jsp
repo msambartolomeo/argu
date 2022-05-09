@@ -8,7 +8,7 @@
     <div class="card-content debate-info-holder">
         <div class="debate-holder-separator">
             <div class="debate-text-holder">
-                <h3 class="debate-title word-wrap"><c:out value="${debate.name}"/></h3>
+                <h5 class="debate-title word-wrap"><c:out value="${debate.name}"/></h5>
                 <c:if test="${debate.creatorUsername != null}">
                     <c:set var="creator"><c:out value="${debate.creatorUsername}"/></c:set>
                     <h6><spring:message code="components.debate-list-item.creator" arguments="${creator}"/></h6>

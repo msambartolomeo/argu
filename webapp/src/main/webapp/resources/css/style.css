@@ -53,6 +53,72 @@ a.card {
     word-wrap: anywhere;
 }
 
+div.input-field.margin-left label {
+    color: white !important;
+}
+
+div.input-field div.select-wrapper {
+    color: white !important;
+}
+
+div.input-field div.select-wrapper ul.dropdown-content li.selected {
+    background-color: var(--primary-color) !important;
+}
+
+div.input-field div.select-wrapper ul.dropdown-content li span {
+    color: black !important;
+}
+
+div.input-field.margin-left div.select-wrapper input {
+    color: white !important;
+}
+
+div.input-field.margin-left div.select-wrapper input.select-dropdown.dropdown-trigger {
+    color: white !important;
+}
+
+div.input-field.margin-left div.select-wrapper svg.caret path {
+    color: white !important;
+}
+
+div.input-field div.select-wrapper ul.dropdown-content li.selected span {
+    color: white !important;
+}
+
+div.input-field div.select-wrapper ul.dropdown-content.select-dropdown {
+    border-color: white !important;
+    border-width: thick;
+}
+
+div.datepicker-date-display {
+    background-color: var(--primary-color) !important;
+}
+
+div.input-field.margin-left.flex input::placeholder {
+    color: white !important;
+}
+
+div.datepicker-footer div.confirmation-btns button {
+    color: black !important;
+}
+
+td.is-today {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+td.is-selected {
+    background-color: var(--secondary-color) !important;
+    color: black !important;
+}
+
+div.order-div {
+    display: flex;
+    /*align-items: center;*/
+    align-self: center;
+}
+
+
 /* NavBar */
 
 .nav-bar {
@@ -191,13 +257,18 @@ a.card {
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin: 1% auto;
+    margin: 1% auto 1% 9%;
     width: 15%;
     height: fit-content;
 }
 
 .selected-button {
     background-color: var(--selected-button);
+}
+
+div.category-list div.collection.with-header {
+    border-color: transparent !important;
+    border-collapse: collapse !important;
 }
 
 .collection a.active {
@@ -216,12 +287,12 @@ a.card {
 }
 
 .debate-list {
-    background: var(--white);
-    border-radius: 10px;
+    background: transparent;
+    /*border-radius: 10px;*/
     display: flex;
-    margin: 1% auto;
+    margin: 1% 9% 1% auto;
     flex-direction: column;
-    width: 70%;
+    width: 60%;
     height: fit-content;
 }
 
@@ -573,4 +644,13 @@ a.card {
 
 .no-borders {
     border-collapse: collapse;
+}
+
+div.card.debate-list-header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--primary-color);
+    margin: 1% 3%;
+    color: white !important;
 }

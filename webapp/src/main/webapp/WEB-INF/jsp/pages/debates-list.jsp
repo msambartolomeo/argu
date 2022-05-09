@@ -12,7 +12,7 @@
     <%@include file="../components/navbar.jsp" %>
     <div class="debates-separator">
         <div class="category-list z-depth-3">
-            <ul class="collection with header">
+            <ul class="collection with-header">
                 <li class="collection-header"><h5><spring:message code="pages.debates-list.categories"/></h5></li>
                 <li>
                     <a href="<c:url value="/debates" />" class="collection-item waves-effect badge-margin category-button ${ empty
@@ -32,39 +32,45 @@
                 </c:forEach>
             </ul>
         </div>
-        <div class="z-depth-3 debate-list">
-            <c:if test="${param.search != null}">
-                <h3 class="center"><spring:message code="pages.debates-list.search-results" arguments="${param.search}"/></h3>
-            </c:if>
-            <c:if test="${param.category != null}">
-                <spring:message code="category.${param.category}" var="categoryCode"/>
-                <h3 class="center"><spring:message code="pages.debates-list.category-results" arguments="${categoryCode}"/></h3>
-            </c:if>
-            <c:if test="${param.search == null && param.category == null}">
-                <h3 class="center"><spring:message code="pages.debates-list.all-debates"/></h3>
-            </c:if>
+        <div class="debate-list">
 
-            <div class="order-div">
-                <div class="input-field margin-left">
-                    <select id="select-order" onchange="addParamToUrlAndRedirect('order', this.value)">
-                        <c:forEach items="${orders}" var="order">--%>
-                            <option value="${order.name}" ${order.name == param.order ? "selected" : ""}><spring:message code="orders.${order.name}"/></option>
-                        </c:forEach>
-                    </select>
-                    <label for="select-order"><spring:message code="pages.debates-list.order-by"/></label>
-                </div>
-                <div class="input-field margin-left">
-                    <select id="select-status" onchange="addParamToUrlAndRedirect('status', this.value)">
-                        <option value="" selected ><spring:message code="status.all"/></option>
-                        <option value="open" ${ 'open' == param.status ? "selected" : ""}><spring:message code="status.open"/></option>
-                        <option value="closed" ${ 'closed' == param.status ? "selected" : ""}><spring:message code="status.closed"/></option>
-                    </select>
-                    <label for="select-status"><spring:message code="pages.debates-list.status"/></label>
-                </div>
-                <div class="input-field margin-left flex">
-                    <label for="datepicker"><spring:message code="pages.debates-list.created-date"/></label>
-                    <input placeholder="date" id="datepicker" type="text" class="datepicker" value="${param.date}" onchange="addParamToUrlAndRedirect('date', this.value)">
-                    <i class="material-icons x" onclick="addParamToUrlAndRedirect('date', '')">close</i>
+            <div class="card debate-list-header">
+                <c:if test="${param.search != null}">
+                    <h5 class="center"><spring:message code="pages.debates-list.search-results" arguments="${param.search}"/></h5>
+                </c:if>
+                <c:if test="${param.category != null}">
+                    <spring:message code="category.${param.category}" var="categoryCode"/>
+                    <h4 class="center"><spring:message code="pages.debates-list.category-results" arguments="${categoryCode}"/></h4>
+                </c:if>
+                <c:if test="${param.search == null && param.category == null}">
+                    <h4 class="center"><spring:message code="pages.debates-list.all-debates"/></h4>
+                </c:if>
+
+                <div class="order-div">
+                    <div class="input-field margin-left">
+                        <select class="select-order" id="select-order" onchange="addParamToUrlAndRedirect('order', this.value)">
+    <%--                        <option value="" disabled selected>--%>
+    <%--                            <spring:message code="category.select-category"/>--%>
+    <%--                        </option>--%>
+                            <c:forEach items="${orders}" var="order">--%>
+                                <option value="${order.name}" ${order.name == param.order ? "selected" : ""}><spring:message code="orders.${order.name}"/></option>
+                            </c:forEach>
+                        </select>
+                        <label for="select-order"><spring:message code="pages.debates-list.order-by"/></label>
+                    </div>
+                    <div class="input-field margin-left">
+                        <select id="select-status" onchange="addParamToUrlAndRedirect('status', this.value)">
+                            <option value="" selected ><spring:message code="status.all"/></option>
+                            <option value="open" ${ 'open' == param.status ? "selected" : ""}><spring:message code="status.open"/></option>
+                            <option value="closed" ${ 'closed' == param.status ? "selected" : ""}><spring:message code="status.closed"/></option>
+                        </select>
+                        <label for="select-status"><spring:message code="pages.debates-list.status"/></label>
+                    </div>
+                    <div class="input-field margin-left flex">
+                        <label for="datepicker"><spring:message code="pages.debates-list.created-date"/></label>
+                        <input placeholder="<spring:message code="filter.by.date"/>" id="datepicker" type="text" class="datepicker" value="${param.date}" onchange="addParamToUrlAndRedirect('date', this.value)">
+                        <i class="material-icons x" onclick="addParamToUrlAndRedirect('date', '')">close</i>
+                    </div>
                 </div>
             </div>
 
