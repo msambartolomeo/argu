@@ -2,13 +2,17 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.enums.UserRole;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -16,43 +20,31 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {
 
-    private final long USER_ID = 1;
-    private final String USER_EMAIL = "email@test.com";
-
+    private final static long USER_ID = 1;
+    private final static String USER_USERNAME = "username";
+    private final static String USER_PASSWORD = "password";
+    private final static String USER_EMAIL = "test@test.com";
+    private final static LocalDate USER_DATE = LocalDate.parse("2022-01-01");
+    private final static UserRole USER_ROLE = UserRole.USER;
     @InjectMocks
     private UserServiceImpl userService = new UserServiceImpl();
     @Mock
     private UserDao userDao;
-
-    //TODO: Change tests
-//    @Test
-//    public void testCreateUser() {
-//        User user = new User(USER_ID, USER_EMAIL);
-//        Mockito.when(userDao.create(Mockito.anyString())).thenReturn(user);
-//
-//
-//        User u = userService.create(USER_EMAIL);
-//
-//        assertEquals(user, u);
-//    }
-//
-//    @Test
-//    public void testGetUserById() {
-//        User user = new User(USER_ID, USER_EMAIL);
-//        Mockito.when(userDao.getUserById(USER_ID)).thenReturn(Optional.of(user));
-//
-//        Optional<User> u = userService.getUserById(USER_ID);
-//
-//        assertTrue(u.isPresent());
-//        assertEquals(user, u.get());
-//    }
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @Test
-    public void testGetUserByIdDoesntExist() {
-        Mockito.when(userDao.getUserById(USER_ID)).thenReturn(Optional.empty());
+    public void testCreateUserNew() {
+        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
+        Mockito.when(userDao.create(Mockito.anyString(),Mockito.anyString(),Mockito.anyString())).thenReturn(user);
+        Mockito.when(userDao.getUserByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn(USER_PASSWORD);
 
-        Optional<User> u = userService.getUserById(USER_ID);
+        User u = userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
 
-        assertFalse(u.isPresent());
+        assertEquals(user.getUsername(), u.getUsername());
+        assertEquals(user.getPassword(), u.getPassword());
+        assertEquals(user.getEmail(), u.getEmail());
+        assertEquals(user.getRole(), u.getRole());
     }
 }
