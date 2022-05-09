@@ -90,8 +90,9 @@ public class PostServiceImpl implements PostService {
 
     private void sendEmailToSubscribedUsers(long debateId, long userId, String fromUsername, String debateName) {
         for (User user : userService.getSubscribedUsersByDebate(debateId)) {
-            if (user.getUserId() != userId) // Si no es el usuario que creo el post
+            if (user.getUserId() != userId) { // Si no es el usuario que creo el post
                 emailService.notifyNewPost(user.getEmail(), fromUsername, debateId, debateName);
+            }
         }
     }
 
