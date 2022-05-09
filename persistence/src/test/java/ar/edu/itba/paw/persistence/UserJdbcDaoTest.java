@@ -49,7 +49,7 @@ public class UserJdbcDaoTest {
     private final static String DEBATE_NAME = "Debate Name Test";
     private final static String DEBATE_DESCRIPTION = "Debate Description Test";
     private final static String DEBATE_DATE = LocalDateTime.parse("2022-01-01T00:00:00", DateTimeFormatter.ISO_DATE_TIME)
-            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS"));
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
     private final DebateCategory DEBATE_CATEGORY = DebateCategory.OTHER;
     private final static DebateStatus DEBATE_STATUS = DebateStatus.OPEN;
     private final static String DEBATES_TABLE = "debates";
@@ -256,7 +256,5 @@ public class UserJdbcDaoTest {
         Number imageKey = jdbcInsertImages.executeAndReturnKey(imageData);
 
         userDao.updateImage(userKey.longValue(), imageKey.longValue());
-
-
     }
 }
