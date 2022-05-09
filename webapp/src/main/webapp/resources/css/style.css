@@ -20,6 +20,10 @@ body {
     font-size: 12px;
 }
 
+.collection {
+    border: none;
+}
+
 .link:hover {
     text-decoration: underline;
 }
