@@ -176,7 +176,7 @@ public class DebateJdbcDao implements DebateDao {
             }
         }
         if (date != null) {
-            LocalDateTime dateTime = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).atStartOfDay();
+            LocalDateTime dateTime = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")).atStartOfDay();
             queryString.append(" AND created_date >= ?");
             params.add(dateTime);
             queryString.append(" AND created_date <= ?");

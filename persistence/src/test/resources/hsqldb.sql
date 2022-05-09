@@ -37,7 +37,8 @@ CREATE TABLE IF NOT EXISTS posts
     userid INTEGER REFERENCES users NOT NULL,
     content TEXT NOT NULL,
     created_date timestamp,
-    imageid INTEGER REFERENCES images(imageid) ON DELETE SET NULL
+    imageid INTEGER REFERENCES images(imageid) ON DELETE SET NULL,
+    status INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS subscribed
@@ -55,7 +56,7 @@ CREATE TABLE IF NOT EXISTS likes
 );
 
 CREATE VIEW public_posts AS
-SELECT posts.postid, users.username, posts.debateid, posts.content, COUNT(likes.userid) AS likes, posts.created_date, posts.imageid
+SELECT posts.postid, users.username, posts.debateid, posts.content, COUNT(likes.userid) AS likes, posts.created_date, posts.imageid, posts.status
 FROM posts LEFT JOIN likes ON posts.postid = likes.postid LEFT JOIN users ON posts.userid = users.userid
 GROUP BY posts.postid, users.username;
 

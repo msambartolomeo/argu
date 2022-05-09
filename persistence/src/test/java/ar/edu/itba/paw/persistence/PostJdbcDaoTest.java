@@ -4,6 +4,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.model.Post;
 import ar.edu.itba.paw.model.PublicPost;
 import ar.edu.itba.paw.model.PublicPostWithUserLike;
+import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.UserRole;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import static org.junit.Assert.*;
@@ -38,6 +38,7 @@ public class PostJdbcDaoTest {
     private final static String POST_CONTENT = "Post Content";
     private final static String POST_DATE = LocalDateTime.parse("2022-01-01T00:00:00")
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+    private final static ArgumentStatus POST_STATUS = ArgumentStatus.ARGUMENT;
     private final static int POST_PAGE = 0;
 
 
@@ -60,7 +61,7 @@ public class PostJdbcDaoTest {
     private final static String DEBATE_DATE = LocalDateTime.parse("2022-01-01T00:00:00")
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
     private final static String PUBLIC_DEBATE_DATE = LocalDateTime.parse(DEBATE_DATE, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
-            .format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yy"));
+            .format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yy"));
     private final DebateCategory DEBATE_CATEGORY = DebateCategory.OTHER;
     private final static DebateStatus DEBATE_STATUS = DebateStatus.OPEN;
 
@@ -131,7 +132,7 @@ public class PostJdbcDaoTest {
 
     @Test
     public void testCreatePost() {
-        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, null, null);
+        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, null, POST_STATUS);
 
         assertNotNull(post);
         assertEquals(postUserId, post.getUserId());
@@ -146,7 +147,7 @@ public class PostJdbcDaoTest {
         imageData.put("data", IMAGE_DATA);
         Long imageId = jdbcInsertImages.executeAndReturnKey(imageData).longValue();
 
-        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, imageId, null);
+        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, imageId, POST_STATUS);
 
         assertNotNull(post);
         assertEquals(postUserId, post.getUserId());
