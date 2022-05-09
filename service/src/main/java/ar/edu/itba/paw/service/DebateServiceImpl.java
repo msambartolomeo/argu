@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.interfaces.services.DebateService;
+import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
@@ -29,18 +30,22 @@ public class DebateServiceImpl implements DebateService {
     private ImageService imageService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private EmailService emailService;
 
     @Transactional
     @Override
     public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] imageArray, DebateCategory category) {
         User creator = userService.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
         User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
-        if (imageArray.length == 0)
-            return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
-        else {
-            Image image = imageService.createImage(imageArray);
-            return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), image.getId(), category);
-        }
+        Debate createdDebate;
+        if (image.length == 0)
+            createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
+        else
+            createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image)
+                , category);
+        emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate.getDebateId(), createdDebate.getName());
+        return createdDebate;
     }
 
     @Override
