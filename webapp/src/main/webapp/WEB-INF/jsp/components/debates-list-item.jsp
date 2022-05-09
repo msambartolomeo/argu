@@ -4,7 +4,7 @@
 
 <html>
 <body>
-<a class="card black-text" href="<c:url value="/debates/${debate.debateId}"/>">
+<a class="card black-text hoverable" href="<c:url value="/debates/${debate.debateId}"/>">
     <div class="card-content debate-info-holder">
         <div class="debate-holder-separator">
             <div class="debate-text-holder">

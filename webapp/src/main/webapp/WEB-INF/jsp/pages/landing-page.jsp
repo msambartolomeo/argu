@@ -44,6 +44,33 @@
         </div>
 
         <div class="parallax-container">
+            <div class="container">
+                <div class="section email-format">
+                    <img class="image-size" src="<c:url value="/resources/images/create-participate-debate.png"/>">
+                    <div class="right-text">
+                        <h2 class="light">Be part of debates!</h2>
+                        <p>Create your own debate or participate in another one.</p>
+                        <p>Note that only moderators can use this feature.</p>
+                        <p>If you aren't a moderator yet, become one by clicking the button above!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="parallax"><img src="<c:url value="/resources/images/conference-debate.webp"/>" alt="Unsplashed background img 2"></div>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <div>
+                    <h2 class="light">Engage in debates</h2>
+                    <p>Subscribe to receive notifications of the debate you're interested in.</p>
+                    <p>Like arguments when you agree with the debater.</p>
+                    <p>Vote for the one you consider is winning the debate!</p>
+                </div>
+                <img class="image-size" src="<c:url value="/resources/images/subscribe-like-vote.png"/>" alt="Subscribe, like and vote">
+            </div>
+        </div>
+
+        <div class="parallax-container">
             <div class="section no-pad-bot">
                 <div class="container">
                     <h2 class="header center light">
