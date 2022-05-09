@@ -48,10 +48,10 @@
                 <div class="section email-format">
                     <img class="image-size" src="<c:url value="/resources/images/create-participate-debate.png"/>">
                     <div class="right-text">
-                        <h2 class="light">Be part of debates!</h2>
-                        <p>Create your own debate or participate in another one.</p>
-                        <p>Note that only moderators can use this feature.</p>
-                        <p>If you aren't a moderator yet, become one by clicking the button above!</p>
+                        <h2 class="light"><spring:message code="pages.landing-page.participate"/></h2>
+                        <p><spring:message code="pages.landing-page.create-debate"/></p>
+                        <p><spring:message code="pages.landing-page.only-moderators"/></p>
+                        <p><spring:message code="pages.landing-page.become-moderator"/></p>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <div class="section">
                 <div>
                     <h2 class="light">
-                        <spring:message code="pages.landing-page.engage-debates"/>
+                        <spring:message code="pages.landing-page.choose-favorites"/>
                     </h2>
                     <p><spring:message code="pages.landing-page.subscribe"/></p>
                     <p><spring:message code="pages.landing-page.like"/></p>
