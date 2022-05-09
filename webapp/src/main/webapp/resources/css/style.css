@@ -359,6 +359,7 @@ div.category-list div.collection.with-header {
 .debate-title {
     padding-bottom: 1%;
     margin: 0;
+    text-align: left !important;
 }
 
 .image-width {
