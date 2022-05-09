@@ -183,12 +183,27 @@ a.card {
     align-items: center;
     flex-direction: column;
     margin: 1% auto;
-    width: 20%;
+    width: 15%;
     height: fit-content;
 }
 
 .selected-button {
     background-color: var(--selected-button);
+}
+
+.collection a.active {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.collection a {
+    color: black !important;
+}
+
+.collection li.collection-header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .debate-list {
@@ -203,7 +218,7 @@ a.card {
 
 .category-button {
     border-radius: 10px;
-    width: 90%;
+    width: 100%;
     margin: 1em 0;
 }
 

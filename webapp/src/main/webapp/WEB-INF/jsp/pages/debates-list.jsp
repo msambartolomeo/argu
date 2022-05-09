@@ -12,15 +12,25 @@
     <%@include file="../components/navbar.jsp" %>
     <div class="debates-separator">
         <div class="category-list z-depth-3">
-            <h2><spring:message code="pages.debates-list.categories"/></h2>
-            <a href="<c:url value="/debates" />" class="waves-effect btn-large badge-margin category-button ${ empty param.category ? "selected-button" : ""}">
-                <spring:message code="category.all"/>
-            </a>
-            <c:forEach items="${categories}" var="category">
-                <a href="<c:url value="?category=${category.name}" />" class="waves-effect btn-large badge-margin category-button ${category.name == param.category ? "selected-button" : ""}">
-                    <spring:message code="category.${category.name}"/>
-                </a>
-            </c:forEach>
+            <ul class="collection with header">
+                <li class="collection-header"><h5><spring:message code="pages.debates-list.categories"/></h5></li>
+                <li>
+                    <a href="<c:url value="/debates" />" class="collection-item waves-effect badge-margin category-button ${ empty
+                    param.category ? "active" : ""}">
+                        <spring:message code="category.all"/>
+                    </a>
+                </li>
+
+                <c:forEach items="${categories}" var="category">
+                    <li>
+                        <a href="<c:url value="?category=${category.name}" />"
+                           class="collection-item waves-effect badge-margin category-button ${category.name == param.category ?
+                           "active" : ""}">
+                            <spring:message code="category.${category.name}"/>
+                        </a>
+                    </li>
+                </c:forEach>
+            </ul>
         </div>
         <div class="z-depth-3 debate-list">
             <c:if test="${param.search != null}">
