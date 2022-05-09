@@ -61,10 +61,12 @@
         <div class="container">
             <div class="section">
                 <div>
-                    <h2 class="light">Engage in debates</h2>
-                    <p>Subscribe to receive notifications of the debate you're interested in.</p>
-                    <p>Like arguments when you agree with the debater.</p>
-                    <p>Vote for the one you consider is winning the debate!</p>
+                    <h2 class="light">
+                        <spring:message code="pages.landing-page.engage-debates"/>
+                    </h2>
+                    <p><spring:message code="pages.landing-page.subscribe"/></p>
+                    <p><spring:message code="pages.landing-page.like"/></p>
+                    <p><spring:message code="pages.landing-page.vote"/></p>
                 </div>
                 <img class="image-size" src="<c:url value="/resources/images/subscribe-like-vote.png"/>" alt="Subscribe, like and vote">
             </div>

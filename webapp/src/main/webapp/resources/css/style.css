@@ -235,8 +235,10 @@ div.order-div {
 }
 
 .image-size {
-    max-width: 30vh;
-    max-height: 30vh;
+    max-width: 200px;
+    max-height: 200px;
+    width: 30vh;
+    height: 30vh;
 }
 
 .page-footer {
