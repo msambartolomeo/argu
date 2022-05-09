@@ -408,8 +408,8 @@ public class EmailServiceImpl implements EmailService {
                     "\n" +
                     "</html>";
 
-//    private final String baseUrl = "http://pawserver.it.itba.edu.ar/paw-2022a-06/";
-    private final String baseUrl = "http://localhost:8080/";
+    private final String baseUrl = "http://pawserver.it.itba.edu.ar/paw-2022a-06/";
+//    private final String baseUrl = "http://localhost:8080/";
 
     @Async
     @Override
