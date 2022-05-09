@@ -91,13 +91,13 @@
             <c:forEach var="post" items="${posts}" varStatus="status">
                 <c:choose>
                     <c:when test="${post.status.name == 'introduction' && status.first}">
-                        <h5 class="center">TODO mensaje de que es introduccion</h5>
+                        <h5 class="center"><spring:message code="components.comment.introduction" /></h5>
                     </c:when>
                     <c:when test="${post.status.name == 'argument' && (posts[status.index - 1].status.name == 'introduction' || status.first)}">
-                        <h5 class="center">TODO mensaje de que es argumentacion</h5>
+                        <h5 class="center"><spring:message code="components.comment.argument" /></h5>
                     </c:when>
                     <c:when test="${(debate.debateStatus.name == 'closing' && post.status.name == 'conclusion') || (debate.debateStatus.name == 'closed' && post.status.name == 'conclusion' && (status.index == 0 || posts[status.index - 1].status.name == 'argument'))}">
-                        <h5 class="center">TODO mensaje de que es conclusion</h5>
+                        <h5 class="center"><spring:message code="components.comment.conclusion" /></h5>
                     </c:when>
                 </c:choose>
                 <div class="list-item">
@@ -146,7 +146,7 @@
                 <div class="card vote-section no-top-margin">
                     <c:choose>
                         <c:when test="${userVote == null}">
-                            <h5><spring:message code="pages.debate.who-wins"/></h5>
+                            <h5 class="center"><spring:message code="pages.debate.who-wins"/></h5>
                             <div class="vote-buttons">
                                 <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>
                                 <form:form method="post" action="${voteForPath}">
