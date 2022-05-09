@@ -22,7 +22,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
-    public long createImage(byte[] data) {
+    public Image createImage(byte[] data) {
         return imageDao.createImage(data);
     }
 

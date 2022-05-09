@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface ImageDao {
     Optional<Image> getImage(long id);
 
-    long createImage(byte[] data);
+    Image createImage(byte[] data);
 
     void deleteImage(long id);
 }

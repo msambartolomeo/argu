@@ -8,12 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostService {
-
-    Optional<Post> getPostById(long id);
     Post create(String username, long debateId, String content, byte[] image);
-    List<Post> getPostsByDebate(long debateId, int page);
     int getPostsByDebateCount(long debateId);
-    Optional<PublicPost> getPublicPostById(long id);
     List<PublicPost> getPublicPostsByDebate(long debateId, int page);
     void likePost(long postId, String username);
     void unlikePost(long postId, String username);

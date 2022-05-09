@@ -63,34 +63,6 @@ public class PostServiceImplTest {
 //        assertEquals(post, p);
 //    }
 
-    @Test
-    public void testGetPostByIdDoesntExist() {
-        Mockito.when(postDao.getPostById(Mockito.anyLong())).thenReturn(Optional.empty());
-
-        Optional<Post> p = postService.getPostById(POST_ID);
-
-        assertFalse(p.isPresent());
-    }
-
-//    @Test
-//    public void testGetPostById() {
-//        Post post = new Post(POST_ID, USER_ID, DEBATE_ID, POST_CONTENT, POST_DATE);
-//        Mockito.when(postDao.getPostById(Mockito.anyLong())).thenReturn(Optional.of(post));
-//
-//        Optional<Post> p = postService.getPostById(POST_ID);
-//
-//        assertTrue(p.isPresent());
-//        assertEquals(post, p.get());
-//    }
-
-    @Test
-    public void testGetPublicPostByIdDoesntExist() {
-        Mockito.when(postDao.getPublicPostById(Mockito.anyLong())).thenReturn(Optional.empty());
-
-        Optional<PublicPost> p = postService.getPublicPostById(POST_ID);
-
-        assertFalse(p.isPresent());
-    }
 
 //    @Test
 //    public void testGetPublicPostById() {
@@ -101,28 +73,6 @@ public class PostServiceImplTest {
 //
 //        assertTrue(p.isPresent());
 //        assertEquals(post, p.get());
-//    }
-
-    @Test
-    public void testGetPostByDebateIsEmpty() {
-        Mockito.when(postDao.getPostsByDebate(Mockito.anyLong(),Mockito.anyInt())).thenReturn(new ArrayList<>());
-
-        List<Post> pl = postService.getPostsByDebate(POST_ID, PAGE);
-
-        assertTrue(pl.isEmpty());
-    }
-
-//    @Test
-//    public void testGetPostByDebate() {
-//        Post post = new Post(POST_ID, USER_ID, DEBATE_ID, POST_CONTENT, POST_DATE);
-//        List<Post> posts = new ArrayList<>();
-//        posts.add(post);
-//        Mockito.when(postDao.getPostsByDebate(Mockito.anyLong(), Mockito.anyInt())).thenReturn(posts);
-//
-//        List<Post> pl = postService.getPostsByDebate(POST_ID, PAGE);
-//
-//        assertFalse(pl.isEmpty());
-//        assertEquals(post, pl.get(0));
 //    }
 
     @Test

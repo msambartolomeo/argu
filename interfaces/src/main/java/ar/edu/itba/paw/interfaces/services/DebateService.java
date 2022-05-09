@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DebateService {
-    Optional<Debate> getDebateById(long id);
     Optional<PublicDebate> getPublicDebateById(long id);
     Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category);
     List<PublicDebate> get(int page, String search, String category, String order, String status, String date);

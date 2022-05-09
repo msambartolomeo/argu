@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -29,18 +31,12 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private DebateService debateService;
 
-    @Override
-    public Optional<Post> getPostById(long id) {
-        return postDao.getPostById(id);
-    }
-
     @Transactional
     @Override
     public Post create(String username, long debateId, String content, byte[] image) {
+        PublicDebate debate = debateService.getPublicDebateById(debateId).orElseThrow(DebateNotFoundException::new);
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
-
-        if (debate.getDebateStatus() == DebateStatus.CLOSED || debate.getDebateStatus() == DebateStatus.DELETED || (debate.getCreatorId() != user.getUserId() && debate.getOpponentId() != user.getUserId())) {
+        if (debate.getDebateStatus() == DebateStatus.CLOSED || debate.getDebateStatus() == DebateStatus.DELETED || (!debate.getCreatorUsername().equals(username) && !debate.getOpponentUsername().equals(username))) {
             throw new ForbiddenPostException();
         }
 
@@ -48,16 +44,16 @@ public class PostServiceImpl implements PostService {
         ArgumentStatus status;
 
         if (!lastArgument.isPresent()) {
-            if (user.getUserId() != debate.getCreatorId())
+            if (!debate.getCreatorUsername().equals(username))
                 throw new ForbiddenPostException();
             status = ArgumentStatus.INTRODUCTION;
         } else {
-            if (user.getUsername().equals(lastArgument.get().getUsername()))
+            if (username.equals(lastArgument.get().getUsername()))
                 throw new ForbiddenPostException();
 
             switch (lastArgument.get().getStatus()) {
                 case INTRODUCTION:
-                    if (user.getUserId() != debate.getCreatorId())
+                    if (!debate.getCreatorUsername().equals(username))
                         status = ArgumentStatus.INTRODUCTION;
                     else
                         status = ArgumentStatus.ARGUMENT;
@@ -81,7 +77,7 @@ public class PostServiceImpl implements PostService {
         if (image.length == 0) {
             createdPost = postDao.create(user.getUserId(), debateId, content,null, status);
         } else {
-            long imageId = imageService.createImage(image);
+            long imageId = imageService.createImage(image).getId();
             createdPost = postDao.create(user.getUserId(), debateId, content, imageId, status);
         }
         sendEmailToSubscribedUsers(debateId, user.getUserId(), user.getUsername(), debate.getName());
@@ -96,18 +92,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Optional<PublicPost> getPublicPostById(long id) {
-        return postDao.getPublicPostById(id);
-    }
-
-    @Override
     public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
+        if (page < 0)
+            return new ArrayList<>();
         return postDao.getPublicPostsByDebate(debateId, page);
-    }
-
-    @Override
-    public List<Post> getPostsByDebate(long debateId, int page) {
-        return postDao.getPostsByDebate(debateId, page);
     }
 
     @Override
@@ -138,6 +126,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, String username, int page) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        if (page < 0)
+            return new ArrayList<>();
         return postDao.getPublicPostsByDebateWithIsLiked(debateId, user.getUserId(), page);
     }
 

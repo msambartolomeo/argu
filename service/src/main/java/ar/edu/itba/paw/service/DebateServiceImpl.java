@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
@@ -29,24 +30,23 @@ public class DebateServiceImpl implements DebateService {
     @Autowired
     private UserService userService;
 
-    @Override
-    public Optional<Debate> getDebateById(long id) {
-        return debateDao.getDebateById(id);
-    }
-
     @Transactional
     @Override
-    public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
+    public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] imageArray, DebateCategory category) {
         User creator = userService.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
         User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
-        if (image.length == 0)
+        if (imageArray.length == 0)
             return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
-        else
-            return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image), category);
+        else {
+            Image image = imageService.createImage(imageArray);
+            return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), image.getId(), category);
+        }
     }
 
     @Override
     public List<PublicDebate> get(int page, String search, String category, String order, String status, String date) {
+        if (page < 0)
+            return new ArrayList<>();
         return debateDao.getPublicDebatesGeneral(page, PAGE_SIZE, search, category, order, status, date);
     }
 
@@ -86,7 +86,7 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
         if (list.equals("subscribed"))
-            return debateDao.getSubscribedDebatesByUsername(userid, page);
+            return debateDao.getSubscribedDebatesByUserId(userid, page);
         else return debateDao.getMyDebates(userid, page);
     }
 
@@ -94,7 +94,7 @@ public class DebateServiceImpl implements DebateService {
     public int getProfileDebatesPageCount(String list, long userid) {
         int count;
         if (list.equals("subscribed"))
-            count = debateDao.getSubscribedDebatesByUsernameCount(userid);
+            count = debateDao.getSubscribedDebatesByUserIdCount(userid);
         else count = debateDao.getMyDebatesCount(userid);
         return (int) Math.ceil(count / (double) PAGE_SIZE);
     }

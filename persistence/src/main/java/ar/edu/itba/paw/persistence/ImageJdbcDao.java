@@ -37,11 +37,12 @@ public class ImageJdbcDao implements ImageDao {
     }
 
     @Override
-    public long createImage(byte[] data) {
+    public Image createImage(byte[] data) {
         final Map<String, Object> sqlData = new HashMap<>();
         sqlData.put("data", data);
 
-        return jdbcInsert.executeAndReturnKey(sqlData).longValue();
+        Number key = jdbcInsert.executeAndReturnKey(sqlData);
+        return new Image(key.longValue(), data);
     }
 
     @Override

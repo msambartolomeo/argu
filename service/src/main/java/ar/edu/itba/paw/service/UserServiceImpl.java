@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateImage(String username, byte[] image) {
         User user = getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        long imageId = imageService.createImage(image);
+        long imageId = imageService.createImage(image).getId();
         userDao.updateImage(user.getUserId(), imageId);
         if (user.getImageId() != null ) imageService.deleteImage(user.getImageId());
     }
