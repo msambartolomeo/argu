@@ -11,16 +11,18 @@
         <%@include file="../components/navbar.jsp" %>
         <div class="profile-container">
             <div class="card profile-data">
-                <c:choose>
-                    <c:when test="${user.imageId != 0}">
-                        <img src="<c:url value="/images/${user.imageId}"/>" class="center circle responsive-img" alt="<spring:message
+                <div class="profile-image">
+                    <c:choose>
+                        <c:when test="${user.imageId != 0}">
+                            <img src="<c:url value="/images/${user.imageId}"/>"  alt="<spring:message
                         code="pages.profile.picture"/>"/>
-                    </c:when>
-                    <c:otherwise>
-                        <img src="<c:url value="/resources/images/user-profile-default.png"/>" class="responsive-img" alt="<spring:message
+                        </c:when>
+                        <c:otherwise>
+                            <img src="<c:url value="/resources/images/user-profile-default.png"/>" class="responsive-img" alt="<spring:message
                         code="pages.profile.picture"/>">
-                    </c:otherwise>
-                </c:choose>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
                 <!-- Modal Trigger -->
                 <a class="waves-effect waves-light btn modal-trigger" href="#edit-profile-image">
                     <spring:message code="pages.profile.edit-profile-image"/>

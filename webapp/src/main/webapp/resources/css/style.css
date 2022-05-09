@@ -498,15 +498,27 @@ a.card {
     margin-right: 10%;
 }
 
-.profile-data>img {
-    max-width: 250px;
+.profile-image {
+    position: relative;
+    width: 15vw;
+    height: 15vw;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: 5%;
+}
+
+.profile-image>img {
+    /*max-width: 250px;
     max-height: 250px;
     min-width: 100px;
     min-height: 100px;
     margin: 5%;
     width: 15vw;
     height: 15vw;
-    border-radius: 50%;
+    border-radius: 50%;*/
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .profile-data>h4 {
