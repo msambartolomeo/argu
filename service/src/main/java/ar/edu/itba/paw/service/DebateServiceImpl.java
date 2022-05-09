@@ -35,15 +35,14 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
-    public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] imageArray, DebateCategory category) {
+    public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
         User creator = userService.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
         User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
         Debate createdDebate;
         if (image.length == 0)
             createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
         else
-            createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image)
-                , category);
+            createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image).getId(), category);
         emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate.getDebateId(), createdDebate.getName());
         return createdDebate;
     }
