@@ -93,7 +93,7 @@
                     <c:when test="${post.status.name == 'introduction' && status.first}">
                         <h5 class="center">TODO mensaje de que es introduccion</h5>
                     </c:when>
-                    <c:when test="${post.status.name == 'argument' && (posts[status.index - 1].status.name == 'introduction' || status.index.first)}">
+                    <c:when test="${post.status.name == 'argument' && (posts[status.index - 1].status.name == 'introduction' || status.first)}">
                         <h5 class="center">TODO mensaje de que es argumentacion</h5>
                     </c:when>
                     <c:when test="${(debate.debateStatus.name == 'closing' && post.status.name == 'conclusion') || (debate.debateStatus.name == 'closed' && post.status.name == 'conclusion' && (status.index == 0 || posts[status.index - 1].status.name == 'argument'))}">
