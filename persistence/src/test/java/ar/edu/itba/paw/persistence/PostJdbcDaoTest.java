@@ -55,7 +55,6 @@ public class PostJdbcDaoTest {
 
     private final static String DEBATES_TABLE = "debates";
     private final static String DEBATE_TABLE_ID = "debateid";
-    private final static long DEBATE_ID = 1;
     private final static String DEBATE_NAME = "Debate Name Test";
     private final static String DEBATE_DESCRIPTION = "Debate Description Test";
     private final static String DEBATE_DATE = LocalDateTime.parse("2022-01-01T00:00:00")
@@ -162,7 +161,6 @@ public class PostJdbcDaoTest {
     public void testGetPublicPostsByDebateEmpty() {
         List<PublicPost> posts = postDao.getPublicPostsByDebate(postDebateId, POST_PAGE);
 
-        assertNotNull(posts);
         assertTrue(posts.isEmpty());
     }
 
@@ -178,7 +176,6 @@ public class PostJdbcDaoTest {
 
         List<PublicPost> posts = postDao.getPublicPostsByDebate(postDebateId, POST_PAGE);
 
-        assertNotNull(posts);
         assertEquals(1, posts.size());
         assertEquals(USER_USERNAME, posts.get(0).getUsername());
         assertEquals(postDebateId, posts.get(0).getDebateId());
@@ -226,7 +223,6 @@ public class PostJdbcDaoTest {
 
         List<PublicPostWithUserLike> posts = postDao.getPublicPostsByDebateWithIsLiked(postDebateId, postUserId, POST_PAGE);
 
-        assertNotNull(posts);
         assertEquals(1, posts.size());
         assertEquals(USER_USERNAME, posts.get(0).getUsername());
         assertEquals(postDebateId, posts.get(0).getDebateId());
@@ -240,7 +236,6 @@ public class PostJdbcDaoTest {
     public void testGetPublicPostsByDebateWithIsLikedEmpty() {
         List<PublicPostWithUserLike> posts = postDao.getPublicPostsByDebateWithIsLiked(postDebateId, postUserId, POST_PAGE);
 
-        assertNotNull(posts);
         assertEquals(0, posts.size());
     }
 

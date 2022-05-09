@@ -44,6 +44,8 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public List<PublicDebate> get(int page, String search, String category, String order, String status, String date) {
+        if (page < 0)
+            return new ArrayList<>();
         return debateDao.getPublicDebatesGeneral(page, PAGE_SIZE, search, category, order, status, date);
     }
 
@@ -83,7 +85,7 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
         if (list.equals("subscribed"))
-            return debateDao.getSubscribedDebatesByUsername(userid, page);
+            return debateDao.getSubscribedDebatesByUserId(userid, page);
         else return debateDao.getMyDebates(userid, page);
     }
 
@@ -91,7 +93,7 @@ public class DebateServiceImpl implements DebateService {
     public int getProfileDebatesPageCount(String list, long userid) {
         int count;
         if (list.equals("subscribed"))
-            count = debateDao.getSubscribedDebatesByUsernameCount(userid);
+            count = debateDao.getSubscribedDebatesByUserIdCount(userid);
         else count = debateDao.getMyDebatesCount(userid);
         return (int) Math.ceil(count / (double) PAGE_SIZE);
     }

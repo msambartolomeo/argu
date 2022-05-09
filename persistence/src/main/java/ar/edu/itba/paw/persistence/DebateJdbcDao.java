@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,16 +27,6 @@ public class DebateJdbcDao implements DebateDao {
     private final SimpleJdbcInsert jdbcInsert;
     private final SimpleJdbcInsert jdbcInsertSubscribed;
     private final SimpleJdbcInsert jdbcInsertVotes;
-    private static final RowMapper<Debate> ROW_MAPPER = (rs, rowNum) ->
-            new Debate(rs.getLong("debateid"),
-                    rs.getString("name"),
-                    rs.getString("description"),
-                    rs.getLong("creatorid"),
-                    rs.getLong("opponentid"),
-                    rs.getObject("created_date", LocalDateTime.class),
-                    rs.getLong("imageid"),
-                    DebateCategory.getFromInt(rs.getInt("category")),
-                    DebateStatus.getFromInt(rs.getInt("status")));
 
     private static final RowMapper<PublicDebate> PUBLIC_ROW_MAPPER = (rs, rowNum) ->
             new PublicDebate(
@@ -45,7 +36,7 @@ public class DebateJdbcDao implements DebateDao {
                     rs.getString("creatorusername"),
                     rs.getString("opponentusername"),
                     rs.getLong("imageid"),
-                    rs.getObject("created_date", LocalDateTime.class),
+                    rs.getObject("created_date", Timestamp.class).toLocalDateTime(),
                     DebateCategory.getFromInt(rs.getInt("category")),
                     rs.getInt("subscribedcount"),
                     DebateStatus.getFromInt(rs.getInt("status")),
@@ -71,7 +62,7 @@ public class DebateJdbcDao implements DebateDao {
         data.put("description", description);
         data.put("creatorid", creatorId);
         data.put("opponentid", opponentId);
-        data.put("created_date", created);
+        data.put("created_date", created.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
         data.put("imageid", imageId);
         data.put("category", DebateCategory.getFromCategory(category));
         data.put("status", DebateStatus.getFromStatus(DebateStatus.OPEN));
@@ -89,12 +80,12 @@ public class DebateJdbcDao implements DebateDao {
 
 
     @Override
-    public List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page) {
+    public List<PublicDebate> getSubscribedDebatesByUserId(long userid, int page) {
         return jdbcTemplate.query("SELECT * FROM public_debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = ?) ORDER BY created_date DESC LIMIT 5 OFFSET ?", new Object[]{userid, page * 5}, PUBLIC_ROW_MAPPER);
     }
 
     @Override
-    public int getSubscribedDebatesByUsernameCount(long userid) {
+    public int getSubscribedDebatesByUserIdCount(long userid) {
         return jdbcTemplate.query("SELECT COUNT(*) FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = ?)", new Object[]{userid}, (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
@@ -118,9 +109,6 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String status, String date) {
-        if (page == -1) {
-            return new ArrayList<>();
-        }
         StringBuilder queryString = new StringBuilder("SELECT * FROM public_debates WHERE TRUE");
         List<Object> params = setUpQuery(searchQuery, category, queryString, status, date);
 
@@ -156,7 +144,6 @@ public class DebateJdbcDao implements DebateDao {
         params.add(pageSize);
         params.add(page * pageSize);
 
-        System.out.println(queryString);
         return jdbcTemplate.query(queryString.toString(), params.toArray(), PUBLIC_ROW_MAPPER);
     }
 

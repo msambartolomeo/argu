@@ -59,7 +59,6 @@ public class ImageJdbcDaoTest {
     public void testGetImageEmpty() {
         Optional<Image> image = imageJdbcDao.getImage(IMAGE_ID);
 
-        assertNotNull(image);
         assertFalse(image.isPresent());
     }
 
@@ -71,7 +70,6 @@ public class ImageJdbcDaoTest {
 
         Optional<Image> image = imageJdbcDao.getImage(key);
 
-        assertNotNull(image);
         assertTrue(image.isPresent());
         assertArrayEquals(IMAGE_DATA, image.get().getData());
     }

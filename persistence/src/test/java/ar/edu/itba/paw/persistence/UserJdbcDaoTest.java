@@ -216,7 +216,7 @@ public class UserJdbcDaoTest {
         final Map<String, Object> debateData = new HashMap<>();
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
-        debateData.put("created_date", DEBATE_DATE.toString());
+        debateData.put("created_date", DEBATE_DATE);
         debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
         debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
         debateData.put("creatorid", userKey.longValue());

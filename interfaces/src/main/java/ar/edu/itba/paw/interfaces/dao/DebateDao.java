@@ -5,15 +5,14 @@ import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateVote;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 public interface DebateDao {
     Optional<PublicDebate> getPublicDebateById(long id);
     Debate create(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category);
-    List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page);
-    int getSubscribedDebatesByUsernameCount(long userid);
+    List<PublicDebate> getSubscribedDebatesByUserId(long userid, int page);
+    int getSubscribedDebatesByUserIdCount(long userid);
 
     void subscribeToDebate(long userid, long debateid);
 
