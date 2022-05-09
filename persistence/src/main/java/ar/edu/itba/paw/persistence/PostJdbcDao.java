@@ -59,32 +59,8 @@ public class PostJdbcDao implements PostDao {
     }
 
     @Override
-    public Optional<Post> getPostById(long postid) {
-        return jdbcTemplate.query("SELECT * FROM posts WHERE postId = ?",
-                        new Object[]{postid},
-                        ROW_MAPPER)
-                .stream().findFirst();
-    }
-
-    @Override
-    public List<Post> getPostsByDebate(long debateId, int page) {
-        if (page < 0) {
-            return new ArrayList<>();
-        }
-        return jdbcTemplate.query("SELECT * FROM posts WHERE debateId = ? ORDER BY created_date LIMIT 5 OFFSET ?", new Object[]{debateId, page * 5}, ROW_MAPPER);
-    }
-
-    @Override
     public int getPostsByDebateCount(long debateId) {
         return jdbcTemplate.query("SELECT COUNT(*) FROM posts WHERE debateId = ?", new Object[]{debateId}, (rs, rowNum) -> rs.getInt(1)).get(0);
-    }
-
-    @Override
-    public Optional<PublicPost> getPublicPostById(long id) {
-        return jdbcTemplate.query("SELECT * FROM public_posts WHERE postId = ?",
-                new Object[]{id},
-                PUBLIC_POST_ROW_MAPPER)
-                .stream().findFirst();
     }
 
     @Override

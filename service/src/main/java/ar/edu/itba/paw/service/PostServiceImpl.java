@@ -29,11 +29,6 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private DebateService debateService;
 
-    @Override
-    public Optional<Post> getPostById(long id) {
-        return postDao.getPostById(id);
-    }
-
     @Transactional
     @Override
     public Post create(String username, long debateId, String content, byte[] image) {
@@ -62,18 +57,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Optional<PublicPost> getPublicPostById(long id) {
-        return postDao.getPublicPostById(id);
-    }
-
-    @Override
     public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
         return postDao.getPublicPostsByDebate(debateId, page);
-    }
-
-    @Override
-    public List<Post> getPostsByDebate(long debateId, int page) {
-        return postDao.getPostsByDebate(debateId, page);
     }
 
     @Override
