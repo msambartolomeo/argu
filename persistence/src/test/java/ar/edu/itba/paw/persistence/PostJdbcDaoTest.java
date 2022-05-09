@@ -129,22 +129,14 @@ public class PostJdbcDaoTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE, DEBATES_TABLE);
     }
 
-//    @Test
-//    public void testCreatePost() {
-//        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, null);
-//
-//        assertNotNull(post);
-//        assertEquals(postUserId, post.getUserId());
-//        assertEquals(postDebateId, post.getDebateId());
-//        assertEquals(POST_CONTENT, post.getContent());
-//        assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate, POSTS_TABLE), 1);
-//    }
+    @Test
+    public void testCreatePost() {
+        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, null, null);
 
         assertNotNull(post);
         assertEquals(postUserId, post.getUserId());
         assertEquals(postDebateId, post.getDebateId());
         assertEquals(POST_CONTENT, post.getContent());
-        assertNull(post.getImageId());
         assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate, POSTS_TABLE), 1);
     }
 
@@ -154,7 +146,7 @@ public class PostJdbcDaoTest {
         imageData.put("data", IMAGE_DATA);
         Long imageId = jdbcInsertImages.executeAndReturnKey(imageData).longValue();
 
-        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, imageId);
+        Post post = postDao.create(postUserId, postDebateId, POST_CONTENT, imageId, null);
 
         assertNotNull(post);
         assertEquals(postUserId, post.getUserId());
