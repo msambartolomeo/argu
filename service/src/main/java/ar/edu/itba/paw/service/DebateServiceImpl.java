@@ -6,7 +6,6 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -48,20 +48,20 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<PublicDebate> get(int page, String search, String category, String order, String status, String date) {
+    public List<PublicDebate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         if (page < 0)
             return new ArrayList<>();
         return debateDao.getPublicDebatesGeneral(page, PAGE_SIZE, search, category, order, status, date);
     }
 
     @Override
-    public int getPages(String search, String category, String status, String date) {
+    public int getPages(String search, DebateCategory category, DebateStatus status, LocalDate date) {
         return (int) Math.ceil(debateDao.getPublicDebatesCount(search, category, status, date) / (double) PAGE_SIZE);
     }
 
     @Override
     public List<PublicDebate> getMostSubscribed() {
-        return debateDao.getPublicDebatesGeneral(0, 3, null, null, String.valueOf(DebateOrder.SUBS_DESC), null, null);
+        return debateDao.getPublicDebatesGeneral(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
     }
 
     @Override

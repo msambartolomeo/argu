@@ -110,7 +110,7 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String status, String date) {
+    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         StringBuilder queryString = new StringBuilder("SELECT * FROM public_debates WHERE TRUE");
         List<Object> params = setUpQuery(searchQuery, category, queryString, status, date);
 
@@ -119,7 +119,7 @@ public class DebateJdbcDao implements DebateDao {
         if (order == null)
             orderBy = DebateOrder.DATE_DESC;
         else
-            orderBy = DebateOrder.valueOf(order.toUpperCase());
+            orderBy = order;
 
         switch(orderBy) {
             case DATE_ASC:
@@ -150,13 +150,13 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public int getPublicDebatesCount(String searchQuery, String category, String status, String date) {
+    public int getPublicDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date) {
         StringBuilder queryString = new StringBuilder("SELECT COUNT(*) FROM public_debates WHERE TRUE");
         List<Object> params = setUpQuery(searchQuery, category, queryString, status, date);
         return jdbcTemplate.query(queryString.toString(), params.toArray(), (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
-    private List<Object> setUpQuery(String searchQuery, String category, StringBuilder queryString, String status, String date) {
+    private List<Object> setUpQuery(String searchQuery, DebateCategory category, StringBuilder queryString, DebateStatus status, LocalDate date) {
         List<Object> params = new ArrayList<>();
 
         if(searchQuery != null) {
@@ -165,12 +165,12 @@ public class DebateJdbcDao implements DebateDao {
         }
         if(category != null) {
             queryString.append(" AND category = ?");
-            params.add(DebateCategory.valueOf(category.toUpperCase()).ordinal());
+            params.add(category.ordinal());
         }
         if (status != null) {
             // TODO buscar mejor solucion (si busco por open necesito tambien ver los que estan closing) (o sino diferenciar la busqueda pero me parece raro)
-            params.add(DebateStatus.valueOf(status.toUpperCase()).ordinal());
-            if (status.equals("open")) {
+            params.add(status.ordinal());
+            if (status == DebateStatus.OPEN) {
                 queryString.append(" AND (status = ? OR status = ?)");
                 params.add(DebateStatus.CLOSING.ordinal());
             } else {
@@ -178,7 +178,7 @@ public class DebateJdbcDao implements DebateDao {
             }
         }
         if (date != null) {
-            LocalDateTime dateTime = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).atStartOfDay();
+            LocalDateTime dateTime = date.atStartOfDay();
             queryString.append(" AND created_date >= ?");
             params.add(dateTime);
             queryString.append(" AND created_date <= ?");
