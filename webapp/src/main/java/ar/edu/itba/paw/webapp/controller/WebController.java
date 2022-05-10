@@ -35,7 +35,7 @@ public class WebController {
     private final ImageService imageService;
 
     @Autowired
-    public WebController(UserService userService, DebateService debateService, PostService postService, ImageService imageService) {
+    public WebController(UserService userService, DebateService debateService, ImageService imageService) {
         this.userService = userService;
         this.debateService = debateService;
         this.imageService = imageService;
@@ -151,12 +151,6 @@ public class WebController {
 
     @RequestMapping(value = "/404")
     public ModelAndView error() {
-        return new ModelAndView("error/404");
-    }
-
-    // TODO: implement 403 error page
-    @RequestMapping(value = "/403")
-    public ModelAndView error403() {
         return new ModelAndView("error/404");
     }
 

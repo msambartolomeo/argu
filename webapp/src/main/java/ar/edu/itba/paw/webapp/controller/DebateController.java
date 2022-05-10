@@ -92,7 +92,7 @@ public class DebateController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/{debateId}", method = { RequestMethod.POST })
+    @RequestMapping(value = "/{debateId}/argument", method = { RequestMethod.POST })
     public ModelAndView createPost(@PathVariable("debateId") final String debateId,
                                    @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
 

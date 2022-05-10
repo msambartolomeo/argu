@@ -43,7 +43,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/", "/debates", "/debates/{\\d+}").permitAll()
                     .antMatchers("/login", "/register").anonymous()
                     .antMatchers("/create_debate").hasAuthority("MODERATOR")
-                    .antMatchers("/**").authenticated()
+                    .antMatchers("/debates/{\\d+}/**", "/moderator", "/profile").authenticated()
                 .and().formLogin()
                     .usernameParameter("username")
                     .passwordParameter("password")
