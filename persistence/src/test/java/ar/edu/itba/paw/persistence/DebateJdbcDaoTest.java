@@ -402,7 +402,8 @@ public class DebateJdbcDaoTest {
 
         int count = debateDao.getMyDebatesCount(userId);
 
-        assertEquals(1, count);
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DEBATES_TABLE,
+                "creatorid = " + userId  +" OR opponentid = " + userId), count);
     }
 
     @Test
