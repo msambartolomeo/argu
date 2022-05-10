@@ -17,7 +17,4 @@ public enum ArgumentStatus {
     public static ArgumentStatus getFromInt(int i) {
         return ArgumentStatus.values()[i];
     }
-    public static int getFromStatus(ArgumentStatus status) {
-        return status.ordinal();
-    }
 }

@@ -104,7 +104,7 @@ public class UserJdbcDaoTest {
         userData.put("password", USER_PASSWORD);
         userData.put("email", USER_EMAIL);
         userData.put("created_date", USER_DATE.toString());
-        userData.put("role", UserRole.getValue(USER_ROLE));
+        userData.put("role", USER_ROLE.ordinal());
         Number key = jdbcInsert.executeAndReturnKey(userData);
 
         Optional<User> user = userDao.getUserById(key.longValue());
@@ -138,7 +138,7 @@ public class UserJdbcDaoTest {
         userData.put("password", USER_PASSWORD);
         userData.put("email", USER_EMAIL);
         userData.put("created_date", USER_DATE.toString());
-        userData.put("role", UserRole.getValue(USER_ROLE));
+        userData.put("role", USER_ROLE.ordinal());
         Number key = jdbcInsert.executeAndReturnKey(userData);
 
         Optional<User> user = userDao.getUserByEmail(USER_EMAIL);
@@ -165,7 +165,7 @@ public class UserJdbcDaoTest {
         userData.put("password", USER_PASSWORD);
         userData.put("email", USER_EMAIL);
         userData.put("created_date", USER_DATE.toString());
-        userData.put("role", UserRole.getValue(USER_ROLE));
+        userData.put("role", USER_ROLE.ordinal());
         Number key = jdbcInsert.executeAndReturnKey(userData);
 
         Optional<User> user = userDao.getUserByUsername(USER_USERNAME);
@@ -210,15 +210,15 @@ public class UserJdbcDaoTest {
         userData.put("password", USER_PASSWORD);
         userData.put("email", USER_EMAIL);
         userData.put("created_date", USER_DATE.toString());
-        userData.put("role", UserRole.getValue(USER_ROLE));
+        userData.put("role", USER_ROLE.ordinal());
         Number userKey = jdbcInsert.executeAndReturnKey(userData);
 
         final Map<String, Object> debateData = new HashMap<>();
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userKey.longValue());
         debateData.put("opponentid", userKey.longValue());
         Number debateKey = jdbcInsertDebates.executeAndReturnKey(debateData);
@@ -248,7 +248,7 @@ public class UserJdbcDaoTest {
         userData.put("password", USER_PASSWORD);
         userData.put("email", USER_EMAIL);
         userData.put("created_date", USER_DATE.toString());
-        userData.put("role", UserRole.getValue(USER_ROLE));
+        userData.put("role", USER_ROLE.ordinal());
         Number userKey = jdbcInsert.executeAndReturnKey(userData);
 
         final Map<String, Object> imageData = new HashMap<>();

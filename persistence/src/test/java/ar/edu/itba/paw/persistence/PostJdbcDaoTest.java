@@ -103,15 +103,15 @@ public class PostJdbcDaoTest {
         userData.put("password", USER_PASSWORD);
         userData.put("email", USER_EMAIL);
         userData.put("created_date", USER_DATE.toString());
-        userData.put("role", UserRole.getValue(USER_ROLE));
+        userData.put("role", USER_ROLE.ordinal());
         postUserId = jdbcInsertUsers.executeAndReturnKey(userData).longValue();
 
         final Map<String, Object> debateData = new HashMap<>();
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
+        debateData.put("status", DEBATE_STATUS.ordinal());
         postDebateId = jdbcInsertDebates.executeAndReturnKey(debateData).longValue();
 
         final Map<String, Object> imageData = new HashMap<>();

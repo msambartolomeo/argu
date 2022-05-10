@@ -28,6 +28,8 @@ public class DebateJdbcDao implements DebateDao {
     private final SimpleJdbcInsert jdbcInsertSubscribed;
     private final SimpleJdbcInsert jdbcInsertVotes;
 
+    private final static DebateStatus DEFAULT_DEBATE_STATUS = DebateStatus.OPEN;
+
     private static final RowMapper<PublicDebate> PUBLIC_ROW_MAPPER = (rs, rowNum) ->
             new PublicDebate(
                     rs.getLong("debateid"),
@@ -64,8 +66,8 @@ public class DebateJdbcDao implements DebateDao {
         data.put("opponentid", opponentId);
         data.put("created_date", created.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
         data.put("imageid", imageId);
-        data.put("category", DebateCategory.getFromCategory(category));
-        data.put("status", DebateStatus.getFromStatus(DebateStatus.OPEN));
+        data.put("category", category.ordinal());
+        data.put("status", DEFAULT_DEBATE_STATUS.ordinal());
 
         final Number debateId = jdbcInsert.executeAndReturnKey(data);
 
@@ -163,14 +165,14 @@ public class DebateJdbcDao implements DebateDao {
         }
         if(category != null) {
             queryString.append(" AND category = ?");
-            params.add(DebateCategory.getFromCategory(DebateCategory.valueOf(category.toUpperCase())));
+            params.add(DebateCategory.valueOf(category.toUpperCase()).ordinal());
         }
         if (status != null) {
             // TODO buscar mejor solucion (si busco por open necesito tambien ver los que estan closing) (o sino diferenciar la busqueda pero me parece raro)
-            params.add(DebateStatus.getFromStatus(DebateStatus.valueOf(status.toUpperCase())));
+            params.add(DebateStatus.valueOf(status.toUpperCase()).ordinal());
             if (status.equals("open")) {
                 queryString.append(" AND (status = ? OR status = ?)");
-                params.add(DebateStatus.getFromStatus(DebateStatus.CLOSING));
+                params.add(DebateStatus.CLOSING.ordinal());
             } else {
                 queryString.append(" AND status = ?");
             }
@@ -226,6 +228,6 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public void changeDebateStatus(long id, DebateStatus status) {
-        jdbcTemplate.update("UPDATE debates SET status = ? WHERE debateid = ?", DebateStatus.getFromStatus(status), id);
+        jdbcTemplate.update("UPDATE debates SET status = ? WHERE debateid = ?", status.ordinal(), id);
     }
 }
