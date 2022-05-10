@@ -138,6 +138,7 @@ public class PostJdbcDaoTest {
         assertEquals(postUserId, post.getUserId());
         assertEquals(postDebateId, post.getDebateId());
         assertEquals(POST_CONTENT, post.getContent());
+        assertEquals(POST_STATUS, post.getStatus());
         assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate, POSTS_TABLE), 1);
     }
 
@@ -154,6 +155,7 @@ public class PostJdbcDaoTest {
         assertEquals(postDebateId, post.getDebateId());
         assertEquals(POST_CONTENT, post.getContent());
         assertEquals(imageId, post.getImageId());
+        assertEquals(POST_STATUS, post.getStatus());
         assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate, POSTS_TABLE), 1);
     }
 
@@ -172,6 +174,7 @@ public class PostJdbcDaoTest {
         postData.put("content", POST_CONTENT);
         postData.put("imageid", imageId);
         postData.put("created_date", POST_DATE);
+        postData.put("status", POST_STATUS.ordinal());
         jdbcInsert.execute(postData);
 
         List<PublicPost> posts = postDao.getPublicPostsByDebate(postDebateId, POST_PAGE);
@@ -182,6 +185,7 @@ public class PostJdbcDaoTest {
         assertEquals(POST_CONTENT, posts.get(0).getContent());
         assertEquals(imageId, posts.get(0).getImageId());
         assertEquals(PUBLIC_DEBATE_DATE, posts.get(0).getCreatedDate());
+        assertEquals(POST_STATUS, posts.get(0).getStatus());
     }
 
     @Test
@@ -199,6 +203,7 @@ public class PostJdbcDaoTest {
         postData.put("content", POST_CONTENT);
         postData.put("imageid", imageId);
         postData.put("created_date", POST_DATE);
+        postData.put("status", POST_STATUS.ordinal());
         jdbcInsert.execute(postData);
 
         int count = postDao.getPostsByDebateCount(postDebateId);
@@ -214,6 +219,7 @@ public class PostJdbcDaoTest {
         postData.put("content", POST_CONTENT);
         postData.put("imageid", imageId);
         postData.put("created_date", POST_DATE);
+        postData.put("status", POST_STATUS.ordinal());
         long postId = jdbcInsert.executeAndReturnKey(postData).longValue();
 
         final Map<String, Object> likeData = new HashMap<>();
@@ -229,6 +235,7 @@ public class PostJdbcDaoTest {
         assertEquals(POST_CONTENT, posts.get(0).getContent());
         assertEquals(imageId, posts.get(0).getImageId());
         assertEquals(PUBLIC_DEBATE_DATE, posts.get(0).getCreatedDate());
+        assertEquals(POST_STATUS, posts.get(0).getStatus());
         assertTrue(posts.get(0).getLiked());
     }
 
@@ -247,6 +254,7 @@ public class PostJdbcDaoTest {
         postData.put("content", POST_CONTENT);
         postData.put("imageid", imageId);
         postData.put("created_date", POST_DATE);
+        postData.put("status", POST_STATUS.ordinal());
         long postId = jdbcInsert.executeAndReturnKey(postData).longValue();
 
         postDao.likePost(postId, postUserId);
@@ -262,6 +270,7 @@ public class PostJdbcDaoTest {
         postData.put("content", POST_CONTENT);
         postData.put("imageid", imageId);
         postData.put("created_date", POST_DATE);
+        postData.put("status", POST_STATUS.ordinal());
         long postId = jdbcInsert.executeAndReturnKey(postData).longValue();
 
         postDao.unlikePost(postId, postUserId);
@@ -277,6 +286,7 @@ public class PostJdbcDaoTest {
         postData.put("content", POST_CONTENT);
         postData.put("imageid", imageId);
         postData.put("created_date", POST_DATE);
+        postData.put("status", POST_STATUS.ordinal());
         long postId = jdbcInsert.executeAndReturnKey(postData).longValue();
 
         final Map<String, Object> likeData = new HashMap<>();
@@ -297,6 +307,7 @@ public class PostJdbcDaoTest {
         postData.put("content", POST_CONTENT);
         postData.put("imageid", imageId);
         postData.put("created_date", POST_DATE);
+        postData.put("status", POST_STATUS.ordinal());
         long postId = jdbcInsert.executeAndReturnKey(postData).longValue();
 
         boolean hasLiked = postDao.hasLiked(postId, postUserId);
@@ -312,6 +323,7 @@ public class PostJdbcDaoTest {
         postData.put("content", POST_CONTENT);
         postData.put("imageid", imageId);
         postData.put("created_date", POST_DATE);
+        postData.put("status", POST_STATUS.ordinal());
         long postId = jdbcInsert.executeAndReturnKey(postData).longValue();
 
         final Map<String, Object> likeData = new HashMap<>();
