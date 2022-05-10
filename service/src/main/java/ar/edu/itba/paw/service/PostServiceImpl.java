@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenPostException;
+import ar.edu.itba.paw.model.exceptions.UserAlreadyLikedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,6 +109,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public void likePost(long postId, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        if(postDao.hasLiked(postId, user.getUserId()))
+            throw new UserAlreadyLikedException();
         postDao.likePost(postId, user.getUserId());
     }
 
