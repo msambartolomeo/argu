@@ -19,7 +19,7 @@
                     </h2>
                     <div class="row center">
                         <c:forEach items="${categories}" var="category">
-                            <a href="<c:url value="/debates/category/${category.name}" />" class="waves-effect btn-small">
+                            <a href="<c:url value="/debates?category=${category.name}" />" class="waves-effect btn-small">
                                 <spring:message code="category.${category.name}"/>
                             </a>
                         </c:forEach>

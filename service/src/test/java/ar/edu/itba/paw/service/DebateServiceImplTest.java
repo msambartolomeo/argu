@@ -31,6 +31,11 @@ public class DebateServiceImplTest {
     @Mock
     private DebateDao debateDao;
 
+    @Test
+    public void test() {
+
+    }
+
 //    @Test
 //    public void testCreateDebate() {
 //        Debate debate = new Debate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATED_DATE);

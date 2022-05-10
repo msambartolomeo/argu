@@ -49,9 +49,6 @@
                 <div class="order-div">
                     <div class="input-field margin-left">
                         <select class="select-order" id="select-order" onchange="addParamToUrlAndRedirect('order', this.value)">
-    <%--                        <option value="" disabled selected>--%>
-    <%--                            <spring:message code="category.select-category"/>--%>
-    <%--                        </option>--%>
                             <c:forEach items="${orders}" var="order">--%>
                                 <option value="${order.name}" ${order.name == param.order ? "selected" : ""}><spring:message code="orders.${order.name}"/></option>
                             </c:forEach>
@@ -68,7 +65,7 @@
                     </div>
                     <div class="input-field margin-left flex">
                         <label for="datepicker"><spring:message code="pages.debates-list.created-date"/></label>
-                        <input placeholder="<spring:message code="filter.by.date"/>" id="datepicker" type="text" class="datepicker" value="${param.date}" onchange="addParamToUrlAndRedirect('date', this.value)">
+                        <input placeholder="<spring:message code="filter.by.date"/>" id="datepicker" type="text" class="datepicker white-text" value="${param.date}" onchange="addParamToUrlAndRedirect('date', this.value)">
                         <i class="material-icons x" onclick="addParamToUrlAndRedirect('date', '')">close</i>
                     </div>
                 </div>
