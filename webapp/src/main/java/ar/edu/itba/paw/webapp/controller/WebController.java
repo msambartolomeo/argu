@@ -79,7 +79,7 @@ public class WebController {
             return registerPage(form);
         }
         userService.create(form.getUsername(), form.getPassword(), form.getEmail());
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/login");
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
