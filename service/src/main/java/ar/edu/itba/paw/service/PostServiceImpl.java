@@ -40,38 +40,7 @@ public class PostServiceImpl implements PostService {
             throw new ForbiddenPostException();
         }
 
-        Optional<PublicPost> lastArgument = getLastArgument(debateId);
-        ArgumentStatus status;
-
-        if (!lastArgument.isPresent()) {
-            if (!debate.getCreatorUsername().equals(username))
-                throw new ForbiddenPostException();
-            status = ArgumentStatus.INTRODUCTION;
-        } else {
-            if (username.equals(lastArgument.get().getUsername()))
-                throw new ForbiddenPostException();
-
-            switch (lastArgument.get().getStatus()) {
-                case INTRODUCTION:
-                    if (!debate.getCreatorUsername().equals(username))
-                        status = ArgumentStatus.INTRODUCTION;
-                    else
-                        status = ArgumentStatus.ARGUMENT;
-                    break;
-                case ARGUMENT:
-                    if (debate.getDebateStatus() != DebateStatus.CLOSING)
-                        status = ArgumentStatus.ARGUMENT;
-                    else
-                        status = ArgumentStatus.CONCLUSION;
-                    break;
-                case CONCLUSION:
-                    status = ArgumentStatus.CONCLUSION;
-                    debateService.closeDebate(debateId);
-                    break;
-                default:
-                    throw new ForbiddenPostException();
-            }
-        }
+        ArgumentStatus status = getArgumentStatus(debateId, debate.getDebateStatus(), debate.getCreatorUsername(), username);
 
         Post createdPost;
         if (image.length == 0) {
@@ -84,7 +53,40 @@ public class PostServiceImpl implements PostService {
         return createdPost;
     }
 
-    private void sendEmailToSubscribedUsers(long debateId, long userId, String fromUsername, String debateName) {
+    // Package-private for testing
+    ArgumentStatus getArgumentStatus(long debateId, DebateStatus debateStatus, String creatorUsername, String username) {
+        Optional<PublicPost> lastArgument = getLastArgument(debateId);
+
+        if (!lastArgument.isPresent()) {
+            if (!creatorUsername.equals(username))
+                throw new ForbiddenPostException();
+            return ArgumentStatus.INTRODUCTION;
+        } else {
+            if (username.equals(lastArgument.get().getUsername()))
+                throw new ForbiddenPostException();
+
+            switch (lastArgument.get().getStatus()) {
+                case INTRODUCTION:
+                    if (!creatorUsername.equals(username))
+                        return ArgumentStatus.INTRODUCTION;
+                    else
+                        return ArgumentStatus.ARGUMENT;
+                case ARGUMENT:
+                    if (debateStatus != DebateStatus.CLOSING)
+                        return ArgumentStatus.ARGUMENT;
+                    else
+                        return ArgumentStatus.CONCLUSION;
+                case CONCLUSION:
+                    debateService.closeDebate(debateId);
+                    return ArgumentStatus.CONCLUSION;
+                default:
+                    throw new ForbiddenPostException();
+            }
+        }
+    }
+
+    // Package-private for testing
+    void sendEmailToSubscribedUsers(long debateId, long userId, String fromUsername, String debateName) {
         for (User user : userService.getSubscribedUsersByDebate(debateId)) {
             if (user.getUserId() != userId) // Si no es el usuario que creo el post
                 emailService.notifyNewPost(user.getEmail(), fromUsername, debateId, debateName);
@@ -99,7 +101,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public int getPostsByDebateCount(long debateId) {
+    public int getPostsByDebatePageCount(long debateId) {
         return (int) Math.ceil(postDao.getPostsByDebateCount(debateId) / (double) PAGE_SIZE);
     }
 
