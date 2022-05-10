@@ -328,7 +328,10 @@ div.category-list div.collection.with-header {
 }
 
 .limit-img-sm {
-    max-height: 17vh;
+    max-width: 150px !important;
+    max-height: 150px;
+    width: 10vw;
+    height: 10vw !important;
 }
 
 .order-div {
@@ -361,10 +364,15 @@ div.category-list div.collection.with-header {
     min-width: 20%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    margin-left: 2%;
 }
 
 .limit-img {
-    max-height: 30vh;
+    max-height: 250px;
+    max-width: 250px !important;
+    height: 15vw !important;
+    width: 15vw;
 }
 
 .debate-info-holder {
