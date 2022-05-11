@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class PostServiceImplTest {
     private final static String USER_USERNAME = "username";
     private final static String USER_PASSWORD = "password";
     private final static String USER_EMAIL = "test@test.com";
-    private final static LocalDate USER_DATE = LocalDate.parse("2022-01-01");
+    private final static Date USER_DATE = Date.valueOf(LocalDate.parse("2022-01-01"));
     private final static UserRole USER_ROLE = UserRole.USER;
 
     private static final String DEBATE_CREATOR = "debateCreator";

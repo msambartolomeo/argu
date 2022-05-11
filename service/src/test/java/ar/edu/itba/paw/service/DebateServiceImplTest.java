@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
+import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
@@ -15,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class DebateServiceImplTest {
     private final static String USER_PASSWORD = "password";
     private final static String USER_EMAIL = "test@test.com";
     private final static String USER_EMAIL_2 = "test2@test.com";
-    private final static LocalDate USER_DATE = LocalDate.parse("2022-01-01");
+    private final static Date USER_DATE = Date.valueOf(LocalDate.parse("2022-01-01"));
     private final static UserRole USER_ROLE = UserRole.USER;
 
     private final static int VALID_PAGE = 0;
@@ -63,6 +65,8 @@ public class DebateServiceImplTest {
     private ImageService imageService;
     @Mock
     private UserService userService;
+    @Mock
+    private EmailService emailService;
 
     @Test
     public void testGetPublicDebateById() {

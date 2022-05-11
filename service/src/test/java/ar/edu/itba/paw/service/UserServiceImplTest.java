@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class UserServiceImplTest {
     private final static String USER_PASSWORD = "password";
     private final static String USER_EMAIL = "test@test.com";
     private final static String MODERATOR_REASON = "reason";
-    private final static LocalDate USER_DATE = LocalDate.parse("2022-01-01");
+    private final static Date USER_DATE = Date.valueOf(LocalDate.parse("2022-01-01"));
     private final static UserRole USER_ROLE = UserRole.USER;
     private final static byte[] IMAGE_DATA = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
     private final static long IMAGE_ID = 1;
