@@ -464,7 +464,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setText(htmlMsg, true); // Use this or above line.
             helper.setTo(to);
             helper.setSubject(from + " invited you to be his opponent in a debate!");
-            helper.setFrom("noreply@argu.com"); //TODO: Actualizar el nombre
+            helper.setFrom("noreply@argu.com");
             emailSender.send(mimeMessage);
         } catch (Exception e) {
             throw new MailingException("Error notifying user.");

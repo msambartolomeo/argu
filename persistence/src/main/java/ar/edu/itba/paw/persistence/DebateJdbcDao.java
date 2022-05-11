@@ -159,7 +159,7 @@ public class DebateJdbcDao implements DebateDao {
     private List<Object> setUpQuery(String searchQuery, DebateCategory category, StringBuilder queryString, DebateStatus status, LocalDate date) {
         List<Object> params = new ArrayList<>();
 
-        if(searchQuery != null) { //TODO: Preguntar sobre ILIKE (extensión de PGS). Anda en PostgreSQL, no en HSQLDB. ¿Podría lower(name) fallar con caracteres sin minúsculas asociadas?
+        if(searchQuery != null) {
             queryString.append(" AND lower(name) LIKE lower(?)");
             params.add("%" + searchQuery + "%");
         }
@@ -168,7 +168,6 @@ public class DebateJdbcDao implements DebateDao {
             params.add(category.ordinal());
         }
         if (status != null) {
-            // TODO buscar mejor solucion (si busco por open necesito tambien ver los que estan closing) (o sino diferenciar la busqueda pero me parece raro)
             params.add(status.ordinal());
             if (status == DebateStatus.OPEN) {
                 queryString.append(" AND (status = ? OR status = ?)");

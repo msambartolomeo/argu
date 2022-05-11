@@ -276,8 +276,6 @@ public class DebateServiceImplTest {
         debateService.subscribeToDebate(USER_USERNAME, DEBATE_ID);
     }
 
-    // TODO tests de si ya esta likeado antes de hacer el like / unlike
-
     @Test
     public void testUnsubscribeToDebate() {
         User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
