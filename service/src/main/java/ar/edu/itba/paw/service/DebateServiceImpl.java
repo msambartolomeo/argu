@@ -51,7 +51,7 @@ public class DebateServiceImpl implements DebateService {
     public List<PublicDebate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         if (page < 0)
             return new ArrayList<>();
-        return debateDao.getPublicDebatesGeneral(page, PAGE_SIZE, search, category, order, status, date);
+        return debateDao.getPublicDebatesDiscovery(page, PAGE_SIZE, search, category, order, status, date);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public List<PublicDebate> getMostSubscribed() {
-        return debateDao.getPublicDebatesGeneral(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
+        return debateDao.getPublicDebatesDiscovery(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
     }
 
     @Override

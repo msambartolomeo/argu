@@ -23,7 +23,7 @@ public interface DebateDao {
 
     boolean isUserSubscribed(long userid, long debateid);
 
-    List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
+    List<PublicDebate> getPublicDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
 
     int getPublicDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date);
 
