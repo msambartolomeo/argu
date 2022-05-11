@@ -137,7 +137,7 @@ public class DebateController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/{debateId}/unvote", method = {RequestMethod.POST})
+    @RequestMapping(value = "/{debateId}/unvote", method = {RequestMethod.POST, RequestMethod.DELETE})
     public ModelAndView unvoteAgainst(@PathVariable("debateId") final String debateId, Authentication auth) {
         if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
         if (auth == null || auth.getPrincipal() == null) {

@@ -177,7 +177,7 @@
                             </div>
                             <h6><spring:message code="page.debate.change-vote"/></h6>
                             <c:url var="unvotePath" value="/debates/${debate.debateId}/unvote"/>
-                            <form:form method="post" action="${unvotePath}">
+                            <form:form method="delete" action="${unvotePath}">
                                 <button class="btn waves-effect" type="submit"><spring:message code="page.debate.unvote"/></button>
                             </form:form>
                         </c:otherwise>
