@@ -141,7 +141,7 @@ public class DebateServiceImpl implements DebateService {
         PublicDebate debate = getPublicDebateById(id).orElseThrow(DebateNotFoundException::new);
 
         if (debate.getDebateStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreatorUsername()) || username.equals(debate.getOpponentUsername())))
-            throw new ForbiddenPostException(); // TODO change to ForbiddenDebate ?
+            throw new ForbiddenDebateException();
 
         debateDao.changeDebateStatus(id, DebateStatus.CLOSING);
     }

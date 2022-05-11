@@ -6,10 +6,7 @@ import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
-import ar.edu.itba.paw.model.exceptions.ImageNotFoundException;
-import ar.edu.itba.paw.model.exceptions.InvalidPageException;
-import ar.edu.itba.paw.model.exceptions.UnauthorizedUserException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.form.CreateDebateForm;
 import ar.edu.itba.paw.webapp.form.ModeratorForm;
 import ar.edu.itba.paw.webapp.form.ProfileImageForm;
@@ -17,6 +14,7 @@ import ar.edu.itba.paw.webapp.form.RegisterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -49,14 +47,17 @@ public class WebController {
     }
 
     @RequestMapping(value = "/moderator", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView moderatorPage(@ModelAttribute("moderatorForm") final ModeratorForm form) {
+    public ModelAndView moderatorPage(@ModelAttribute("moderatorForm") final ModeratorForm form, Authentication authentication) {
+        if (authentication != null && authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MODERATOR"))) {
+            throw new Exception403();
+        }
         return new ModelAndView("pages/request-moderator");
     }
 
     @RequestMapping(value = "/moderator", method = { RequestMethod.POST })
     public ModelAndView moderatorPage(@Valid @ModelAttribute("moderatorForm") final ModeratorForm form, BindingResult errors, Authentication authentication) {
         if (errors.hasErrors()) {
-            return moderatorPage(form);
+            return moderatorPage(form, authentication);
         }
         LOGGER.info("user {} requested moderator status because reason: {}", authentication.getName(), form.getReason());
         userService.requestModerator(authentication.getName(), form.getReason());
@@ -150,6 +151,7 @@ public class WebController {
     }
 
     @RequestMapping(value = "/404")
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView error() {
         return new ModelAndView("error/404");
     }

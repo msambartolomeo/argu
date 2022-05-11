@@ -515,8 +515,7 @@ public class DebateServiceImplTest {
         debateService.startConclusion(DEBATE_ID, USER_USERNAME);
     }
 
-    // TOOD change exception ?
-    @Test(expected = ForbiddenPostException.class)
+    @Test(expected = ForbiddenDebateException.class)
     public void testStartConclusionInvalidUser() {
         PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.OPEN, FOR_COUNT, AGAINST_COUNT);
         when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
@@ -524,7 +523,7 @@ public class DebateServiceImplTest {
         debateService.startConclusion(DEBATE_ID, USER_USERNAME);
     }
 
-    @Test(expected = ForbiddenPostException.class)
+    @Test(expected = ForbiddenDebateException.class)
     public void testStartConclusionAlreadyStarted() {
         PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.CLOSING, FOR_COUNT, AGAINST_COUNT);
         when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
@@ -532,7 +531,7 @@ public class DebateServiceImplTest {
         debateService.startConclusion(DEBATE_ID, DEBATE_CREATOR);
     }
 
-    @Test(expected = ForbiddenPostException.class)
+    @Test(expected = ForbiddenDebateException.class)
     public void testStartConclusionClosed() {
         PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.CLOSED, FOR_COUNT, AGAINST_COUNT);
         when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));

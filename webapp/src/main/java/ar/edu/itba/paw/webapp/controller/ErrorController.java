@@ -23,11 +23,12 @@ public class ErrorController {
         return new ModelAndView("pages/login");
     }
 
-    @ExceptionHandler(ForbiddenPostException.class)
+    @ExceptionHandler(Exception403.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
-    public ModelAndView handleForbiddenPostException(ForbiddenPostException e) {
-        return new ModelAndView("error/404");
-        // TODO: change to 403
+    public ModelAndView handleForbiddenPostException(Exception403 e) {
+        ModelAndView mav = new ModelAndView("error/404");
+        mav.addObject("exception", e.getMessageCode());
+        return mav;
     }
 
     @ExceptionHandler(Exception500.class)
