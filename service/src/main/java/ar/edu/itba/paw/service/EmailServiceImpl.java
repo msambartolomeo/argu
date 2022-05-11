@@ -1,24 +1,17 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.services.EmailService;
-import ar.edu.itba.paw.model.exceptions.MailingException;
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 
 import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -26,6 +19,7 @@ public class EmailServiceImpl implements EmailService {
     private JavaMailSender emailSender;
     @Autowired
     Environment env;
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     private final String htmlMailFirstHalf = "<!DOCTYPE html\n" +
             "    PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" +
@@ -423,7 +417,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             emailSender.send(message);
         } catch (Exception e) {
-            throw new MailingException("Error sending email to self", e);
+            LOGGER.error("Error sending image to self {}", e.toString());
         }
     }
 
@@ -449,7 +443,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setFrom("noreply@argu.com"); //TODO: Actualizar el nombre
             emailSender.send(mimeMessage);
         } catch (Exception e) {
-            e.printStackTrace(); //TODO: handle exception
+            LOGGER.error("Error notifying new post to {}, {}", to, e.toString());
         }
     }
 
@@ -475,7 +469,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setFrom("noreply@argu.com"); //TODO: Actualizar el nombre
             emailSender.send(mimeMessage);
         } catch (Exception e) {
-            throw new MailingException("Error notifying user", e);
+            LOGGER.error("Error notifying user {}, {}", to, e.toString());
         }
     }
 }
