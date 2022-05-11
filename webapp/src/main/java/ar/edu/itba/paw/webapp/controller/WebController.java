@@ -49,7 +49,7 @@ public class WebController {
     @RequestMapping(value = "/moderator", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView moderatorPage(@ModelAttribute("moderatorForm") final ModeratorForm form, Authentication authentication) {
         if (authentication != null && authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MODERATOR"))) {
-            throw new Exception403();
+            throw new Exception403("User does not have the authority to send a request to become a moderator");
         }
         return new ModelAndView("pages/request-moderator");
     }
@@ -157,9 +157,12 @@ public class WebController {
     @RequestMapping(value = "/404")
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView error() {
+        LOGGER.error("error 404");
         return new ModelAndView("error/404");
     }
 
     @RequestMapping(value = "/500")
-    public ModelAndView error500() { return new ModelAndView("error/500"); }
+    public ModelAndView error500() {
+        LOGGER.error("error 500");
+        return new ModelAndView("error/500"); }
 }
