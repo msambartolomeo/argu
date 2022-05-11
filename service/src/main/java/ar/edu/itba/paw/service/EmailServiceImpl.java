@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.model.exceptions.MailingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -29,20 +30,15 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendEmailSelf(String subject, String body) {
-        sendEmail(env.getProperty("spring.mail.username"), subject, body);
-    }
-
-    @Override
-    public void sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("noreply@argu.com");
-        message.setTo(to);
+        message.setTo(env.getProperty("spring.mail.username"));
         message.setSubject(subject);
         message.setText(body);
         try {
             emailSender.send(message);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new MailingException("Error sending email to self", e);
         }
     }
 
@@ -444,17 +440,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setFrom("noreply@argu.com"); //TODO: Actualizar el nombre
             emailSender.send(mimeMessage);
         } catch (Exception e) {
-            e.printStackTrace(); //TODO: handle exception
-        }
-    }
-
-    public static class ResourceReader {
-        public static String asString(Resource resource) {
-            try (Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
-                return FileCopyUtils.copyToString(reader);
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
+            throw new MailingException("Error notifying user", e);
         }
     }
 }
