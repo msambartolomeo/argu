@@ -40,6 +40,8 @@ public class PostJdbcDaoTest {
     private final static String POST_CONTENT = "Post Content";
     private final static String POST_DATE = LocalDateTime.parse("2022-01-01T00:00:00")
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+    private final static String PUBLIC_POST_DATE = LocalDateTime.parse(POST_DATE, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
+            .format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yy"));
     private final static ArgumentStatus POST_STATUS = ArgumentStatus.ARGUMENT;
     private final static int POST_PAGE = 0;
 
@@ -62,8 +64,6 @@ public class PostJdbcDaoTest {
     private final static String DEBATE_DESCRIPTION = "Debate Description Test";
     private final static String DEBATE_DATE = LocalDateTime.parse("2022-01-01T00:00:00")
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
-    private final static String PUBLIC_DEBATE_DATE = LocalDateTime.parse(DEBATE_DATE, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
-            .format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yy"));
     private final DebateCategory DEBATE_CATEGORY = DebateCategory.OTHER;
     private final static DebateStatus DEBATE_STATUS = DebateStatus.OPEN;
 
@@ -186,7 +186,7 @@ public class PostJdbcDaoTest {
         assertEquals(postDebateId, post.get().getDebateId());
         assertEquals(POST_CONTENT, post.get().getContent());
         assertEquals(imageId, post.get().getImageId());
-        assertEquals(PUBLIC_DEBATE_DATE, post.get().getCreatedDate());
+        assertEquals(PUBLIC_POST_DATE, post.get().getCreatedDate());
         assertEquals(POST_STATUS, post.get().getStatus());
     }
 
@@ -216,7 +216,7 @@ public class PostJdbcDaoTest {
         assertEquals(postDebateId, posts.get(0).getDebateId());
         assertEquals(POST_CONTENT, posts.get(0).getContent());
         assertEquals(imageId, posts.get(0).getImageId());
-        assertEquals(PUBLIC_DEBATE_DATE, posts.get(0).getCreatedDate());
+        assertEquals(PUBLIC_POST_DATE, posts.get(0).getCreatedDate());
         assertEquals(POST_STATUS, posts.get(0).getStatus());
     }
 
@@ -266,7 +266,7 @@ public class PostJdbcDaoTest {
         assertEquals(postDebateId, posts.get(0).getDebateId());
         assertEquals(POST_CONTENT, posts.get(0).getContent());
         assertEquals(imageId, posts.get(0).getImageId());
-        assertEquals(PUBLIC_DEBATE_DATE, posts.get(0).getCreatedDate());
+        assertEquals(PUBLIC_POST_DATE, posts.get(0).getCreatedDate());
         assertEquals(POST_STATUS, posts.get(0).getStatus());
         assertTrue(posts.get(0).getLiked());
     }
@@ -393,7 +393,7 @@ public class PostJdbcDaoTest {
         assertEquals(postDebateId, post.get().getDebateId());
         assertEquals(USER_USERNAME, post.get().getUsername());
         assertEquals(POST_CONTENT, post.get().getContent());
-        assertEquals(PUBLIC_DEBATE_DATE, post.get().getCreatedDate());
+        assertEquals(PUBLIC_POST_DATE, post.get().getCreatedDate());
         assertEquals(POST_STATUS, post.get().getStatus());
     }
 }

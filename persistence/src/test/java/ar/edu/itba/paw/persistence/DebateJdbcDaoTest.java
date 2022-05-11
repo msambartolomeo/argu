@@ -40,7 +40,7 @@ public class DebateJdbcDaoTest {
     private final static String DEBATE_DATE = LocalDateTime.parse("2022-01-01T00:00:00", DateTimeFormatter.ISO_DATE_TIME)
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
     private final static String PUBLIC_DEBATE_DATE = LocalDateTime.parse(DEBATE_DATE, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
-            .format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yy"));
+            .format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
     private final static DebateCategory DEBATE_CATEGORY = DebateCategory.OTHER;
     private final static DebateStatus DEBATE_STATUS = DebateStatus.OPEN;
     private final static DebateVote DEBATE_VOTE_FOR = DebateVote.FOR;
