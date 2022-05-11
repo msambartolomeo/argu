@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.UserRole;
+import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -123,14 +124,6 @@ public class UserServiceImplTest {
 
         assertFalse(u.isPresent());
     }
-
-    @Test
-    public void testRequestModerator() {
-        userService.requestModerator(USER_USERNAME, MODERATOR_REASON);
-
-        Mockito.verify(emailService).sendEmailSelf(Mockito.anyString(), Mockito.anyString());
-    }
-
     @Test
     public void testUpdateImage() {
         User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, IMAGE_ID, USER_ROLE);
@@ -155,6 +148,12 @@ public class UserServiceImplTest {
 
         Mockito.verify(userDao).updateImage(Mockito.anyLong(), Mockito.anyLong());
         Mockito.verify(imageService, Mockito.times(0)).deleteImage(Mockito.anyLong());
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testUpdateImageNoValidUser() {
+        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.empty());
+        userService.updateImage(USER_USERNAME, IMAGE_DATA);
     }
 
     @Test

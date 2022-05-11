@@ -203,12 +203,20 @@ public class PostServiceImplTest {
         postService.likePost(POST_ID, USER_USERNAME);
     }
 
-
-    // TODO chequear cuando tiremos la excepcion de que no existe el post
     @Test(expected = PostNotFoundException.class)
     public void testLikePostNotValidPost() {
         User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+
+        postService.likePost(POST_ID, USER_USERNAME);
+    }
+    @Test(expected = UserAlreadyLikedException.class)
+    public void testLikePostAlreadyLiked() {
+        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
+        PublicPost post = new PublicPost(POST_ID, POST_USERNAME, DEBATE_ID, POST_CONTENT, LIKES, POST_DATE, IMAGE_ID, ArgumentStatus.ARGUMENT);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+        when(postDao.getPublicPostById(anyLong())).thenReturn(Optional.of(post));
+        when(postDao.hasLiked(anyLong(), anyLong())).thenReturn(true);
 
         postService.likePost(POST_ID, USER_USERNAME);
     }
@@ -228,17 +236,6 @@ public class PostServiceImplTest {
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.empty());
 
         postService.unlikePost(POST_ID, USER_USERNAME);
-    }
-
-    @Test(expected = UserAlreadyLikedException.class)
-    public void testLikePostAlreadyLiked() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        PublicPost post = new PublicPost(POST_ID, POST_USERNAME, DEBATE_ID, POST_CONTENT, LIKES, POST_DATE, IMAGE_ID, ArgumentStatus.ARGUMENT);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        when(postDao.getPublicPostById(anyLong())).thenReturn(Optional.of(post));
-        when(postDao.hasLiked(anyLong(), anyLong())).thenReturn(true);
-
-        postService.likePost(POST_ID, USER_USERNAME);
     }
 
     @Test

@@ -54,11 +54,4 @@ public class ImageServiceImplTest {
 
         assertEquals(image.getData(), i.getData());
     }
-
-    @Test
-    public void testDeleteImage() {
-        imageService.deleteImage(IMAGE_ID);
-
-        Mockito.verify(imageDao).deleteImage(IMAGE_ID);
-    }
 }
