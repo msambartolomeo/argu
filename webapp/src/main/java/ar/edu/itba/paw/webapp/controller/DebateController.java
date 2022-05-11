@@ -44,8 +44,6 @@ public class DebateController {
         if (!page.matches("-?\\d+")) throw new InvalidPageException();
         String auxOrder = order;
         if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(auxOrder))) order = null;
-        // TODO: acá no deberíamos también poner closing?
-        // TODO: si closing es parte de open, entonces deberíamos ponerlo en el frontend. Mostremos al usuario algo tipo "Open (closing)" o algo así
         if (status != null && !status.equals("open") && !status.equals("closed")) status = null;
         if (category != null && Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category)))
             throw new CategoryNotFoundException();
