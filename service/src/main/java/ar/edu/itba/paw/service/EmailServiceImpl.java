@@ -463,7 +463,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             helper.setText(htmlMsg, true); // Use this or above line.
             helper.setTo(to);
-            helper.setSubject(from + " invited you to be his opponent in a debate!");
+            helper.setSubject(from + " invited you to be their opponent in a debate!");
             helper.setFrom("noreply@argu.com");
             emailSender.send(mimeMessage);
         } catch (Exception e) {
