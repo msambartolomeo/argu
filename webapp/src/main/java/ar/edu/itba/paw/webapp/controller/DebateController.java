@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.PostService;
-import ar.edu.itba.paw.model.PublicPost;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateVote;
@@ -67,7 +66,7 @@ public class DebateController {
 
         final ModelAndView mav = new ModelAndView("pages/debate");
         mav.addObject("debate", debateService.getPublicDebateById(debateIdNum).orElseThrow(DebateNotFoundException::new));
-        mav.addObject("total_pages", postService.getPostsByDebateCount(debateIdNum));
+        mav.addObject("total_pages", postService.getPostsByDebatePageCount(debateIdNum));
 
         if(auth != null && auth.getPrincipal() != null) {
             mav.addObject("isSubscribed", debateService.isUserSubscribed(auth.getName(), debateIdNum));

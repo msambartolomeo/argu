@@ -91,6 +91,9 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
+        if (page < 0) {
+            return new ArrayList<>();
+        }
         if (list.equals("subscribed"))
             return debateDao.getSubscribedDebatesByUserId(userid, page);
         else return debateDao.getMyDebates(userid, page);
@@ -122,10 +125,10 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public String getUserVote(long debateid, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        PublicDebate debate = debateDao.getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
         if(!debateDao.hasUserVoted(debateid, user.getUserId()))
             return null;
         DebateVote debateVote = debateDao.getUserVote(debateid, user.getUserId());
-        PublicDebate debate = debateDao.getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
 
         if(debateVote == DebateVote.FOR) {
             return debate.getCreatorUsername();
