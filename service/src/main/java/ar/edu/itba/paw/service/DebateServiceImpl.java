@@ -108,6 +108,7 @@ public class DebateServiceImpl implements DebateService {
         return (int) Math.ceil(count / (double) PAGE_SIZE);
     }
 
+    @Transactional
     @Override
     public void addVote(long debateId, String username, DebateVote vote) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
@@ -116,6 +117,7 @@ public class DebateServiceImpl implements DebateService {
         debateDao.addVote(debateId, user.getUserId(), vote);
     }
 
+    @Transactional
     @Override
     public void removeVote(long debateId, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
@@ -136,6 +138,7 @@ public class DebateServiceImpl implements DebateService {
             return debate.getOpponentUsername();
     }
 
+    @Transactional
     @Override
     public void startConclusion(long id, String username) {
         PublicDebate debate = getPublicDebateById(id).orElseThrow(DebateNotFoundException::new);
@@ -146,6 +149,7 @@ public class DebateServiceImpl implements DebateService {
         debateDao.changeDebateStatus(id, DebateStatus.CLOSING);
     }
 
+    @Transactional
     @Override
     public void closeDebate(long id) {
         debateDao.changeDebateStatus(id, DebateStatus.CLOSED);
