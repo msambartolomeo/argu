@@ -28,6 +28,8 @@ public class DebateJdbcDao implements DebateDao {
     private final SimpleJdbcInsert jdbcInsertSubscribed;
     private final SimpleJdbcInsert jdbcInsertVotes;
 
+    private final static DebateStatus DEFAULT_DEBATE_STATUS = DebateStatus.OPEN;
+
     private static final RowMapper<PublicDebate> PUBLIC_ROW_MAPPER = (rs, rowNum) ->
             new PublicDebate(
                     rs.getLong("debateid"),
@@ -64,8 +66,8 @@ public class DebateJdbcDao implements DebateDao {
         data.put("opponentid", opponentId);
         data.put("created_date", created.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
         data.put("imageid", imageId);
-        data.put("category", DebateCategory.getFromCategory(category));
-        data.put("status", DebateStatus.getFromStatus(DebateStatus.OPEN));
+        data.put("category", category.ordinal());
+        data.put("status", DEFAULT_DEBATE_STATUS.ordinal());
 
         final Number debateId = jdbcInsert.executeAndReturnKey(data);
 
@@ -108,7 +110,7 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, String category, String order, String status, String date) {
+    public List<PublicDebate> getPublicDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         StringBuilder queryString = new StringBuilder("SELECT * FROM public_debates WHERE TRUE");
         List<Object> params = setUpQuery(searchQuery, category, queryString, status, date);
 
@@ -117,7 +119,7 @@ public class DebateJdbcDao implements DebateDao {
         if (order == null)
             orderBy = DebateOrder.DATE_DESC;
         else
-            orderBy = DebateOrder.valueOf(order.toUpperCase());
+            orderBy = order;
 
         switch(orderBy) {
             case DATE_ASC:
@@ -148,39 +150,39 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public int getPublicDebatesCount(String searchQuery, String category, String status, String date) {
+    public int getPublicDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date) {
         StringBuilder queryString = new StringBuilder("SELECT COUNT(*) FROM public_debates WHERE TRUE");
         List<Object> params = setUpQuery(searchQuery, category, queryString, status, date);
         return jdbcTemplate.query(queryString.toString(), params.toArray(), (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 
-    private List<Object> setUpQuery(String searchQuery, String category, StringBuilder queryString, String status, String date) {
+    private List<Object> setUpQuery(String searchQuery, DebateCategory category, StringBuilder queryString, DebateStatus status, LocalDate date) {
         List<Object> params = new ArrayList<>();
 
-        if(searchQuery != null) {
-            queryString.append(" AND name ILIKE ?");
+        if(searchQuery != null) { //TODO: Preguntar sobre ILIKE (extensión de PGS). Anda en PostgreSQL, no en HSQLDB. ¿Podría lower(name) fallar con caracteres sin minúsculas asociadas?
+            queryString.append(" AND lower(name) LIKE lower(?)");
             params.add("%" + searchQuery + "%");
         }
         if(category != null) {
             queryString.append(" AND category = ?");
-            params.add(DebateCategory.getFromCategory(DebateCategory.valueOf(category.toUpperCase())));
+            params.add(category.ordinal());
         }
         if (status != null) {
             // TODO buscar mejor solucion (si busco por open necesito tambien ver los que estan closing) (o sino diferenciar la busqueda pero me parece raro)
-            params.add(DebateStatus.getFromStatus(DebateStatus.valueOf(status.toUpperCase())));
-            if (status.equals("open")) {
+            params.add(status.ordinal());
+            if (status == DebateStatus.OPEN) {
                 queryString.append(" AND (status = ? OR status = ?)");
-                params.add(DebateStatus.getFromStatus(DebateStatus.CLOSING));
+                params.add(DebateStatus.CLOSING.ordinal());
             } else {
                 queryString.append(" AND status = ?");
             }
         }
         if (date != null) {
-            LocalDateTime dateTime = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).atStartOfDay();
+            LocalDateTime dateTime = date.atStartOfDay();
             queryString.append(" AND created_date >= ?");
-            params.add(dateTime);
+            params.add(Timestamp.valueOf(dateTime));
             queryString.append(" AND created_date <= ?");
-            params.add(dateTime.plusDays(1));
+            params.add(Timestamp.valueOf(dateTime.plusDays(1)));
         }
         return params;
     }
@@ -226,6 +228,6 @@ public class DebateJdbcDao implements DebateDao {
 
     @Override
     public void changeDebateStatus(long id, DebateStatus status) {
-        jdbcTemplate.update("UPDATE debates SET status = ? WHERE debateid = ?", DebateStatus.getFromStatus(status), id);
+        jdbcTemplate.update("UPDATE debates SET status = ? WHERE debateid = ?", status.ordinal(), id);
     }
 }

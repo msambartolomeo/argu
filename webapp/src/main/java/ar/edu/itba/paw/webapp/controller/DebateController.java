@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
+import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.form.PostForm;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
 
 @Controller
@@ -40,8 +42,10 @@ public class DebateController {
                                     @RequestParam(value = "date", required = false) String date) {
 
         if (!page.matches("-?\\d+")) throw new InvalidPageException();
-        String finalOrder = order;
-        if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(finalOrder))) order = null;
+        String auxOrder = order;
+        if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(auxOrder))) order = null;
+        // TODO: acá no deberíamos también poner closing?
+        // TODO: si closing es parte de open, entonces deberíamos ponerlo en el frontend. Mostremos al usuario algo tipo "Open (closing)" o algo así
         if (status != null && !status.equals("open") && !status.equals("closed")) status = null;
         if (category != null && Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category)))
             throw new CategoryNotFoundException();
@@ -50,8 +54,14 @@ public class DebateController {
         final ModelAndView mav = new ModelAndView("pages/debates-list");
         mav.addObject("categories", DebateCategory.values());
         mav.addObject("orders", DebateOrder.values());
-        mav.addObject("total_pages", debateService.getPages(search, category, status, date));
-        mav.addObject("debates", debateService.get(Integer.parseInt(page), search, category, order, status, date));
+
+        DebateCategory finalCategory = category == null ? null : DebateCategory.valueOf(category.toUpperCase());
+        DebateOrder finalOrder = order == null ? null : DebateOrder.valueOf(order.toUpperCase());
+        DebateStatus finalStatus = status == null ? null : DebateStatus.valueOf(status.toUpperCase());
+        LocalDate finalDate = date == null ? null : LocalDate.parse(date);
+
+        mav.addObject("total_pages", debateService.getPages(search, finalCategory, finalStatus, finalDate));
+        mav.addObject("debates", debateService.get(Integer.parseInt(page), search, finalCategory, finalOrder, finalStatus, finalDate));
         return mav;
     }
 
@@ -76,7 +86,6 @@ public class DebateController {
         } else {
             mav.addObject("posts", postService.getPublicPostsByDebate(debateIdNum, pageNum));
         }
-
         return mav;
     }
 

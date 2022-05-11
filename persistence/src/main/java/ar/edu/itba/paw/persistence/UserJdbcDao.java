@@ -74,7 +74,7 @@ public class UserJdbcDao implements UserDao {
         userData.put("password", password);
         userData.put("email", email);
         userData.put("created_date", created.toString());
-        userData.put("role", UserRole.getValue(UserRole.USER));
+        userData.put("role", UserRole.USER.ordinal());
 
         final Number userId = jdbcInsert.executeAndReturnKey(userData);
 

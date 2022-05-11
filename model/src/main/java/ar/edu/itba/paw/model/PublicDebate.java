@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.enums.DebateStatus;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class PublicDebate {
     private final long debateId;
@@ -84,5 +85,22 @@ public class PublicDebate {
 
     public Integer getAgainstCount() {
         return againstCount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PublicDebate that = (PublicDebate) o;
+        return debateId == that.debateId && name.equals(that.name) && description.equals(that.description)
+                && creatorUsername.equals(that.creatorUsername) && Objects.equals(opponentUsername, that.opponentUsername)
+                && Objects.equals(imageId, that.imageId) && createdDate.equals(that.createdDate) && debateCategory == that.debateCategory
+                && debateStatus == that.debateStatus && subscribedUsers.equals(that.subscribedUsers) && forCount.equals(that.forCount)
+                && againstCount.equals(that.againstCount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(debateId, name, description, creatorUsername, opponentUsername, imageId, createdDate, debateCategory, debateStatus, subscribedUsers, forCount, againstCount);
     }
 }

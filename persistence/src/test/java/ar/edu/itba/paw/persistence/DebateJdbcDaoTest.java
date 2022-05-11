@@ -98,7 +98,7 @@ public class DebateJdbcDaoTest {
         userData.put("password", USER_PASSWORD);
         userData.put("email", USER_EMAIL);
         userData.put("date", USER_DATE.toString());
-        userData.put("role", UserRole.getValue(USER_ROLE));
+        userData.put("role", USER_ROLE.ordinal());
         userId = jdbcInsertUser.executeAndReturnKey(userData).longValue();
     }
 
@@ -151,8 +151,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -183,8 +183,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -219,8 +219,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -241,8 +241,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -258,8 +258,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -280,8 +280,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -297,8 +297,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -314,8 +314,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -336,8 +336,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -362,15 +362,15 @@ public class DebateJdbcDaoTest {
         userData.put("password", USER_PASSWORD);
         userData.put("email", USER_OTHER_EMAIL);
         userData.put("created_date", USER_DATE.toString());
-        userData.put("role", UserRole.getValue(USER_ROLE));
+        userData.put("role", USER_ROLE.ordinal());
         long userKey = jdbcInsertUser.executeAndReturnKey(userData).longValue();
 
         final Map<String, Object> debateData = new HashMap<>();
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userKey);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -394,15 +394,16 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         jdbcInsert.execute(debateData);
 
         int count = debateDao.getMyDebatesCount(userId);
 
-        assertEquals(1, count);
+        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DEBATES_TABLE,
+                "creatorid = " + userId  +" OR opponentid = " + userId), count);
     }
 
     @Test
@@ -418,8 +419,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -436,8 +437,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -461,8 +462,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -484,8 +485,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -502,8 +503,8 @@ public class DebateJdbcDaoTest {
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
         debateData.put("creatorid", userId);
         debateData.put("opponentid", userId);
         long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
@@ -517,6 +518,78 @@ public class DebateJdbcDaoTest {
         boolean result = debateDao.hasUserVoted(debateKey, userId);
 
         assertTrue(result);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, VOTES_TABLE, "vote = " + DEBATE_VOTE_FOR.ordinal()));
+    }
+    @Test
+    public void testGetUserVoteFor() {
+        final Map<String, Object> debateData = new HashMap<>();
+        debateData.put("name", DEBATE_NAME);
+        debateData.put("description", DEBATE_DESCRIPTION);
+        debateData.put("created_date", DEBATE_DATE);
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
+        debateData.put("creatorid", userId);
+        debateData.put("opponentid", userId);
+        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+
+        final Map<String, Object> voteData = new HashMap<>();
+        voteData.put("debateid", debateKey);
+        voteData.put("userid", userId);
+        voteData.put("vote", DEBATE_VOTE_FOR.ordinal());
+        jdbcInsertVotes.execute(voteData);
+
+        DebateVote result = debateDao.getUserVote(debateKey, userId);
+
+        assertEquals(DEBATE_VOTE_FOR, result);
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, VOTES_TABLE));
+    }
+
+    @Test
+    public void testGetUserVoteAgainst() {
+        final Map<String, Object> debateData = new HashMap<>();
+        debateData.put("name", DEBATE_NAME);
+        debateData.put("description", DEBATE_DESCRIPTION);
+        debateData.put("created_date", DEBATE_DATE);
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
+        debateData.put("creatorid", userId);
+        debateData.put("opponentid", userId);
+        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+
+        final Map<String, Object> voteData = new HashMap<>();
+        voteData.put("debateid", debateKey);
+        voteData.put("userid", userId);
+        voteData.put("vote", DEBATE_VOTE_AGAINST.ordinal());
+        jdbcInsertVotes.execute(voteData);
+
+        DebateVote result = debateDao.getUserVote(debateKey, userId);
+
+        assertEquals(DEBATE_VOTE_AGAINST, result);
+        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, VOTES_TABLE));
+    }
+
+    @Test
+    public void testChangeDebateStatusEmpty() {
+        debateDao.changeDebateStatus(DEBATE_ID, DebateStatus.OPEN);
+
+        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, DEBATES_TABLE));
+    }
+
+    @Test
+    public void testChangeDebateStatus() {
+        final Map<String, Object> debateData = new HashMap<>();
+        debateData.put("name", DEBATE_NAME);
+        debateData.put("description", DEBATE_DESCRIPTION);
+        debateData.put("created_date", DEBATE_DATE);
+        debateData.put("status", DEBATE_STATUS.ordinal());
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
+        debateData.put("creatorid", userId);
+        debateData.put("opponentid", userId);
+        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+
+        debateDao.changeDebateStatus(debateKey, DebateStatus.CLOSED);
+
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DEBATES_TABLE, "status = " + DebateStatus.OPEN.ordinal()));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DEBATES_TABLE, "status = " + DebateStatus.CLOSED.ordinal()));
     }
 }

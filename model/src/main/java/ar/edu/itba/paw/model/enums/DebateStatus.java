@@ -18,7 +18,4 @@ public enum DebateStatus {
     public static DebateStatus getFromInt(int i) {
         return DebateStatus.values()[i];
     }
-    public static int getFromStatus(DebateStatus status) {
-        return status.ordinal();
-    }
 }

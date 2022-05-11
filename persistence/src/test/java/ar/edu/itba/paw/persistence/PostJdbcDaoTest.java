@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -103,15 +104,15 @@ public class PostJdbcDaoTest {
         userData.put("password", USER_PASSWORD);
         userData.put("email", USER_EMAIL);
         userData.put("created_date", USER_DATE.toString());
-        userData.put("role", UserRole.getValue(USER_ROLE));
+        userData.put("role", USER_ROLE.ordinal());
         postUserId = jdbcInsertUsers.executeAndReturnKey(userData).longValue();
 
         final Map<String, Object> debateData = new HashMap<>();
         debateData.put("name", DEBATE_NAME);
         debateData.put("description", DEBATE_DESCRIPTION);
         debateData.put("created_date", DEBATE_DATE);
-        debateData.put("category", DebateCategory.getFromCategory(DEBATE_CATEGORY));
-        debateData.put("status", DebateStatus.getFromStatus(DEBATE_STATUS));
+        debateData.put("category", DEBATE_CATEGORY.ordinal());
+        debateData.put("status", DEBATE_STATUS.ordinal());
         postDebateId = jdbcInsertDebates.executeAndReturnKey(debateData).longValue();
 
         final Map<String, Object> imageData = new HashMap<>();
@@ -334,5 +335,34 @@ public class PostJdbcDaoTest {
         boolean hasLiked = postDao.hasLiked(postId, postUserId);
 
         assertTrue(hasLiked);
+    }
+
+    @Test
+    public void testGetLastArgumentEmpty() {
+        Optional<PublicPost> post = postDao.getLastArgument(postDebateId);
+
+        assertFalse(post.isPresent());
+    }
+
+    @Test
+    public void testGetLastArgument() {
+        final Map<String, Object> postData = new HashMap<>();
+        postData.put("debateid", postDebateId);
+        postData.put("userid", postUserId);
+        postData.put("content", POST_CONTENT);
+        postData.put("imageid", imageId);
+        postData.put("created_date", POST_DATE);
+        postData.put("status", POST_STATUS.ordinal());
+        long postId = jdbcInsert.executeAndReturnKey(postData).longValue();
+
+        Optional<PublicPost> post = postDao.getLastArgument(postDebateId);
+
+        assertTrue(post.isPresent());
+        assertEquals(postId, post.get().getPostId());
+        assertEquals(postDebateId, post.get().getDebateId());
+        assertEquals(USER_USERNAME, post.get().getUsername());
+        assertEquals(POST_CONTENT, post.get().getContent());
+        assertEquals(PUBLIC_DEBATE_DATE, post.get().getCreatedDate());
+        assertEquals(POST_STATUS, post.get().getStatus());
     }
 }

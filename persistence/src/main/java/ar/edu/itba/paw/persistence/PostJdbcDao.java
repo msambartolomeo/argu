@@ -83,7 +83,7 @@ public class PostJdbcDao implements PostDao {
         data.put("content", content);
         data.put("created_date", created.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
         data.put("imageid", imageId);
-        data.put("status", ArgumentStatus.getFromStatus(status));
+        data.put("status", status.ordinal());
 
         final Number postId = jdbcInsert.executeAndReturnKey(data);
 
