@@ -23,7 +23,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -423,11 +422,9 @@ public class PostServiceImplTest {
 
         Post p = postService.create(DEBATE_CREATOR, DEBATE_ID, POST_CONTENT, new byte[0]);
 
-        assertEquals(p.getPostId(), post.getPostId());
         assertEquals(p.getUserId(), post.getUserId());
         assertEquals(p.getDebateId(), post.getDebateId());
         assertEquals(p.getContent(), post.getContent());
-        assertEquals(p.getCreationDate(), post.getCreationDate());
         assertEquals(p.getImageId(), post.getImageId());
         assertEquals(p.getStatus(), post.getStatus());
     }
@@ -445,12 +442,26 @@ public class PostServiceImplTest {
 
         Post p = postService.create(DEBATE_CREATOR, DEBATE_ID, POST_CONTENT, IMAGE_DATA);
 
-        assertEquals(p.getPostId(), post.getPostId());
         assertEquals(p.getUserId(), post.getUserId());
         assertEquals(p.getDebateId(), post.getDebateId());
         assertEquals(p.getContent(), post.getContent());
-        assertEquals(p.getCreationDate(), post.getCreationDate());
         assertEquals(p.getImageId(), post.getImageId());
         assertEquals(p.getStatus(), post.getStatus());
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testHasLikedInvalidUser() {
+        postService.hasLiked(POST_ID, USER_USERNAME);
+    }
+
+    @Test
+    public void testHasLiked() {
+        User user = new User(USER_ID, DEBATE_CREATOR, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+        when(postDao.hasLiked(anyLong(), anyLong())).thenReturn(true);
+
+        boolean hasLiked = postService.hasLiked(POST_ID, DEBATE_CREATOR);
+
+        assertTrue(hasLiked);
     }
 }

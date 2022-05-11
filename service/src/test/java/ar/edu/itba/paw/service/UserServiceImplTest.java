@@ -15,6 +15,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -31,6 +33,8 @@ public class UserServiceImplTest {
     private final static UserRole USER_ROLE = UserRole.USER;
     private final static byte[] IMAGE_DATA = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
     private final static long IMAGE_ID = 1;
+
+    private final static long DEBATE_ID = 1;
 
     @InjectMocks
     private UserServiceImpl userService = new UserServiceImpl();
@@ -150,5 +154,33 @@ public class UserServiceImplTest {
 
         Mockito.verify(userDao).updateImage(Mockito.anyLong(), Mockito.anyLong());
         Mockito.verify(imageService, Mockito.times(0)).deleteImage(Mockito.anyLong());
+    }
+
+    @Test
+    public void testGetSubscribedUsersByDebate() {
+        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
+        List<User> users = new ArrayList<>();
+        users.add(user);
+
+        Mockito.when(userDao.getSubscribedUsersByDebate(Mockito.anyLong())).thenReturn(users);
+
+        List<User> u = userService.getSubscribedUsersByDebate(DEBATE_ID);
+
+        assertFalse(u.isEmpty());
+        assertEquals(user.getUserId(), u.get(0).getUserId());
+        assertEquals(user.getUsername(), u.get(0).getUsername());
+        assertEquals(user.getPassword(), u.get(0).getPassword());
+        assertEquals(user.getEmail(), u.get(0).getEmail());
+        assertEquals(user.getRole(), u.get(0).getRole());
+        assertEquals(user.getCreatedDate(), u.get(0).getCreatedDate());
+    }
+
+    @Test
+    public void testGetSubscribedUsersByDebateEmpty() {
+        Mockito.when(userDao.getSubscribedUsersByDebate(Mockito.anyLong())).thenReturn(new ArrayList<>());
+
+        List<User> u = userService.getSubscribedUsersByDebate(DEBATE_ID);
+
+        assertTrue(u.isEmpty());
     }
 }
