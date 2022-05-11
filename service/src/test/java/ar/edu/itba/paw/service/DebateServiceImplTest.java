@@ -154,7 +154,7 @@ public class DebateServiceImplTest {
         PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT,AGAINST_COUNT );
         List<PublicDebate> debates = new ArrayList<>();
         debates.add(debate);
-        when(debateDao.getPublicDebatesGeneral(anyInt(),anyInt(),any(), any(), any(), any(), any())).thenReturn(debates);
+        when(debateDao.getPublicDebatesDiscovery(anyInt(),anyInt(),any(), any(), any(), any(), any())).thenReturn(debates);
 
         List<PublicDebate> dl = debateService.get(VALID_PAGE, null, null, null, null, null);
 
@@ -195,7 +195,7 @@ public class DebateServiceImplTest {
         PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT,AGAINST_COUNT );
         List<PublicDebate> debates = new ArrayList<>();
         debates.add(debate);
-        when(debateDao.getPublicDebatesGeneral(anyInt(),anyInt(),any(), any(), any(), any(), any())).thenReturn(debates);
+        when(debateDao.getPublicDebatesDiscovery(anyInt(),anyInt(),any(), any(), any(), any(), any())).thenReturn(debates);
 
         List<PublicDebate> dl = debateService.getMostSubscribed();
 
