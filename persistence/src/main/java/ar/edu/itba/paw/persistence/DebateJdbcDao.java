@@ -110,7 +110,7 @@ public class DebateJdbcDao implements DebateDao {
     }
 
     @Override
-    public List<PublicDebate> getPublicDebatesGeneral(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
+    public List<PublicDebate> getPublicDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         StringBuilder queryString = new StringBuilder("SELECT * FROM public_debates WHERE TRUE");
         List<Object> params = setUpQuery(searchQuery, category, queryString, status, date);
 
@@ -159,8 +159,8 @@ public class DebateJdbcDao implements DebateDao {
     private List<Object> setUpQuery(String searchQuery, DebateCategory category, StringBuilder queryString, DebateStatus status, LocalDate date) {
         List<Object> params = new ArrayList<>();
 
-        if(searchQuery != null) {
-            queryString.append(" AND name ILIKE ?");
+        if(searchQuery != null) { //TODO: Preguntar sobre ILIKE (extensión de PGS). Anda en PostgreSQL, no en HSQLDB. ¿Podría lower(name) fallar con caracteres sin minúsculas asociadas?
+            queryString.append(" AND lower(name) LIKE lower(?)");
             params.add("%" + searchQuery + "%");
         }
         if(category != null) {
@@ -180,9 +180,9 @@ public class DebateJdbcDao implements DebateDao {
         if (date != null) {
             LocalDateTime dateTime = date.atStartOfDay();
             queryString.append(" AND created_date >= ?");
-            params.add(dateTime);
+            params.add(Timestamp.valueOf(dateTime));
             queryString.append(" AND created_date <= ?");
-            params.add(dateTime.plusDays(1));
+            params.add(Timestamp.valueOf(dateTime.plusDays(1)));
         }
         return params;
     }
