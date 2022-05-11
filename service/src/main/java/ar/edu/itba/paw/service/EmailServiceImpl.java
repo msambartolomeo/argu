@@ -439,8 +439,8 @@ public class EmailServiceImpl implements EmailService {
         try {
             helper.setText(htmlMsg, true); // Use this or above line.
             helper.setTo(to);
-            helper.setSubject("New post in a debate you're subscribed to!");
-            helper.setFrom("noreply@argu.com"); //TODO: Actualizar el nombre
+            helper.setSubject("New argument in a debate you're subscribed to!");
+            helper.setFrom("noreply@argu.com");
             emailSender.send(mimeMessage);
         } catch (Exception e) {
             LOGGER.error("Error notifying new post to {}, {}", to, e.toString());
