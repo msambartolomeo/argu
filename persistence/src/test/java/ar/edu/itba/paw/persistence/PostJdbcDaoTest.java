@@ -36,6 +36,7 @@ public class PostJdbcDaoTest {
 
     private final static String POSTS_TABLE = "posts";
     private final static String POST_TABLE_ID = "postid";
+    private final static long POST_ID = 1;
     private final static String POST_CONTENT = "Post Content";
     private final static String POST_DATE = LocalDateTime.parse("2022-01-01T00:00:00")
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
@@ -159,6 +160,36 @@ public class PostJdbcDaoTest {
         assertEquals(POST_STATUS, post.getStatus());
         assertEquals(JdbcTestUtils.countRowsInTable(jdbcTemplate, POSTS_TABLE), 1);
     }
+
+    @Test
+    public void testGetPublicPostByIdEmpty() {
+        Optional<PublicPost> post = postDao.getPublicPostById(POST_ID);
+
+        assertFalse(post.isPresent());
+    }
+
+    @Test
+    public void testGetPublicPostById() {
+        final Map<String, Object> postData = new HashMap<>();
+        postData.put("debateid", postDebateId);
+        postData.put("userid", postUserId);
+        postData.put("content", POST_CONTENT);
+        postData.put("imageid", imageId);
+        postData.put("created_date", POST_DATE);
+        postData.put("status", POST_STATUS.ordinal());
+        long postId = jdbcInsert.executeAndReturnKey(postData).longValue();
+
+        Optional<PublicPost> post = postDao.getPublicPostById(postId);
+
+        assertTrue(post.isPresent());
+        assertEquals(postId, post.get().getPostId());
+        assertEquals(postDebateId, post.get().getDebateId());
+        assertEquals(POST_CONTENT, post.get().getContent());
+        assertEquals(imageId, post.get().getImageId());
+        assertEquals(PUBLIC_DEBATE_DATE, post.get().getCreatedDate());
+        assertEquals(POST_STATUS, post.get().getStatus());
+    }
+
 
     @Test
     public void testGetPublicPostsByDebateEmpty() {
