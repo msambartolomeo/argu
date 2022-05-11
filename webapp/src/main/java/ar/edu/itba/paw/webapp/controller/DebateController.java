@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 @Controller
@@ -59,7 +60,7 @@ public class DebateController {
         DebateCategory finalCategory = category == null ? null : DebateCategory.valueOf(category.toUpperCase());
         DebateOrder finalOrder = order == null ? null : DebateOrder.valueOf(order.toUpperCase());
         DebateStatus finalStatus = status == null ? null : DebateStatus.valueOf(status.toUpperCase());
-        LocalDate finalDate = date == null ? null : LocalDate.parse(date);
+        LocalDate finalDate = date == null ? null : LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         mav.addObject("total_pages", debateService.getPages(search, finalCategory, finalStatus, finalDate));
         mav.addObject("debates", debateService.get(Integer.parseInt(page), search, finalCategory, finalOrder, finalStatus, finalDate));
