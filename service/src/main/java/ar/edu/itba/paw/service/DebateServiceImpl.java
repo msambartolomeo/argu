@@ -113,6 +113,7 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public void addVote(long debateId, String username, DebateVote vote) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        getPublicDebateById(debateId).orElseThrow(DebateNotFoundException::new);
         if (debateDao.hasUserVoted(debateId, user.getUserId()))
             throw new UserAlreadyVotedException();
         debateDao.addVote(debateId, user.getUserId(), vote);

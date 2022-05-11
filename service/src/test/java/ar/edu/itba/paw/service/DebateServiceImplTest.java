@@ -422,8 +422,10 @@ public class DebateServiceImplTest {
     @Test
     public void testAddVote() {
         User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
+        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT,AGAINST_COUNT );
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
         when(debateDao.hasUserVoted(anyLong(), anyLong())).thenReturn(false);
+        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
 
         debateService.addVote(DEBATE_ID, USER_USERNAME, DebateVote.FOR);
 
@@ -433,11 +435,21 @@ public class DebateServiceImplTest {
     @Test(expected = UserAlreadyVotedException.class)
     public void testAddVoteAlreadyVoted() {
         User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
+        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT,AGAINST_COUNT );
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
         when(debateDao.hasUserVoted(anyLong(), anyLong())).thenReturn(true);
+        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
 
         debateService.addVote(DEBATE_ID, USER_USERNAME, DebateVote.FOR);
 
+    }
+
+    @Test(expected = DebateNotFoundException.class)
+    public void testAddVoteDebateNotFound() {
+        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+
+        debateService.addVote(DEBATE_ID, USER_USERNAME, DebateVote.FOR);
     }
 
     @Test(expected = UserNotFoundException.class)
