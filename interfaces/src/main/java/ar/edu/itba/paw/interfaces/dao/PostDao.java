@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostDao {
+    Optional<PublicPost> getPublicPostById(long postId);
+
     int getPostsByDebateCount(long debateId);
 
     List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, long userId, int page);

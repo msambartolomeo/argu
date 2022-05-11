@@ -5,17 +5,13 @@ import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateStatus;
-import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenPostException;
-import ar.edu.itba.paw.model.exceptions.UserAlreadyLikedException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -96,6 +92,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Optional<PublicPost> getPublicPostById(long postId) {
+        return postDao.getPublicPostById(postId);
+    }
+
+    @Override
     public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
         if (page < 0)
             return new ArrayList<>();
@@ -111,6 +112,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void likePost(long postId, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        getPublicPostById(postId).orElseThrow(PostNotFoundException::new);
         if(postDao.hasLiked(postId, user.getUserId()))
             throw new UserAlreadyLikedException();
         postDao.likePost(postId, user.getUserId());

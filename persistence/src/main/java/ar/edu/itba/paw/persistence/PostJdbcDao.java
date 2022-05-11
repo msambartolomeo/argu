@@ -56,6 +56,11 @@ public class PostJdbcDao implements PostDao {
     }
 
     @Override
+    public Optional<PublicPost> getPublicPostById(long postId) {
+        return jdbcTemplate.query("SELECT * FROM public_posts WHERE postid = ?", new Object[]{postId}, PUBLIC_POST_ROW_MAPPER).stream().findFirst();
+    }
+
+    @Override
     public int getPostsByDebateCount(long debateId) {
         return jdbcTemplate.query("SELECT COUNT(*) FROM posts WHERE debateId = ?", new Object[]{debateId}, (rs, rowNum) -> rs.getInt(1)).get(0);
     }

@@ -10,6 +10,9 @@ import java.util.Optional;
 public interface PostService {
     Post create(String username, long debateId, String content, byte[] image);
     int getPostsByDebatePageCount(long debateId);
+
+    Optional<PublicPost> getPublicPostById(long postId);
+
     List<PublicPost> getPublicPostsByDebate(long debateId, int page);
     void likePost(long postId, String username);
     void unlikePost(long postId, String username);

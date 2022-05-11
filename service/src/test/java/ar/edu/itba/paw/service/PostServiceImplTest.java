@@ -10,10 +10,7 @@ import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.UserRole;
-import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenPostException;
-import ar.edu.itba.paw.model.exceptions.PostNotFoundException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -190,7 +187,9 @@ public class PostServiceImplTest {
     @Test
     public void testlikePost() {
         User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
+        PublicPost post = new PublicPost(POST_ID, POST_USERNAME, DEBATE_ID, POST_CONTENT, LIKES, POST_DATE, IMAGE_ID, ArgumentStatus.ARGUMENT);
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+        when(postDao.getPublicPostById(anyLong())).thenReturn(Optional.of(post));
 
         postService.likePost(POST_ID, USER_USERNAME);
 
@@ -231,17 +230,16 @@ public class PostServiceImplTest {
         postService.unlikePost(POST_ID, USER_USERNAME);
     }
 
-
-    // TODO chequear cuando tiremos la excepcion de que no existe el post
-    @Test(expected = PostNotFoundException.class)
-    public void testUnlikePostNotValidPost() {
+    @Test(expected = UserAlreadyLikedException.class)
+    public void testLikePostAlreadyLiked() {
         User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
+        PublicPost post = new PublicPost(POST_ID, POST_USERNAME, DEBATE_ID, POST_CONTENT, LIKES, POST_DATE, IMAGE_ID, ArgumentStatus.ARGUMENT);
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+        when(postDao.getPublicPostById(anyLong())).thenReturn(Optional.of(post));
+        when(postDao.hasLiked(anyLong(), anyLong())).thenReturn(true);
 
-        postService.unlikePost(POST_ID, USER_USERNAME);
+        postService.likePost(POST_ID, USER_USERNAME);
     }
-
-    // TODO tests de si ya esta likeado antes de hacer el like / unlike
 
     @Test
     public void testGetLastArgument() {
