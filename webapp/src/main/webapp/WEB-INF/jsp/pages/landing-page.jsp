@@ -35,8 +35,9 @@
                     <h2 class="brown-text">
                         <spring:message code="pages.landing.page.about"/>
                     </h2>
-                    <p>Argu cuts through the noise typically associated with social and online media, making it easy to engage in focused discussion.</p>
-                    <p>One can only comment as long as the moderator gave their permission.</p>
+                    <p><spring:message code="pages.landing-page.description"/></p>
+                    <p><spring:message code="pages.landing-page.structure"/></p>
+                    <p><spring:message code="pages.landing-page.turns"/></p>
                 </div>
                 <img src="<c:url value="/resources/images/debate-icon.png"/>">
 
