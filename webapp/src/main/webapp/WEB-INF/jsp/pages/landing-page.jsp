@@ -32,7 +32,7 @@
         <div class="container">
             <div class="section">
                 <div>
-                    <h2 class="brown-text">
+                    <h2 class="light">
                         <spring:message code="pages.landing.page.about"/>
                     </h2>
                     <p><spring:message code="pages.landing-page.description"/></p>

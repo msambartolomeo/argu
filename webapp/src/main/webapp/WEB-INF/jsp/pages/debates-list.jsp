@@ -40,10 +40,10 @@
                 </c:if>
                 <c:if test="${param.category != null}">
                     <spring:message code="category.${param.category}" var="categoryCode"/>
-                    <h4 class="center"><spring:message code="pages.debates-list.category-results" arguments="${categoryCode}"/></h4>
+                    <h5 class="center"><spring:message code="pages.debates-list.category-results" arguments="${categoryCode}"/></h5>
                 </c:if>
                 <c:if test="${param.search == null && param.category == null}">
-                    <h4 class="center"><spring:message code="pages.debates-list.all-debates"/></h4>
+                    <h5 class="center"><spring:message code="pages.debates-list.all-debates"/></h5>
                 </c:if>
 
                 <div class="order-div">
@@ -80,7 +80,27 @@
                 </c:forEach>
             </c:if>
             <c:if test="${debates.size() == 0}">
-                <h5 class="center"><spring:message code="pages.debates-list.no-debates"/></h5>
+                <div class="speech-bubble sb-left">
+                    <div class="comment-info">
+                        <h6 class="comment-owner">
+                            <spring:message code="components.argu-team-said"/>:
+                        </h6>
+                    </div>
+                    <div>
+                        <p><spring:message code="pages.debates-list.no-debates"/></p>
+                    </div>
+                </div>
+                <div class="speech-bubble sb-right">
+                    <div class="comment-info">
+                        <h6 class="comment-owner">
+                            <spring:message code="components.argu-community-said"/>:
+                        </h6>
+                    </div>
+                    <div>
+                        <p><spring:message code="pages.debates-list-create-your-debate"/></p>
+                    </div>
+                </div>
+<%--                <h5 class="center white-text"><spring:message code="pages.debates-list.no-debates"/></h5>--%>
             </c:if>
             <%@include file="../components/pagination.jsp"%>
         </div>
