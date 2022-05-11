@@ -73,6 +73,7 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public void subscribeToDebate(String username, long debateid) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
         if(debateDao.isUserSubscribed(user.getUserId(), debateid))
             throw new UserAlreadySubscribedException();
         debateDao.subscribeToDebate(user.getUserId(), debateid);

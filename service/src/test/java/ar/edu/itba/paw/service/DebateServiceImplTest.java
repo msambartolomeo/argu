@@ -253,10 +253,20 @@ public class DebateServiceImplTest {
     public void testSubscribeToDebate() {
         User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.OPEN, FOR_COUNT,AGAINST_COUNT );
+        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
 
         debateService.subscribeToDebate(USER_USERNAME, DEBATE_ID);
 
         verify(debateDao).subscribeToDebate(anyLong(), anyLong());
+    }
+
+    @Test(expected = DebateNotFoundException.class)
+    public void testSubscribeToDebateNotValidDebate() {
+        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+
+        debateService.subscribeToDebate(USER_USERNAME, DEBATE_ID);
     }
 
     @Test(expected = UserNotFoundException.class)
