@@ -48,14 +48,17 @@ public class WebController {
 
     @RequestMapping(value = "/moderator", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView moderatorPage(@ModelAttribute("moderatorForm") final ModeratorForm form, Authentication authentication) {
-        if (authentication != null && authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MODERATOR"))) {
-            throw new Exception403("User does not have the authority to send a request to become a moderator");
+        if (authentication == null || authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MODERATOR"))) {
+            throw new Exception403("User is already a moderator, cannot send a request to become one");
         }
         return new ModelAndView("pages/request-moderator");
     }
 
     @RequestMapping(value = "/moderator", method = { RequestMethod.POST })
     public ModelAndView moderatorPage(@Valid @ModelAttribute("moderatorForm") final ModeratorForm form, BindingResult errors, Authentication authentication) {
+        if (authentication == null || authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MODERATOR"))) {
+            throw new Exception403("User is already a moderator, cannot send a request to become one");
+        }
         if (errors.hasErrors()) {
             LOGGER.warn("Moderator page form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return moderatorPage(form, authentication);

@@ -15,6 +15,9 @@ public class UserNotSelfValidator implements ConstraintValidator<UserNotSelf, St
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.getPrincipal() == null) return true;
         return !value.equals(auth.getName());

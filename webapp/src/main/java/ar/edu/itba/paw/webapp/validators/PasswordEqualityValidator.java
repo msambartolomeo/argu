@@ -15,6 +15,13 @@ public class PasswordEqualityValidator implements ConstraintValidator<PasswordEq
         String password = form.getPassword();
         String passwordConfirmation = form.getPasswordConfirmation();
 
+        if (password == null && passwordConfirmation == null) {
+            return true;
+        }
+        if (password == null || passwordConfirmation == null) {
+            return false;
+        }
+
         return password.equals(passwordConfirmation);
     }
 }
