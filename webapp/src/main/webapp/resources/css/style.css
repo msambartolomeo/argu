@@ -114,6 +114,10 @@ td.is-selected {
     color: black !important;
 }
 
+div.input-field.margin-left div.selects-container div.select-wrapper input.select-dropdown.dropdown-trigger {
+    color: black !important;
+}
+
 div.order-div {
     display: flex;
     /*align-items: center;*/
