@@ -16,7 +16,7 @@
         <div class="debate-holder-separator">
             <div class="debate-text-holder">
                 <div class="debate-info-holder">
-                    <h3 class="debate-title word-wrap"><c:out value="${debate.name}"/></h3>
+                    <h4 class="debate-title word-wrap"><c:out value="${debate.name}"/></h4>
                     <c:if test="${debate.debateStatus.name == 'open' && (pageContext.request.userPrincipal.name == debate.creatorUsername || pageContext.request.userPrincipal.name == debate.opponentUsername)}">
                         <c:url var="closeDebatePath" value="/debates/${debate.debateId}/close"/>
                         <form:form method="post" action="${closeDebatePath}">
