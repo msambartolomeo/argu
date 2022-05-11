@@ -37,11 +37,13 @@ CREATE TABLE IF NOT EXISTS likes
     PRIMARY KEY (userid, postid)
 );
 
+DROP VIEW IF EXISTS public_posts;
 CREATE OR REPLACE VIEW public_posts AS
     SELECT posts.postid, users.username, posts.debateid, posts.content, COUNT(likes.userid) AS likes, posts.created_date, posts.imageid
     FROM posts LEFT JOIN likes ON posts.postid = likes.postid LEFT JOIN users ON posts.userid = users.userid
     GROUP BY posts.postid, users.username;
 
+DROP VIEW IF EXISTS public_debates;
 CREATE OR REPLACE VIEW public_debates AS
     SELECT debates.debateid, debates.name, debates.description, debates.category, debates.created_date, debates.imageid, u1.username AS creatorusername, u2.username AS opponentusername, COUNT(DISTINCT s.userid) AS subscribedcount, debates.status
     FROM debates LEFT JOIN users u1 ON debates.creatorid = u1.userid LEFT JOIN users u2 ON debates.opponentid = u2.userid LEFT JOIN subscribed s on debates.debateid = s.debateid

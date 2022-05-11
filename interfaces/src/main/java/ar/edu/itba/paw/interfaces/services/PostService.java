@@ -8,19 +8,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostService {
+    Post create(String username, long debateId, String content, byte[] image);
+    int getPostsByDebatePageCount(long debateId);
 
-    Optional<Post> getPostById(long id);
-    Post create(long userId, long debateId, String content, byte[] image);
-    // TODO: Deprecated
-    Post createWithEmail(String userEmail, long debateId, String content);
-    List<Post> getPostsByDebate(long debateId, int page);
-    int getPostsByDebateCount(long debateId);
-    Optional<PublicPost> getPublicPostById(long id);
+    Optional<PublicPost> getPublicPostById(long postId);
+
     List<PublicPost> getPublicPostsByDebate(long debateId, int page);
-    void likePost(long postId, long userId);
-    void unlikePost(long postId, long userId);
+    void likePost(long postId, String username);
+    void unlikePost(long postId, String username);
 
-    boolean hasLiked(long postId, long userId);
+    boolean hasLiked(long postId, String username);
 
-    List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, long userId, int page);
+    List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, String username, int page);
+
+    Optional<PublicPost> getLastArgument(long debateIdNum);
 }

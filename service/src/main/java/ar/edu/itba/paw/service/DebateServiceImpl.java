@@ -1,86 +1,67 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
-import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.DebateService;
+import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
+import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
-import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.exceptions.DebateOponentException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateOrder;
+import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.enums.DebateVote;
+import ar.edu.itba.paw.model.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class DebateServiceImpl implements DebateService {
 
-    @Autowired
-    private UserDao userDao;
+    private static final int PAGE_SIZE = 5;
     @Autowired
     private DebateDao debateDao;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private EmailService emailService;
 
-    @Override
-    public Optional<Debate> getDebateById(long id) {
-        return debateDao.getDebateById(id);
-    }
-
+    @Transactional
     @Override
     public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
-        if (creatorUsername.equals(opponentUsername)) throw new DebateOponentException(opponentUsername, name, description, category);
-        User creator = userDao.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
-        User opponent = userDao.getUserByUsername(opponentUsername).orElseThrow(() -> new DebateOponentException(opponentUsername, name, description, category));
+        User creator = userService.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
+        User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
+        Debate createdDebate;
         if (image.length == 0)
-            return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
+            createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
         else
-            return debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image), category);
+            createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image).getId(), category);
+        emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate.getDebateId(), createdDebate.getName());
+        return createdDebate;
     }
 
     @Override
-    public List<PublicDebate> getSubscribedDebatesByUsername(long userid, int page) {
-        return debateDao.getSubscribedDebatesByUsername(userid, page);
+    public List<PublicDebate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
+        if (page < 0)
+            return new ArrayList<>();
+        return debateDao.getPublicDebatesDiscovery(page, PAGE_SIZE, search, category, order, status, date);
     }
 
     @Override
-    public int getSubscribedDebatesByUsernameCount(long userid) {
-        return debateDao.getSubscribedDebatesByUsernameCount(userid);
-    }
-
-    @Override
-    public List<PublicDebate> get(int page, String search) {
-        if (search != null)
-            return debateDao.getQuery(page, search);
-         else
-             return debateDao.getAll(page);
-    }
-
-    @Override
-    public int getCount(String search) {
-        if (search != null)
-            return debateDao.getQueryCount(search);
-        else
-            return debateDao.getAllcount();
-    }
-
-    @Override
-    public List<PublicDebate> getFromCategory(DebateCategory category, int page) {
-        return debateDao.getAllFromCategory(category, page);
-    }
-
-    @Override
-    public int getFromCategoryCount(DebateCategory category) {
-        return debateDao.getAllFromCategoryCount(category);
+    public int getPages(String search, DebateCategory category, DebateStatus status, LocalDate date) {
+        return (int) Math.ceil(debateDao.getPublicDebatesCount(search, category, status, date) / (double) PAGE_SIZE);
     }
 
     @Override
     public List<PublicDebate> getMostSubscribed() {
-        return debateDao.getMostSubscribed();
+        return debateDao.getPublicDebatesDiscovery(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
     }
 
     @Override
@@ -88,16 +69,91 @@ public class DebateServiceImpl implements DebateService {
         return debateDao.getPublicDebateById(id);
     }
 
+    @Transactional
     @Override
-    public void subscribeToDebate(long userid, long debateid) {
-        debateDao.subscribeToDebate(userid, debateid);
+    public void subscribeToDebate(String username, long debateid) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
+        if(debateDao.isUserSubscribed(user.getUserId(), debateid))
+            throw new UserAlreadySubscribedException();
+        debateDao.subscribeToDebate(user.getUserId(), debateid);
+    }
+    @Transactional
+    @Override
+    public void unsubscribeToDebate(String username, long debateid) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        debateDao.unsubscribeToDebate(user.getUserId(), debateid);
     }
     @Override
-    public void unsubscribeToDebate(long userid, long debateid) {
-        debateDao.unsubscribeToDebate(userid, debateid);
+    public boolean isUserSubscribed(String username, long debateid) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        return debateDao.isUserSubscribed(user.getUserId(), debateid);
     }
+
     @Override
-    public boolean isUserSubscribed(long userid, long debateid) {
-        return debateDao.isUserSubscribed(userid, debateid);
+    public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
+        if (page < 0) {
+            return new ArrayList<>();
+        }
+        if (list.equals("subscribed"))
+            return debateDao.getSubscribedDebatesByUserId(userid, page);
+        else return debateDao.getMyDebates(userid, page);
+    }
+
+    @Override
+    public int getProfileDebatesPageCount(String list, long userid) {
+        int count;
+        if (list.equals("subscribed"))
+            count = debateDao.getSubscribedDebatesByUserIdCount(userid);
+        else count = debateDao.getMyDebatesCount(userid);
+        return (int) Math.ceil(count / (double) PAGE_SIZE);
+    }
+
+    @Transactional
+    @Override
+    public void addVote(long debateId, String username, DebateVote vote) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        getPublicDebateById(debateId).orElseThrow(DebateNotFoundException::new);
+        if (debateDao.hasUserVoted(debateId, user.getUserId()))
+            throw new UserAlreadyVotedException();
+        debateDao.addVote(debateId, user.getUserId(), vote);
+    }
+
+    @Transactional
+    @Override
+    public void removeVote(long debateId, String username) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        debateDao.removeVote(debateId, user.getUserId());
+    }
+
+    @Override
+    public String getUserVote(long debateid, String username) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        PublicDebate debate = debateDao.getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
+        if(!debateDao.hasUserVoted(debateid, user.getUserId()))
+            return null;
+        DebateVote debateVote = debateDao.getUserVote(debateid, user.getUserId());
+
+        if(debateVote == DebateVote.FOR) {
+            return debate.getCreatorUsername();
+        } else
+            return debate.getOpponentUsername();
+    }
+
+    @Transactional
+    @Override
+    public void startConclusion(long id, String username) {
+        PublicDebate debate = getPublicDebateById(id).orElseThrow(DebateNotFoundException::new);
+
+        if (debate.getDebateStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreatorUsername()) || username.equals(debate.getOpponentUsername())))
+            throw new ForbiddenDebateException();
+
+        debateDao.changeDebateStatus(id, DebateStatus.CLOSING);
+    }
+
+    @Transactional
+    @Override
+    public void closeDebate(long id) {
+        debateDao.changeDebateStatus(id, DebateStatus.CLOSED);
     }
 }

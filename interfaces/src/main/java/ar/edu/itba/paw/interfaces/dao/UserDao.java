@@ -12,8 +12,5 @@ public interface UserDao {
     User create(String username, String password, String email);
     void updateImage(long userId, long imageId);
     User updateLegacyUser(long userId, String username, String password, String email);
-    // int pageSize
-    List<User> getAll(int page);
-
     List<User> getSubscribedUsersByDebate(long debateId);
 }

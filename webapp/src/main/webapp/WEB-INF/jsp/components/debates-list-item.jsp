@@ -4,24 +4,21 @@
 
 <html>
 <body>
-<a class="card black-text" href="<c:url value="/debates/${debate.debateId}"/>">
+<a class="card black-text hoverable" href="<c:url value="/debates/${debate.debateId}"/>">
     <div class="card-content debate-info-holder">
         <div class="debate-holder-separator">
             <div class="debate-text-holder">
-                <h3 class="debate-title word-wrap"><c:out value="${debate.name}"/></h3>
+                <h5 class="debate-title word-wrap"><c:out value="${debate.name}"/></h5>
                 <c:if test="${debate.creatorUsername != null}">
                     <c:set var="creator"><c:out value="${debate.creatorUsername}"/></c:set>
-                    <h6><spring:message code="components.debate-list-item.creator" arguments="${creator}"/></h6>
+                    <h6><b><spring:message code="components.debate-list-item.creator"/></b> ${creator}</h6>
                 </c:if>
             </div>
             <div class="debate-footer">
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="status.${debate.debateStatus.name}"/>"></span>
-                <span class="new badge blue-grey darken-2" data-badge-caption="${debate.createdDate}"></span>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="category.${debate.debateCategory.name}"/>"></span>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsers}"/>"></span>
+                <div class="chip"><spring:message code="category.${debate.debateCategory.name}"/></div>
+                <div class="chip"><spring:message code="components.debate-created-on"/> ${debate.createdDate}</div>
+                <div class="chip"><spring:message code="status.${debate.debateStatus.name}"/></div>
+                <div class="chip"><spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsers}"/></div>
             </div>
         </div>
         <c:if test="${debate.imageId != 0}">

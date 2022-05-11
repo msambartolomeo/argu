@@ -4,13 +4,16 @@ import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Repository
@@ -24,7 +27,7 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("username"),
                     rs.getString("password"),
                     rs.getString("email"),
-                    rs.getObject("created_date", LocalDate.class),
+                    rs.getObject("created_date", Date.class),
                     rs.getLong("imageid"),
                     UserRole.getRole(rs.getInt("role")));
 
@@ -70,24 +73,20 @@ public class UserJdbcDao implements UserDao {
         userData.put("username", username);
         userData.put("password", password);
         userData.put("email", email);
-        userData.put("created_date", created);
-        userData.put("role", UserRole.getValue(UserRole.USER));
+        userData.put("created_date", created.toString());
+        userData.put("role", UserRole.USER.ordinal());
 
         final Number userId = jdbcInsert.executeAndReturnKey(userData);
 
-        return new User(userId.longValue(), username, password, email, created, UserRole.USER);
+        return new User(userId.longValue(), username, password, email, Date.valueOf(created), UserRole.USER);
     }
 
     @Override
     public User updateLegacyUser(long userId, String username, String password, String email) {
-        LocalDate created = LocalDate.now();
-        jdbcTemplate.update("UPDATE users SET username = ?, password = ?, created_date = ?, role = ? WHERE email = ?", username, password, created, UserRole.USER.ordinal(), email);
+        Date created = Date.valueOf(LocalDate.now());
+        jdbcTemplate.update("UPDATE users SET username = ?, password = ?, created_date = ?, role = ? WHERE email = ?",
+                username, password, created, UserRole.USER.ordinal(), email);
         return new User(userId, username, password, email, created, UserRole.USER);
-    }
-
-    @Override
-    public List<User> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM users LIMIT 10 OFFSET ?", new Object[] { page * 10 }, ROW_MAPPER);
     }
 
     @Override

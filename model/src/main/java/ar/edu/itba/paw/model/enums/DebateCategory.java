@@ -23,11 +23,7 @@ public enum DebateCategory {
     public String getName() {
         return name;
     }
-
     public static DebateCategory getFromInt(Integer i) {
         return DebateCategory.values()[i];
-    }
-    public static Integer getFromCategory(DebateCategory category) {
-        return category.ordinal();
     }
 }

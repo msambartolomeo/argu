@@ -40,10 +40,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                 .and().authorizeRequests()
-                    .antMatchers("/", "/debates/**").permitAll()
+                    .antMatchers("/", "/debates", "/debates/{\\d+}").permitAll()
                     .antMatchers("/login", "/register").anonymous()
                     .antMatchers("/create_debate").hasAuthority("MODERATOR")
-                    .antMatchers("/**").authenticated()
+                    .antMatchers("/debates/{\\d+}/**", "/moderator", "/profile").authenticated()
                 .and().formLogin()
                     .usernameParameter("username")
                     .passwordParameter("password")
@@ -64,6 +64,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring() // Ignore static resources
-                .antMatchers("/resources/**", "/images/**", "/403");
+                .antMatchers("/resources/**", "/images/**", "/logs/**");
     }
 }

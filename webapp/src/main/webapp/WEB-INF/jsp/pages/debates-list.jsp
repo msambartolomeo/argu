@@ -12,24 +12,64 @@
     <%@include file="../components/navbar.jsp" %>
     <div class="debates-separator">
         <div class="category-list z-depth-3">
-            <h3><spring:message code="pages.debates-list.categories"/></h3>
-            <c:forEach items="${categories}" var="category">
-                <a href="<c:url value="/debates/category/${category.name}" />" class="waves-effect btn-large badge-margin category-button ${category.name == currentCategory ? "selected-button" : ""}">
-                    <spring:message code="category.${category.name}"/>
-                </a>
-            </c:forEach>
+            <ul class="collection with-header">
+                <li class="collection-header"><h5><spring:message code="pages.debates-list.categories"/></h5></li>
+                <li>
+                    <a href="<c:url value="/debates" />" class="collection-item waves-effect badge-margin category-button ${ empty
+                    param.category ? "active" : ""}">
+                        <spring:message code="category.all"/>
+                    </a>
+                </li>
+
+                <c:forEach items="${categories}" var="category">
+                    <li>
+                        <a href="<c:url value="?category=${category.name}" />"
+                           class="collection-item waves-effect badge-margin category-button ${category.name == param.category ?
+                           "active" : ""}">
+                            <spring:message code="category.${category.name}"/>
+                        </a>
+                    </li>
+                </c:forEach>
+            </ul>
         </div>
-        <div class="z-depth-3 debate-list">
-            <c:if test="${search != null}">
-                <h3 class="center"><spring:message code="pages.debates-list.search-results" arguments="${search}"/></h3>
-            </c:if>
-            <c:if test="${currentCategory != null}">
-                <spring:message code="category.${currentCategory}" var="categoryCode"/>
-                <h3 class="center"><spring:message code="pages.debates-list.category-results" arguments="${categoryCode}"/></h3>
-            </c:if>
-            <c:if test="${search == null && currentCategory == null}">
-                <h3 class="center"><spring:message code="pages.debates-list.all-debates"/></h3>
-            </c:if>
+        <div class="debate-list">
+
+            <div class="card debate-list-header">
+                <c:if test="${param.search != null}">
+                    <h5 class="center"><spring:message code="pages.debates-list.search-results" arguments="${param.search}"/></h5>
+                </c:if>
+                <c:if test="${param.category != null}">
+                    <spring:message code="category.${param.category}" var="categoryCode"/>
+                    <h5 class="center"><spring:message code="pages.debates-list.category-results" arguments="${categoryCode}"/></h5>
+                </c:if>
+                <c:if test="${param.search == null && param.category == null}">
+                    <h5 class="center"><spring:message code="pages.debates-list.all-debates"/></h5>
+                </c:if>
+
+                <div class="order-div">
+                    <div class="input-field margin-left">
+                        <select class="select-order" id="select-order" onchange="addParamToUrlAndRedirect('order', this.value)">
+                            <c:forEach items="${orders}" var="order">--%>
+                                <option value="${order.name}" ${(order.name == param.order || (empty param.order && order.name == 'date_desc' )) ? "selected" : ""}><spring:message code="orders.${order.name}"/></option>
+                            </c:forEach>
+                        </select>
+                        <label for="select-order"><spring:message code="pages.debates-list.order-by"/></label>
+                    </div>
+                    <div class="input-field margin-left">
+                        <select id="select-status" onchange="addParamToUrlAndRedirect('status', this.value)">
+                            <option value="" selected ><spring:message code="status.all"/></option>
+                            <option value="open" ${ 'open' == param.status ? "selected" : ""}><spring:message code="status.open"/></option>
+                            <option value="closed" ${ 'closed' == param.status ? "selected" : ""}><spring:message code="status.closed"/></option>
+                        </select>
+                        <label for="select-status"><spring:message code="pages.debates-list.status"/></label>
+                    </div>
+                    <div class="input-field margin-left flex">
+                        <label for="datepicker"><spring:message code="pages.debates-list.created-date"/></label>
+                        <input placeholder="<spring:message code="filter.by.date"/>" id="datepicker" type="text" class="datepicker white-text" value="${param.date}" onchange="addParamToUrlAndRedirect('date', this.value)">
+                        <i class="material-icons x" onclick="addParamToUrlAndRedirect('date', '')">close</i>
+                    </div>
+                </div>
+            </div>
 
             <c:if test="${debates.size() > 0}">
                 <c:forEach var="debate" items="${debates}">
@@ -40,7 +80,27 @@
                 </c:forEach>
             </c:if>
             <c:if test="${debates.size() == 0}">
-                <h3 class="center"><spring:message code="pages.debates-list.no-debates"/></h3>
+                <div class="speech-bubble sb-left">
+                    <div class="comment-info">
+                        <h6 class="comment-owner">
+                            <spring:message code="components.argu-team-said"/>:
+                        </h6>
+                    </div>
+                    <div>
+                        <p><spring:message code="pages.debates-list.no-debates"/></p>
+                    </div>
+                </div>
+                <div class="speech-bubble sb-right">
+                    <div class="comment-info">
+                        <h6 class="comment-owner">
+                            <spring:message code="components.argu-community-said"/>:
+                        </h6>
+                    </div>
+                    <div>
+                        <p><spring:message code="pages.debates-list-create-your-debate"/></p>
+                    </div>
+                </div>
+<%--                <h5 class="center white-text"><spring:message code="pages.debates-list.no-debates"/></h5>--%>
             </c:if>
             <%@include file="../components/pagination.jsp"%>
         </div>

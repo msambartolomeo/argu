@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ar.edu.itba.paw</groupId>
   <artifactId>PAW-webapp</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
   <packaging>pom</packaging>
     
   <properties>
@@ -24,6 +24,8 @@
     <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
     <spring-security.version>4.0.4.RELEASE</spring-security.version>
     <commons-fileupload.version>1.4</commons-fileupload.version>
+    <maven-war-plugin.version>2.6</maven-war-plugin.version>
+    <junit.version>4.11</junit.version>
   </properties>
 
   <modules>
@@ -74,7 +76,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.11</version>
+        <version>${junit.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -151,7 +153,6 @@
         <artifactId>spring-security-config</artifactId>
         <version>${spring-security.version}</version>
       </dependency>
-<!--   TODO preguntar si se puede usar   -->
       <dependency>
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
@@ -223,6 +224,14 @@
         <configuration>
           <source>8</source>
           <target>8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>${maven-war-plugin.version}</version>
+        <configuration>
+          <packagingExcludes>**/logback-test.xml</packagingExcludes>
         </configuration>
       </plugin>
     </plugins>

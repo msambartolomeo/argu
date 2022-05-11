@@ -15,44 +15,64 @@
     <div class="card-content debate-info-holder">
         <div class="debate-holder-separator">
             <div class="debate-text-holder">
-                <h1 class="debate-title word-wrap"><c:out value="${debate.name}"/></h1>
+                <div class="debate-info-holder">
+                    <h4 class="debate-title word-wrap"><c:out value="${debate.name}"/></h4>
+                    <c:if test="${debate.debateStatus.name == 'open' && (pageContext.request.userPrincipal.name == debate.creatorUsername || pageContext.request.userPrincipal.name == debate.opponentUsername)}">
+                        <c:url var="closeDebatePath" value="/debates/${debate.debateId}/close"/>
+                        <form:form method="post" action="${closeDebatePath}">
+                            <button type="submit" class="btn waves-effect">
+                                <spring:message code="pages.debate-close"/>
+                                <i class="large material-icons right">close</i>
+                            </button>
+                        </form:form>
+                    </c:if>
+                </div>
                 <hr class="dashed">
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
                 <c:if test="${debate.creatorUsername != null}">
                     <c:set var="creator"><c:out value="${debate.creatorUsername}"/></c:set>
-                    <c:set var="opponent"><c:out value="${debate.opponentUsername}"/></c:set>
-                    <p><spring:message code="pages.debate.for" arguments="${creator}"/></p>
-                    <p><spring:message code="pages.debate.against" arguments='${opponent}'/></p>
+                    <c:set var="opponent">
+                        <c:choose>
+                            <c:when test="${debate.opponentUsername != null}">
+                                <c:out value="${debate.opponentUsername}"/>
+                            </c:when>
+                            <c:otherwise>
+                                <spring:message code="pages.debate.no-opponent"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:set>
+                    <h6><b><spring:message code="pages.debate.for"/></b> ${creator}</h6>
+                    <h6><b><spring:message code="pages.debate.against"/></b> ${opponent}</h6>
                 </c:if>
             </div>
             <div class="debate-footer">
                 <sec:authorize access="hasAuthority('USER')">
-                    <c:url var="subscribePath" value="/subscribe/${debate.debateId}"/>
-                    <form id="subscribeForm" method="post" action="${subscribePath}">
-                        <c:choose>
-                            <c:when test="${isSubscribed == false}">
-                                <button class="btn waves-effect" type="submit" name="subscribe">
+                    <c:choose>
+                        <c:when test="${isSubscribed == false}">
+                            <c:url var="subscribePath" value="/debates/${debate.debateId}/subscribe"/>
+                            <form:form id="subscribeForm" method="post" action="${subscribePath}">
+                                <button class="btn waves-effect chip" type="submit">
                                     <spring:message code="pages.debate-subscribe"/>
                                     <i class="material-icons right">notifications_active</i>
                                 </button>
-                            </c:when>
-                            <c:otherwise>
-                                <button class="btn waves-effect" type="submit" name="unsubscribe">
+                            </form:form>
+                        </c:when>
+                        <c:otherwise>
+                            <c:url var="unsubscribePath" value="/debates/${debate.debateId}/unsubscribe"/>
+                            <form:form id="subscribeForm" method="delete" action="${unsubscribePath}">
+                                <button class="btn waves-effect chip" type="submit">
                                     <spring:message code="pages.debate-unsubscribe"/>
                                     <i class="material-icons right">notifications_off</i>
                                 </button>
-                            </c:otherwise>
-                        </c:choose>
-                    </form>
+                            </form:form>
+                        </c:otherwise>
+                    </c:choose>
                 </sec:authorize>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="category.${debate.debateCategory.name}"/>"></span>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="components.debate-created-on"/> ${debate.createdDate}"></span>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="status.${debate.debateStatus.name}"/>"></span>
-                <span class="new badge blue-grey darken-2"
-                      data-badge-caption="<spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsers}"/>"></span>
+                <a class="chip btn" href="<c:url value="/debates?category=${debate.debateCategory.name}"/>"><spring:message code="category.${debate.debateCategory.name}"/></a>
+                <button class="chip btn" onclick="dateFilter('${debate.createdDate}')"><spring:message code="components.debate-created-on"/> ${debate.createdDate}</button>
+                <a class="chip btn" href="<c:url value="/debates?status=${debate.debateStatus.name == 'closed' ? 'closed' : 'open'}"/>"><spring:message code="status.${debate.debateStatus.name}"/></a>
+                <a class="chip btn" href="<c:url value="/debates?order=subs_desc"/>"><spring:message code="page.debate.subscribed"
+                                                  arguments="${debate.subscribedUsers}"/></a>
             </div>
         </div>
         <c:if test="${debate.imageId != 0}">
@@ -68,7 +88,18 @@
 
     <div class="z-depth-3 comment-list">
         <c:if test="${posts.size() > 0}">
-            <c:forEach var="post" items="${posts}">
+            <c:forEach var="post" items="${posts}" varStatus="status">
+                <c:choose>
+                    <c:when test="${post.status.name == 'introduction' && status.first}">
+                        <h5 class="center"><spring:message code="components.comment.introduction" /></h5>
+                    </c:when>
+                    <c:when test="${post.status.name == 'argument' && (posts[status.index - 1].status.name == 'introduction' || status.first)}">
+                        <h5 class="center"><spring:message code="components.comment.argument" /></h5>
+                    </c:when>
+                    <c:when test="${(debate.debateStatus.name == 'closing' && post.status.name == 'conclusion') || (debate.debateStatus.name == 'closed' && post.status.name == 'conclusion' && (status.index == 0 || posts[status.index - 1].status.name == 'argument'))}">
+                        <h5 class="center"><spring:message code="components.comment.conclusion" /></h5>
+                    </c:when>
+                </c:choose>
                 <div class="list-item">
                     <c:set var="post" value="${post}" scope="request"/>
                     <%@include file="../components/comment.jsp" %>
@@ -77,14 +108,109 @@
         </c:if>
 
         <c:if test="${posts.size() == 0}">
-            <h3 class="center"><spring:message code="pages.debate.no-posts"/></h3>
+            <h5 class="center"><spring:message code="pages.debate.no-posts"/></h5>
         </c:if>
 
         <%@include file="../components/pagination.jsp" %>
     </div>
 
     <div class="post-comments">
-        <%@include file="../components/post-comment.jsp" %>
+        <c:if test="${debate.debateStatus.name != 'closed' && (pageContext.request.userPrincipal.name == debate.creatorUsername || pageContext.request.userPrincipal.name == debate.opponentUsername)}">
+            <div class="card no-top-margin">
+                <div class="card-content">
+                    <c:choose>
+                        <c:when test="${pageContext.request.userPrincipal.name == null}">
+                            <div class="card-title card-title-margins">
+                                <spring:message code="components.post-need-to-log-in"/>
+                                <a href="<c:url value="/login"/>">
+                                    <spring:message code="components.first-log-in"/>
+                                </a>
+                            </div>
+                        </c:when>
+                        <c:when test="">
+                        </c:when>
+                        <c:when test="${((empty lastArgument && pageContext.request.userPrincipal.name == debate.creatorUsername) || (not empty lastArgument && pageContext.request.userPrincipal.name != lastArgument.username))}">
+                            <%@include file="../components/post-comment.jsp" %>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="card-title card-title-margins">
+                                <spring:message code="components.post-comment.wait-turn"/>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
+        </c:if>
+        <c:choose>
+            <c:when test="${pageContext.request.userPrincipal.name != null && debate.creatorUsername != null && debate.opponentUsername != null}">
+                <div class="card vote-section no-top-margin">
+                    <c:choose>
+                        <c:when test="${userVote == null}">
+                            <h5 class="center"><spring:message code="pages.debate.who-wins"/></h5>
+                            <div class="vote-buttons">
+                                <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>
+                                <form:form method="post" action="${voteForPath}">
+                                    <button class="btn waves-effect" type="submit">${debate.creatorUsername}</button>
+                                </form:form>
+
+                                <c:url var="voteAgainstPath" value="/debates/${debate.debateId}/vote/against"/>
+                                <form:form method="post" action="${voteAgainstPath}">
+                                    <button class="btn waves-effect" type="submit">${debate.opponentUsername}</button>
+                                </form:form>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <h6><spring:message code="pages.debate.voted"/> ${userVote}</h6>
+                            <div class="progress red">
+                                <c:if test="${debate.forCount > 0}">
+                                    <div class="votes-format blue" style="width: ${debate.forCount}%">
+                                        <span>${debate.creatorUsername}</span>
+                                        <span>${debate.forCount}%</span>
+                                    </div>
+                                </c:if>
+                                <c:if test="${debate.againstCount > 0}">
+                                    <div class="votes-format" style="width: ${debate.againstCount}%">
+                                        <span>${debate.opponentUsername}</span>
+                                        <span>${debate.againstCount}%</span>
+                                    </div>
+                                </c:if>
+                            </div>
+                            <h6><spring:message code="page.debate.change-vote"/></h6>
+                            <c:url var="unvotePath" value="/debates/${debate.debateId}/unvote"/>
+                            <form:form method="delete" action="${unvotePath}">
+                                <button class="btn waves-effect" type="submit"><spring:message code="page.debate.unvote"/></button>
+                            </form:form>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="card vote-section no-top-margin">
+                    <c:choose>
+                        <c:when test="${debate.forCount + debate.againstCount > 0}">
+                            <h5>Votes</h5>
+                            <div class="progress red">
+                                <c:if test="${debate.forCount > 0}">
+                                    <div class="votes-format blue" style="width: ${debate.forCount}%">
+                                        <span>${debate.creatorUsername}</span>
+                                        <span>${debate.forCount}%</span>
+                                    </div>
+                                </c:if>
+                                <c:if test="${debate.againstCount > 0}">
+                                    <div class="votes-format" style="width: ${debate.againstCount}%">
+                                        <span>${debate.opponentUsername}</span>
+                                        <span>${debate.againstCount}%</span>
+                                    </div>
+                                </c:if>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <h5 class="center">No votes yet</h5>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 
 </div>

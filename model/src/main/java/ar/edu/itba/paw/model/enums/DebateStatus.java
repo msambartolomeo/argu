@@ -3,7 +3,8 @@ package ar.edu.itba.paw.model.enums;
 public enum DebateStatus {
     OPEN("open"),
     CLOSED("closed"),
-    DELETED("deleted");
+    DELETED("deleted"),
+    CLOSING("closing");
 
     private final String name;
 
@@ -16,8 +17,5 @@ public enum DebateStatus {
     }
     public static DebateStatus getFromInt(int i) {
         return DebateStatus.values()[i];
-    }
-    public static int getFromStatus(DebateStatus status) {
-        return status.ordinal();
     }
 }
