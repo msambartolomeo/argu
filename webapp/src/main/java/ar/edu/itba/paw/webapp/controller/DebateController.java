@@ -8,6 +8,8 @@ import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.form.PostForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,7 @@ public class DebateController {
 
     private final DebateService debateService;
     private final PostService postService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DebateController.class);
 
     @Autowired
     public DebateController(DebateService debateService, PostService postService) {
@@ -103,6 +106,7 @@ public class DebateController {
                                    @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
 
         if (errors.hasErrors()) {
+            LOGGER.warn("Create argument form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return debate(debateId, form, "0", auth);
         }
         if (!debateId.matches("\\d+")) throw new DebateNotFoundException();

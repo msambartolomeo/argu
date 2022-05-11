@@ -57,6 +57,7 @@ public class WebController {
     @RequestMapping(value = "/moderator", method = { RequestMethod.POST })
     public ModelAndView moderatorPage(@Valid @ModelAttribute("moderatorForm") final ModeratorForm form, BindingResult errors, Authentication authentication) {
         if (errors.hasErrors()) {
+            LOGGER.warn("Moderator page form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return moderatorPage(form, authentication);
         }
         LOGGER.info("user {} requested moderator status because reason: {}", authentication.getName(), form.getReason());
@@ -77,6 +78,7 @@ public class WebController {
     @RequestMapping(value = "/register", method = { RequestMethod.POST })
     public ModelAndView register(@Valid @ModelAttribute("registerForm") final RegisterForm form, BindingResult errors) {
         if (errors.hasErrors()) {
+            LOGGER.warn("Register form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return registerPage(form);
         }
         userService.create(form.getUsername(), form.getPassword(), form.getEmail());
@@ -106,6 +108,7 @@ public class WebController {
     @RequestMapping(value = "/profile", method = { RequestMethod.POST})
     public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {
+            LOGGER.warn("Profile image form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return profilePage(form, auth, "subscribed", "0");
         }
         if (auth == null || auth.getPrincipal() == null) {
@@ -134,6 +137,7 @@ public class WebController {
     @RequestMapping(value = "/create_debate", method = { RequestMethod.POST })
     public ModelAndView createDebate(@Valid @ModelAttribute("createDebateForm") final CreateDebateForm form, BindingResult errors, Authentication auth) throws IOException {
         if (errors.hasErrors()) {
+            LOGGER.warn("Create debate form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return createDebatePage(form);
         }
 
