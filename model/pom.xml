@@ -10,4 +10,11 @@
   <artifactId>model</artifactId>
   <version>3.0.0</version>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.1-api</artifactId>
+    </dependency>
+  </dependencies>
+
 </project>
