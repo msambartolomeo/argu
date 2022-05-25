@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@Repository
+//@Repository
 public class UserJdbcDao implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
