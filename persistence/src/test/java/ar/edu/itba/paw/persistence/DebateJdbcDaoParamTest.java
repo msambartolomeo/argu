@@ -71,7 +71,7 @@ public class DebateJdbcDaoParamTest {
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
-        debateDao = new DebateJdbcDao(ds);
+        debateDao = new DebateJpaDao();
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName(DEBATE_TABLE)
                 .usingGeneratedKeyColumns(DEBATE_TABLE_ID);
