@@ -41,19 +41,4 @@ public class UserJpaDao implements UserDao {
         em.persist(user);
         return user;
     }
-
-    @Override
-    public void updateImage(long userId, long imageId) {
-
-    }
-
-    @Override
-    public User updateLegacyUser(long userId, String username, String password, String email) {
-        return null;
-    }
-
-    @Override
-    public List<User> getSubscribedUsersByDebate(long debateId) {
-        return null;
-    }
 }

@@ -10,7 +10,9 @@ public interface UserDao {
     Optional<User> getUserByUsername(String username);
     Optional<User> getUserByEmail(String email);
     User create(String username, String password, String email);
-    void updateImage(long userId, long imageId);
-    User updateLegacyUser(long userId, String username, String password, String email);
-    List<User> getSubscribedUsersByDebate(long debateId);
+
+    // TODO: moved to User model and Debate model (not implemented yet) remove for migration merge
+//    void updateImage(long userId, long imageId);
+//    User updateLegacyUser(long userId, String username, String password, String email);
+//    List<User> getSubscribedUsersByDebate(long debateId);
 }
