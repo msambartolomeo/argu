@@ -14,7 +14,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "posts_postid_seq")
     @SequenceGenerator(sequenceName = "posts_postid_seq", name = "posts_postid_seq", allocationSize = 1)
     @Column(name = "postid")
-    private long postId;
+    private Long postId;
 
     @Column(name = "debateid", nullable = false)
     private Long debateId;
