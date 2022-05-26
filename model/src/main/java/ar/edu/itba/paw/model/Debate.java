@@ -27,7 +27,7 @@ public class Debate {
     private Long creatorId;
     @Column(name = "opponentid", nullable = false)
     private Long opponentId;
-    @Column(name = "imageid", nullable = false)
+    @Column(name = "imageid")
     private Long imageId;
 
 //    TODO: Uncomment when available
