@@ -122,8 +122,8 @@ public class DebateServiceImplTest {
         assertEquals(debate.getDescription(), d.getDescription());
         assertEquals(debate.getCreatorId(), d.getCreatorId());
         assertEquals(debate.getOpponentId(), d.getOpponentId());
-        assertEquals(debate.getDebateCategory(), d.getDebateCategory());
-        assertEquals(debate.getDebateStatus(), d.getDebateStatus());
+        assertEquals(debate.getCategory(), d.getCategory());
+        assertEquals(debate.getStatus(), d.getStatus());
         assertEquals(debate.getImageId(), d.getImageId());
     }
 
@@ -144,8 +144,8 @@ public class DebateServiceImplTest {
         assertEquals(debate.getDescription(), d.getDescription());
         assertEquals(debate.getCreatorId(), d.getCreatorId());
         assertEquals(debate.getOpponentId(), d.getOpponentId());
-        assertEquals(debate.getDebateCategory(), d.getDebateCategory());
-        assertEquals(debate.getDebateStatus(), d.getDebateStatus());
+        assertEquals(debate.getCategory(), d.getCategory());
+        assertEquals(debate.getStatus(), d.getStatus());
         assertEquals(debate.getImageId(), d.getImageId());
     }
 

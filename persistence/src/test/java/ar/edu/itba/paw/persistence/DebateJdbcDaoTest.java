@@ -67,7 +67,7 @@ public class DebateJdbcDaoTest {
 
     private final static String VOTES_TABLE = "votes";
 
-    private DebateJdbcDao debateDao;
+    private DebateJpaDao debateDao;
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
     private SimpleJdbcInsert jdbcInsertUser;
@@ -77,7 +77,7 @@ public class DebateJdbcDaoTest {
     private Long userId;
     @Before
     public void setUp() {
-        debateDao = new DebateJdbcDao(ds);
+        debateDao = new DebateJpaDao();
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName(DEBATES_TABLE)
@@ -118,7 +118,7 @@ public class DebateJdbcDaoTest {
         assertEquals(DEBATE_DESCRIPTION, debate.getDescription());
         assertEquals(userId, debate.getCreatorId());
         assertEquals(userId, debate.getOpponentId());
-        assertEquals(DEBATE_CATEGORY, debate.getDebateCategory());
+        assertEquals(DEBATE_CATEGORY, debate.getCategory());
     }
 
     @Test
@@ -135,7 +135,7 @@ public class DebateJdbcDaoTest {
         assertEquals(userId, debate.getCreatorId());
         assertEquals(userId, debate.getOpponentId());
         assertEquals(imageId, debate.getImageId());
-        assertEquals(DEBATE_CATEGORY, debate.getDebateCategory());
+        assertEquals(DEBATE_CATEGORY, debate.getCategory());
     }
 
     @Test
