@@ -73,7 +73,7 @@ public class Post {
         this.likesCount = 0;
     }
 
-    public long getPostId() {
+    public Long getPostId() {
         return postId;
     }
 
