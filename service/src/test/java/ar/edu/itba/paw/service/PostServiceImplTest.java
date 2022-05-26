@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class PostServiceImplTest {
 
-    private final static int VALID_PAGE = 0;
+   /* private final static int VALID_PAGE = 0;
     private final static int NOT_VALID_PAGE = -1;
     private final static long POST_ID = 1;
     private final static String POST_CONTENT = "Post Content";
@@ -459,5 +459,5 @@ public class PostServiceImplTest {
         boolean hasLiked = postService.hasLiked(POST_ID, DEBATE_CREATOR);
 
         assertTrue(hasLiked);
-    }
+    }*/
 }

@@ -17,10 +17,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@Repository
-public class PostJdbcDao implements PostDao {
+//@Repository
+public class PostJdbcDao /*implements PostDao*/ {
 
-    private final JdbcTemplate jdbcTemplate;
+    /*private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private final SimpleJdbcInsert jdbcInsertLikes;
 
@@ -117,5 +117,5 @@ public class PostJdbcDao implements PostDao {
     @Override
     public Optional<PublicPost> getLastArgument(long debateId) {
         return jdbcTemplate.query("SELECT * FROM public_posts WHERE debateId = ? ORDER BY created_date DESC LIMIT 1", new Object[]{debateId}, PUBLIC_POST_ROW_MAPPER).stream().findFirst();
-    }
+    }*/
 }
