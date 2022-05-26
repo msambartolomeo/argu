@@ -7,8 +7,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
-// TODO: change to users for migration merge
-@Table(name = "users2")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_userid_seq")
@@ -23,12 +22,9 @@ public class User {
     @Column(name = "created_date")
     private LocalDate createdDate;
 
-    // TODO: replace when Image is migrated and test if it works
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "image_id")
-//    private Image Image;
-    @Column
-    private Long imageId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Image image;
     @Enumerated(EnumType.ORDINAL)
     private UserRole role;
 
@@ -73,20 +69,15 @@ public class User {
         return createdDate;
     }
 
-    // TODO: replace when Image is migrated and test if it works
-//    public Image getImage() {
-//        return image;
-//    }
-    public Long getImageId() {
-        return imageId;
+    public Image getImage() {
+        return image;
     }
-
     public UserRole getRole() {
         return role;
     }
 
     public void updateImage(byte[] data) {
-//        this.image = new Image(data); // TODO uncomment when Image is migrated and test if it works
+        this.image = new Image(data);
     }
 
     public User updateLegacyUser(String username, String password) {

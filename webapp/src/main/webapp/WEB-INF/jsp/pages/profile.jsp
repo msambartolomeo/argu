@@ -13,8 +13,8 @@
             <div class="card profile-data">
                 <div class="profile-image">
                     <c:choose>
-                        <c:when test="${user.imageId != null}">
-                            <img src="<c:url value="/images/${user.imageId}"/>"  alt="<spring:message
+                        <c:when test="${user.image.id != null}">
+                            <img src="<c:url value="/images/${user.image.id}"/>"  alt="<spring:message
                         code="pages.profile.picture"/>"/>
                         </c:when>
                         <c:otherwise>

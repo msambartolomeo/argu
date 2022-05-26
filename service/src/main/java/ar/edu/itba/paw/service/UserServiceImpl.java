@@ -23,6 +23,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
+    private ImageService imageService;
+    @Autowired
     private EmailService emailService;
 
     @Override
@@ -48,10 +50,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateImage(String username, byte[] image) {
         User user = getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+
+        Long imageId = null;
+        if (user.getImage() != null)
+            imageId = user.getImage().getId();
+
         user.updateImage(image);
-//        long imageId = imageService.createImage(image).getId();
-//        userDao.updateImage(user.getUserId(), imageId);
-//        if (user.getImage() != null ) imageService.deleteImage(user.getImage().getId()); TODO: check if this is necesary
+
+        if (imageId != null) imageService.deleteImage(imageId);
     }
 
     @Override
