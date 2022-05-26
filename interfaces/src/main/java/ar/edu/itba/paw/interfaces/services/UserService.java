@@ -16,5 +16,6 @@ public interface UserService {
 
     void requestModerator(String username, String reason);
 
+    // TODO: moved to Debate model (not implemented yet) remove for migration merge
     List<User> getSubscribedUsersByDebate(long debateId);
 }

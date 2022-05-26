@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +22,6 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private ImageService imageService;
     @Autowired
     private EmailService emailService;
 
@@ -36,7 +35,7 @@ public class UserServiceImpl implements UserService {
     public User create(String username, String password, String email) {
         Optional<User> user = getUserByEmail(email);
         if (user.isPresent())
-            return userDao.updateLegacyUser(user.get().getUserId(), username, passwordEncoder.encode(password), email);
+            return user.get().updateLegacyUser(username, passwordEncoder.encode(password));
         return userDao.create(username, passwordEncoder.encode(password), email);
     }
 
@@ -49,9 +48,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateImage(String username, byte[] image) {
         User user = getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        long imageId = imageService.createImage(image).getId();
-        userDao.updateImage(user.getUserId(), imageId);
-        if (user.getImageId() != null ) imageService.deleteImage(user.getImageId());
+        user.updateImage(image);
+//        long imageId = imageService.createImage(image).getId();
+//        userDao.updateImage(user.getUserId(), imageId);
+//        if (user.getImage() != null ) imageService.deleteImage(user.getImage().getId()); TODO: check if this is necesary
     }
 
     @Override
@@ -59,8 +59,10 @@ public class UserServiceImpl implements UserService {
         emailService.sendEmailSelf("New user moderator request for " + username, "reason for request: " + reason);
     }
 
+    // TODO: moved to Debate model (not implemented yet) remove for migration merge
     @Override
     public List<User> getSubscribedUsersByDebate(long debateId) {
-        return userDao.getSubscribedUsersByDebate(debateId);
+        return new ArrayList<>();
+//        return userDao.getSubscribedUsersByDebate(debateId);
     }
 }
