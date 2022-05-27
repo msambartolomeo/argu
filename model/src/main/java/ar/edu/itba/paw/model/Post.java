@@ -17,6 +17,7 @@ public class Post {
     private Long postId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +31,7 @@ public class Post {
     private LocalDateTime creationDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "imageid")
     private Image image;
 
     @Enumerated(EnumType.ORDINAL)
@@ -38,6 +40,9 @@ public class Post {
 
     @Formula("(SELECT COUNT(*) FROM likes WHERE postid = postid)")
     private int likesCount;
+
+    @Transient
+    private boolean isLikedByUser;
 
     /*default*/Post() {
         // Just for Hibernate
@@ -51,6 +56,7 @@ public class Post {
         this.image = image;
         this.status = status;
         this.likesCount = 0;
+        this.isLikedByUser = false;
     }
 
     @Deprecated
@@ -88,5 +94,13 @@ public class Post {
 
     public int getLikesCount() {
         return likesCount;
+    }
+
+    public boolean isLikedByUser() {
+        return isLikedByUser;
+    }
+
+    public void setLikedByUser(boolean likedByUser) {
+        isLikedByUser = likedByUser;
     }
 }

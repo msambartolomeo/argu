@@ -48,7 +48,7 @@ public class Debate {
     private DebateStatus status;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "subscribed",
+    @JoinTable(name = "subscribed2",
             joinColumns = @JoinColumn(name = "debateid", referencedColumnName = "debateid"),
             inverseJoinColumns = @JoinColumn(name = "userid", referencedColumnName = "userid"))
     private Set<User> subscribedUsers;

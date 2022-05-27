@@ -13,6 +13,7 @@ public interface PostDao {
 
     List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, long userId, int page);
     Post create(User user, Debate debate, String content, Image image, ArgumentStatus status);
+    List<Post> getPostsByDebate(Debate debate, User user, int page);
     List<PublicPost> getPublicPostsByDebate(long debateId, int page);
     void likePost(long postId, long userId);
     void unlikePost(long postId, long userId);

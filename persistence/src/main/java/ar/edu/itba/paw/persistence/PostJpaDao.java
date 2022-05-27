@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class PostJpaDao implements PostDao {
@@ -47,6 +49,31 @@ public class PostJpaDao implements PostDao {
                                 (Boolean) isliked
         ).collect(Collectors.toList());*/
         return null;
+    }
+
+    @Override
+    public List<Post> getPostsByDebate(Debate debate, User user, int page) {
+        final Query idQuery = em.createNativeQuery("SELECT postid FROM posts WHERE debateid = :debateid LIMIT 5 OFFSET :offset");
+        idQuery.setParameter("debateid", debate.getDebateId());
+        idQuery.setParameter("offset", page * 5);
+
+        @SuppressWarnings("unchecked")
+        List<Long> ids = (List<Long>) idQuery.getResultList().stream().map(o -> ((Integer) o).longValue()).collect(Collectors.toList());
+
+        final TypedQuery<Post> query = em.createQuery("FROM Post WHERE postId IN :ids", Post.class);
+        query.setParameter("ids", ids);
+
+        final List<Post> posts = query.getResultList();
+
+        final Query likeQuery = em.createNativeQuery("SELECT postid FROM likes2 WHERE userid = :userid AND postid = :postid");
+        likeQuery.setParameter("userid", user.getUserId());
+
+        for(Post post : posts) {
+            likeQuery.setParameter("postid", post.getPostId());
+            if(likeQuery.getResultList().size() == 1) post.setLikedByUser(true);
+        }
+
+        return posts;
     }
 
     @Override
