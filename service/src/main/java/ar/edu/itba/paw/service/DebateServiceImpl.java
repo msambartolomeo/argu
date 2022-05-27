@@ -33,6 +33,11 @@ public class DebateServiceImpl implements DebateService {
     @Autowired
     private EmailService emailService;
 
+    @Override
+    public Optional<Debate> getDebateById(long id) {
+        return debateDao.getDebateById(id);
+    }
+
     @Transactional
     @Override
     public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
