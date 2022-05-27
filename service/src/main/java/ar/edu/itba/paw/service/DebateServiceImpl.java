@@ -40,9 +40,9 @@ public class DebateServiceImpl implements DebateService {
         User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
         Debate createdDebate;
         if (image.length == 0)
-            createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
+            createdDebate = debateDao.create(name, description, creator, opponent, null, category);
         else
-            createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image).getId(), category);
+            createdDebate = debateDao.create(name, description, creator, opponent, imageService.createImage(image), category);
         emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate.getDebateId(), createdDebate.getName());
         return createdDebate;
     }
@@ -66,7 +66,9 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public Optional<PublicDebate> getPublicDebateById(long id) {
-        return debateDao.getPublicDebateById(id);
+        // TODO
+        // return debateDao.getPublicDebateById(id);
+        return Optional.empty();
     }
 
     @Transactional
@@ -94,9 +96,9 @@ public class DebateServiceImpl implements DebateService {
     public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
         if (page < 0) {
             return new ArrayList<>();
-        }
-        if (list.equals("subscribed"))
-            return debateDao.getSubscribedDebatesByUserId(userid, page);
+        } // TODO
+        // if (list.equals("subscribed"))
+            // return debateDao.getSubscribedDebatesByUserId(userid, page);
         else return debateDao.getMyDebates(userid, page);
     }
 
@@ -128,7 +130,7 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public String getUserVote(long debateid, String username) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        /* User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         PublicDebate debate = debateDao.getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
         if(!debateDao.hasUserVoted(debateid, user.getUserId()))
             return null;
@@ -137,7 +139,8 @@ public class DebateServiceImpl implements DebateService {
         if(debateVote == DebateVote.FOR) {
             return debate.getCreatorUsername();
         } else
-            return debate.getOpponentUsername();
+            return debate.getOpponentUsername();*/
+        return null; // TODO
     }
 
     @Transactional

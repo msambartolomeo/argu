@@ -108,4 +108,16 @@ public class DebateJpaDao implements DebateDao {
     public Boolean hasUserVoted(long debateId, long userId) {
         return null;
     }
+
+    @Override
+    @Deprecated
+    public DebateVote getUserVote(long debateid, long userid) {
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public void changeDebateStatus(long id, DebateStatus status) {
+
+    }
 }
