@@ -27,6 +27,8 @@ public class PostServiceImpl implements PostService {
     private UserService userService;
     @Autowired
     private DebateService debateService;
+    @Autowired
+    private LikeService likeService;
 
     @Transactional
     @Override
@@ -112,23 +114,18 @@ public class PostServiceImpl implements PostService {
     @Override
     public void likePost(long postId, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        getPostById(postId).orElseThrow(PostNotFoundException::new);
-        if(postDao.hasLiked(postId, user.getUserId()))
-            throw new UserAlreadyLikedException();
-        postDao.likePost(postId, user.getUserId());
+        Post post = getPostById(postId).orElseThrow(PostNotFoundException::new);
+        Optional<Like> like = likeService.getLike(post, user);
+
+        if(like.isPresent()) throw new UserAlreadyLikedException();
+        likeService.likePost(postId, user.getUserId());
     }
 
     @Transactional
     @Override
     public void unlikePost(long postId, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        postDao.unlikePost(postId, user.getUserId());
-    }
-
-    @Override
-    public boolean hasLiked(long postId, String username) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        return postDao.hasLiked(postId, user.getUserId());
+        likeService.unlikePost(postId, user.getUserId());
     }
 
     @Override

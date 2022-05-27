@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,11 @@ public class LikeJpaDao implements LikeDao {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Override
+    public Optional<Like> getLike(User user, Post post) {
+        return Optional.ofNullable(em.find(Like.class, new UserPostKey(user.getUserId(), post.getPostId())));
+    }
 
     @Override
     public Set<Long> getUserPostsLikesInDebate(long userid, long debateid) {

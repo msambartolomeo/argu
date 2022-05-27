@@ -17,8 +17,6 @@ public interface PostService {
     void likePost(long postId, String username);
     void unlikePost(long postId, String username);
 
-    boolean hasLiked(long postId, String username);
-
     List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, String username, int page);
 
     Optional<PublicPost> getLastArgument(long debateIdNum);

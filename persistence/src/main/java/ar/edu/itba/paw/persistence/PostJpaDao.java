@@ -89,21 +89,6 @@ public class PostJpaDao implements PostDao {
     }
 
     @Override
-    public void likePost(long postId, long userId) {
-
-    }
-
-    @Override
-    public void unlikePost(long postId, long userId) {
-
-    }
-
-    @Override
-    public boolean hasLiked(long postId, long userId) {
-        return false;
-    }
-
-    @Override
     public Optional<PublicPost> getLastArgument(long debateId) {
 //        final TypedQuery<Post> query = em.createQuery("FROM Post AS p WHERE p.debate.debateid = :id ORDER BY p.created_date DESC LIMIT 1", Post.class);
 //        query.setParameter("id", debateId);
