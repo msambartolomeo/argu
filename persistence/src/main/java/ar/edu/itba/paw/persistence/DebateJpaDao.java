@@ -97,7 +97,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public Boolean hasUserVoted(long debateId, long userId) {
-        return null;
+        return false;
     }
 
     @Override

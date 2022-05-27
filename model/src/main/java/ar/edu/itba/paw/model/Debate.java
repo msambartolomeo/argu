@@ -56,9 +56,9 @@ public class Debate {
     @Formula("(select count(*) from subscribed where debateid = debateid)")
     private int subcribedUsersCount;
 
-    @Formula("(select count(*) from votes where debateid = debateid and vote = FOR)")
+    @Formula("(select count(*) from votes2 where debateid = debateid and votes2.vote = 0)")
     private int forCount;
-    @Formula("(select count(*) from votes where debateid = debateid and vote = AGAINST)")
+    @Formula("(select count(*) from votes2 where debateid = debateid and votes2.vote = 1)")
     private int againstCount;
 
     Debate() {}

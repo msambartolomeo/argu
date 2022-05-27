@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -129,11 +130,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, String username, int page) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+    public List<Post> getPublicPostsByDebateWithIsLiked(long debateId, String username, int page) {
         if (page < 0)
-            return new ArrayList<>();
-        return postDao.getPublicPostsByDebateWithIsLiked(debateId, user.getUserId(), page);
+            return Collections.emptyList();
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
+        return postDao.getPostsByDebate(debate, user, page);
     }
 
     @Override

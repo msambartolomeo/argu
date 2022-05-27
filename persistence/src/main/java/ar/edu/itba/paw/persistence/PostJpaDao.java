@@ -9,6 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,14 +55,18 @@ public class PostJpaDao implements PostDao {
 
     @Override
     public List<Post> getPostsByDebate(Debate debate, User user, int page) {
-        final Query idQuery = em.createNativeQuery("SELECT postid FROM posts WHERE debateid = :debateid LIMIT 5 OFFSET :offset");
+        final Query idQuery = em.createNativeQuery("SELECT postid FROM posts2 WHERE debateid = :debateid LIMIT 5 OFFSET :offset");
         idQuery.setParameter("debateid", debate.getDebateId());
         idQuery.setParameter("offset", page * 5);
 
         @SuppressWarnings("unchecked")
-        List<Long> ids = (List<Long>) idQuery.getResultList().stream().map(o -> ((Integer) o).longValue()).collect(Collectors.toList());
+        List<Long> ids = (List<Long>) idQuery.getResultList().stream().map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
 
-        final TypedQuery<Post> query = em.createQuery("FROM Post WHERE postId IN :ids", Post.class);
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final TypedQuery<Post> query = em.createQuery("FROM Post p WHERE p.postId IN :ids", Post.class);
         query.setParameter("ids", ids);
 
         final List<Post> posts = query.getResultList();
@@ -93,6 +99,6 @@ public class PostJpaDao implements PostDao {
 //        final TypedQuery<Post> query = em.createQuery("FROM Post AS p WHERE p.debate.debateid = :id ORDER BY p.created_date DESC LIMIT 1", Post.class);
 //        query.setParameter("id", debateId);
 //        return Optional.ofNullable(query.getSingleResult());
-        return null;
+        return Optional.empty();
     }
 }

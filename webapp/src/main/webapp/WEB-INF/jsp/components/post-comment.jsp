@@ -12,10 +12,10 @@
     <div class="card-content">
 
         <c:choose>
-            <c:when test="${empty lastArgument || (lastArgument.status.name == 'introduction' && lastArgument.username == debate.creatorUsername)}">
+            <c:when test="${empty lastArgument || (lastArgument.status.name == 'introduction' && lastArgument.user.username == debate.creator.username)}">
                 <span class="card-title"><spring:message code="components.post-comment.introduction"/></span>
             </c:when>
-            <c:when test="${debate.debateStatus.name == 'closing'}">
+            <c:when test="${debate.status.name == 'closing'}">
                 <span class="card-title"><spring:message code="components.post-comment.conclusion"/></span>
             </c:when>
             <c:otherwise>

@@ -77,7 +77,7 @@ public class DebateController {
         int pageNum = Integer.parseInt(page);
 
         final ModelAndView mav = new ModelAndView("pages/debate");
-        mav.addObject("debate", debateService.getPublicDebateById(debateIdNum).orElseThrow(DebateNotFoundException::new));
+        mav.addObject("debate", debateService.getDebateById(debateIdNum).orElseThrow(DebateNotFoundException::new));
         mav.addObject("total_pages", postService.getPostsByDebatePageCount(debateIdNum));
 
         if(auth != null && auth.getPrincipal() != null) {

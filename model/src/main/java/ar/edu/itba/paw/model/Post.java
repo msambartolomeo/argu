@@ -25,6 +25,7 @@ public class Post {
     private Debate debate;
 
     @Column(nullable = false)
+    // TODO: Change to text
     private String content;
 
     @Column(name = "created_date", nullable = false)
@@ -38,7 +39,7 @@ public class Post {
     @Column(name = "status", nullable = false, length = 20)
     private ArgumentStatus status;
 
-    @Formula("(SELECT COUNT(*) FROM likes WHERE postid = postid)")
+    @Formula("(SELECT COUNT(*) FROM likes2 WHERE likes2.postid = postid)")
     private int likesCount;
 
     @Transient
