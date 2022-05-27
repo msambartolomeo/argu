@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.PublicDebate;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
@@ -16,9 +13,8 @@ import java.util.Optional;
 public interface DebateDao {
     Optional<Debate> getDebateById(long id);
 
-    Optional<PublicDebate> getPublicDebateById(long id);
     Debate create(String name, String description, User creator, User opponent, Image image, DebateCategory category);
-    List<PublicDebate> getSubscribedDebatesByUserId(long userid, int page);
+    List<Debate> getSubscribedDebatesByUserId(long userid, int page);
     int getSubscribedDebatesByUserIdCount(long userid);
 
     void subscribeToDebate(long userid, long debateid);
@@ -35,13 +31,14 @@ public interface DebateDao {
 
     int getMyDebatesCount(long userid);
 
+    @Deprecated // TODO: Delete deprecated methods
     void addVote(long debateId, long userId, DebateVote vote);
-
+    @Deprecated
     void removeVote(long debateId, long userId);
-
+    @Deprecated
     Boolean hasUserVoted(long debateId, long userId);
-
+    @Deprecated
     DebateVote getUserVote(long debateid, long userid);
-
+    @Deprecated
     void changeDebateStatus(long id, DebateStatus status);
 }

@@ -1,21 +1,22 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.PublicDebate;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.DebateVote;
+import ar.edu.itba.paw.model.keys.UserDebateKey;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class DebateJpaDao implements DebateDao {
@@ -36,18 +37,24 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    public Optional<PublicDebate> getPublicDebateById(long id) {
-        return Optional.empty();
-    }
+    public List<Debate> getSubscribedDebatesByUserId(long userid, int page) {
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid LIMIT 5 OFFSET :offset)");
+        idQuery.setParameter("userid", userid);
+        idQuery.setParameter("offset", page * 5);
+        @SuppressWarnings("unchecked")
+        List<Long> ids = (List<Long>) idQuery.getResultList().stream()
+                .map(o -> ((Integer) o).longValue()).collect(Collectors.toList());
 
-    @Override
-    public List<PublicDebate> getSubscribedDebatesByUserId(long userid, int page) {
-        return null;
+        final TypedQuery<Debate> query = em.createQuery("FROM debates AS d WHERE d.id IN :ids", Debate.class);
+        query.setParameter("ids", ids);
+        return query.getResultList();
     }
 
     @Override
     public int getSubscribedDebatesByUserIdCount(long userid) {
-        return 0;
+        Query query = em.createNativeQuery("SELECT COUNT(*) FROM subscribed WHERE userid = :userid");
+        query.setParameter("userid", userid);
+        return ((Number) query.getSingleResult()).intValue();
     }
 
     @Override
@@ -91,22 +98,14 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
+    @Deprecated
     public void removeVote(long debateId, long userId) {
 
     }
 
     @Override
+    @Deprecated
     public Boolean hasUserVoted(long debateId, long userId) {
         return null;
-    }
-
-    @Override
-    public DebateVote getUserVote(long debateid, long userid) {
-        return null;
-    }
-
-    @Override
-    public void changeDebateStatus(long id, DebateStatus status) {
-
     }
 }

@@ -21,16 +21,25 @@ public class Vote {
     @JoinColumn(name = "debateid")
     private Debate debate;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "vote", nullable = false, length = 10)
     private DebateVote vote;
 
 
     Vote() {}
 
-    public Vote(User user, Debate debate) {
+    public Vote(User user, Debate debate, DebateVote vote) {
         this.user = user;
         this.debate = debate;
+        this.vote = vote;
         this.userDebateKey = new UserDebateKey(user.getUserId(), debate.getDebateId());
+    }
+
+    public void setVote(DebateVote vote) {
+        this.vote = vote;
+    }
+
+    public DebateVote getVote() {
+        return vote;
     }
 }

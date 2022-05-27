@@ -36,13 +36,17 @@ public class Debate {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "category", nullable = false, length = 20)
     private DebateCategory category;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "status", nullable = false, length = 20)
     private DebateStatus status;
+
+    public void setStatus(DebateStatus status) {
+        this.status = status;
+    }
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "subscribed",
