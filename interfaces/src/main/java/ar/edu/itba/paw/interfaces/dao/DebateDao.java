@@ -17,10 +17,11 @@ public interface DebateDao {
     List<Debate> getSubscribedDebatesByUserId(long userid, int page);
     int getSubscribedDebatesByUserIdCount(long userid);
 
+    @Deprecated
     void subscribeToDebate(long userid, long debateid);
-
+    @Deprecated
     void unsubscribeToDebate(long userid, long debateid);
-
+    @Deprecated
     boolean isUserSubscribed(long userid, long debateid);
 
     List<PublicDebate> getPublicDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);

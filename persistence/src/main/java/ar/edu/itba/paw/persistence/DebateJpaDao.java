@@ -58,16 +58,19 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
+    @Deprecated
     public void subscribeToDebate(long userid, long debateid) {
 
     }
 
     @Override
+    @Deprecated
     public void unsubscribeToDebate(long userid, long debateid) {
 
     }
 
     @Override
+    @Deprecated
     public boolean isUserSubscribed(long userid, long debateid) {
         return false;
     }
