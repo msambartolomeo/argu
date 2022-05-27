@@ -41,10 +41,10 @@ public class PostServiceImpl implements PostService {
 
         Post createdPost;
         if (image.length == 0) {
-            createdPost = postDao.create(user.getUserId(), debateId, content,null, status);
+            createdPost = postDao.create(user, debateId, content,null, status);
         } else {
-            long imageId = imageService.createImage(image).getId();
-            createdPost = postDao.create(user.getUserId(), debateId, content, imageId, status);
+            Image newImage = imageService.createImage(image);
+            createdPost = postDao.create(user, debateId, content, newImage, status);
         }
         sendEmailToSubscribedUsers(debateId, user.getUserId(), user.getUsername(), debate.getName());
         return createdPost;
@@ -92,8 +92,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Optional<PublicPost> getPublicPostById(long postId) {
-        return postDao.getPublicPostById(postId);
+    public Optional<Post> getPostById(long postId) {
+        return postDao.getPostById(postId);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void likePost(long postId, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        getPublicPostById(postId).orElseThrow(PostNotFoundException::new);
+        getPostById(postId).orElseThrow(PostNotFoundException::new);
         if(postDao.hasLiked(postId, user.getUserId()))
             throw new UserAlreadyLikedException();
         postDao.likePost(postId, user.getUserId());

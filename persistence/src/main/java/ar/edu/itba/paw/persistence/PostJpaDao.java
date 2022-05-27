@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +18,8 @@ public class PostJpaDao implements PostDao {
     private EntityManager em;
 
     @Override
-    public Optional<PublicPost> getPublicPostById(long postId) {
-//        return Optional.ofNullable(em.find(Post.class, postId));
-        return null;
+    public Optional<Post> getPostById(long postId) {
+        return Optional.ofNullable(em.find(Post.class, postId));
     }
 
     @Override
@@ -52,8 +50,8 @@ public class PostJpaDao implements PostDao {
     }
 
     @Override
-    public Post create(long userId, long debateId, String content, Long imageId, ArgumentStatus status) {
-        final Post post = new Post(userId, debateId, content, imageId, status);
+    public Post create(User user, long debateId, String content, Image image, ArgumentStatus status) {
+        final Post post = new Post(user, debateId, content, image, status);
         em.persist(post);
         return post;
     }

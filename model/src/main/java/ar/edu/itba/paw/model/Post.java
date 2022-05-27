@@ -16,17 +16,13 @@ public class Post {
     @Column(name = "postid")
     private Long postId;
 
-    @Column(name = "debateid", nullable = false)
-    private Long debateId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
-    @Column(name = "userid", nullable = false)
-    private Long userId;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private User user;
-//
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    private Debate debate;
+    @Column(name = "debateid", nullable = false)
+    private Long debateId;
 
     @Column(nullable = false)
     private String content;
@@ -34,11 +30,8 @@ public class Post {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime creationDate;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    private Image image;
-
-    @Column(name = "imageid")
-    private Long imageId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Image image;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "status", nullable = false, length = 20)
@@ -51,24 +44,24 @@ public class Post {
         // Just for Hibernate
     }
 
-    public Post( final Long userId, final Long debateId, final String content, final Long imageId, final ArgumentStatus status) {
+    public Post(final User user, final Long debateId, final String content, final Image image, final ArgumentStatus status) {
         this.debateId = debateId;
-        this.userId = userId;
+        this.user = user;
         this.content = content;
         this.creationDate = LocalDateTime.now();
-        this.imageId = imageId;
+        this.image = image;
         this.status = status;
         this.likesCount = 0;
     }
 
     @Deprecated
-    public Post(final long postId, final Long userId, final Long debateId, final String content, final LocalDateTime creationDate, final Long imageId, final ArgumentStatus status) {
+    public Post(final long postId, final User user, final Long debateId, final String content, final LocalDateTime creationDate, final Image image, final ArgumentStatus status) {
         this.postId = postId;
-        this.userId = userId;
+        this.user = user;
         this.debateId = debateId;
         this.content = content;
         this.creationDate = creationDate;
-        this.imageId = imageId;
+        this.image = image;
         this.status = status;
         this.likesCount = 0;
     }
@@ -77,10 +70,10 @@ public class Post {
         return postId;
     }
 
-//    public User getUser() {
-//        return user;
-//    }
-//
+    public User getUser() {
+        return user;
+    }
+
 //    public Debate getDebate() {
 //        return debate;
 //    }
@@ -93,9 +86,9 @@ public class Post {
         return creationDate;
     }
 
-//    public Image getImage() {
-//        return image;
-//    }
+    public Image getImage() {
+        return image;
+    }
 
     public ArgumentStatus getStatus() {
         return status;
@@ -105,15 +98,7 @@ public class Post {
         return likesCount;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
     public Long getDebateId() {
         return debateId;
-    }
-
-    public Long getImageId() {
-        return imageId;
     }
 }

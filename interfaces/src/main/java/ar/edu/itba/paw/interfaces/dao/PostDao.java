@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostDao {
-    Optional<PublicPost> getPublicPostById(long postId);
+    Optional<Post> getPostById(long postId);
 
     int getPostsByDebateCount(long debateId);
 
     List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, long userId, int page);
-    Post create(long userId, long debateId, String content, Long imageId, ArgumentStatus status);
+    Post create(User user, long debateId, String content, Image image, ArgumentStatus status);
     List<PublicPost> getPublicPostsByDebate(long debateId, int page);
     void likePost(long postId, long userId);
     void unlikePost(long postId, long userId);
