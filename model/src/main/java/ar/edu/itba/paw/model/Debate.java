@@ -23,22 +23,15 @@ public class Debate {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "creatorid", nullable = false)
-    private Long creatorId;
-    @Column(name = "opponentid", nullable = false)
-    private Long opponentId;
-    @Column(name = "imageid")
-    private Long imageId;
 
-//    TODO: Uncomment when available
-//    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-//    private User creator;
-//    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-//    private User opponent;
-//
-//
-//    @OneToOne(fetch = FetchType.EAGER)
-//    private Image image;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User creator;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User opponent;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Image image;
 
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
@@ -51,24 +44,28 @@ public class Debate {
     @Column(name = "status", nullable = false, length = 20)
     private DebateStatus status;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "subscribed",
+            joinColumns = @JoinColumn(name = "debateid", referencedColumnName = "debateid"),
+            inverseJoinColumns = @JoinColumn(name = "userid", referencedColumnName = "userid"))
+    private Set<User> subscribedUsers;
 
-//    @Formula("(select count(*) from subscribed where debateid = debateid)")
-//    private int subcribedUsers;
-//
-//    @Formula("(select count(*) from votes where debateid = debateid and vote = FOR)")
-//    private int forCount;
-//    @Formula("(select count(*) from votes where debateid = debateid and vote = AGAINST)")
-//    private int againstCount;
+    @Formula("(select count(*) from subscribed where debateid = debateid)")
+    private int subcribedUsersCount;
+
+    @Formula("(select count(*) from votes where debateid = debateid and vote = FOR)")
+    private int forCount;
+    @Formula("(select count(*) from votes where debateid = debateid and vote = AGAINST)")
+    private int againstCount;
 
     Debate() {}
 
-    // TODO: Change to use User and Image instead of IDs
-    public Debate(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category, DebateStatus status) {
+    public Debate(String name, String description, User creator, User opponent, Image image, DebateCategory category, DebateStatus status) {
         this.name = name;
         this.description = description;
-        this.creatorId = creatorId;
-        this.opponentId = opponentId;
-        this.imageId = imageId;
+        this.creator = creator;
+        this.opponent = opponent;
+        this.image = image;
         this.category = category;
         this.status = status;
         this.createdDate = LocalDateTime.now();
@@ -92,20 +89,8 @@ public class Debate {
         return description;
     }
 
-    public Long getCreatorId() {
-        return creatorId;
-    }
-
-    public Long getOpponentId() {
-        return opponentId;
-    }
-
     public LocalDateTime getCreatedDate() {
         return createdDate;
-    }
-
-    public Long getImageId() {
-        return imageId;
     }
 
     public DebateCategory getCategory() {
@@ -114,5 +99,33 @@ public class Debate {
 
     public DebateStatus getStatus() {
         return status;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public User getOpponent() {
+        return opponent;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public Set<User> getSubscribedUsers() {
+        return subscribedUsers;
+    }
+
+    public int getSubcribedUsersCount() {
+        return subcribedUsersCount;
+    }
+
+    public int getForCount() {
+        return forCount;
+    }
+
+    public int getAgainstCount() {
+        return againstCount;
     }
 }

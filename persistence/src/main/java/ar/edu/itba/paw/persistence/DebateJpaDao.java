@@ -2,7 +2,9 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.PublicDebate;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
@@ -22,8 +24,8 @@ public class DebateJpaDao implements DebateDao {
     private EntityManager em;
 
     @Override
-    public Debate create(String name, String description, Long creatorId, Long opponentId, Long imageId, DebateCategory category) {
-        Debate debate = new Debate(name, description, creatorId, opponentId, imageId, category, DebateStatus.OPEN);
+    public Debate create(String name, String description, User creator, User opponent, Image image, DebateCategory category) {
+        Debate debate = new Debate(name, description, creator, opponent, image, category, DebateStatus.OPEN);
         em.persist(debate);
         return debate;
     }
