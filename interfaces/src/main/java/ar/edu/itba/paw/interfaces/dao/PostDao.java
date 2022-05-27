@@ -12,7 +12,7 @@ public interface PostDao {
     int getPostsByDebateCount(long debateId);
 
     List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, long userId, int page);
-    Post create(User user, long debateId, String content, Image image, ArgumentStatus status);
+    Post create(User user, Debate debate, String content, Image image, ArgumentStatus status);
     List<PublicPost> getPublicPostsByDebate(long debateId, int page);
     void likePost(long postId, long userId);
     void unlikePost(long postId, long userId);

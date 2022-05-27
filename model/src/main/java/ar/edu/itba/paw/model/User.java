@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users2")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_userid_seq")
@@ -24,7 +24,7 @@ public class User {
     private LocalDate createdDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
+    @JoinColumn(name = "imageid")
     private Image image;
     @Enumerated(EnumType.ORDINAL)
     private UserRole role;

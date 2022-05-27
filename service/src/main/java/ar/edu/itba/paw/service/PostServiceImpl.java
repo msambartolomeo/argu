@@ -31,20 +31,20 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public Post create(String username, long debateId, String content, byte[] image) {
-        PublicDebate debate = debateService.getPublicDebateById(debateId).orElseThrow(DebateNotFoundException::new);
+        Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        if (debate.getDebateStatus() == DebateStatus.CLOSED || debate.getDebateStatus() == DebateStatus.DELETED || (!debate.getCreatorUsername().equals(username) && !debate.getOpponentUsername().equals(username))) {
+        if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED || (!debate.getCreator().getUsername().equals(username) && !debate.getOpponent().getUsername().equals(username))) {
             throw new ForbiddenPostException();
         }
 
-        ArgumentStatus status = getArgumentStatus(debateId, debate.getDebateStatus(), debate.getCreatorUsername(), username);
+        ArgumentStatus status = getArgumentStatus(debateId, debate.getStatus(), debate.getCreator().getUsername(), username);
 
         Post createdPost;
         if (image.length == 0) {
-            createdPost = postDao.create(user, debateId, content,null, status);
+            createdPost = postDao.create(user, debate, content,null, status);
         } else {
             Image newImage = imageService.createImage(image);
-            createdPost = postDao.create(user, debateId, content, newImage, status);
+            createdPost = postDao.create(user, debate, content, newImage, status);
         }
         sendEmailToSubscribedUsers(debateId, user.getUserId(), user.getUsername(), debate.getName());
         return createdPost;

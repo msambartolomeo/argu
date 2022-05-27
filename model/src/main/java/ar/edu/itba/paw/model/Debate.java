@@ -25,12 +25,15 @@ public class Debate {
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "creatorid")
     private User creator;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "opponentid")
     private User opponent;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "imageid")
     private Image image;
 
     @Column(name = "created_date", nullable = false)

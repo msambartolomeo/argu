@@ -50,8 +50,8 @@ public class PostJpaDao implements PostDao {
     }
 
     @Override
-    public Post create(User user, long debateId, String content, Image image, ArgumentStatus status) {
-        final Post post = new Post(user, debateId, content, image, status);
+    public Post create(User user, Debate debate, String content, Image image, ArgumentStatus status) {
+        final Post post = new Post(user, debate, content, image, status);
         em.persist(post);
         return post;
     }

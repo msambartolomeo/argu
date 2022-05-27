@@ -6,7 +6,7 @@ import ar.edu.itba.paw.model.keys.UserDebateKey;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "votes")
+@Table(name = "votes2")
 public class Vote {
     @EmbeddedId
     private UserDebateKey userDebateKey;

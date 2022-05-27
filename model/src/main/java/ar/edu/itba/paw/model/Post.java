@@ -19,10 +19,9 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Debate debate;
-    @Column(name = "debateid", nullable = false)
-    private Long debateId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "debateid")
+    private Debate debate;
 
     @Column(nullable = false)
     private String content;
@@ -44,8 +43,8 @@ public class Post {
         // Just for Hibernate
     }
 
-    public Post(final User user, final Long debateId, final String content, final Image image, final ArgumentStatus status) {
-        this.debateId = debateId;
+    public Post(final User user, final Debate debate, final String content, final Image image, final ArgumentStatus status) {
+        this.debate = debate;
         this.user = user;
         this.content = content;
         this.creationDate = LocalDateTime.now();
@@ -56,14 +55,7 @@ public class Post {
 
     @Deprecated
     public Post(final long postId, final User user, final Long debateId, final String content, final LocalDateTime creationDate, final Image image, final ArgumentStatus status) {
-        this.postId = postId;
-        this.user = user;
-        this.debateId = debateId;
-        this.content = content;
-        this.creationDate = creationDate;
-        this.image = image;
-        this.status = status;
-        this.likesCount = 0;
+
     }
 
     public Long getPostId() {
@@ -74,9 +66,9 @@ public class Post {
         return user;
     }
 
-//    public Debate getDebate() {
-//        return debate;
-//    }
+    public Debate getDebate() {
+        return debate;
+    }
 
     public String getContent() {
         return content;
@@ -96,9 +88,5 @@ public class Post {
 
     public int getLikesCount() {
         return likesCount;
-    }
-
-    public Long getDebateId() {
-        return debateId;
     }
 }
