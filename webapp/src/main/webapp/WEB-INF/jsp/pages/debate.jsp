@@ -72,7 +72,7 @@
                 <button class="chip btn" onclick="dateFilter('${debate.createdDate}')"><spring:message code="components.debate-created-on"/> ${debate.createdDate}</button>
                 <a class="chip btn" href="<c:url value="/debates?status=${debate.status.name == 'closed' ? 'closed' : 'open'}"/>"><spring:message code="status.${debate.status.name}"/></a>
                 <a class="chip btn" href="<c:url value="/debates?order=subs_desc"/>"><spring:message code="page.debate.subscribed"
-                                                  arguments="${debate.subscribedUsers}"/></a>
+                                                  arguments="${debate.subscribedUsersCount}"/></a>
             </div>
         </div>
         <c:if test="${debate.image.id != null}">
