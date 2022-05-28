@@ -9,10 +9,6 @@ import java.util.Set;
 
 public interface LikeDao {
     Optional<Like> getLike(User user, Post post);
-
-    Set<Long> getUserPostsLikesInDebate(long userid, long debateid);
-
     void likePost(User user, Post post);
-
     void unlikePost(User user, Post post);
 }

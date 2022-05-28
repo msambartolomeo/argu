@@ -11,6 +11,8 @@
 
 <body>
 <%@include file="../components/navbar.jsp" %>
+<c:set var="debate" value="${debate}" scope="request"/>
+<c:set var="lastArgument" value="${lastArgument}" scope="request"/>
 <div class="card normalized-margins">
     <div class="card-content debate-info-holder">
         <div class="debate-holder-separator">
@@ -129,7 +131,7 @@
                         </c:when>
                         <c:when test="">
                         </c:when>
-                        <c:when test="${((empty lastArgument && pageContext.request.userPrincipal.name == debate.creator.username) || (not empty lastArgument && pageContext.request.userPrincipal.name != lastArgument.username))}">
+                        <c:when test="${((empty lastArgument && pageContext.request.userPrincipal.name == debate.creator.username) || (not empty lastArgument && pageContext.request.userPrincipal.name != lastArgument.user.username))}">
                             <%@include file="../components/post-comment.jsp" %>
                         </c:when>
                         <c:otherwise>

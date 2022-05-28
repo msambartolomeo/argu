@@ -28,29 +28,11 @@ public class PostJpaDao implements PostDao {
 
     @Override
     public int getPostsByDebateCount(long debateId) {
-        final Query query = em.createNativeQuery("SELECT COUNT(*) FROM posts WHERE debateid = :id");
+        final Query query = em.createNativeQuery("SELECT COUNT(*) FROM posts2 WHERE debateid = :id");
         query.setParameter("id", debateId);
-        return ((Number) query.getSingleResult()).intValue();
-    }
 
-    @Override
-    public List<PublicPostWithUserLike> getPublicPostsByDebateWithIsLiked(long debateId, long userId, int page) {
-         /*final Query query = em.createNativeQuery("SELECT postid, debateid, username, content, likes, created_date, imageid, (SELECT COUNT(*) FROM likes WHERE userid = ? AND postid = public_posts.postid) as isliked, status FROM public_posts WHERE debateid = ? ORDER BY created_date LIMIT 5 OFFSET :offset");
-        query.setParameter("offset", page * 5);
-        List<PublicPostWithUserLike> = (List<PublicPostWithUserLike>) query.getResultList().stream().map(
-                (postid, debateid, username, content, created_date, imageid, likes, status, isliked) ->
-                        new PublicPostWithUserLike(
-                                postid,
-                                username,
-                                debateid,
-                                content,
-                                likes,
-                                (LocalDateTime) created_date,
-                                imageid,
-                                ArgumentStatus.getFromInt(((Number)status).intValue()),
-                                (Boolean) isliked
-        ).collect(Collectors.toList());*/
-        return null;
+        Optional<?> queryResult = query.getResultList().stream().findFirst();
+        return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
     }
 
     @Override
@@ -90,15 +72,10 @@ public class PostJpaDao implements PostDao {
     }
 
     @Override
-    public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
-        return null;
-    }
-
-    @Override
-    public Optional<PublicPost> getLastArgument(long debateId) {
-//        final TypedQuery<Post> query = em.createQuery("FROM Post AS p WHERE p.debate.debateid = :id ORDER BY p.created_date DESC LIMIT 1", Post.class);
-//        query.setParameter("id", debateId);
-//        return Optional.ofNullable(query.getSingleResult());
-        return Optional.empty();
+    public Optional<Post> getLastArgument(Debate debate) {
+        final TypedQuery<Post> query = em.createQuery("FROM Post p WHERE p.debate = :debate ORDER BY p.creationDate DESC ", Post.class);
+        query.setParameter("debate", debate);
+        query.setMaxResults(1);
+        return query.getResultList().stream().findFirst();
     }
 }

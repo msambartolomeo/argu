@@ -26,18 +26,6 @@ public class LikeJpaDao implements LikeDao {
     }
 
     @Override
-    public Set<Long> getUserPostsLikesInDebate(long userid, long debateid) {
-        final Query query = em.createNativeQuery("SELECT likes.postid FROM posts JOIN likes ON posts.postid = likes.postid WHERE debateid = :debateid AND likes.userid = :userid");
-        query.setParameter("debateid", debateid);
-        query.setParameter("userid", userid);
-
-        @SuppressWarnings("unchecked")
-        Set<Long> ids = (Set<Long>) query.getResultList().stream().map(o -> ((Integer) o).longValue()).collect(Collectors.toSet());
-
-        return ids;
-    }
-
-    @Override
     public void likePost(User user, Post post) {
         final Like like = new Like(user, post);
         em.persist(like);

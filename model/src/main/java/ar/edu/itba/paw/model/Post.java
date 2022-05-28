@@ -24,8 +24,7 @@ public class Post {
     @JoinColumn(name = "debateid")
     private Debate debate;
 
-    @Column(nullable = false)
-    // TODO: Change to text
+    @Column(columnDefinition = "text", nullable = false)
     private String content;
 
     @Column(name = "created_date", nullable = false)

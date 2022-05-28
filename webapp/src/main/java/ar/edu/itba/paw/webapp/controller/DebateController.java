@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.DebateService;
+import ar.edu.itba.paw.interfaces.services.LikeService;
 import ar.edu.itba.paw.interfaces.services.PostService;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
@@ -29,12 +30,14 @@ public class DebateController {
 
     private final DebateService debateService;
     private final PostService postService;
+    private final LikeService likeService;
     private static final Logger LOGGER = LoggerFactory.getLogger(DebateController.class);
 
     @Autowired
-    public DebateController(DebateService debateService, PostService postService) {
+    public DebateController(DebateService debateService, PostService postService, LikeService likeService) {
         this.debateService = debateService;
         this.postService = postService;
+        this.likeService = likeService;
     }
 
     @RequestMapping(method = { RequestMethod.GET, RequestMethod.HEAD })
@@ -78,16 +81,17 @@ public class DebateController {
 
         final ModelAndView mav = new ModelAndView("pages/debate");
         mav.addObject("debate", debateService.getDebateById(debateIdNum).orElseThrow(DebateNotFoundException::new));
-        mav.addObject("total_pages", postService.getPostsByDebatePageCount(debateIdNum));
 
+        String username = null;
         if(auth != null && auth.getPrincipal() != null) {
+            username = auth.getName();
             mav.addObject("isSubscribed", debateService.isUserSubscribed(auth.getName(), debateIdNum));
-            mav.addObject("posts", postService.getPublicPostsByDebateWithIsLiked(debateIdNum, auth.getName(), pageNum));
             mav.addObject("userVote", debateService.getUserVote(debateIdNum, auth.getName()));
             postService.getLastArgument(debateIdNum).ifPresent(lastArgument -> mav.addObject("lastArgument", lastArgument));
-        } else {
-            mav.addObject("posts", postService.getPublicPostsByDebate(debateIdNum, pageNum));
         }
+        mav.addObject("posts", postService.getPostsByDebate(debateIdNum, username, pageNum));
+        mav.addObject("total_pages", postService.getPostsByDebatePageCount(debateIdNum));
+
         return mav;
     }
 
@@ -184,7 +188,7 @@ public class DebateController {
             throw new UnauthorizedUserException();
         }
 
-        postService.likePost(Long.parseLong(postId), auth.getName());
+        likeService.likePost(Long.parseLong(postId), auth.getName());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
@@ -196,7 +200,7 @@ public class DebateController {
             throw new UnauthorizedUserException();
         }
 
-        postService.unlikePost(Long.parseLong(postId), auth.getName());
+        likeService.unlikePost(Long.parseLong(postId), auth.getName());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 }

@@ -8,6 +8,7 @@ import ar.edu.itba.paw.model.Like;
 import ar.edu.itba.paw.model.Post;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.PostNotFoundException;
+import ar.edu.itba.paw.model.exceptions.UserAlreadyLikedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,18 +35,20 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     @Transactional
-    public void likePost(long postId, long userId) {
+    public void likePost(long postId, String username) {
         Post post = postService.getPostById(postId).orElseThrow(PostNotFoundException::new);
-        User user = userService.getUserById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+
+        getLike(post, user).ifPresent(l -> {throw new UserAlreadyLikedException();});
 
         likeDao.likePost(user, post);
     }
 
     @Override
     @Transactional
-    public void unlikePost(long postId, long userId) {
+    public void unlikePost(long postId, String username) {
         Post post = postService.getPostById(postId).orElseThrow(PostNotFoundException::new);
-        User user = userService.getUserById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
 
         likeDao.unlikePost(user, post);
     }

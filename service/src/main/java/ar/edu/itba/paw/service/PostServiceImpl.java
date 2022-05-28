@@ -55,14 +55,14 @@ public class PostServiceImpl implements PostService {
 
     // Package-private for testing
     ArgumentStatus getArgumentStatus(long debateId, DebateStatus debateStatus, String creatorUsername, String username) {
-        Optional<PublicPost> lastArgument = getLastArgument(debateId);
+        Optional<Post> lastArgument = getLastArgument(debateId);
 
         if (!lastArgument.isPresent()) {
             if (!creatorUsername.equals(username))
                 throw new ForbiddenPostException();
             return ArgumentStatus.INTRODUCTION;
         } else {
-            if (username.equals(lastArgument.get().getUsername()))
+            if (username.equals(lastArgument.get().getUser().getUsername()))
                 throw new ForbiddenPostException();
 
             switch (lastArgument.get().getStatus()) {
@@ -100,37 +100,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PublicPost> getPublicPostsByDebate(long debateId, int page) {
-        if (page < 0)
-            return new ArrayList<>();
-        return postDao.getPublicPostsByDebate(debateId, page);
-    }
-
-    @Override
     public int getPostsByDebatePageCount(long debateId) {
         return (int) Math.ceil(postDao.getPostsByDebateCount(debateId) / (double) PAGE_SIZE);
     }
 
-    @Transactional
     @Override
-    public void likePost(long postId, String username) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        Post post = getPostById(postId).orElseThrow(PostNotFoundException::new);
-        Optional<Like> like = likeService.getLike(post, user);
-
-        if(like.isPresent()) throw new UserAlreadyLikedException();
-        likeService.likePost(postId, user.getUserId());
-    }
-
-    @Transactional
-    @Override
-    public void unlikePost(long postId, String username) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        likeService.unlikePost(postId, user.getUserId());
-    }
-
-    @Override
-    public List<Post> getPublicPostsByDebateWithIsLiked(long debateId, String username, int page) {
+    public List<Post> getPostsByDebate(long debateId, String username, int page) {
         if (page < 0)
             return Collections.emptyList();
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
@@ -139,7 +114,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Optional<PublicPost> getLastArgument(long debateIdNum) {
-        return postDao.getLastArgument(debateIdNum);
+    public Optional<Post> getLastArgument(long debateId) {
+        final Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
+        return postDao.getLastArgument(debate);
     }
 }

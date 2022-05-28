@@ -10,7 +10,7 @@ public interface LikeService{
 
     Optional<Like> getLike(Post post, User user);
 
-    void likePost(long postId, long userId);
+    void likePost(long postId, String username);
 
-    void unlikePost(long postId, long userId);
+    void unlikePost(long postId, String username);
 }
