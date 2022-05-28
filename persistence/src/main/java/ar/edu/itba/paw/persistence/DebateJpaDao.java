@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -43,9 +44,9 @@ public class DebateJpaDao implements DebateDao {
         idQuery.setParameter("offset", page * 5);
         @SuppressWarnings("unchecked")
         List<Long> ids = (List<Long>) idQuery.getResultList().stream()
-                .map(o -> ((Integer) o).longValue()).collect(Collectors.toList());
+                .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
 
-        final TypedQuery<Debate> query = em.createQuery("FROM debates AS d WHERE d.id IN :ids", Debate.class);
+        final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
         query.setParameter("ids", ids);
         return query.getResultList();
     }
@@ -54,7 +55,11 @@ public class DebateJpaDao implements DebateDao {
     public int getSubscribedDebatesByUserIdCount(long userid) {
         Query query = em.createNativeQuery("SELECT COUNT(*) FROM subscribed WHERE userid = :userid");
         query.setParameter("userid", userid);
-        return ((Number) query.getSingleResult()).intValue();
+
+        query.getSingleResult();
+
+        Optional<?> queryResult = query.getResultList().stream().findFirst();
+        return queryResult.map(o -> (Integer) o).orElse(0);
     }
 
     @Override
