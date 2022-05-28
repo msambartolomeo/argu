@@ -49,6 +49,10 @@ public class DebateJpaDao implements DebateDao {
         List<Long> ids = (List<Long>) idQuery.getResultList().stream()
                 .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
 
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
         query.setParameter("ids", ids);
         return query.getResultList();
@@ -132,6 +136,10 @@ public class DebateJpaDao implements DebateDao {
         List<Long> ids = (List<Long>) idQuery.getResultList().stream()
                 .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
 
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
         query.setParameter("ids", ids);
         return query.getResultList();
@@ -192,6 +200,10 @@ public class DebateJpaDao implements DebateDao {
         @SuppressWarnings("unchecked")
         List<Long> ids = (List<Long>) idQuery.getResultList().stream()
                 .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
+
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
         query.setParameter("ids", ids);

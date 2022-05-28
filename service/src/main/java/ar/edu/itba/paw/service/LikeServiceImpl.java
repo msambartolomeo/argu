@@ -52,4 +52,9 @@ public class LikeServiceImpl implements LikeService {
 
         likeDao.unlikePost(user, post);
     }
+
+    @Override
+    public boolean isLiked(User user, Post post) {
+        return getLike(post, user).isPresent();
+    }
 }

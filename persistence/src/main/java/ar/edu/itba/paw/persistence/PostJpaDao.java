@@ -36,7 +36,7 @@ public class PostJpaDao implements PostDao {
     }
 
     @Override
-    public List<Post> getPostsByDebate(Debate debate, User user, int page) {
+    public List<Post> getPostsByDebate(Debate debate, int page) {
         final Query idQuery = em.createNativeQuery("SELECT postid FROM posts2 WHERE debateid = :debateid LIMIT 5 OFFSET :offset");
         idQuery.setParameter("debateid", debate.getDebateId());
         idQuery.setParameter("offset", page * 5);
@@ -51,17 +51,7 @@ public class PostJpaDao implements PostDao {
         final TypedQuery<Post> query = em.createQuery("FROM Post p WHERE p.postId IN :ids", Post.class);
         query.setParameter("ids", ids);
 
-        final List<Post> posts = query.getResultList();
-
-        final Query likeQuery = em.createNativeQuery("SELECT postid FROM likes2 WHERE userid = :userid AND postid = :postid");
-        likeQuery.setParameter("userid", user.getUserId());
-
-        for(Post post : posts) {
-            likeQuery.setParameter("postid", post.getPostId());
-            if(likeQuery.getResultList().size() == 1) post.setLikedByUser(true);
-        }
-
-        return posts;
+        return query.getResultList();
     }
 
     @Override

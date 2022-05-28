@@ -114,9 +114,17 @@ public class PostServiceImpl implements PostService {
     public List<Post> getPostsByDebate(long debateId, String username, int page) {
         if (page < 0)
             return Collections.emptyList();
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
-        return postDao.getPostsByDebate(debate, user, page);
+        List<Post> posts = postDao.getPostsByDebate(debate, page);
+
+        if (username != null) {
+            User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+            for (Post post : posts) {
+                post.setLikedByUser(likeService.isLiked(user, post));
+            }
+        }
+
+        return posts;
     }
 
     @Override

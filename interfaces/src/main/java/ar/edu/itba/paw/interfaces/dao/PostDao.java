@@ -10,6 +10,6 @@ public interface PostDao {
     Optional<Post> getPostById(long postId);
     int getPostsByDebateCount(long debateId);
     Post create(User user, Debate debate, String content, Image image, ArgumentStatus status);
-    List<Post> getPostsByDebate(Debate debate, User user, int page);
+    List<Post> getPostsByDebate(Debate debate, int page);
     Optional<Post> getLastArgument(Debate debate);
 }
