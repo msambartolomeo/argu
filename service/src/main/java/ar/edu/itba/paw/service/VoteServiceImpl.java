@@ -29,6 +29,7 @@ public class VoteServiceImpl implements VoteService {
 
 
     @Override
+    @Transactional
     public Vote addVote(long debateId, String username, DebateVote vote) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
@@ -48,6 +49,7 @@ public class VoteServiceImpl implements VoteService {
 
 
     @Override
+    @Transactional
     public void removeVote(long debateId, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);

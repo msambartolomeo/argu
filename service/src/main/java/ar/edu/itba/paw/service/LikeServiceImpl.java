@@ -11,6 +11,7 @@ import ar.edu.itba.paw.model.exceptions.PostNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
+    @Transactional
     public void likePost(long postId, long userId) {
         Post post = postService.getPostById(postId).orElseThrow(PostNotFoundException::new);
         User user = userService.getUserById(userId).orElseThrow(UserNotFoundException::new);
@@ -40,6 +42,7 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
+    @Transactional
     public void unlikePost(long postId, long userId) {
         Post post = postService.getPostById(postId).orElseThrow(PostNotFoundException::new);
         User user = userService.getUserById(userId).orElseThrow(UserNotFoundException::new);

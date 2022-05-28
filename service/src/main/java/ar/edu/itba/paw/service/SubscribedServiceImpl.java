@@ -12,6 +12,7 @@ import ar.edu.itba.paw.model.exceptions.UserAlreadySubscribedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ public class SubscribedServiceImpl implements SubscribedService {
     DebateService debateService;
 
     @Override
+    @Transactional
     public Subscribed subscribeToDebate(String username, long debateId) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
@@ -36,6 +38,7 @@ public class SubscribedServiceImpl implements SubscribedService {
     }
 
     @Override
+    @Transactional
     public void unsubscribeToDebate(String username, long debateId) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
