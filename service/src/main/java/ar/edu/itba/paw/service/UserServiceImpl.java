@@ -11,8 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -68,12 +66,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public void requestModerator(String username, String reason) {
         emailService.sendEmailSelf("New user moderator request for " + username, "reason for request: " + reason);
-    }
-
-    // TODO: moved to Debate model (not implemented yet) remove for migration merge
-    @Override
-    public List<User> getSubscribedUsersByDebate(long debateId) {
-        return new ArrayList<>();
-//        return userDao.getSubscribedUsersByDebate(debateId);
     }
 }

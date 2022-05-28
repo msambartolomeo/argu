@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.model.Post;
-import ar.edu.itba.paw.model.PublicPost;
-import ar.edu.itba.paw.model.PublicPostWithUserLike;
 
 import java.util.List;
 import java.util.Optional;

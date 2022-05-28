@@ -156,33 +156,4 @@ public class UserServiceImplTest {
         Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.empty());
         userService.updateImage(USER_USERNAME, IMAGE_DATA);
     }
-
-    // TODO: moved to Debate model (not implemented yet) remove for migration merge
-//    @Test
-//    public void testGetSubscribedUsersByDebate() {
-//        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-//        List<User> users = new ArrayList<>();
-//        users.add(user);
-//
-//        Mockito.when(userDao.getSubscribedUsersByDebate(Mockito.anyLong())).thenReturn(users);
-//
-//        List<User> u = userService.getSubscribedUsersByDebate(DEBATE_ID);
-//
-//        assertFalse(u.isEmpty());
-//        assertEquals(user.getUserId(), u.get(0).getUserId());
-//        assertEquals(user.getUsername(), u.get(0).getUsername());
-//        assertEquals(user.getPassword(), u.get(0).getPassword());
-//        assertEquals(user.getEmail(), u.get(0).getEmail());
-//        assertEquals(user.getRole(), u.get(0).getRole());
-//        assertEquals(user.getCreatedDate(), u.get(0).getCreatedDate());
-//    }
-//
-//    @Test
-//    public void testGetSubscribedUsersByDebateEmpty() {
-//        Mockito.when(userDao.getSubscribedUsersByDebate(Mockito.anyLong())).thenReturn(new ArrayList<>());
-//
-//        List<User> u = userService.getSubscribedUsersByDebate(DEBATE_ID);
-//
-//        assertTrue(u.isEmpty());
-//    }
 }

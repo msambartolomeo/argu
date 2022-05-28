@@ -5,7 +5,6 @@ import ar.edu.itba.paw.model.enums.UserRole;
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Entity
 @Table(name = "users2")
@@ -28,9 +27,6 @@ public class User {
     private Image image;
     @Enumerated(EnumType.ORDINAL)
     private UserRole role;
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "subscribedUsers")
-    private Set<Debate> subscribedDebates;
 
     public User() {}
 

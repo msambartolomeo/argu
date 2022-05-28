@@ -2,15 +2,20 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.PostDao;
 import ar.edu.itba.paw.interfaces.services.*;
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.Post;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateStatus;
-import ar.edu.itba.paw.model.exceptions.*;
+import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
+import ar.edu.itba.paw.model.exceptions.ForbiddenPostException;
+import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +54,7 @@ public class PostServiceImpl implements PostService {
             Image newImage = imageService.createImage(image);
             createdPost = postDao.create(user, debate, content, newImage, status);
         }
-        sendEmailToSubscribedUsers(debateId, user.getUserId(), user.getUsername(), debate.getName());
+        sendEmailToSubscribedUsers(debate, user);
         return createdPost;
     }
 
@@ -86,10 +91,11 @@ public class PostServiceImpl implements PostService {
     }
 
     // Package-private for testing
-    void sendEmailToSubscribedUsers(long debateId, long userId, String fromUsername, String debateName) {
-        for (User user : userService.getSubscribedUsersByDebate(debateId)) {
-            if (user.getUserId() != userId) { // Si no es el usuario que creo el post
-                emailService.notifyNewPost(user.getEmail(), fromUsername, debateId, debateName);
+    @Async // TODO: test that it works
+    void sendEmailToSubscribedUsers(Debate debate, User user) {
+        for (User u : debate.getSubscribedUsers()) {
+            if (u.getUserId().equals(user.getUserId())) { // Si no es el usuario que creo el post
+                emailService.notifyNewPost(u.getEmail(), user.getUsername(), debate.getDebateId(), debate.getName());
             }
         }
     }
