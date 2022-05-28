@@ -170,12 +170,12 @@ public class DebateJdbcDaoTest {
         assertEquals(USER_USERNAME, debate.get().getOpponentUsername());*/
     }
 
-    @Test
-    public void testGetSuscribedDebatesEmpty() {
-        List<Debate> debates = debateDao.getSubscribedDebatesByUserId(userId, DEBATES_PAGE);
-
-        assertTrue(debates.isEmpty());
-    }
+//    @Test
+//    public void testGetSuscribedDebatesEmpty() {
+//        List<Debate> debates = debateDao.getSubscribedDebatesByUserId(userId, DEBATES_PAGE);
+//
+//        assertTrue(debates.isEmpty());
+//    }
 
     /*@Test
     public void testGetSuscribedDebates() {

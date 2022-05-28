@@ -14,7 +14,9 @@ public interface DebateDao {
     Optional<Debate> getDebateById(long id);
 
     Debate create(String name, String description, User creator, User opponent, Image image, DebateCategory category);
-    List<Debate> getSubscribedDebatesByUserId(long userid, int page);
+
+    List<Debate> getSubscribedDebatesByUserId(User user, int page);
+
     int getSubscribedDebatesByUserIdCount(long userid);
 
     @Deprecated
@@ -26,9 +28,17 @@ public interface DebateDao {
 
     List<PublicDebate> getPublicDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
 
+    List<Debate> getDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
+
+    int getDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date);
+
     int getPublicDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date);
 
     List<PublicDebate> getMyDebates(long userid, int page);
+
+    List<Debate> getMyDebates(User user, int page);
+
+    int getMyDebatesCount(User user);
 
     int getMyDebatesCount(long userid);
 

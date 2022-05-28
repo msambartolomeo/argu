@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DebateServiceImpl implements DebateService {
@@ -78,6 +80,7 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
+    @Deprecated
     public void subscribeToDebate(String username, long debateid) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
@@ -87,11 +90,13 @@ public class DebateServiceImpl implements DebateService {
     }
     @Transactional
     @Override
+    @Deprecated
     public void unsubscribeToDebate(String username, long debateid) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         debateDao.unsubscribeToDebate(user.getUserId(), debateid);
     }
     @Override
+    @Deprecated
     public boolean isUserSubscribed(String username, long debateid) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         return debateDao.isUserSubscribed(user.getUserId(), debateid);
@@ -118,6 +123,7 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
+    @Deprecated
     public void addVote(long debateId, String username, DebateVote vote) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         getPublicDebateById(debateId).orElseThrow(DebateNotFoundException::new);
@@ -128,12 +134,14 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
+    @Deprecated
     public void removeVote(long debateId, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         debateDao.removeVote(debateId, user.getUserId());
     }
 
     @Override
+    @Deprecated
     public String getUserVote(long debateid, String username) {
         User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
         Debate debate = debateDao.getDebateById(debateid).orElseThrow(DebateNotFoundException::new);
@@ -160,6 +168,7 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
+    @Deprecated
     public void closeDebate(long id) {
         debateDao.changeDebateStatus(id, DebateStatus.CLOSED);
     }
