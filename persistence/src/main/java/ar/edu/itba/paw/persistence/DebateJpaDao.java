@@ -42,7 +42,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public List<Debate> getSubscribedDebatesByUserId(User user, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) LIMIT 5 OFFSET :offset");
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed2 WHERE userid = :userid) LIMIT 5 OFFSET :offset");
         idQuery.setParameter("userid", user.getUserId());
         idQuery.setParameter("offset", page * 5);
         @SuppressWarnings("unchecked")
@@ -56,11 +56,11 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public int getSubscribedDebatesByUserIdCount(long userid) {
-        Query query = em.createNativeQuery("SELECT COUNT(*) FROM subscribed WHERE userid = :userid");
+        Query query = em.createNativeQuery("SELECT COUNT(*) FROM subscribed2 WHERE userid = :userid");
         query.setParameter("userid", userid);
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();
-        return queryResult.map(o -> (Integer) o).orElse(0);
+        return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
     }
 
     @Override

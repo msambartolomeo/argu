@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.LikeService;
 import ar.edu.itba.paw.interfaces.services.PostService;
+import ar.edu.itba.paw.interfaces.services.SubscribedService;
+import ar.edu.itba.paw.interfaces.services.VoteService;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
@@ -29,15 +31,19 @@ import java.util.Arrays;
 public class DebateController {
 
     private final DebateService debateService;
+    private final SubscribedService subscribedService;
+    private final VoteService voteService;
     private final PostService postService;
     private final LikeService likeService;
     private static final Logger LOGGER = LoggerFactory.getLogger(DebateController.class);
 
     @Autowired
-    public DebateController(DebateService debateService, PostService postService, LikeService likeService) {
+    public DebateController(DebateService debateService, PostService postService, LikeService likeService, SubscribedService subscribedService, VoteService voteService) {
         this.debateService = debateService;
         this.postService = postService;
         this.likeService = likeService;
+        this.subscribedService = subscribedService;
+        this.voteService = voteService;
     }
 
     @RequestMapping(method = { RequestMethod.GET, RequestMethod.HEAD })
@@ -85,8 +91,8 @@ public class DebateController {
         String username = null;
         if(auth != null && auth.getPrincipal() != null) {
             username = auth.getName();
-            mav.addObject("isSubscribed", debateService.isUserSubscribed(auth.getName(), debateIdNum));
-            mav.addObject("userVote", debateService.getUserVote(debateIdNum, auth.getName()));
+            mav.addObject("isSubscribed", subscribedService.isUserSubscribed(auth.getName(), debateIdNum));
+            voteService.getVote(debateIdNum, auth.getName()).ifPresent(v -> mav.addObject("userVote", v.getVote()));
             postService.getLastArgument(debateIdNum).ifPresent(lastArgument -> mav.addObject("lastArgument", lastArgument));
         }
         mav.addObject("posts", postService.getPostsByDebate(debateIdNum, username, pageNum));
@@ -131,7 +137,7 @@ public class DebateController {
             throw new UnauthorizedUserException();
         }
 
-        debateService.addVote(Long.parseLong(debateId), auth.getName(), DebateVote.FOR);
+        voteService.addVote(Long.parseLong(debateId), auth.getName(), DebateVote.FOR);
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
@@ -142,7 +148,7 @@ public class DebateController {
             throw new UnauthorizedUserException();
         }
 
-        debateService.addVote(Long.parseLong(debateId), auth.getName(), DebateVote.AGAINST);
+        voteService.addVote(Long.parseLong(debateId), auth.getName(), DebateVote.AGAINST);
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
@@ -153,7 +159,7 @@ public class DebateController {
             throw new UnauthorizedUserException();
         }
 
-        debateService.removeVote(Long.parseLong(debateId), auth.getName());
+        voteService.removeVote(Long.parseLong(debateId), auth.getName());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
@@ -165,7 +171,7 @@ public class DebateController {
             throw new UnauthorizedUserException();
         }
 
-        debateService.subscribeToDebate(auth.getName(), Long.parseLong(debateId));
+        subscribedService.subscribeToDebate(auth.getName(), Long.parseLong(debateId));
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
@@ -176,7 +182,7 @@ public class DebateController {
             throw new UnauthorizedUserException();
         }
 
-        debateService.unsubscribeToDebate(auth.getName(), Long.parseLong(debateId));
+        subscribedService.unsubscribeToDebate(auth.getName(), Long.parseLong(debateId));
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 

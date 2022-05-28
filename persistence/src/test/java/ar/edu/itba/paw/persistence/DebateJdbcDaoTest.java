@@ -235,100 +235,100 @@ public class DebateJdbcDaoTest {
         assertEquals(1, count);
     }
 
-    @Test
-    public void testSubscribeToDebate() {
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DEBATE_STATUS.ordinal());
-        debateData.put("category", DEBATE_CATEGORY.ordinal());
-        debateData.put("creatorid", userId);
-        debateData.put("opponentid", userId);
-        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
-
-        debateDao.subscribeToDebate(userId, debateKey);
-
-        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, SUBSCRIBED_TABLE));
-    }
-
-    @Test
-    public void testUnsubscribeDebate() {
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DEBATE_STATUS.ordinal());
-        debateData.put("category", DEBATE_CATEGORY.ordinal());
-        debateData.put("creatorid", userId);
-        debateData.put("opponentid", userId);
-        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
-
-        final Map<String, Object> subscribedData = new HashMap<>();
-        subscribedData.put("userid", userId);
-        subscribedData.put("debateid", debateKey);
-        jdbcInsertSubscribed.execute(subscribedData);
-
-        debateDao.unsubscribeToDebate(userId, debateKey);
-
-        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, SUBSCRIBED_TABLE));
-    }
-
-    @Test
-    public void testUnsubscribeDebateEmpty() {
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DEBATE_STATUS.ordinal());
-        debateData.put("category", DEBATE_CATEGORY.ordinal());
-        debateData.put("creatorid", userId);
-        debateData.put("opponentid", userId);
-        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
-
-        debateDao.unsubscribeToDebate(userId, debateKey);
-
-        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, SUBSCRIBED_TABLE));
-    }
-
-    @Test
-    public void testIsUserSubscribedEmpty() {
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DEBATE_STATUS.ordinal());
-        debateData.put("category", DEBATE_CATEGORY.ordinal());
-        debateData.put("creatorid", userId);
-        debateData.put("opponentid", userId);
-        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
-
-        boolean isSubscribed = debateDao.isUserSubscribed(userId, debateKey);
-
-        assertFalse(isSubscribed);
-    }
-
-    @Test
-    public void testIsUserSubscribed() {
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DEBATE_STATUS.ordinal());
-        debateData.put("category", DEBATE_CATEGORY.ordinal());
-        debateData.put("creatorid", userId);
-        debateData.put("opponentid", userId);
-        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
-
-        final Map<String, Object> subscribedData = new HashMap<>();
-        subscribedData.put("userid", userId);
-        subscribedData.put("debateid", debateKey);
-        jdbcInsertSubscribed.execute(subscribedData);
-
-        boolean isSubscribed = debateDao.isUserSubscribed(userId, debateKey);
-
-        assertTrue(isSubscribed);
-    }
+//    @Test TODO: pasar a algún SubscribedDaoTest
+//    public void testSubscribeToDebate() {
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        debateData.put("created_date", DEBATE_DATE);
+//        debateData.put("status", DEBATE_STATUS.ordinal());
+//        debateData.put("category", DEBATE_CATEGORY.ordinal());
+//        debateData.put("creatorid", userId);
+//        debateData.put("opponentid", userId);
+//        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+//
+//        debateDao.subscribeToDebate(userId, debateKey);
+//
+//        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, SUBSCRIBED_TABLE));
+//    }
+//
+//    @Test
+//    public void testUnsubscribeDebate() {
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        debateData.put("created_date", DEBATE_DATE);
+//        debateData.put("status", DEBATE_STATUS.ordinal());
+//        debateData.put("category", DEBATE_CATEGORY.ordinal());
+//        debateData.put("creatorid", userId);
+//        debateData.put("opponentid", userId);
+//        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+//
+//        final Map<String, Object> subscribedData = new HashMap<>();
+//        subscribedData.put("userid", userId);
+//        subscribedData.put("debateid", debateKey);
+//        jdbcInsertSubscribed.execute(subscribedData);
+//
+//        debateDao.unsubscribeToDebate(userId, debateKey);
+//
+//        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, SUBSCRIBED_TABLE));
+//    }
+//
+//    @Test
+//    public void testUnsubscribeDebateEmpty() {
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        debateData.put("created_date", DEBATE_DATE);
+//        debateData.put("status", DEBATE_STATUS.ordinal());
+//        debateData.put("category", DEBATE_CATEGORY.ordinal());
+//        debateData.put("creatorid", userId);
+//        debateData.put("opponentid", userId);
+//        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+//
+//        debateDao.unsubscribeToDebate(userId, debateKey);
+//
+//        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, SUBSCRIBED_TABLE));
+//    }
+//
+//    @Test
+//    public void testIsUserSubscribedEmpty() {
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        debateData.put("created_date", DEBATE_DATE);
+//        debateData.put("status", DEBATE_STATUS.ordinal());
+//        debateData.put("category", DEBATE_CATEGORY.ordinal());
+//        debateData.put("creatorid", userId);
+//        debateData.put("opponentid", userId);
+//        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+//
+//        boolean isSubscribed = debateDao.isUserSubscribed(userId, debateKey);
+//
+//        assertFalse(isSubscribed);
+//    }
+//
+//    @Test
+//    public void testIsUserSubscribed() {
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        debateData.put("created_date", DEBATE_DATE);
+//        debateData.put("status", DEBATE_STATUS.ordinal());
+//        debateData.put("category", DEBATE_CATEGORY.ordinal());
+//        debateData.put("creatorid", userId);
+//        debateData.put("opponentid", userId);
+//        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+//
+//        final Map<String, Object> subscribedData = new HashMap<>();
+//        subscribedData.put("userid", userId);
+//        subscribedData.put("debateid", debateKey);
+//        jdbcInsertSubscribed.execute(subscribedData);
+//
+//        boolean isSubscribed = debateDao.isUserSubscribed(userId, debateKey);
+//
+//        assertTrue(isSubscribed);
+//    }
 
     @Test
     public void testGetMyDebatesSameUser() {

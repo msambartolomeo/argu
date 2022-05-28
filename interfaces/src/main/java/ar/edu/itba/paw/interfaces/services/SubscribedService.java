@@ -6,4 +6,8 @@ import java.util.Optional;
 public interface SubscribedService {
     Subscribed subscribeToDebate(String username, long debateId);
     void unsubscribeToDebate(String username, long debateId);
+
+    boolean isUserSubscribed(String username, long debateId);
+
+    Optional<Subscribed> getSubscribed(String username, long debateId);
 }

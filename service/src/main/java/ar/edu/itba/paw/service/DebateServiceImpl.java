@@ -78,30 +78,6 @@ public class DebateServiceImpl implements DebateService {
         return Optional.empty();
     }
 
-    @Transactional
-    @Override
-    @Deprecated
-    public void subscribeToDebate(String username, long debateid) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
-        if(debateDao.isUserSubscribed(user.getUserId(), debateid))
-            throw new UserAlreadySubscribedException();
-        debateDao.subscribeToDebate(user.getUserId(), debateid);
-    }
-    @Transactional
-    @Override
-    @Deprecated
-    public void unsubscribeToDebate(String username, long debateid) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        debateDao.unsubscribeToDebate(user.getUserId(), debateid);
-    }
-    @Override
-    @Deprecated
-    public boolean isUserSubscribed(String username, long debateid) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        return debateDao.isUserSubscribed(user.getUserId(), debateid);
-    }
-
     @Override
     public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
         if (page < 0) {
@@ -119,40 +95,6 @@ public class DebateServiceImpl implements DebateService {
             count = debateDao.getSubscribedDebatesByUserIdCount(userid);
         else count = debateDao.getMyDebatesCount(userid);
         return (int) Math.ceil(count / (double) PAGE_SIZE);
-    }
-
-    @Transactional
-    @Override
-    @Deprecated
-    public void addVote(long debateId, String username, DebateVote vote) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        getPublicDebateById(debateId).orElseThrow(DebateNotFoundException::new);
-        if (debateDao.hasUserVoted(debateId, user.getUserId()))
-            throw new UserAlreadyVotedException();
-        debateDao.addVote(debateId, user.getUserId(), vote);
-    }
-
-    @Transactional
-    @Override
-    @Deprecated
-    public void removeVote(long debateId, String username) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        debateDao.removeVote(debateId, user.getUserId());
-    }
-
-    @Override
-    @Deprecated
-    public String getUserVote(long debateid, String username) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        Debate debate = debateDao.getDebateById(debateid).orElseThrow(DebateNotFoundException::new);
-        if(!debateDao.hasUserVoted(debateid, user.getUserId()))
-            return null;
-        DebateVote debateVote = debateDao.getUserVote(debateid, user.getUserId());
-
-        if(debateVote == DebateVote.FOR) {
-            return debate.getCreator().getUsername();
-        } else
-            return debate.getOpponent().getUsername();
     }
 
     @Transactional

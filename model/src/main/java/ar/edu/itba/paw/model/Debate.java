@@ -57,7 +57,7 @@ public class Debate {
             inverseJoinColumns = @JoinColumn(name = "userid", referencedColumnName = "userid"))
     private Set<User> subscribedUsers;
 
-    @Formula("(select count(*) from subscribed where subscribed.debateid = debateid)")
+    @Formula("(select count(*) from subscribed2 where subscribed.debateid = debateid)")
     private int subscribedUsersCount;
 
     @Formula("(select count(*) from votes2 where votes2.debateid = debateid and votes2.vote = 0)")

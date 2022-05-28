@@ -45,4 +45,16 @@ public class SubscribedServiceImpl implements SubscribedService {
         Optional<Subscribed> subscribed = subscribedDao.getSubscribed(user, debate);
         subscribed.ifPresent(s -> subscribedDao.unsubscribe(s));
     }
+
+    @Override
+    public boolean isUserSubscribed(String username, long debateId) {
+        return getSubscribed(username, debateId).isPresent();
+    }
+
+    @Override
+    public Optional<Subscribed> getSubscribed(String username, long debateId) {
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
+        return subscribedDao.getSubscribed(user, debate);
+    }
 }
