@@ -33,10 +33,15 @@
                         </form:form>
                     </c:otherwise>
                 </c:choose>
-                <div>
-                    <p><c:out value="${post.likesCount}"/></p>
-                </div>
             </sec:authorize>
+            <c:if test="${pageContext.request.userPrincipal == null}">
+                <a href="<c:url value="/login"/>" class="btn-flat">
+                    <i class="large material-icons">favorite_border</i>
+                </a>
+            </c:if>
+            <div>
+                <p><c:out value="${post.likesCount}"/></p>
+            </div>
             <span class="new badge blue-grey darken-2 badge-margin" data-badge-caption="${post.creationDate}"></span>
             <span class="new badge blue-grey darken-2 badge-margin" data-badge-caption="<spring:message code='status.${post.status.name}'/>"></span>
         </div>
