@@ -9,6 +9,6 @@ public interface UserService {
     Optional<User> getUserByUsername(String username);
     User create(String username, String password, String email);
     Optional<User> getUserByEmail(String email);
-    void updateImage(String username, byte[] image);
+    User updateImage(String username, byte[] image);
     void requestModerator(String username, String reason);
 }

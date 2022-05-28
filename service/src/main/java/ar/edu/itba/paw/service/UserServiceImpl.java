@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateImage(String username, byte[] image) {
+    public User updateImage(String username, byte[] image) {
         User user = getUserByUsername(username).orElseThrow(UserNotFoundException::new);
 
         Long imageId = null;
@@ -61,6 +61,8 @@ public class UserServiceImpl implements UserService {
         user.updateImage(image);
 
         if (imageId != null) imageService.deleteImage(imageId);
+
+        return user;
     }
 
     @Override

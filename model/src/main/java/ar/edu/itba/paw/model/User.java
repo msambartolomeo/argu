@@ -38,17 +38,6 @@ public class User {
         this.role = UserRole.USER;
     }
 
-    // TODO: remove for migration merge
-    @Deprecated // For jdbc compatibility/compilation
-    public User(long userId, String username, String password, String email, Date userDate, UserRole userRole) {
-
-    }
-
-    // TODO: remove for migration merge
-    @Deprecated // For jdbc compatibility/compilation
-    public User(long userId, String username, String password, String email, Date userDate, long imageId, UserRole userRole) {
-    }
-
     public Long getUserId() {
         return userId;
     }
