@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +26,11 @@ public class UserServiceImpl implements UserService {
     private EmailService emailService;
 
     @Override
+    public Optional<User> getUserById(long userId) {
+        return userDao.getUserById(userId);
+    }
+
+    @Override
     public Optional<User> getUserByUsername(String username) {
         return userDao.getUserByUsername(username);
     }
@@ -36,7 +40,7 @@ public class UserServiceImpl implements UserService {
     public User create(String username, String password, String email) {
         Optional<User> user = getUserByEmail(email);
         if (user.isPresent())
-            return userDao.updateLegacyUser(user.get().getUserId(), username, passwordEncoder.encode(password), email);
+            return user.get().updateLegacyUser(username, passwordEncoder.encode(password));
         return userDao.create(username, passwordEncoder.encode(password), email);
     }
 
@@ -47,20 +51,22 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateImage(String username, byte[] image) {
+    public User updateImage(String username, byte[] image) {
         User user = getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        long imageId = imageService.createImage(image).getId();
-        userDao.updateImage(user.getUserId(), imageId);
-        if (user.getImageId() != null ) imageService.deleteImage(user.getImageId());
+
+        Long imageId = null;
+        if (user.getImage() != null)
+            imageId = user.getImage().getId();
+
+        user.updateImage(image);
+
+        if (imageId != null) imageService.deleteImage(imageId);
+
+        return user;
     }
 
     @Override
     public void requestModerator(String username, String reason) {
         emailService.sendEmailSelf("New user moderator request for " + username, "reason for request: " + reason);
-    }
-
-    @Override
-    public List<User> getSubscribedUsersByDebate(long debateId) {
-        return userDao.getSubscribedUsersByDebate(debateId);
     }
 }

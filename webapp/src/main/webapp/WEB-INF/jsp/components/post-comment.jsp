@@ -6,16 +6,16 @@
 <html>
 <body>
 <c:url value="/debates/${debate.debateId}/argument" var="postPath"/>
-<%--@elvariable id="postForm" type="ar.edu.itba.paw.webapp.form.PostForm"--%>
-<form:form enctype="multipart/form-data" modelAttribute="postForm" action="${postPath}"
+<%--@elvariable id="argumentForm" type="ar.edu.itba.paw.webapp.form.ArgumentForm"--%>
+<form:form enctype="multipart/form-data" modelAttribute="argumentForm" action="${postPath}"
            method="post" acceptCharset="utf-8" id="postform">
     <div class="card-content">
 
         <c:choose>
-            <c:when test="${empty lastArgument || (lastArgument.status.name == 'introduction' && lastArgument.username == debate.creatorUsername)}">
+            <c:when test="${empty lastArgument || (lastArgument.status.name == 'introduction' && lastArgument.user.username == debate.creator.username)}">
                 <span class="card-title"><spring:message code="components.post-comment.introduction"/></span>
             </c:when>
-            <c:when test="${debate.debateStatus.name == 'closing'}">
+            <c:when test="${debate.status.name == 'closing'}">
                 <span class="card-title"><spring:message code="components.post-comment.conclusion"/></span>
             </c:when>
             <c:otherwise>

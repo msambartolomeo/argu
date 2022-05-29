@@ -1,37 +1,12 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.dao.PostDao;
-import ar.edu.itba.paw.interfaces.services.DebateService;
-import ar.edu.itba.paw.interfaces.services.EmailService;
-import ar.edu.itba.paw.interfaces.services.ImageService;
-import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.model.enums.ArgumentStatus;
-import ar.edu.itba.paw.model.enums.DebateCategory;
-import ar.edu.itba.paw.model.enums.DebateStatus;
-import ar.edu.itba.paw.model.enums.UserRole;
-import ar.edu.itba.paw.model.exceptions.*;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
 @RunWith(MockitoJUnitRunner.class)
-public class PostServiceImplTest {
+public class ArgumentServiceImplTest {
 
-    private final static int VALID_PAGE = 0;
+   /* private final static int VALID_PAGE = 0;
     private final static int NOT_VALID_PAGE = -1;
     private final static long POST_ID = 1;
     private final static String POST_CONTENT = "Post Content";
@@ -459,5 +434,5 @@ public class PostServiceImplTest {
         boolean hasLiked = postService.hasLiked(POST_ID, DEBATE_CREATOR);
 
         assertTrue(hasLiked);
-    }
+    }*/
 }

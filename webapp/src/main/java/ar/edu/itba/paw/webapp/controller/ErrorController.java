@@ -30,7 +30,7 @@ public class ErrorController {
 
     @ExceptionHandler(Exception403.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
-    public ModelAndView handleForbiddenPostException(Exception403 e) {
+    public ModelAndView handleForbiddenArgumentException(Exception403 e) {
         ModelAndView mav = new ModelAndView("error/404");
         mav.addObject("exception", e.getMessageCode());
         LOGGER.error("error 403 - {}", e.toString());
