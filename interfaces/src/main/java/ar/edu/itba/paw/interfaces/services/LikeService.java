@@ -1,14 +1,14 @@
 package ar.edu.itba.paw.interfaces.services;
 
+import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.model.Like;
-import ar.edu.itba.paw.model.Post;
 import ar.edu.itba.paw.model.User;
 
 import java.util.Optional;
 
 public interface LikeService{
-    Optional<Like> getLike(Post post, User user);
-    void likePost(long postId, String username);
-    void unlikePost(long postId, String username);
-    boolean isLiked(User user, Post post);
+    Optional<Like> getLike(Argument argument, User user);
+    void likeArgument(long argumentId, String username);
+    void unlikeArgument(long argumentId, String username);
+    boolean isLiked(User user, Argument argument);
 }

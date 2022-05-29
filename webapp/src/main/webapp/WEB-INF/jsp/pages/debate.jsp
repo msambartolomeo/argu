@@ -89,27 +89,27 @@
 <div class="debate-content">
 
     <div class="z-depth-3 comment-list">
-        <c:if test="${posts.size() > 0}">
-            <c:forEach var="post" items="${posts}" varStatus="status">
+        <c:if test="${arguments.size() > 0}">
+            <c:forEach var="argument" items="${arguments}" varStatus="status">
                 <c:choose>
-                    <c:when test="${post.status.name == 'introduction' && status.first}">
+                    <c:when test="${argument.status.name == 'introduction' && status.first}">
                         <h5 class="center"><spring:message code="components.comment.introduction" /></h5>
                     </c:when>
-                    <c:when test="${post.status.name == 'argument' && (posts[status.index - 1].status.name == 'introduction' || status.first)}">
+                    <c:when test="${argument.status.name == 'argument' && (arguments[status.index - 1].status.name == 'introduction' || status.first)}">
                         <h5 class="center"><spring:message code="components.comment.argument" /></h5>
                     </c:when>
-                    <c:when test="${(debate.status.name == 'closing' && post.status.name == 'conclusion') || (debate.status.name == 'closed' && post.status.name == 'conclusion' && (status.index == 0 || posts[status.index - 1].status.name == 'argument'))}">
+                    <c:when test="${(debate.status.name == 'closing' && argument.status.name == 'conclusion') || (debate.status.name == 'closed' && argument.status.name == 'conclusion' && (status.index == 0 || arguments[status.index - 1].status.name == 'argument'))}">
                         <h5 class="center"><spring:message code="components.comment.conclusion" /></h5>
                     </c:when>
                 </c:choose>
                 <div class="list-item">
-                    <c:set var="post" value="${post}" scope="request"/>
+                    <c:set var="argument" value="${argument}" scope="request"/>
                     <%@include file="../components/comment.jsp" %>
                 </div>
             </c:forEach>
         </c:if>
 
-        <c:if test="${posts.size() == 0}">
+        <c:if test="${arguments.size() == 0}">
             <h5 class="center"><spring:message code="pages.debate.no-posts"/></h5>
         </c:if>
 

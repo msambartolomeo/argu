@@ -19,15 +19,15 @@ public class Like {
     @ManyToOne
     @MapsId("postId")
     @JoinColumn(name = "postid")
-    private Post post;
+    private Argument argument;
 
     /*default*/public Like() {
         // Just for Hibernate
     }
 
-    public Like(User user, Post post) {
+    public Like(User user, Argument argument) {
         this.user = user;
-        this.post = post;
-        this.userPostKey = new UserPostKey(user.getUserId(), post.getPostId());
+        this.argument = argument;
+        this.userPostKey = new UserPostKey(user.getUserId(), argument.getArgumentId());
     }
 }

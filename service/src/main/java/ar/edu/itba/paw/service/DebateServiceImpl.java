@@ -100,12 +100,12 @@ public class DebateServiceImpl implements DebateService {
     @Transactional
     @Override
     public void startConclusion(long id, String username) {
-        PublicDebate debate = getPublicDebateById(id).orElseThrow(DebateNotFoundException::new);
+        Debate debate = getDebateById(id).orElseThrow(DebateNotFoundException::new);
 
-        if (debate.getDebateStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreatorUsername()) || username.equals(debate.getOpponentUsername())))
+        if (debate.getStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreator().getUsername()) || username.equals(debate.getOpponent().getUsername())))
             throw new ForbiddenDebateException();
-        // TODO: Use correct method
-        //debateDao.changeDebateStatus(id, DebateStatus.CLOSING);
+
+        debate.setStatus(DebateStatus.CLOSING);
     }
 
 }

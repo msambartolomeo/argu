@@ -421,7 +421,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void notifyNewPost(String to, String from, long debateId, String debateName) {
+    public void notifyNewArgument(String to, String from, long debateId, String debateName) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
@@ -441,7 +441,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setFrom("noreply@argu.com");
             emailSender.send(mimeMessage);
         } catch (Exception e) {
-            throw new MailingException("Error notifying new post.");
+            throw new MailingException("Error notifying new argument.");
         }
     }
 

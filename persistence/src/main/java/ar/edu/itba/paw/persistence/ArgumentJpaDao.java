@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.dao.PostDao;
+import ar.edu.itba.paw.interfaces.dao.ArgumentDao;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import org.springframework.stereotype.Repository;
@@ -16,18 +16,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-public class PostJpaDao implements PostDao {
+public class ArgumentJpaDao implements ArgumentDao {
 
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public Optional<Post> getPostById(long postId) {
-        return Optional.ofNullable(em.find(Post.class, postId));
+    public Optional<Argument> getArgumentById(long argumentId) {
+        return Optional.ofNullable(em.find(Argument.class, argumentId));
     }
 
     @Override
-    public int getPostsByDebateCount(long debateId) {
+    public int getArgumentsByDebateCount(long debateId) {
         final Query query = em.createNativeQuery("SELECT COUNT(*) FROM posts2 WHERE debateid = :id");
         query.setParameter("id", debateId);
 
@@ -36,7 +36,7 @@ public class PostJpaDao implements PostDao {
     }
 
     @Override
-    public List<Post> getPostsByDebate(Debate debate, int page) {
+    public List<Argument> getArgumentsByDebate(Debate debate, int page) {
         final Query idQuery = em.createNativeQuery("SELECT postid FROM posts2 WHERE debateid = :debateid LIMIT 5 OFFSET :offset");
         idQuery.setParameter("debateid", debate.getDebateId());
         idQuery.setParameter("offset", page * 5);
@@ -48,22 +48,22 @@ public class PostJpaDao implements PostDao {
             return Collections.emptyList();
         }
 
-        final TypedQuery<Post> query = em.createQuery("FROM Post p WHERE p.postId IN :ids", Post.class);
+        final TypedQuery<Argument> query = em.createQuery("FROM Argument p WHERE p.argumentId IN :ids", Argument.class);
         query.setParameter("ids", ids);
 
         return query.getResultList();
     }
 
     @Override
-    public Post create(User user, Debate debate, String content, Image image, ArgumentStatus status) {
-        final Post post = new Post(user, debate, content, image, status);
-        em.persist(post);
-        return post;
+    public Argument create(User user, Debate debate, String content, Image image, ArgumentStatus status) {
+        final Argument argument = new Argument(user, debate, content, image, status);
+        em.persist(argument);
+        return argument;
     }
 
     @Override
-    public Optional<Post> getLastArgument(Debate debate) {
-        final TypedQuery<Post> query = em.createQuery("FROM Post p WHERE p.debate = :debate ORDER BY p.creationDate DESC ", Post.class);
+    public Optional<Argument> getLastArgument(Debate debate) {
+        final TypedQuery<Argument> query = em.createQuery("FROM Argument p WHERE p.debate = :debate ORDER BY p.creationDate DESC ", Argument.class);
         query.setParameter("debate", debate);
         query.setMaxResults(1);
         return query.getResultList().stream().findFirst();

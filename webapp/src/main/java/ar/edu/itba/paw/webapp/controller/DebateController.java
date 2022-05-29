@@ -2,7 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.LikeService;
-import ar.edu.itba.paw.interfaces.services.PostService;
+import ar.edu.itba.paw.interfaces.services.ArgumentService;
 import ar.edu.itba.paw.interfaces.services.SubscribedService;
 import ar.edu.itba.paw.interfaces.services.VoteService;
 import ar.edu.itba.paw.model.enums.DebateCategory;
@@ -10,7 +10,7 @@ import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.*;
-import ar.edu.itba.paw.webapp.form.PostForm;
+import ar.edu.itba.paw.webapp.form.ArgumentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +33,14 @@ public class DebateController {
     private final DebateService debateService;
     private final SubscribedService subscribedService;
     private final VoteService voteService;
-    private final PostService postService;
+    private final ArgumentService argumentService;
     private final LikeService likeService;
     private static final Logger LOGGER = LoggerFactory.getLogger(DebateController.class);
 
     @Autowired
-    public DebateController(DebateService debateService, PostService postService, LikeService likeService, SubscribedService subscribedService, VoteService voteService) {
+    public DebateController(DebateService debateService, ArgumentService argumentService, LikeService likeService, SubscribedService subscribedService, VoteService voteService) {
         this.debateService = debateService;
-        this.postService = postService;
+        this.argumentService = argumentService;
         this.likeService = likeService;
         this.subscribedService = subscribedService;
         this.voteService = voteService;
@@ -77,7 +77,7 @@ public class DebateController {
     }
 
     @RequestMapping(value = "/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debate(@PathVariable("debateId") final String debateId, @ModelAttribute("postForm") final PostForm form,
+    public ModelAndView debate(@PathVariable("debateId") final String debateId, @ModelAttribute("argumentForm") final ArgumentForm form,
                                @RequestParam(value = "page", defaultValue = "0") String page, Authentication auth) {
 
         if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
@@ -93,10 +93,10 @@ public class DebateController {
             username = auth.getName();
             mav.addObject("isSubscribed", subscribedService.isUserSubscribed(auth.getName(), debateIdNum));
             voteService.getVote(debateIdNum, auth.getName()).ifPresent(v -> mav.addObject("userVote", v.getVote()));
-            postService.getLastArgument(debateIdNum).ifPresent(lastArgument -> mav.addObject("lastArgument", lastArgument));
+            argumentService.getLastArgument(debateIdNum).ifPresent(lastArgument -> mav.addObject("lastArgument", lastArgument));
         }
-        mav.addObject("posts", postService.getPostsByDebate(debateIdNum, username, pageNum));
-        mav.addObject("total_pages", postService.getPostsByDebatePageCount(debateIdNum));
+        mav.addObject("arguments", argumentService.getArgumentsByDebate(debateIdNum, username, pageNum));
+        mav.addObject("total_pages", argumentService.getArgumentByDebatePageCount(debateIdNum));
 
         return mav;
     }
@@ -113,8 +113,8 @@ public class DebateController {
     }
 
     @RequestMapping(value = "/{debateId}/argument", method = { RequestMethod.POST })
-    public ModelAndView createPost(@PathVariable("debateId") final String debateId,
-                                   @Valid @ModelAttribute("postForm") final PostForm form, BindingResult errors, Authentication auth) throws IOException {
+    public ModelAndView createArgument(@PathVariable("debateId") final String debateId,
+                                   @Valid @ModelAttribute("argumentForm") final ArgumentForm form, BindingResult errors, Authentication auth) throws IOException {
 
         if (errors.hasErrors()) {
             LOGGER.warn("Create argument form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
@@ -126,7 +126,7 @@ public class DebateController {
             throw new UnauthorizedUserException();
         }
 
-        postService.create(auth.getName(), Long.parseLong(debateId), form.getContent(), form.getFile().getBytes());
+        argumentService.create(auth.getName(), Long.parseLong(debateId), form.getContent(), form.getFile().getBytes());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
@@ -186,27 +186,27 @@ public class DebateController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/{debateId}/like/{postId}", method = { RequestMethod.POST })
-    public ModelAndView like(@PathVariable("postId") final String postId, @PathVariable("debateId") final String debateId ,Authentication auth) {
+    @RequestMapping(value = "/{debateId}/like/{argumentId}", method = { RequestMethod.POST })
+    public ModelAndView like(@PathVariable("argumentId") final String argumentId, @PathVariable("debateId") final String debateId ,Authentication auth) {
         if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
-        if (!postId.matches("\\d+")) throw new PostNotFoundException();
+        if (!argumentId.matches("\\d+")) throw new ArgumentNotFoundException();
         if (auth == null || auth.getPrincipal() == null) {
             throw new UnauthorizedUserException();
         }
 
-        likeService.likePost(Long.parseLong(postId), auth.getName());
+        likeService.likeArgument(Long.parseLong(argumentId), auth.getName());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/{debateId}/unlike/{postId}", method = { RequestMethod.POST, RequestMethod.DELETE })
-    public ModelAndView unlike(@PathVariable("postId") final String postId, @PathVariable("debateId") final String debateId ,Authentication auth) {
+    @RequestMapping(value = "/{debateId}/unlike/{argumentId}", method = { RequestMethod.POST, RequestMethod.DELETE })
+    public ModelAndView unlike(@PathVariable("argumentId") final String argumentId, @PathVariable("debateId") final String debateId , Authentication auth) {
         if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
-        if (!postId.matches("\\d+")) throw new PostNotFoundException();
+        if (!argumentId.matches("\\d+")) throw new ArgumentNotFoundException();
         if (auth == null || auth.getPrincipal() == null) {
             throw new UnauthorizedUserException();
         }
 
-        likeService.unlikePost(Long.parseLong(postId), auth.getName());
+        likeService.unlikeArgument(Long.parseLong(argumentId), auth.getName());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 }
