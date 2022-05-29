@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "debates2") // TODO: Change to debates
+@Table(name = "debates")
 public class Debate {
 
     @Id
@@ -20,7 +20,7 @@ public class Debate {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "text")
     private String description;
 
 
@@ -52,17 +52,17 @@ public class Debate {
     }
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "subscribed2",
+    @JoinTable(name = "subscribed",
             joinColumns = @JoinColumn(name = "debateid", referencedColumnName = "debateid"),
             inverseJoinColumns = @JoinColumn(name = "userid", referencedColumnName = "userid"))
     private Set<User> subscribedUsers;
 
-    @Formula("(select count(*) from subscribed2 where subscribed2.debateid = debateid)")
+    @Formula("(select count(*) from subscribed where subscribed.debateid = debateid)")
     private int subscribedUsersCount;
 
-    @Formula("(select count(*) from votes2 where votes2.debateid = debateid and votes2.vote = 0)")
+    @Formula("(select count(*) from votes where votes.debateid = debateid and votes.vote = 0)")
     private int forCount;
-    @Formula("(select count(*) from votes2 where votes2.debateid = debateid and votes2.vote = 1)")
+    @Formula("(select count(*) from votes where votes.debateid = debateid and votes.vote = 1)")
     private int againstCount;
 
     Debate() {}

@@ -28,7 +28,7 @@ public class ArgumentJpaDao implements ArgumentDao {
 
     @Override
     public int getArgumentsByDebateCount(long debateId) {
-        final Query query = em.createNativeQuery("SELECT COUNT(*) FROM posts2 WHERE debateid = :id");
+        final Query query = em.createNativeQuery("SELECT COUNT(*) FROM posts WHERE debateid = :id");
         query.setParameter("id", debateId);
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();
@@ -37,7 +37,7 @@ public class ArgumentJpaDao implements ArgumentDao {
 
     @Override
     public List<Argument> getArgumentsByDebate(Debate debate, int page) {
-        final Query idQuery = em.createNativeQuery("SELECT postid FROM posts2 WHERE debateid = :debateid LIMIT 5 OFFSET :offset");
+        final Query idQuery = em.createNativeQuery("SELECT postid FROM posts WHERE debateid = :debateid LIMIT 5 OFFSET :offset");
         idQuery.setParameter("debateid", debate.getDebateId());
         idQuery.setParameter("offset", page * 5);
 

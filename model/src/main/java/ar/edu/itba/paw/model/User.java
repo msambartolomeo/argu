@@ -7,13 +7,13 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "users2")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_userid_seq")
     @SequenceGenerator(allocationSize = 1, name = "users_userid_seq", sequenceName = "users_userid_seq")
     private Long userId;
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, unique = true)
     private String email;
     @Column(length = 64, unique = true)
     private String username;

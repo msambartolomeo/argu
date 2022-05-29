@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +57,7 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public List<Debate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         if (page < 0)
-            return new ArrayList<>();
+            return Collections.emptyList();
         return debateDao.getDebatesDiscovery(page, PAGE_SIZE, search, category, order, status, date);
     }
 
@@ -71,16 +72,9 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public Optional<PublicDebate> getPublicDebateById(long id) {
-        // TODO
-        // return debateDao.getPublicDebateById(id);
-        return Optional.empty();
-    }
-
-    @Override
     public List<Debate> getProfileDebates(String list, long userid, int page) {
         if (page < 0) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
         User user = userService.getUserById(userid).orElseThrow(UserNotFoundException::new);
          if (list.equals("subscribed"))

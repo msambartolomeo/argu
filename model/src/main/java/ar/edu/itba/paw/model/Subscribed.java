@@ -5,7 +5,7 @@ import ar.edu.itba.paw.model.keys.UserDebateKey;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "subscribed2")
+@Table(name = "subscribed")
 public class Subscribed {
 
     @EmbeddedId

@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "posts2")
+@Table(name = "posts")
 public class Argument {
 
     @Id
@@ -16,11 +16,11 @@ public class Argument {
     @Column(name = "postid")
     private Long argumentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "userid")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "debateid")
     private Debate debate;
 
@@ -38,7 +38,7 @@ public class Argument {
     @Column(name = "status", nullable = false, length = 20)
     private ArgumentStatus status;
 
-    @Formula("(SELECT COUNT(*) FROM likes2 WHERE likes2.postid = postid)")
+    @Formula("(SELECT COUNT(*) FROM likes WHERE likes.postid = postid)")
     private int likesCount;
 
     @Transient

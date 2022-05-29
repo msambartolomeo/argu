@@ -38,7 +38,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public List<Debate> getSubscribedDebatesByUser(User user, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates2 WHERE debateid IN (SELECT debateid FROM subscribed2 WHERE userid = :userid) LIMIT 5 OFFSET :offset");
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) LIMIT 5 OFFSET :offset");
         idQuery.setParameter("userid", user.getUserId());
         idQuery.setParameter("offset", page * 5);
         @SuppressWarnings("unchecked")
@@ -56,7 +56,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public int getSubscribedDebatesByUserIdCount(long userid) {
-        Query query = em.createNativeQuery("SELECT COUNT(*) FROM subscribed2 WHERE userid = :userid");
+        Query query = em.createNativeQuery("SELECT COUNT(*) FROM subscribed WHERE userid = :userid");
         query.setParameter("userid", userid);
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();
@@ -168,7 +168,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public List<Debate> getMyDebates(User user, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates2 WHERE creatorid = :userid OR opponentid = :userid ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE creatorid = :userid OR opponentid = :userid ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
         idQuery.setParameter("userid", user.getUserId());
         idQuery.setParameter("offset", page * 5);
         @SuppressWarnings("unchecked")
@@ -186,7 +186,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public int getMyDebatesCount(long userid) {
-        Query query = em.createNativeQuery("SELECT COUNT(*) FROM debates2 WHERE creatorid = :userid OR opponentid = :userid");
+        Query query = em.createNativeQuery("SELECT COUNT(*) FROM debates WHERE creatorid = :userid OR opponentid = :userid");
         query.setParameter("userid", userid);
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();

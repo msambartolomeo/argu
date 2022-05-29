@@ -5,7 +5,7 @@ import ar.edu.itba.paw.model.keys.UserPostKey;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "likes2")
+@Table(name = "likes")
 public class Like {
 
     @EmbeddedId
