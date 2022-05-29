@@ -8,7 +8,6 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
-import ar.edu.itba.paw.model.enums.DebateVote;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -65,24 +64,6 @@ public class DebateJpaDao implements DebateDao {
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();
         return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
-    }
-
-    @Override
-    @Deprecated
-    public void subscribeToDebate(long userid, long debateid) {
-
-    }
-
-    @Override
-    @Deprecated
-    public void unsubscribeToDebate(long userid, long debateid) {
-
-    }
-
-    @Override
-    @Deprecated
-    public boolean isUserSubscribed(long userid, long debateid) {
-        return false;
     }
 
     @Override
@@ -227,33 +208,4 @@ public class DebateJpaDao implements DebateDao {
         return 0;
     }
 
-    @Override
-    @Deprecated
-    public void addVote(long debateId, long userId, DebateVote vote) {
-
-    }
-
-    @Override
-    @Deprecated
-    public void removeVote(long debateId, long userId) {
-
-    }
-
-    @Override
-    @Deprecated
-    public Boolean hasUserVoted(long debateId, long userId) {
-        return false;
-    }
-
-    @Override
-    @Deprecated
-    public DebateVote getUserVote(long debateid, long userid) {
-        return null;
-    }
-
-    @Override
-    @Deprecated
-    public void changeDebateStatus(long id, DebateStatus status) {
-
-    }
 }

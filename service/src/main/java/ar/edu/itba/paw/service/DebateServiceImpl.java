@@ -104,14 +104,8 @@ public class DebateServiceImpl implements DebateService {
 
         if (debate.getDebateStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreatorUsername()) || username.equals(debate.getOpponentUsername())))
             throw new ForbiddenDebateException();
-
-        debateDao.changeDebateStatus(id, DebateStatus.CLOSING);
+        // TODO: Use correct method
+        //debateDao.changeDebateStatus(id, DebateStatus.CLOSING);
     }
 
-    @Transactional
-    @Override
-    @Deprecated
-    public void closeDebate(long id) {
-        debateDao.changeDebateStatus(id, DebateStatus.CLOSED);
-    }
 }

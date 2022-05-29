@@ -82,7 +82,8 @@ public class PostServiceImpl implements PostService {
                     else
                         return ArgumentStatus.CONCLUSION;
                 case CONCLUSION:
-                    debateService.closeDebate(debateId);
+                    //debateService.closeDebate(debateId);
+                    // TODO: close debate with model
                     return ArgumentStatus.CONCLUSION;
                 default:
                     throw new ForbiddenPostException();
