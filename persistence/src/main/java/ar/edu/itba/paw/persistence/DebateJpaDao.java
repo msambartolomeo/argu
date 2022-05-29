@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DebateDao;
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.PublicDebate;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
@@ -123,7 +120,12 @@ public class DebateJpaDao implements DebateDao {
 
         final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
         query.setParameter("ids", ids);
-        return query.getResultList();
+
+        List<Debate> unsortedList = query.getResultList();
+        List<Debate> sortedList = new ArrayList<>();
+        for (Long id: ids)
+            sortedList.add(unsortedList.stream().filter(debate -> debate.getDebateId() == id).findFirst().get());
+        return sortedList;
     }
 
     @Override

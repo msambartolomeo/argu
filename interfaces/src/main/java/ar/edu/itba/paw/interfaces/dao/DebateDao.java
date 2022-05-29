@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.PublicDebate;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
@@ -21,14 +18,17 @@ public interface DebateDao {
 
     int getSubscribedDebatesByUserIdCount(long userid);
 
+    @Deprecated
     List<PublicDebate> getPublicDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
 
     List<Debate> getDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
 
     int getDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date);
 
+    @Deprecated
     int getPublicDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date);
 
+    @Deprecated
     List<PublicDebate> getMyDebates(long userid, int page);
 
     List<Debate> getMyDebates(User user, int page);
