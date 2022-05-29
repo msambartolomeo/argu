@@ -62,7 +62,7 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public int getPages(String search, DebateCategory category, DebateStatus status, LocalDate date) {
-        return (int) Math.ceil(debateDao.getPublicDebatesCount(search, category, status, date) / (double) PAGE_SIZE);
+        return (int) Math.ceil(debateDao.getDebatesCount(search, category, status, date) / (double) PAGE_SIZE);
     }
 
     @Override
@@ -78,13 +78,14 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
+    public List<Debate> getProfileDebates(String list, long userid, int page) {
         if (page < 0) {
             return new ArrayList<>();
-        } // TODO
-        // if (list.equals("subscribed"))
-            // return debateDao.getSubscribedDebatesByUserId(userid, page);
-        else return debateDao.getMyDebates(userid, page);
+        }
+        User user = userService.getUserById(userid).orElseThrow(UserNotFoundException::new);
+         if (list.equals("subscribed"))
+             return debateDao.getSubscribedDebatesByUser(user, page);
+        else return debateDao.getMyDebates(user, page);
     }
 
     @Override

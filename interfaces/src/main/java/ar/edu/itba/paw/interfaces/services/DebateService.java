@@ -17,7 +17,7 @@ public interface DebateService {
     List<Debate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
     int getPages(String search, DebateCategory category, DebateStatus status, LocalDate date);
     List<Debate> getMostSubscribed();
-    List<PublicDebate> getProfileDebates(String list, long userid, int page);
+    List<Debate> getProfileDebates(String list, long userid, int page);
     int getProfileDebatesPageCount(String list, long userid);
     void startConclusion(long id, String username);
 }

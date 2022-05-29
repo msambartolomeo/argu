@@ -37,8 +37,8 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    public List<Debate> getSubscribedDebatesByUserId(User user, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed2 WHERE userid = :userid) LIMIT 5 OFFSET :offset");
+    public List<Debate> getSubscribedDebatesByUser(User user, int page) {
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates2 WHERE debateid IN (SELECT debateid FROM subscribed2 WHERE userid = :userid) LIMIT 5 OFFSET :offset");
         idQuery.setParameter("userid", user.getUserId());
         idQuery.setParameter("offset", page * 5);
         @SuppressWarnings("unchecked")
@@ -64,12 +64,6 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    @Deprecated
-    public List<PublicDebate> getPublicDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
-        return null;
-    }
-
-    @Override
     public List<Debate> getDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         StringBuilder queryString = new StringBuilder("SELECT debateid FROM public_debates WHERE TRUE");
         Map<String, Object> params = setupDiscovery(searchQuery, category, queryString, status, date);
@@ -82,7 +76,7 @@ public class DebateJpaDao implements DebateDao {
             orderBy = order;
 
         switch(orderBy) {
-            case DATE_ASC: // TODO: ver el tema del ORDER BY con @Formula
+            case DATE_ASC:
                 queryString.append(" created_date ASC");
                 break;
             case DATE_DESC:
@@ -130,7 +124,16 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public int getDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date) {
-        return 0;
+        StringBuilder queryString = new StringBuilder("SELECT COUNT(*) FROM public_debates WHERE TRUE");
+
+        Map<String, Object> params = setupDiscovery(searchQuery, category, queryString, status, date);
+
+        Query query = em.createNativeQuery(queryString.toString());
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+        Optional<?> queryResult = query.getResultList().stream().findFirst();
+        return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
     }
 
     private Map<String, Object> setupDiscovery(String searchQuery, DebateCategory category, StringBuilder queryString, DebateStatus status, LocalDate date) {
@@ -164,20 +167,8 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    @Deprecated
-    public int getPublicDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date) {
-        return 0;
-    }
-
-    @Override
-    @Deprecated
-    public List<PublicDebate> getMyDebates(long userid, int page) {
-        return null;
-    }
-
-    @Override
     public List<Debate> getMyDebates(User user, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE creatorid = :userid OR opponentid = :userid ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates2 WHERE creatorid = :userid OR opponentid = :userid ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
         idQuery.setParameter("userid", user.getUserId());
         idQuery.setParameter("offset", page * 5);
         @SuppressWarnings("unchecked")
@@ -194,20 +185,11 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    public int getMyDebatesCount(User user) {
-        Query query = em.createNativeQuery("SELECT COUNT(*) FROM debates WHERE creatorid = :userid OR opponentid = :userid");
-        query.setParameter("userid", user.getUserId());
-
-        query.getSingleResult();
+    public int getMyDebatesCount(long userid) {
+        Query query = em.createNativeQuery("SELECT COUNT(*) FROM debates2 WHERE creatorid = :userid OR opponentid = :userid");
+        query.setParameter("userid", userid);
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();
-        return queryResult.map(o -> (Integer) o).orElse(0);
+        return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
     }
-
-    @Override
-    @Deprecated
-    public int getMyDebatesCount(long userid) {
-        return 0;
-    }
-
 }

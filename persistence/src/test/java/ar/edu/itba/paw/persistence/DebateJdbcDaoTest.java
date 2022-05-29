@@ -206,34 +206,34 @@ public class DebateJdbcDaoTest {
         assertEquals(USER_USERNAME, debates.get(0).getOpponentUsername());
     }*/
 
-    @Test
-    public void testGetSubscribedDebatesByUserIdCountEmpty() {
-        int count = debateDao.getSubscribedDebatesByUserIdCount(userId);
+//    @Test
+//    public void testGetSubscribedDebatesByUserIdCountEmpty() {
+//        int count = debateDao.getSubscribedDebatesByUserIdCount(userId);
+//
+//        assertEquals(0, count);
+//    }
 
-        assertEquals(0, count);
-    }
-
-    @Test
-    public void testGetSubscribedDebatesByUserIdCount() {
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DEBATE_STATUS.ordinal());
-        debateData.put("category", DEBATE_CATEGORY.ordinal());
-        debateData.put("creatorid", userId);
-        debateData.put("opponentid", userId);
-        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
-
-        final Map<String, Object> subscribedData = new HashMap<>();
-        subscribedData.put("userid", userId);
-        subscribedData.put("debateid", debateKey);
-        jdbcInsertSubscribed.execute(subscribedData);
-
-        int count = debateDao.getSubscribedDebatesByUserIdCount(userId);
-
-        assertEquals(1, count);
-    }
+//    @Test
+//    public void testGetSubscribedDebatesByUserIdCount() {
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        debateData.put("created_date", DEBATE_DATE);
+//        debateData.put("status", DEBATE_STATUS.ordinal());
+//        debateData.put("category", DEBATE_CATEGORY.ordinal());
+//        debateData.put("creatorid", userId);
+//        debateData.put("opponentid", userId);
+//        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+//
+//        final Map<String, Object> subscribedData = new HashMap<>();
+//        subscribedData.put("userid", userId);
+//        subscribedData.put("debateid", debateKey);
+//        jdbcInsertSubscribed.execute(subscribedData);
+//
+//        int count = debateDao.getSubscribedDebatesByUserIdCount(userId);
+//
+//        assertEquals(1, count);
+//    }
 
 //    @Test TODO: pasar a algún SubscribedDaoTest
 //    public void testSubscribeToDebate() {
@@ -330,88 +330,88 @@ public class DebateJdbcDaoTest {
 //        assertTrue(isSubscribed);
 //    }
 
-    @Test
-    public void testGetMyDebatesSameUser() {
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DEBATE_STATUS.ordinal());
-        debateData.put("category", DEBATE_CATEGORY.ordinal());
-        debateData.put("creatorid", userId);
-        debateData.put("opponentid", userId);
-        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+//    @Test
+//    public void testGetMyDebatesSameUser() {
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        debateData.put("created_date", DEBATE_DATE);
+//        debateData.put("status", DEBATE_STATUS.ordinal());
+//        debateData.put("category", DEBATE_CATEGORY.ordinal());
+//        debateData.put("creatorid", userId);
+//        debateData.put("opponentid", userId);
+//        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+//
+//        List<PublicDebate> debates = debateDao.getMyDebates(userId, DEBATES_PAGE);
+//
+//        assertEquals(1, debates.size());
+//        assertEquals(debateKey, debates.get(0).getDebateId());
+//        assertEquals(DEBATE_NAME, debates.get(0).getName());
+//        assertEquals(DEBATE_DESCRIPTION, debates.get(0).getDescription());
+//        assertEquals(PUBLIC_DEBATE_DATE, debates.get(0).getCreatedDate());
+//        assertEquals(DEBATE_STATUS, debates.get(0).getDebateStatus());
+//        assertEquals(DEBATE_CATEGORY, debates.get(0).getDebateCategory());
+//        assertEquals(USER_USERNAME, debates.get(0).getCreatorUsername());
+//        assertEquals(USER_USERNAME, debates.get(0).getOpponentUsername());
+//    }
+//
+//    @Test
+//    public void testGetMyDebatesDifferentUser() {
+//        final Map<String, Object> userData = new HashMap<>();
+//        userData.put("username", USER_OTHER_USERNAME);
+//        userData.put("password", USER_PASSWORD);
+//        userData.put("email", USER_OTHER_EMAIL);
+//        userData.put("created_date", USER_DATE.toString());
+//        userData.put("role", USER_ROLE.ordinal());
+//        long userKey = jdbcInsertUser.executeAndReturnKey(userData).longValue();
+//
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        debateData.put("created_date", DEBATE_DATE);
+//        debateData.put("status", DEBATE_STATUS.ordinal());
+//        debateData.put("category", DEBATE_CATEGORY.ordinal());
+//        debateData.put("creatorid", userId);
+//        debateData.put("opponentid", userKey);
+//        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
+//
+//        List<PublicDebate> debates = debateDao.getMyDebates(userKey, DEBATES_PAGE);
+//
+//        assertEquals(1, debates.size());
+//        assertEquals(debateKey, debates.get(0).getDebateId());
+//        assertEquals(DEBATE_NAME, debates.get(0).getName());
+//        assertEquals(DEBATE_DESCRIPTION, debates.get(0).getDescription());
+//        assertEquals(PUBLIC_DEBATE_DATE, debates.get(0).getCreatedDate());
+//        assertEquals(DEBATE_STATUS, debates.get(0).getDebateStatus());
+//        assertEquals(DEBATE_CATEGORY, debates.get(0).getDebateCategory());
+//        assertEquals(USER_USERNAME, debates.get(0).getCreatorUsername());
+//        assertEquals(USER_OTHER_USERNAME, debates.get(0).getOpponentUsername());
+//    }
 
-        List<PublicDebate> debates = debateDao.getMyDebates(userId, DEBATES_PAGE);
-
-        assertEquals(1, debates.size());
-        assertEquals(debateKey, debates.get(0).getDebateId());
-        assertEquals(DEBATE_NAME, debates.get(0).getName());
-        assertEquals(DEBATE_DESCRIPTION, debates.get(0).getDescription());
-        assertEquals(PUBLIC_DEBATE_DATE, debates.get(0).getCreatedDate());
-        assertEquals(DEBATE_STATUS, debates.get(0).getDebateStatus());
-        assertEquals(DEBATE_CATEGORY, debates.get(0).getDebateCategory());
-        assertEquals(USER_USERNAME, debates.get(0).getCreatorUsername());
-        assertEquals(USER_USERNAME, debates.get(0).getOpponentUsername());
-    }
-
-    @Test
-    public void testGetMyDebatesDifferentUser() {
-        final Map<String, Object> userData = new HashMap<>();
-        userData.put("username", USER_OTHER_USERNAME);
-        userData.put("password", USER_PASSWORD);
-        userData.put("email", USER_OTHER_EMAIL);
-        userData.put("created_date", USER_DATE.toString());
-        userData.put("role", USER_ROLE.ordinal());
-        long userKey = jdbcInsertUser.executeAndReturnKey(userData).longValue();
-
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DEBATE_STATUS.ordinal());
-        debateData.put("category", DEBATE_CATEGORY.ordinal());
-        debateData.put("creatorid", userId);
-        debateData.put("opponentid", userKey);
-        long debateKey = jdbcInsert.executeAndReturnKey(debateData).longValue();
-
-        List<PublicDebate> debates = debateDao.getMyDebates(userKey, DEBATES_PAGE);
-
-        assertEquals(1, debates.size());
-        assertEquals(debateKey, debates.get(0).getDebateId());
-        assertEquals(DEBATE_NAME, debates.get(0).getName());
-        assertEquals(DEBATE_DESCRIPTION, debates.get(0).getDescription());
-        assertEquals(PUBLIC_DEBATE_DATE, debates.get(0).getCreatedDate());
-        assertEquals(DEBATE_STATUS, debates.get(0).getDebateStatus());
-        assertEquals(DEBATE_CATEGORY, debates.get(0).getDebateCategory());
-        assertEquals(USER_USERNAME, debates.get(0).getCreatorUsername());
-        assertEquals(USER_OTHER_USERNAME, debates.get(0).getOpponentUsername());
-    }
-
-    @Test
-    public void testGetMyDebatesCount() {
-        final Map<String, Object> debateData = new HashMap<>();
-        debateData.put("name", DEBATE_NAME);
-        debateData.put("description", DEBATE_DESCRIPTION);
-        debateData.put("created_date", DEBATE_DATE);
-        debateData.put("status", DEBATE_STATUS.ordinal());
-        debateData.put("category", DEBATE_CATEGORY.ordinal());
-        debateData.put("creatorid", userId);
-        debateData.put("opponentid", userId);
-        jdbcInsert.execute(debateData);
-
-        int count = debateDao.getMyDebatesCount(userId);
-
-        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DEBATES_TABLE,
-                "creatorid = " + userId  +" OR opponentid = " + userId), count);
-    }
-
-    @Test
-    public void testGetMyDebatesCountEmpty() {
-        int count = debateDao.getMyDebatesCount(userId);
-
-        assertEquals(0, count);
-    }
+//    @Test
+//    public void testGetMyDebatesCount() {
+//        final Map<String, Object> debateData = new HashMap<>();
+//        debateData.put("name", DEBATE_NAME);
+//        debateData.put("description", DEBATE_DESCRIPTION);
+//        debateData.put("created_date", DEBATE_DATE);
+//        debateData.put("status", DEBATE_STATUS.ordinal());
+//        debateData.put("category", DEBATE_CATEGORY.ordinal());
+//        debateData.put("creatorid", userId);
+//        debateData.put("opponentid", userId);
+//        jdbcInsert.execute(debateData);
+//
+//        int count = debateDao.getMyDebatesCount(userId);
+//
+//        assertEquals(JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DEBATES_TABLE,
+//                "creatorid = " + userId  +" OR opponentid = " + userId), count);
+//    }
+//
+//    @Test
+//    public void testGetMyDebatesCountEmpty() {
+//        int count = debateDao.getMyDebatesCount(userId);
+//
+//        assertEquals(0, count);
+//    }
 
 //    @Test
 //    public void testAddVoteFor() {
