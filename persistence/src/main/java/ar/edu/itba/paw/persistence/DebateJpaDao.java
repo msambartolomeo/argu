@@ -74,7 +74,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public List<Debate> getDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
-        StringBuilder queryString = new StringBuilder("SELECT debateid FROM debates WHERE TRUE");
+        StringBuilder queryString = new StringBuilder("SELECT debateid FROM public_debates WHERE TRUE");
         Map<String, Object> params = setupDiscovery(searchQuery, category, queryString, status, date);
 
         queryString.append(" ORDER BY");

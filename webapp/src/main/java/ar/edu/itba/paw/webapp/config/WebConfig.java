@@ -49,6 +49,8 @@ public class WebConfig {
     private Resource schemaV1;
     @Value("classpath:schema-v2.sql")
     private Resource schemaV2;
+    @Value("classpath:init-views.sql")
+    private Resource initViews;
 
     @Autowired
     private Environment env;
@@ -76,21 +78,19 @@ public class WebConfig {
     }
 
     // TODO delete when jpa migration is done
-//    @Bean
-//    public DataSourceInitializer dataSourceInitializer() {
-//        final DataSourceInitializer dsi = new DataSourceInitializer();
-//        dsi.setDataSource(dataSource());
-//        dsi.setDatabasePopulator(databasePopulator());
-//        return dsi;
-//    }
-//
-//    public DatabasePopulator databasePopulator() {
-//        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-//        populator.addScript(schemaV0);
-//        populator.addScript(schemaV1);
-//        populator.addScript(schemaV2);
-//        return populator;
-//    }
+    @Bean
+    public DataSourceInitializer dataSourceInitializer() {
+        final DataSourceInitializer dsi = new DataSourceInitializer();
+        dsi.setDataSource(dataSource());
+        dsi.setDatabasePopulator(databasePopulator());
+        return dsi;
+    }
+
+    public DatabasePopulator databasePopulator() {
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScript(initViews);
+        return populator;
+    }
 
     @Bean
     public MessageSource messageSource() {

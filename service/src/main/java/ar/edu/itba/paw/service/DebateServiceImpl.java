@@ -55,10 +55,10 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<PublicDebate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
+    public List<Debate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         if (page < 0)
             return new ArrayList<>();
-        return debateDao.getPublicDebatesDiscovery(page, PAGE_SIZE, search, category, order, status, date);
+        return debateDao.getDebatesDiscovery(page, PAGE_SIZE, search, category, order, status, date);
     }
 
     @Override
@@ -67,8 +67,8 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<PublicDebate> getMostSubscribed() {
-        return debateDao.getPublicDebatesDiscovery(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
+    public List<Debate> getMostSubscribed() {
+        return debateDao.getDebatesDiscovery(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
     }
 
     @Override
