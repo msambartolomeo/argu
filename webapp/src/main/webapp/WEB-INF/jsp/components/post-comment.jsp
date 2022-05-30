@@ -48,7 +48,17 @@
         </div>
         <button class="btn waves-effect center-block" type="submit"
                 onclick="this.disabled=true; document.getElementById('postform').submit()">
-            <spring:message code="components.post-comment.submit"/>
+            <c:choose>
+                <c:when test="${empty lastArgument || (lastArgument.status.name == 'introduction' && lastArgument.user.username == debate.creator.username)}">
+                    <spring:message code="components.post-intro.submit"/>
+                </c:when>
+                <c:when test="${debate.status.name == 'closing'}">
+                    <spring:message code="components.post-conclusion.submit"/>
+                </c:when>
+                <c:otherwise>
+                    <spring:message code="components.post-argument.submit"/>
+                </c:otherwise>
+            </c:choose>
             <i class="material-icons right">send</i>
         </button>
     </div>
