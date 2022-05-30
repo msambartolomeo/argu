@@ -108,7 +108,7 @@ public class WebController {
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(() -> {
             LOGGER.error("/profile : User {} not found", auth.getName());
-            throw new UserNotFoundException();
+            return new UserNotFoundException();
         });
         mav.addObject("user", user);
         mav.addObject("total_pages", debateService.getProfileDebatesPageCount(list, user.getUserId()));
@@ -130,7 +130,7 @@ public class WebController {
         final ModelAndView mav = new ModelAndView("/pages/user_profile");
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("/user/{username} : User {} not found", username);
-            throw new UserNotFoundException();
+            return new UserNotFoundException();
         });
         mav.addObject("user", user);
         mav.addObject("total_pages", debateService.getUserDebatesPageCount(user.getUserId()));
@@ -163,7 +163,7 @@ public class WebController {
 
         return imageService.getImage(Integer.parseInt(imageId)).orElseThrow(() -> {
             LOGGER.error("/images/{imageId} : Image {} not found", imageId);
-            throw new ImageNotFoundException();
+            return new ImageNotFoundException();
         }).getData();
     }
 
