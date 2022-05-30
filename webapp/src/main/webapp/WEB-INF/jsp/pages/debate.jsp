@@ -41,7 +41,7 @@
                                 <a class="link" href="<c:url value="/user/${debate.creator.username}"/>"> <c:out value="${debate.creator.username}"/></a>
                             </c:when>
                             <c:otherwise>
-                                <i><spring:message code="deletedusername"/></i>
+                                <i><spring:message code="username.deleted"/></i>
                             </c:otherwise>
                         </c:choose>
                     </h6>
@@ -54,7 +54,7 @@
                                 <a class="link" href="<c:url value="/user/${debate.opponent.username}"/>"> <c:out value="${debate.opponent.username}"/></a>
                             </c:when>
                             <c:otherwise>
-                                <i><spring:message code="deletedusername"/></i>
+                                <i><spring:message code="username.deleted"/></i>
                             </c:otherwise>
                         </c:choose>
                     </h6>

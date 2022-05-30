@@ -16,7 +16,7 @@
                             <c:out value="${debate.creator.username}" />
                         </c:when>
                         <c:otherwise>
-                            <i><spring:message code="deletedusername" /></i>
+                            <i><spring:message code="username.deleted" /></i>
                         </c:otherwise>
                     </c:choose>
                 </h6>
