@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +57,16 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User updateImage(String username, byte[] image) {
+    public User updateImage(String username, byte[] data) {
         User user = getUserByUsername(username).orElseThrow(UserNotFoundException::new);
 
-        Long imageId = null;
+        Image image = null;
         if (user.getImage() != null)
-            imageId = user.getImage().getId();
+            image = user.getImage();
 
-        user.updateImage(image);
+        user.updateImage(data);
 
-        if (imageId != null) imageService.deleteImage(imageId);
+        if (image != null) imageService.deleteImage(image);
 
         return user;
     }

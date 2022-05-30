@@ -9,5 +9,5 @@ public interface ImageDao {
 
     Image createImage(byte[] data);
 
-    void deleteImage(long id);
+    void deleteImage(Image image);
 }

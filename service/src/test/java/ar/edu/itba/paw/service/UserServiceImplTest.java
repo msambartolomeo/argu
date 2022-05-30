@@ -2,19 +2,20 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.ImageService;
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {
@@ -36,8 +37,8 @@ public class UserServiceImplTest {
     @Test
     public void testCreateUserNew() {
         User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-        Mockito.when(userDao.create(Mockito.anyString(),Mockito.anyString(),Mockito.anyString())).thenReturn(user);
-        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn(USER_PASSWORD);
+        when(userDao.create(anyString(), anyString(), anyString())).thenReturn(user);
+        when(passwordEncoder.encode(anyString())).thenReturn(USER_PASSWORD);
 
         User u = userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
 
@@ -50,8 +51,8 @@ public class UserServiceImplTest {
     @Test
     public void testCreateUserUpdateLegacy() {
         User user = new User(USER_EMAIL, null, null);
-        Mockito.when(userDao.getUserByEmail(Mockito.anyString())).thenReturn(Optional.of(user));
-        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn(USER_PASSWORD);
+        when(userDao.getUserByEmail(anyString())).thenReturn(Optional.of(user));
+        when(passwordEncoder.encode(anyString())).thenReturn(USER_PASSWORD);
 
         User u = userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
 
@@ -64,7 +65,7 @@ public class UserServiceImplTest {
     @Test
     public void testGetUserByUsername() {
         User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
         Optional<User> u = userService.getUserByUsername(USER_USERNAME);
 
@@ -77,7 +78,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUserByUsernameEmpty() {
-        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.empty());
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.empty());
 
         Optional<User> u = userService.getUserByUsername(USER_USERNAME);
 
@@ -87,7 +88,7 @@ public class UserServiceImplTest {
     @Test
     public void testGetUserByEmail() {
         User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-        Mockito.when(userDao.getUserByEmail(Mockito.anyString())).thenReturn(Optional.of(user));
+        when(userDao.getUserByEmail(anyString())).thenReturn(Optional.of(user));
 
         Optional<User> u = userService.getUserByEmail(USER_EMAIL);
 
@@ -100,39 +101,40 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUserByEmailEmpty() {
-        Mockito.when(userDao.getUserByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+        when(userDao.getUserByEmail(anyString())).thenReturn(Optional.empty());
 
         Optional<User> u = userService.getUserByEmail(USER_EMAIL);
 
         assertFalse(u.isPresent());
     }
-    // TODO: learn how to fix this test
-//    @Test
-//    public void testUpdateImage() {
-//        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-//        user.updateImage(IMAGE_DATA);
-//        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
-//
-//        User u = userService.updateImage(USER_USERNAME, IMAGE_DATA);
-//
-//        assertEquals(IMAGE_DATA, u.getImage().getData());
-//        Mockito.verify(imageService).deleteImage(Mockito.anyLong());
-//    }
 
     @Test
-    public void testUpdateImageNoPreviousImage() {
+    public void testUpdateImage() {
         User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
+        user.updateImage(IMAGE_DATA);
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
         User u = userService.updateImage(USER_USERNAME, IMAGE_DATA);
 
         assertEquals(IMAGE_DATA, u.getImage().getData());
-        Mockito.verify(imageService, Mockito.times(0)).deleteImage(Mockito.anyLong());
+        verify(imageService).deleteImage(any(Image.class));
+    }
+
+    @Test
+    public void testUpdateImageNoPreviousImage() {
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+
+        User u = userService.updateImage(USER_USERNAME, IMAGE_DATA);
+
+        assertEquals(IMAGE_DATA, u.getImage().getData());
+        verify(imageService, times(0)).deleteImage(any(Image.class));
     }
 
     @Test(expected = UserNotFoundException.class)
     public void testUpdateImageNoValidUser() {
-        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.empty());
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.empty());
+
         userService.updateImage(USER_USERNAME, IMAGE_DATA);
     }
 }
