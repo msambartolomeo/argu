@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.PublicDebate;
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
