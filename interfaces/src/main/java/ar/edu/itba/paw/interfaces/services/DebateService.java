@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.PublicDebate;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
@@ -16,7 +17,9 @@ public interface DebateService {
     List<Debate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
     int getPages(String search, DebateCategory category, DebateStatus status, LocalDate date);
     List<Debate> getMostSubscribed();
-    List<Debate> getProfileDebates(String list, long userid, int page);
-    int getProfileDebatesPageCount(String list, long userid);
+    List<Debate> getProfileDebates(String list, long userId, int page);
+    List<Debate> getUserDebates(long userId, int page);
+    int getProfileDebatesPageCount(String list, long userId);
+    int getUserDebatesPageCount(long userId);
     void startConclusion(long id, String username);
 }

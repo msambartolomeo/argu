@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class ArgumentJpaDao implements ArgumentDao {
 
     @Override
     public List<Argument> getArgumentsByDebate(Debate debate, int page) {
-        final Query idQuery = em.createNativeQuery("SELECT postid FROM posts WHERE debateid = :debateid LIMIT 5 OFFSET :offset");
+        final Query idQuery = em.createNativeQuery("SELECT postid FROM posts WHERE debateid = :debateid ORDER BY created_date LIMIT 5 OFFSET :offset");
         idQuery.setParameter("debateid", debate.getDebateId());
         idQuery.setParameter("offset", page * 5);
 
@@ -51,7 +52,9 @@ public class ArgumentJpaDao implements ArgumentDao {
         final TypedQuery<Argument> query = em.createQuery("FROM Argument p WHERE p.argumentId IN :ids", Argument.class);
         query.setParameter("ids", ids);
 
-        return query.getResultList();
+        List<Argument> arguments = query.getResultList();
+        arguments.sort(Comparator.comparing(Argument::getCreationDate));
+        return arguments;
     }
 
     @Override

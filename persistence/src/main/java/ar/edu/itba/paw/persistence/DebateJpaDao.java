@@ -37,9 +37,9 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    public List<Debate> getSubscribedDebatesByUser(User user, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) LIMIT 5 OFFSET :offset");
-        idQuery.setParameter("userid", user.getUserId());
+    public List<Debate> getSubscribedDebatesByUser(long userId, int page) {
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
+        idQuery.setParameter("userid", userId);
         idQuery.setParameter("offset", page * 5);
         @SuppressWarnings("unchecked")
         List<Long> ids = (List<Long>) idQuery.getResultList().stream()
@@ -51,11 +51,14 @@ public class DebateJpaDao implements DebateDao {
 
         final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
         query.setParameter("ids", ids);
-        return query.getResultList();
+
+        List<Debate> debates = query.getResultList();
+        debates.sort(Comparator.comparing(Debate::getCreatedDate).reversed());
+        return debates;
     }
 
     @Override
-    public int getSubscribedDebatesByUserIdCount(long userid) {
+    public int getSubscribedDebatesByUserCount(long userid) {
         Query query = em.createNativeQuery("SELECT COUNT(*) FROM subscribed WHERE userid = :userid");
         query.setParameter("userid", userid);
 
@@ -167,9 +170,9 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    public List<Debate> getMyDebates(User user, int page) {
+    public List<Debate> getUserDebates(long userId, int page) {
         Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE creatorid = :userid OR opponentid = :userid ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
-        idQuery.setParameter("userid", user.getUserId());
+        idQuery.setParameter("userid", userId);
         idQuery.setParameter("offset", page * 5);
         @SuppressWarnings("unchecked")
         List<Long> ids = (List<Long>) idQuery.getResultList().stream()
@@ -181,11 +184,14 @@ public class DebateJpaDao implements DebateDao {
 
         final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
         query.setParameter("ids", ids);
-        return query.getResultList();
+
+        List<Debate> debates = query.getResultList();
+        debates.sort(Comparator.comparing(Debate::getCreatedDate).reversed());
+        return debates;
     }
 
     @Override
-    public int getMyDebatesCount(long userid) {
+    public int getUserDebatesCount(long userid) {
         Query query = em.createNativeQuery("SELECT COUNT(*) FROM debates WHERE creatorid = :userid OR opponentid = :userid");
         query.setParameter("userid", userid);
 
