@@ -85,7 +85,7 @@ public class Argument {
         return creationDate;
     }
     public String getFormattedDate() {
-        return creationDate.format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy"));
+        return creationDate.format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
     }
 
     public Image getImage() {

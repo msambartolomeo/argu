@@ -163,8 +163,6 @@ public class DebateJpaDao implements DebateDao {
             LocalDateTime dateTime = date.atStartOfDay();
             queryString.append(" AND created_date >= :date");
             params.put("date", Timestamp.valueOf(dateTime));
-            queryString.append(" AND created_date <= :date");
-            params.put("date", Timestamp.valueOf(dateTime.plusDays(1)));
         }
         return params;
     }

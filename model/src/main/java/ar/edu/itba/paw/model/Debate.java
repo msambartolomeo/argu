@@ -102,7 +102,7 @@ public class Debate {
     }
 
     public String getFormattedDate() {
-        return createdDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return createdDate.format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
     }
 
     public DebateCategory getCategory() {

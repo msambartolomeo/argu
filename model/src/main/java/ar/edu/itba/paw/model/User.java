@@ -61,7 +61,7 @@ public class User {
     }
 
     public String getFormattedDate() {
-        return createdDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return createdDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     public Image getImage() {

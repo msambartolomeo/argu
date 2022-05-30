@@ -68,7 +68,7 @@
                     </c:choose>
                 </sec:authorize>
                 <a class="chip btn" href="<c:url value="/debates?category=${debate.category.name}"/>"><spring:message code="category.${debate.category.name}"/></a>
-                <button class="chip btn" onclick="dateFilter('${debate.createdDate}')"><spring:message code="components.debate-created-on"/> ${debate.formattedDate}</button>
+                <button class="chip btn" onclick="dateFilter('${debate.formattedDate}')"><spring:message code="components.debate-created-on"/> ${debate.formattedDate}</button>
                 <a class="chip btn" href="<c:url value="/debates?status=${debate.status.name == 'closed' ? 'closed' : 'open'}"/>"><spring:message code="status.${debate.status.name}"/></a>
                 <a class="chip btn" href="<c:url value="/debates?order=subs_desc"/>"><spring:message code="page.debate.subscribed"
                                                   arguments="${debate.subscribedUsersCount}"/></a>
