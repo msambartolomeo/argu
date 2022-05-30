@@ -11,4 +11,6 @@ public interface UserService {
     Optional<User> getUserByEmail(String email);
     User updateImage(String username, byte[] image);
     void requestModerator(String username, String reason);
+
+    void deleteUser(String username);
 }

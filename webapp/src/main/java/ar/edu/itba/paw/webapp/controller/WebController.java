@@ -6,10 +6,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.exceptions.*;
-import ar.edu.itba.paw.webapp.form.CreateDebateForm;
-import ar.edu.itba.paw.webapp.form.ModeratorForm;
-import ar.edu.itba.paw.webapp.form.ProfileImageForm;
-import ar.edu.itba.paw.webapp.form.RegisterForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +85,7 @@ public class WebController {
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth, @RequestParam(value = "list", defaultValue = "subscribed") String list, @RequestParam(value = "page", defaultValue = "0") String page) {
+    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, @ModelAttribute("confirmationModal") final ConfirmationForm userForm, Authentication auth, @RequestParam(value = "list", defaultValue = "subscribed") String list, @RequestParam(value = "page", defaultValue = "0") String page) {
         if (!page.matches("-?\\d+")) throw new InvalidPageException();
 
         final ModelAndView mav = new ModelAndView("/pages/profile");
@@ -123,11 +120,11 @@ public class WebController {
         return mav;
     }
 
-    @RequestMapping(value = "/profile", method = { RequestMethod.POST})
-    public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
+    @RequestMapping(value = "/profile", method = { RequestMethod.POST}, params = "editImage")
+    public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, @ModelAttribute("confirmationModal") final ConfirmationForm confirmationForm, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {
             LOGGER.warn("Profile image form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return profilePage(form, auth, "subscribed", "0");
+            return profilePage(form, confirmationForm, auth, "subscribed", "0");
         }
         if (auth == null || auth.getPrincipal() == null) {
             throw new UnauthorizedUserException();
@@ -135,6 +132,20 @@ public class WebController {
 
         userService.updateImage(auth.getName(), form.getFile().getBytes());
         return new ModelAndView("redirect:/profile");
+    }
+
+    @RequestMapping(value = "/profile", method = { RequestMethod.POST}, params = "deleteAccount")
+    public ModelAndView deleteUser(@ModelAttribute("profileImageForm") final ProfileImageForm imageForm, @Valid @ModelAttribute("confirmationModal") final ConfirmationForm form, BindingResult errors, Authentication auth) {
+        if(errors.hasErrors()) {
+            LOGGER.warn("Confirmation form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
+            return profilePage(imageForm, form, auth, "subscribed", "0");
+        }
+        if (auth == null || auth.getPrincipal() == null) {
+            throw new UnauthorizedUserException();
+        }
+        // TODO: Verify password
+        userService.deleteUser(auth.getName());
+        return new ModelAndView("redirect:/logout");
     }
 
     @ResponseBody
