@@ -42,7 +42,7 @@
             <div>
                 <p><c:out value="${argument.likesCount}"/></p>
             </div>
-            <span class="new badge blue-grey darken-2 badge-margin" data-badge-caption="${argument.creationDate}"></span>
+            <span class="new badge blue-grey darken-2 badge-margin" data-badge-caption="${argument.formattedDate}"></span>
             <span class="new badge blue-grey darken-2 badge-margin" data-badge-caption="<spring:message code='status.${argument.status.name}'/>"></span>
         </div>
     </div>
