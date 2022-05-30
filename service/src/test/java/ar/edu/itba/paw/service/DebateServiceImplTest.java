@@ -6,7 +6,6 @@ import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.*;
 import ar.edu.itba.paw.model.exceptions.*;
