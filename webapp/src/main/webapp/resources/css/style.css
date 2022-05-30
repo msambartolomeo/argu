@@ -415,6 +415,13 @@ div.category-list div.collection.with-header {
     align-items: flex-start;
 }
 
+.debate-buttons-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
 .comment-list {
     background: var(--white);
     border-radius: 10px;

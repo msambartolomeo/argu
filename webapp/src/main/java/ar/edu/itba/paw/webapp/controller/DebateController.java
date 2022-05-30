@@ -209,4 +209,15 @@ public class DebateController {
         likeService.unlikeArgument(Long.parseLong(argumentId), auth.getName());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
+
+    @RequestMapping(value = "/{debateId}/delete", method = {RequestMethod.POST, RequestMethod.DELETE})
+    public ModelAndView deleteDebate(@PathVariable("debateId") final String debateId, Authentication auth) {
+        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (auth == null || auth.getPrincipal() == null) {
+            throw new UnauthorizedUserException();
+        }
+
+        debateService.deleteDebate(Long.parseLong(debateId), auth.getName());
+        return new ModelAndView("redirect:/debates");
+    }
 }

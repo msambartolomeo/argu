@@ -38,7 +38,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public List<Debate> getSubscribedDebatesByUser(User user, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) LIMIT 5 OFFSET :offset");
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) AND status <> 2 LIMIT 5 OFFSET :offset");
         idQuery.setParameter("userid", user.getUserId());
         idQuery.setParameter("offset", page * 5);
         @SuppressWarnings("unchecked")
@@ -147,11 +147,12 @@ public class DebateJpaDao implements DebateDao {
             queryString.append(" AND category = :category");
             params.put("category", category.ordinal());
         }
-        if (status != null) {
+        queryString.append(" AND status <> 2");
+        if (status != null && status != DebateStatus.DELETED) {
             params.put("status", status.ordinal());
             if (status == DebateStatus.OPEN) {
-                queryString.append(" AND (status = :status OR status = :status)");
-                params.put("status", DebateStatus.CLOSING.ordinal());
+                queryString.append(" AND (status = :status OR status = :statusAux)");
+                params.put("statusAux", DebateStatus.CLOSING.ordinal());
             } else {
                 queryString.append(" AND status = :status");
             }
@@ -168,7 +169,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public List<Debate> getMyDebates(User user, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE creatorid = :userid OR opponentid = :userid ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE (creatorid = :userid OR opponentid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
         idQuery.setParameter("userid", user.getUserId());
         idQuery.setParameter("offset", page * 5);
         @SuppressWarnings("unchecked")
@@ -186,7 +187,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public int getMyDebatesCount(long userid) {
-        Query query = em.createNativeQuery("SELECT COUNT(*) FROM debates WHERE creatorid = :userid OR opponentid = :userid");
+        Query query = em.createNativeQuery("SELECT COUNT(*) FROM debates WHERE (creatorid = :userid OR opponentid = :userid) AND status <> 2");
         query.setParameter("userid", userid);
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();

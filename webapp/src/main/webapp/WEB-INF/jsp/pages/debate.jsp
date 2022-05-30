@@ -19,15 +19,42 @@
             <div class="debate-text-holder">
                 <div class="debate-info-holder">
                     <h4 class="debate-title word-wrap"><c:out value="${debate.name}"/></h4>
-                    <c:if test="${debate.status.name == 'open' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
-                        <c:url var="closeDebatePath" value="/debates/${debate.debateId}/close"/>
-                        <form:form method="post" action="${closeDebatePath}">
-                            <button type="submit" class="btn waves-effect">
-                                <spring:message code="pages.debate-close"/>
-                                <i class="large material-icons right">close</i>
-                            </button>
-                        </form:form>
-                    </c:if>
+                    <div class="right debate-buttons-display">
+                        <c:if test="${debate.status.name == 'open' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
+                            <c:url var="closeDebatePath" value="/debates/${debate.debateId}/close"/>
+                            <form:form method="post" action="${closeDebatePath}">
+                                <button type="submit" class="btn waves-effect">
+                                    <spring:message code="pages.debate-close"/>
+                                    <i class="large material-icons right">close</i>
+                                </button>
+                            </form:form>
+                        </c:if>
+                        <c:if test="${debate.status.name != 'deleted' && pageContext.request.userPrincipal.name == debate.creator.username}">
+                            <!-- Modal Trigger -->
+                            <a class="waves-effect waves-light btn modal-trigger red" href="#delete-debate">
+                                <i class="large material-icons">delete</i>
+                            </a>
+                            <!-- Modal Structure -->
+                            <div id="delete-debate" class="modal">
+                                <c:url var="deleteDebatePath" value="/debates/${debate.debateId}/delete"/>
+                                <form:form method="post" action="${deleteDebatePath}">
+                                    <div class="modal-content">
+                                        <h4><spring:message code="pages.debate.delete-confirmation"/></h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="" class="modal-close waves-effect btn-flat">
+                                            <spring:message code="pages.debate.cancel"/>
+                                        </a>
+
+                                            <button type="submit" class="modal-close waves-effect btn-flat">
+                                                <spring:message code="pages.debate.yes"/>
+                                            </button>
+                                    </div>
+                                </form:form>
+                            </div>
+                        </c:if>
+                    </div>
+
                 </div>
                 <hr class="dashed">
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
@@ -217,5 +244,11 @@
 
 </div>
 <%@include file="../components/JS_imports.jsp" %>
+<script>
+    const elem = document.getElementById('delete-debate');
+    const instance = M.Modal.init(elem);
+    if (${not empty imageError})
+        instance.open();
+</script>
 </body>
 </html>

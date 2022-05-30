@@ -6,7 +6,6 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +35,9 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     public Optional<Debate> getDebateById(long debateId) {
-        return debateDao.getDebateById(debateId);
+        Optional<Debate> debate = debateDao.getDebateById(debateId);
+        if(debate.isPresent() && debate.get().getStatus() == DebateStatus.DELETED) return Optional.empty();
+        return debate;
     }
 
     @Transactional
@@ -100,6 +100,17 @@ public class DebateServiceImpl implements DebateService {
             throw new ForbiddenDebateException();
 
         debate.setStatus(DebateStatus.CLOSING);
+    }
+
+    @Transactional
+    @Override
+    public void deleteDebate(long id, String username) {
+        Debate debate = getDebateById(id).orElseThrow(DebateNotFoundException::new);
+
+        if (debate.getStatus() == DebateStatus.DELETED || !(username.equals(debate.getCreator().getUsername()) || username.equals(debate.getOpponent().getUsername())))
+            throw new ForbiddenDebateException();
+
+        debate.setStatus(DebateStatus.DELETED);
     }
 
 }
