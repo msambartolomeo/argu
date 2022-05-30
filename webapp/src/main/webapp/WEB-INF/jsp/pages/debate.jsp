@@ -247,11 +247,9 @@
 
 </div>
 <%@include file="../components/JS_imports.jsp" %>
-<script>
-    const elem = document.getElementById('delete-debate');
-    const instance = M.Modal.init(elem);
-    if (${not empty imageError})
-        instance.open();
-</script>
+<%--<script>--%>
+<%--    const elem = document.getElementById('delete-debate');--%>
+<%--    const instance = M.Modal.init(elem);--%>
+<%--</script>--%>
 </body>
 </html>
