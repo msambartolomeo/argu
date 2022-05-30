@@ -9,10 +9,17 @@
         <div class="debate-holder-separator">
             <div class="debate-text-holder">
                 <h5 class="debate-title word-wrap"><c:out value="${debate.name}"/></h5>
-                <c:if test="${debate.creator.username != null}">
-                    <c:set var="creator"><c:out value="${debate.creator.username}"/></c:set>
-                    <h6><b><spring:message code="components.debate-list-item.creator"/></b> ${creator}</h6>
-                </c:if>
+                <h6>
+                    <b><spring:message code="components.debate-list-item.creator"/></b>
+                    <c:choose>
+                        <c:when test="${debate.creator.username != null}">
+                            <c:out value="${debate.creator.username}" />
+                        </c:when>
+                        <c:otherwise>
+                            <i><spring:message code="deletedusername" /></i>
+                        </c:otherwise>
+                    </c:choose>
+                </h6>
             </div>
             <div class="debate-footer">
                 <div class="chip"><spring:message code="category.${debate.category.name}"/></div>
