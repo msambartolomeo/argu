@@ -1,10 +1,11 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.UserRole;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -27,6 +28,12 @@ public class User {
     private Image image;
     @Enumerated(EnumType.ORDINAL)
     private UserRole role;
+
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    private Set<Debate> createdDebates;
+
+    @OneToMany(mappedBy = "opponent", fetch = FetchType.LAZY)
+    private Set<Debate> opponentDebates;
 
     public User() {}
 
@@ -77,4 +84,16 @@ public class User {
         return this;
     }
 
+    public void removeUser() {
+        this.email = null;
+        this.username = null;
+        this.password = null;
+        this.role = UserRole.USER;
+        for (Debate debate : createdDebates) {
+            debate.setStatus(DebateStatus.CLOSED);
+        }
+        for (Debate debate : opponentDebates) {
+            debate.setStatus(DebateStatus.CLOSED);
+        }
+    }
 }
