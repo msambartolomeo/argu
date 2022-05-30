@@ -136,7 +136,7 @@ public class WebController {
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.POST}, params = "editImage")
-    public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, @ModelAttribute("confirmationModal") final ConfirmationForm confirmationForm, BindingResult errors, Authentication auth) throws IOException {
+    public ModelAndView editProfileImage(@ModelAttribute("confirmationModal") final ConfirmationForm confirmationForm, @Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {
             LOGGER.warn("Profile image form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return profilePage(form, confirmationForm, auth, "subscribed", "0");
