@@ -107,7 +107,7 @@ public class DebateServiceImpl implements DebateService {
     public void deleteDebate(long id, String username) {
         Debate debate = getDebateById(id).orElseThrow(DebateNotFoundException::new);
 
-        if (debate.getStatus() == DebateStatus.DELETED || !(username.equals(debate.getCreator().getUsername()) || username.equals(debate.getOpponent().getUsername())))
+        if (debate.getStatus() == DebateStatus.DELETED || !username.equals(debate.getCreator().getUsername()))
             throw new ForbiddenDebateException();
 
         debate.setStatus(DebateStatus.DELETED);
