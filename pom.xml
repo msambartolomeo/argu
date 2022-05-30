@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ar.edu.itba.paw</groupId>
   <artifactId>PAW-webapp</artifactId>
-  <version>3.0.0</version>
+  <version>4.0.0</version>
   <packaging>pom</packaging>
     
   <properties>
@@ -26,6 +26,8 @@
     <commons-fileupload.version>1.4</commons-fileupload.version>
     <maven-war-plugin.version>2.6</maven-war-plugin.version>
     <junit.version>4.11</junit.version>
+    <org.hibernate.version>5.1.0.Final</org.hibernate.version>
+    <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
   </properties>
 
   <modules>
@@ -100,6 +102,12 @@
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-validator</artifactId>
         <version>${org.hibernate.validator}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <!-- Dependencies to send mails -->
       <dependency>
@@ -167,6 +175,26 @@
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-taglibs</artifactId>
         <version>${spring-security.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-orm</artifactId>
+        <version>${org.springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${org.hibernate.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-entitymanager</artifactId>
+        <version>${org.hibernate.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate.javax.persistence</groupId>
+        <artifactId>hibernate-jpa-2.1-api</artifactId>
+        <version>${org.hibernate.jpa.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

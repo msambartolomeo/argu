@@ -28,7 +28,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
-    public void deleteImage(long id) {
-        imageDao.deleteImage(id);
+    public void deleteImage(Image image) {
+        imageDao.deleteImage(image);
     }
 }

@@ -1,42 +1,29 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
-import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.enums.UserRole;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {
 
-    private final static long USER_ID = 1;
     private final static String USER_USERNAME = "username";
     private final static String USER_PASSWORD = "password";
     private final static String USER_EMAIL = "test@test.com";
-    private final static String MODERATOR_REASON = "reason";
-    private final static Date USER_DATE = Date.valueOf(LocalDate.parse("2022-01-01"));
-    private final static UserRole USER_ROLE = UserRole.USER;
     private final static byte[] IMAGE_DATA = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-    private final static long IMAGE_ID = 1;
-
-    private final static long DEBATE_ID = 1;
 
     @InjectMocks
     private UserServiceImpl userService = new UserServiceImpl();
@@ -45,16 +32,13 @@ public class UserServiceImplTest {
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
-    private EmailService emailService;
-    @Mock
     private ImageService imageService;
 
     @Test
     public void testCreateUserNew() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        Mockito.when(userDao.create(Mockito.anyString(),Mockito.anyString(),Mockito.anyString())).thenReturn(user);
-        Mockito.when(userDao.getUserByEmail(Mockito.anyString())).thenReturn(Optional.empty());
-        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn(USER_PASSWORD);
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        when(userDao.create(anyString(), anyString(), anyString())).thenReturn(user);
+        when(passwordEncoder.encode(anyString())).thenReturn(USER_PASSWORD);
 
         User u = userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
 
@@ -66,10 +50,9 @@ public class UserServiceImplTest {
 
     @Test
     public void testCreateUserUpdateLegacy() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        Mockito.when(userDao.updateLegacyUser(Mockito.anyLong(),Mockito.anyString(),Mockito.anyString(),Mockito.anyString())).thenReturn(user);
-        Mockito.when(userDao.getUserByEmail(Mockito.anyString())).thenReturn(Optional.of(user));
-        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn(USER_PASSWORD);
+        User user = new User(USER_EMAIL, null, null);
+        when(userDao.getUserByEmail(anyString())).thenReturn(Optional.of(user));
+        when(passwordEncoder.encode(anyString())).thenReturn(USER_PASSWORD);
 
         User u = userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
 
@@ -81,8 +64,8 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUserByUsername() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
         Optional<User> u = userService.getUserByUsername(USER_USERNAME);
 
@@ -95,7 +78,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUserByUsernameEmpty() {
-        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.empty());
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.empty());
 
         Optional<User> u = userService.getUserByUsername(USER_USERNAME);
 
@@ -104,8 +87,8 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUserByEmail() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        Mockito.when(userDao.getUserByEmail(Mockito.anyString())).thenReturn(Optional.of(user));
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        when(userDao.getUserByEmail(anyString())).thenReturn(Optional.of(user));
 
         Optional<User> u = userService.getUserByEmail(USER_EMAIL);
 
@@ -118,69 +101,40 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUserByEmailEmpty() {
-        Mockito.when(userDao.getUserByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+        when(userDao.getUserByEmail(anyString())).thenReturn(Optional.empty());
 
         Optional<User> u = userService.getUserByEmail(USER_EMAIL);
 
         assertFalse(u.isPresent());
     }
+
     @Test
     public void testUpdateImage() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, IMAGE_ID, USER_ROLE);
-        Image image = new Image(IMAGE_ID, IMAGE_DATA);
-        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
-        Mockito.when(imageService.createImage(Mockito.any())).thenReturn(image);
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        user.updateImage(IMAGE_DATA);
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
-        userService.updateImage(USER_USERNAME, IMAGE_DATA);
+        User u = userService.updateImage(USER_USERNAME, IMAGE_DATA);
 
-        Mockito.verify(userDao).updateImage(Mockito.anyLong(), Mockito.anyLong());
-        Mockito.verify(imageService).deleteImage(Mockito.anyLong());
+        assertEquals(IMAGE_DATA, u.getImage().getData());
+        verify(imageService).deleteImage(any(Image.class));
     }
 
     @Test
     public void testUpdateImageNoPreviousImage() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        Image image = new Image(IMAGE_ID, IMAGE_DATA);
-        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
-        Mockito.when(imageService.createImage(Mockito.any())).thenReturn(image);
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
-        userService.updateImage(USER_USERNAME, IMAGE_DATA);
+        User u = userService.updateImage(USER_USERNAME, IMAGE_DATA);
 
-        Mockito.verify(userDao).updateImage(Mockito.anyLong(), Mockito.anyLong());
-        Mockito.verify(imageService, Mockito.times(0)).deleteImage(Mockito.anyLong());
+        assertEquals(IMAGE_DATA, u.getImage().getData());
+        verify(imageService, times(0)).deleteImage(any(Image.class));
     }
 
     @Test(expected = UserNotFoundException.class)
     public void testUpdateImageNoValidUser() {
-        Mockito.when(userDao.getUserByUsername(Mockito.anyString())).thenReturn(Optional.empty());
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.empty());
+
         userService.updateImage(USER_USERNAME, IMAGE_DATA);
-    }
-
-    @Test
-    public void testGetSubscribedUsersByDebate() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        List<User> users = new ArrayList<>();
-        users.add(user);
-
-        Mockito.when(userDao.getSubscribedUsersByDebate(Mockito.anyLong())).thenReturn(users);
-
-        List<User> u = userService.getSubscribedUsersByDebate(DEBATE_ID);
-
-        assertFalse(u.isEmpty());
-        assertEquals(user.getUserId(), u.get(0).getUserId());
-        assertEquals(user.getUsername(), u.get(0).getUsername());
-        assertEquals(user.getPassword(), u.get(0).getPassword());
-        assertEquals(user.getEmail(), u.get(0).getEmail());
-        assertEquals(user.getRole(), u.get(0).getRole());
-        assertEquals(user.getCreatedDate(), u.get(0).getCreatedDate());
-    }
-
-    @Test
-    public void testGetSubscribedUsersByDebateEmpty() {
-        Mockito.when(userDao.getSubscribedUsersByDebate(Mockito.anyLong())).thenReturn(new ArrayList<>());
-
-        List<User> u = userService.getSubscribedUsersByDebate(DEBATE_ID);
-
-        assertTrue(u.isEmpty());
     }
 }

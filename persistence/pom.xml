@@ -4,11 +4,11 @@
   <parent>
     <artifactId>PAW-webapp</artifactId>
     <groupId>ar.edu.itba.paw</groupId>
-    <version>3.0.0</version>
+    <version>4.0.0</version>
   </parent>
 
   <artifactId>persistence</artifactId>
-  <version>3.0.0</version>
+  <version>4.0.0</version>
 
   <dependencies>
     <dependency>
@@ -35,6 +35,18 @@
     <dependency>
       <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
     </dependency>
   </dependencies>
 

@@ -9,5 +9,5 @@ public interface ImageService {
 
     Image createImage(byte[] data);
 
-    void deleteImage(long id);
+    void deleteImage(Image image);
 }

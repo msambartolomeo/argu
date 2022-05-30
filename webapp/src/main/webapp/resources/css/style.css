@@ -41,6 +41,10 @@ a.card {
     display: block;
 }
 
+.no-uppercase {
+    text-transform: unset !important;
+}
+
 .btn, .btn-large{
     display: flex;
     justify-content: center;
@@ -408,11 +412,24 @@ div.category-list div.collection.with-header {
     padding-top: 1%;
 }
 
+.username-container {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
 .debate-content {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
+}
+
+.debate-buttons-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .comment-list {
@@ -434,6 +451,24 @@ div.category-list div.collection.with-header {
 .chip{
     background: var(--primary-color);
     color: white;
+}
+
+.chip-delete{
+    background: red;
+    color: white;
+}
+
+.chip-delete:hover{
+    background: darkred;
+}
+
+.non-clickable-chip{
+    pointer-events: none;
+}
+
+.non-clickable-chip:hover{
+    background: var(--primary-color);
+    cursor: none;
 }
 
 .vote-buttons {
@@ -490,6 +525,18 @@ div.category-list div.collection.with-header {
 * {
     margin: 0;
     padding: 0;
+}
+
+.image-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.x {
+    position: absolute;
+    visibility: hidden;
 }
 
 .speech-bubble {
@@ -614,6 +661,11 @@ div.category-list div.collection.with-header {
     width: 30%;
     height: fit-content;
     margin-right: 10%;
+}
+
+.delete-account-btn {
+    margin-top: 1%;
+    margin-bottom: 10%;
 }
 
 .profile-image {

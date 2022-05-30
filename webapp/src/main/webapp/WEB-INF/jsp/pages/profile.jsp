@@ -13,8 +13,8 @@
             <div class="card profile-data">
                 <div class="profile-image">
                     <c:choose>
-                        <c:when test="${user.imageId != 0}">
-                            <img src="<c:url value="/images/${user.imageId}"/>"  alt="<spring:message
+                        <c:when test="${user.image.id != null}">
+                            <img src="<c:url value="/images/${user.image.id}"/>"  alt="<spring:message
                         code="pages.profile.picture"/>"/>
                         </c:when>
                         <c:otherwise>
@@ -41,12 +41,20 @@
                     </h6>
                 </div>
                 <h6>
-                    <spring:message code="pages.profile.created-in"/> <c:out value="${user.createdDate}"/>
+                    <spring:message code="pages.profile.created-in"/> <c:out value="${user.formattedDate}"/>
                 </h6>
                 <a class="waves-effect waves-light btn logout-btn" href="<c:url value="/logout"/>">
                     <i class="material-icons left">logout</i>
                     <spring:message code="pages.profile.logout"/>
                 </a>
+                <!-- Modal Trigger -->
+                <a class="waves-effect waves-light btn modal-trigger delete-account-btn" href="#delete-account">
+                    <spring:message code="delete.user"/>
+                </a>
+                <!-- Modal Structure -->
+                <div id="delete-account" class="modal">
+                    <%@include file="../components/confirmation-modal.jsp"%>
+                </div>
             </div>
             <div class="debates-column">
                 <div class="section">
@@ -58,7 +66,7 @@
                     </a>
                 </div>
                 <div class="card user-debates">
-                    <h3>
+                    <h3 class="center">
                         <c:choose>
                             <c:when test="${param.list == null || param.list == 'subscribed'}">
                                 <spring:message code="pages.profile.debates-subscribed"/>
@@ -78,9 +86,18 @@
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <h5 class="center">
-                                <spring:message code="pages.profile.no-debates-subscribed"/>
-                            </h5>
+                            <c:choose>
+                                <c:when test="${param.list == null || param.list == 'subscribed'}">
+                                    <h5 class="center">
+                                        <spring:message code="pages.profile.no-debates-subscribed"/>
+                                    </h5>
+                                </c:when>
+                                <c:otherwise>
+                                    <h5 class="center">
+                                        <spring:message code="pages.profile.no-debates-participated"/>
+                                    </h5>
+                                </c:otherwise>
+                            </c:choose>
                         </c:otherwise>
                     </c:choose>
 
@@ -92,8 +109,12 @@
         <script>
             const elem = document.getElementById('edit-profile-image');
             const instance = M.Modal.init(elem);
+            const elem2 = document.getElementById('delete-account');
+            const instance2 = M.Modal.init(elem2);
             if (${not empty imageError})
                 instance.open();
+            if (${not empty deleteError})
+                instance2.open();
         </script>
     </body>
 </html>

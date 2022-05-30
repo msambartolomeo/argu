@@ -4,10 +4,21 @@
   <parent>
     <artifactId>PAW-webapp</artifactId>
     <groupId>ar.edu.itba.paw</groupId>
-    <version>3.0.0</version>
+    <version>4.0.0</version>
   </parent>
 
   <artifactId>model</artifactId>
-  <version>3.0.0</version>
+  <version>4.0.0</version>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.1-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+  </dependencies>
 
 </project>

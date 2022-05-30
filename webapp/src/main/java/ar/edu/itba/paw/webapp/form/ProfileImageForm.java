@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.validators.Image;
+import ar.edu.itba.paw.webapp.validators.ImageExistance;
 import ar.edu.itba.paw.webapp.validators.ImageSize;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +12,7 @@ public class ProfileImageForm {
         return file;
     }
 
+    @ImageExistance
     @Image
     @ImageSize
     private MultipartFile file;

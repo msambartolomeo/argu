@@ -1,9 +1,10 @@
 package ar.edu.itba.paw.model.exceptions;
 
-public class PostNotFoundException extends Exception404 {
-    public PostNotFoundException() {
-        super("Requested post not found");
+public class ForbiddenArgumentException extends Exception403 {
+    public ForbiddenArgumentException() {
+        super("Forbidden argument");
     }
+
     @Override
     public String getMessageCode() {
         return "error.post.not.found";

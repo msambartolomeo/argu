@@ -16,7 +16,7 @@
         </h4>
           <div class="file-field input-field">
             <div class="btn">
-              <form:label path="file"><spring:message code="pages.profile.upload"/></form:label>
+              <form:label class="white-text" path="file"><spring:message code="pages.profile.upload"/></form:label>
               <form:input path="file" type="file"/>
             </div>
             <div class="file-path-wrapper">
@@ -30,7 +30,7 @@
           <spring:message code="pages.profile.close"/>
         </a>
         <button class="modal-close waves-effect btn-flat" type="submit" form="photoForm"
-                id="photoForm" onclick="this.form.submit();" name="action">
+                id="photoForm" onclick="this.form.submit();" name="editImage">
           <spring:message code="pages.profile.confirm"/>
         </button>
       </div>

@@ -9,24 +9,39 @@
         <div class="debate-holder-separator">
             <div class="debate-text-holder">
                 <h5 class="debate-title word-wrap"><c:out value="${debate.name}"/></h5>
-                <c:if test="${debate.creatorUsername != null}">
-                    <c:set var="creator"><c:out value="${debate.creatorUsername}"/></c:set>
-                    <h6><b><spring:message code="components.debate-list-item.creator"/></b> ${creator}</h6>
-                </c:if>
+                <h6>
+                    <b><spring:message code="components.debate-list-item.creator"/></b>
+                    <c:choose>
+                        <c:when test="${debate.creator.username != null}">
+                            <c:out value="${debate.creator.username}" />
+                        </c:when>
+                        <c:otherwise>
+                            <i><spring:message code="username.deleted" /></i>
+                        </c:otherwise>
+                    </c:choose>
+                </h6>
             </div>
             <div class="debate-footer">
-                <div class="chip"><spring:message code="category.${debate.debateCategory.name}"/></div>
-                <div class="chip"><spring:message code="components.debate-created-on"/> ${debate.createdDate}</div>
-                <div class="chip"><spring:message code="status.${debate.debateStatus.name}"/></div>
-                <div class="chip"><spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsers}"/></div>
+                <div class="chip"><spring:message code="category.${debate.category.name}"/></div>
+                <div class="chip"><spring:message code="components.debate-created-on"/> ${debate.formattedDate}</div>
+                <div class="chip"><spring:message code="status.${debate.status.name}"/></div>
+                <div class="chip"><spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsersCount}"/></div>
             </div>
         </div>
-        <c:if test="${debate.imageId != 0}">
-            <div class="image-width">
-                <img src="<c:url value="/images/${debate.imageId}"/>" class="limit-img-sm responsive-img" alt="<spring:message
-                                    code="pages.debate-picture"/>"/>
-            </div>
-        </c:if>
+        <c:choose>
+            <c:when test="${debate.image != null}">
+                <div class="image-width">
+                    <img src="<c:url value="/images/${debate.image.id}"/>" class="limit-img-sm responsive-img" alt="<spring:message
+                                        code="pages.debate-picture"/>"/>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="image-width">
+                    <img src="<c:url value="/resources/images/debate_stock.png"/>" class="limit-img-sm responsive-img" alt="<spring:message
+                                        code="pages.debate-picture"/>"/>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 </a>
 </body>

@@ -6,23 +6,26 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
-import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DebateServiceImpl implements DebateService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DebateServiceImpl.class);
     private static final int PAGE_SIZE = 5;
     @Autowired
     private DebateDao debateDao;
@@ -33,127 +36,112 @@ public class DebateServiceImpl implements DebateService {
     @Autowired
     private EmailService emailService;
 
+    @Override
+    public Optional<Debate> getDebateById(long debateId) {
+        Optional<Debate> debate = debateDao.getDebateById(debateId);
+        if(debate.isPresent() && debate.get().getStatus() == DebateStatus.DELETED) return Optional.empty();
+        return debate;
+    }
+
     @Transactional
     @Override
     public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
-        User creator = userService.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
-        User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
+        User creator = userService.getUserByUsername(creatorUsername).orElseThrow(() -> {
+            LOGGER.error("Cannot create new Debate with name {} because creator User {} does not exist", name, creatorUsername);
+            return new UserNotFoundException();
+        });
+        User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(() -> {
+            LOGGER.error("Cannot create new Debate with name {} because opponent User {} does not exist", name, opponentUsername);
+            return new UserNotFoundException();
+        });
         Debate createdDebate;
         if (image.length == 0)
-            createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), null, category);
+            createdDebate = debateDao.create(name, description, creator, opponent, null, category);
         else
-            createdDebate = debateDao.create(name, description, creator.getUserId(), opponent.getUserId(), imageService.createImage(image).getId(), category);
+            createdDebate = debateDao.create(name, description, creator, opponent, imageService.createImage(image), category);
         emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate.getDebateId(), createdDebate.getName());
         return createdDebate;
     }
 
     @Override
-    public List<PublicDebate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
+    public List<Debate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         if (page < 0)
-            return new ArrayList<>();
-        return debateDao.getPublicDebatesDiscovery(page, PAGE_SIZE, search, category, order, status, date);
+            return Collections.emptyList();
+        return debateDao.getDebatesDiscovery(page, PAGE_SIZE, search, category, order, status, date);
     }
 
     @Override
     public int getPages(String search, DebateCategory category, DebateStatus status, LocalDate date) {
-        return (int) Math.ceil(debateDao.getPublicDebatesCount(search, category, status, date) / (double) PAGE_SIZE);
+        return (int) Math.ceil(debateDao.getDebatesCount(search, category, status, date) / (double) PAGE_SIZE);
     }
 
     @Override
-    public List<PublicDebate> getMostSubscribed() {
-        return debateDao.getPublicDebatesDiscovery(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
+    public List<Debate> getMostSubscribed() {
+        return debateDao.getDebatesDiscovery(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
     }
 
     @Override
-    public Optional<PublicDebate> getPublicDebateById(long id) {
-        return debateDao.getPublicDebateById(id);
-    }
+    public List<Debate> getProfileDebates(String list, long userId, int page) {
+        if (list.equals("mydebates"))
+            return getUserDebates(userId, page);
 
-    @Transactional
-    @Override
-    public void subscribeToDebate(String username, long debateid) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
-        if(debateDao.isUserSubscribed(user.getUserId(), debateid))
-            throw new UserAlreadySubscribedException();
-        debateDao.subscribeToDebate(user.getUserId(), debateid);
-    }
-    @Transactional
-    @Override
-    public void unsubscribeToDebate(String username, long debateid) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        debateDao.unsubscribeToDebate(user.getUserId(), debateid);
-    }
-    @Override
-    public boolean isUserSubscribed(String username, long debateid) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        return debateDao.isUserSubscribed(user.getUserId(), debateid);
-    }
-
-    @Override
-    public List<PublicDebate> getProfileDebates(String list, long userid, int page) {
         if (page < 0) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
-        if (list.equals("subscribed"))
-            return debateDao.getSubscribedDebatesByUserId(userid, page);
-        else return debateDao.getMyDebates(userid, page);
+        return debateDao.getSubscribedDebatesByUser(userId, page);
     }
 
     @Override
-    public int getProfileDebatesPageCount(String list, long userid) {
-        int count;
-        if (list.equals("subscribed"))
-            count = debateDao.getSubscribedDebatesByUserIdCount(userid);
-        else count = debateDao.getMyDebatesCount(userid);
-        return (int) Math.ceil(count / (double) PAGE_SIZE);
-    }
-
-    @Transactional
-    @Override
-    public void addVote(long debateId, String username, DebateVote vote) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        getPublicDebateById(debateId).orElseThrow(DebateNotFoundException::new);
-        if (debateDao.hasUserVoted(debateId, user.getUserId()))
-            throw new UserAlreadyVotedException();
-        debateDao.addVote(debateId, user.getUserId(), vote);
-    }
-
-    @Transactional
-    @Override
-    public void removeVote(long debateId, String username) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        debateDao.removeVote(debateId, user.getUserId());
+    public List<Debate> getUserDebates(long userId, int page) {
+        if (page < 0) {
+            return Collections.emptyList();
+        }
+        return debateDao.getUserDebates(userId, page);
     }
 
     @Override
-    public String getUserVote(long debateid, String username) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        PublicDebate debate = debateDao.getPublicDebateById(debateid).orElseThrow(DebateNotFoundException::new);
-        if(!debateDao.hasUserVoted(debateid, user.getUserId()))
-            return null;
-        DebateVote debateVote = debateDao.getUserVote(debateid, user.getUserId());
+    public int getProfileDebatesPageCount(String list, long userId) {
+        if (list.equals("mydebates"))
+            return getUserDebatesPageCount(userId);
 
-        if(debateVote == DebateVote.FOR) {
-            return debate.getCreatorUsername();
-        } else
-            return debate.getOpponentUsername();
+        return (int) Math.ceil(debateDao.getSubscribedDebatesByUserCount(userId) / (double) PAGE_SIZE);
+    }
+
+    @Override
+    public int getUserDebatesPageCount(long userId) {
+        return (int) Math.ceil(debateDao.getUserDebatesCount(userId) / (double) PAGE_SIZE);
     }
 
     @Transactional
     @Override
     public void startConclusion(long id, String username) {
-        PublicDebate debate = getPublicDebateById(id).orElseThrow(DebateNotFoundException::new);
+        Debate debate = getDebateById(id).orElseThrow(() -> {
+            LOGGER.error("Cannot start conclusion of Debate with id {} because it does not exist", id);
+            return new DebateNotFoundException();
+        });
 
-        if (debate.getDebateStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreatorUsername()) || username.equals(debate.getOpponentUsername())))
+        if (debate.getStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreator().getUsername()) || username.equals(debate.getOpponent().getUsername()))) {
+            LOGGER.error("Cannot start conclusion of Debate with id {} because it is not open or the user {} is not the creator or the opponent", id, username);
             throw new ForbiddenDebateException();
+        }
 
-        debateDao.changeDebateStatus(id, DebateStatus.CLOSING);
+        debate.setStatus(DebateStatus.CLOSING);
     }
 
     @Transactional
     @Override
-    public void closeDebate(long id) {
-        debateDao.changeDebateStatus(id, DebateStatus.CLOSED);
+    public void deleteDebate(long id, String username) {
+        Debate debate = getDebateById(id).orElseThrow(() -> {
+            LOGGER.error("Cannot delete Debate {} because it does not exist", id);
+            return new DebateNotFoundException();
+        });
+
+        if (debate.getStatus() == DebateStatus.DELETED || !username.equals(debate.getCreator().getUsername())) {
+            LOGGER.error("Cannot delete Debate {} because it is already deleted or the user {} is not the creator", id, username);
+            throw new ForbiddenDebateException();
+        }
+
+        debate.setStatus(DebateStatus.DELETED);
     }
+
 }
