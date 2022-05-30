@@ -25,3 +25,15 @@ function dateFilter(date) {
     url.searchParams.append('date', dateString);
     window.location.href = url.href;
 }
+
+function resetFileValue(fileId, fileNameId) {
+    document.getElementById(fileId).value = "";
+    const fileName = document.getElementById(fileNameId);
+    fileName.value = "";
+    fileName.classList.remove("valid");
+    document.getElementById("x").classList.add("x");
+}
+
+function updateVisibilityOfX() {
+    document.getElementById("x").classList.remove("x");
+}

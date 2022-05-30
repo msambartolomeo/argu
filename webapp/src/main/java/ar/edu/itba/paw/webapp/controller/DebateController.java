@@ -130,7 +130,7 @@ public class DebateController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/{debateId}/argument", method = { RequestMethod.POST })
+    @RequestMapping(value = "/{debateId}", method = { RequestMethod.POST })
     public ModelAndView createArgument(@PathVariable("debateId") final String debateId,
                                    @Valid @ModelAttribute("argumentForm") final ArgumentForm form, BindingResult errors, Authentication auth) throws IOException {
 
@@ -139,12 +139,12 @@ public class DebateController {
             return debate(debateId, form, "0", auth);
         }
         if (!debateId.matches("\\d+")) {
-            LOGGER.error("/debates/{debateId}/argument : DebateId {} not a valid id number", debateId);
+            LOGGER.error("/debates/{debateId} : DebateId {} not a valid id number", debateId);
             throw new DebateNotFoundException();
         }
 
         if (auth == null || auth.getPrincipal() == null) {
-            LOGGER.error("/debates/{debateId}/argument : User not logged in");
+            LOGGER.error("/debates/{debateId} : User not logged in");
             throw new UnauthorizedUserException();
         }
 

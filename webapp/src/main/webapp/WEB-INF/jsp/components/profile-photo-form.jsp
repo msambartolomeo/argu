@@ -16,7 +16,7 @@
         </h4>
           <div class="file-field input-field">
             <div class="btn">
-              <form:label path="file"><spring:message code="pages.profile.upload"/></form:label>
+              <form:label class="white-text" path="file"><spring:message code="pages.profile.upload"/></form:label>
               <form:input path="file" type="file"/>
             </div>
             <div class="file-path-wrapper">

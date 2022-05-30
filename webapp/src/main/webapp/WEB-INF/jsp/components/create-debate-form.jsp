@@ -53,16 +53,19 @@
 
                 <table class="no-borders">
                     <tr>
-                        <td><spring:message code="components.create-debate-image"/></td>
+                        <c:set var="imageErrors"><form:errors path="image"/></c:set>
+                        <td>
+                            <spring:message code="components.create-debate-image"/>
+                            <a id="x" class="material-icons ${empty imageErrors? 'x' : ''}" onclick="resetFileValue('image','imageName')">close</a>
+                        </td>
                         <td>
                             <div class="file-field input-field">
                                 <div class="btn">
-                                    <form:label path="image" for="image"><spring:message code="components.user-image-button"/></form:label>
+                                    <form:label class="white-text" path="image" for="image"><spring:message code="components.user-image-button"/></form:label>
                                     <form:input id="image" path="image" type="file"/>
                                 </div>
                                 <div class="file-path-wrapper">
-                                    <c:set var="imageErrors"><form:errors path="image"/></c:set>
-                                    <form:input path="imageName" class="file-path validate ${not empty imageErrors ? 'invalid' : ''}" type="text"/>
+                                    <form:input path="imageName" class="file-path validate ${not empty imageErrors ? 'invalid' : ''}" type="text" onchange="updateVisibilityOfX()"/>
                                 </div>
                                 <form:errors path="image" cssClass="helper-text error"/>
                             </div>
