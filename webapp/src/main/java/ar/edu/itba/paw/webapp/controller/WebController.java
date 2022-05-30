@@ -6,10 +6,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.exceptions.*;
-import ar.edu.itba.paw.webapp.form.CreateDebateForm;
-import ar.edu.itba.paw.webapp.form.ModeratorForm;
-import ar.edu.itba.paw.webapp.form.ProfileImageForm;
-import ar.edu.itba.paw.webapp.form.RegisterForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,6 +132,20 @@ public class WebController {
 
         userService.updateImage(auth.getName(), form.getFile().getBytes());
         return new ModelAndView("redirect:/profile");
+    }
+
+    @RequestMapping(value = "/profile/delete", method = { RequestMethod.POST})
+    public ModelAndView deleteUser(@Valid @ModelAttribute("confirmationModal") final ConfirmationForm form, BindingResult errors, Authentication auth) {
+        if(errors.hasErrors()) {
+            LOGGER.warn("Confirmation form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
+            return deleteUser(form, errors, auth);
+        }
+        if (auth == null || auth.getPrincipal() == null) {
+            throw new UnauthorizedUserException();
+        }
+        // TODO: Verify password
+        //userService.deleteUser(auth.getName());
+        return new ModelAndView("redirect:/login");
     }
 
     @ResponseBody
