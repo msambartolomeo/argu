@@ -20,4 +20,5 @@ public interface DebateService {
     int getProfileDebatesPageCount(String list, long userId);
     int getUserDebatesPageCount(long userId);
     void startConclusion(long id, String username);
+    void deleteDebate(long id, String username);
 }

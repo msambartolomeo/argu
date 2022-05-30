@@ -19,15 +19,45 @@
             <div class="debate-text-holder">
                 <div class="debate-info-holder">
                     <h4 class="debate-title word-wrap"><c:out value="${debate.name}"/></h4>
-                    <c:if test="${debate.status.name == 'open' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
-                        <c:url var="closeDebatePath" value="/debates/${debate.debateId}/close"/>
-                        <form:form method="post" action="${closeDebatePath}">
-                            <button type="submit" class="btn waves-effect">
-                                <spring:message code="pages.debate-close"/>
-                                <i class="large material-icons right">close</i>
-                            </button>
-                        </form:form>
-                    </c:if>
+                    <div class="right debate-buttons-display">
+                        <div class="col">
+                        <c:if test="${debate.status.name == 'open' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
+                            <c:url var="closeDebatePath" value="/debates/${debate.debateId}/close"/>
+                            <form:form method="post" action="${closeDebatePath}">
+                                <button type="submit" class="btn waves-effect chip">
+                                    <spring:message code="pages.debate-close"/>
+                                    <i class="material-icons right">close</i>
+                                </button>
+                            </form:form>
+                        </c:if>
+                        <c:if test="${debate.status.name != 'deleted' && pageContext.request.userPrincipal.name == debate.creator.username}">
+                            <!-- Modal Trigger -->
+                            <a class="btn waves-effect chip chip-delete modal-trigger" href="#delete-debate">
+                                <spring:message code="pages.debate-delete"/>
+                                <i class="material-icons right">delete</i>
+                            </a>
+                            <!-- Modal Structure -->
+                            <div id="delete-debate" class="modal">
+                                <c:url var="deleteDebatePath" value="/debates/${debate.debateId}/delete"/>
+                                <form:form method="post" action="${deleteDebatePath}">
+                                    <div class="modal-content">
+                                        <h4><spring:message code="pages.debate.delete-confirmation"/></h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="" class="modal-close waves-effect btn-flat">
+                                            <spring:message code="pages.debate.cancel"/>
+                                        </a>
+
+                                            <button type="submit" class="modal-close waves-effect btn-flat">
+                                                <spring:message code="pages.debate.yes"/>
+                                            </button>
+                                    </div>
+                                </form:form>
+                            </div>
+                        </c:if>
+                        </div>
+                    </div>
+
                 </div>
                 <hr class="dashed">
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
@@ -70,8 +100,8 @@
                 <a class="chip btn" href="<c:url value="/debates?category=${debate.category.name}"/>"><spring:message code="category.${debate.category.name}"/></a>
                 <button class="chip btn" onclick="dateFilter('${debate.formattedDate}')"><spring:message code="components.debate-created-on"/> ${debate.formattedDate}</button>
                 <a class="chip btn" href="<c:url value="/debates?status=${debate.status.name == 'closed' ? 'closed' : 'open'}"/>"><spring:message code="status.${debate.status.name}"/></a>
-                <a class="chip btn" href="<c:url value="/debates?order=subs_desc"/>"><spring:message code="page.debate.subscribed"
-                                                  arguments="${debate.subscribedUsersCount}"/></a>
+                <div class="chip non-clickable-chip btn" ><spring:message code="page.debate.subscribed"
+                                                  arguments="${debate.subscribedUsersCount}"/></div>
             </div>
         </div>
         <c:if test="${debate.image.id != null}">
@@ -214,5 +244,9 @@
 
 </div>
 <%@include file="../components/JS_imports.jsp" %>
+<%--<script>--%>
+<%--    const elem = document.getElementById('delete-debate');--%>
+<%--    const instance = M.Modal.init(elem);--%>
+<%--</script>--%>
 </body>
 </html>

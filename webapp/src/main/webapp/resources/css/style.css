@@ -425,6 +425,13 @@ div.category-list div.collection.with-header {
     align-items: flex-start;
 }
 
+.debate-buttons-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
 .comment-list {
     background: var(--white);
     border-radius: 10px;
@@ -444,6 +451,24 @@ div.category-list div.collection.with-header {
 .chip{
     background: var(--primary-color);
     color: white;
+}
+
+.chip-delete{
+    background: red;
+    color: white;
+}
+
+.chip-delete:hover{
+    background: darkred;
+}
+
+.non-clickable-chip{
+    pointer-events: none;
+}
+
+.non-clickable-chip:hover{
+    background: var(--primary-color);
+    cursor: none;
 }
 
 .vote-buttons {
