@@ -30,7 +30,7 @@
           <spring:message code="pages.profile.close"/>
         </a>
         <button class="modal-close waves-effect btn-flat" type="submit" form="photoForm"
-                id="photoForm" onclick="this.form.submit();" name="action">
+                id="photoForm" onclick="this.form.submit();" name="editImage">
           <spring:message code="pages.profile.confirm"/>
         </button>
       </div>

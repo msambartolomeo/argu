@@ -120,11 +120,11 @@ public class WebController {
         return mav;
     }
 
-    @RequestMapping(value = "/profile", method = { RequestMethod.POST})
-    public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
+    @RequestMapping(value = "/profile", method = { RequestMethod.POST}, params = "editImage")
+    public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, @ModelAttribute("confirmationModal") final ConfirmationForm confirmationForm, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {
             LOGGER.warn("Profile image form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return profilePage(form, new ConfirmationForm(), auth, "subscribed", "0");
+            return profilePage(form, confirmationForm, auth, "subscribed", "0");
         }
         if (auth == null || auth.getPrincipal() == null) {
             throw new UnauthorizedUserException();
@@ -134,11 +134,11 @@ public class WebController {
         return new ModelAndView("redirect:/profile");
     }
 
-    @RequestMapping(value = "/profile/delete", method = { RequestMethod.POST})
-    public ModelAndView deleteUser(@Valid @ModelAttribute("confirmationModal") final ConfirmationForm form, BindingResult errors, Authentication auth) {
+    @RequestMapping(value = "/profile", method = { RequestMethod.POST}, params = "deleteAccount")
+    public ModelAndView deleteUser(@ModelAttribute("profileImageForm") final ProfileImageForm imageForm, @Valid @ModelAttribute("confirmationModal") final ConfirmationForm form, BindingResult errors, Authentication auth) {
         if(errors.hasErrors()) {
             LOGGER.warn("Confirmation form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return profilePage( new ProfileImageForm(), form, auth, "subscribed", "0");
+            return profilePage(imageForm, form, auth, "subscribed", "0");
         }
         if (auth == null || auth.getPrincipal() == null) {
             throw new UnauthorizedUserException();
