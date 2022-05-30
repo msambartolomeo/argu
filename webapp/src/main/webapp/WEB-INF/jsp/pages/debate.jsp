@@ -31,21 +31,18 @@
                 </div>
                 <hr class="dashed">
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
-                <c:if test="${debate.creator.username != null}">
-                    <c:set var="creator"><c:out value="${debate.creator.username}"/></c:set>
-                    <c:set var="opponent">
-                        <c:choose>
-                            <c:when test="${debate.opponent.username != null}">
-                                <c:out value="${debate.opponent.username}"/>
-                            </c:when>
-                            <c:otherwise>
-                                <spring:message code="pages.debate.no-opponent"/>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:set>
-                    <h6><b><spring:message code="pages.debate.for"/></b> ${creator}</h6>
-                    <h6><b><spring:message code="pages.debate.against"/></b> ${opponent}</h6>
-                </c:if>
+                <div class="username-container">
+                    <h6>
+                        <b><spring:message code="pages.debate.for"/></b>
+                        <a class="link" href="<c:url value="/user/${debate.creator.username}"/>"> <c:out value="${debate.creator.username}"/></a>
+                    </h6>
+                </div>
+                <div class="username-container">
+                    <h6>
+                        <b><spring:message code="pages.debate.against"/></b>
+                        <a class="link" href="<c:url value="/user/${debate.opponent.username}"/>"> <c:out value="${debate.opponent.username}"/></a>
+                    </h6>
+                </div>
             </div>
             <div class="debate-footer">
                 <sec:authorize access="hasAuthority('USER')">

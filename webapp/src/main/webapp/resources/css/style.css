@@ -41,6 +41,10 @@ a.card {
     display: block;
 }
 
+.no-uppercase {
+    text-transform: unset !important;
+}
+
 .btn, .btn-large{
     display: flex;
     justify-content: center;
@@ -406,6 +410,12 @@ div.category-list div.collection.with-header {
     flex-wrap: wrap;
     align-items: baseline;
     padding-top: 1%;
+}
+
+.username-container {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
 }
 
 .debate-content {
