@@ -14,11 +14,10 @@
         <h4>
             <spring:message code="delete.user.confirmation"/>
         </h4>
-        <div class="file-field input-field">
-            <div class="btn">
-                <form:label path="password"><spring:message code="delete.user"/></form:label>
-                <form:input path="password" type="file"/>
-            </div>
+        <div class="input-field">
+            <c:set var="passwordError"><form:errors path="password"/></c:set>
+            <form:label path="password"><spring:message code="delete.introduce-password"/></form:label>
+            <form:input path="password" type="password"/>
             <form:errors path="password" cssClass="helper-text error"/>
         </div>
     </div>
@@ -26,8 +25,8 @@
         <a href="" class="modal-close waves-effect btn-flat">
             <spring:message code="pages.profile.close"/>
         </a>
-        <button class="modal-close waves-effect btn-flat" type="submit" form="photoForm"
-                id="photoForm" onclick="this.form.submit();" name="action">
+        <button class="modal-close waves-effect btn-flat" type="submit" form="confirmationForm"
+                id="confirmationForm" onclick="this.form.submit();" name="action">
             <spring:message code="pages.profile.confirm"/>
         </button>
     </div>

@@ -85,7 +85,7 @@ public class WebController {
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth, @RequestParam(value = "list", defaultValue = "subscribed") String list, @RequestParam(value = "page", defaultValue = "0") String page) {
+    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, @ModelAttribute("confirmationModal") final ConfirmationForm userForm, Authentication auth, @RequestParam(value = "list", defaultValue = "subscribed") String list, @RequestParam(value = "page", defaultValue = "0") String page) {
         if (!page.matches("-?\\d+")) throw new InvalidPageException();
 
         final ModelAndView mav = new ModelAndView("/pages/profile");
@@ -124,7 +124,7 @@ public class WebController {
     public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {
             LOGGER.warn("Profile image form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return profilePage(form, auth, "subscribed", "0");
+            return profilePage(form, new ConfirmationForm(), auth, "subscribed", "0");
         }
         if (auth == null || auth.getPrincipal() == null) {
             throw new UnauthorizedUserException();
@@ -138,14 +138,14 @@ public class WebController {
     public ModelAndView deleteUser(@Valid @ModelAttribute("confirmationModal") final ConfirmationForm form, BindingResult errors, Authentication auth) {
         if(errors.hasErrors()) {
             LOGGER.warn("Confirmation form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return deleteUser(form, errors, auth);
+            return profilePage( new ProfileImageForm(), form, auth, "subscribed", "0");
         }
         if (auth == null || auth.getPrincipal() == null) {
             throw new UnauthorizedUserException();
         }
         // TODO: Verify password
-        //userService.deleteUser(auth.getName());
-        return new ModelAndView("redirect:/login");
+        userService.deleteUser(auth.getName());
+        return new ModelAndView("redirect:/logout");
     }
 
     @ResponseBody
