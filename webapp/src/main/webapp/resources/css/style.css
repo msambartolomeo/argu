@@ -452,6 +452,15 @@ div.category-list div.collection.with-header {
     background: darkred;
 }
 
+.non-clickable-chip{
+    pointer-events: none;
+}
+
+.non-clickable-chip:hover{
+    background: var(--primary-color);
+    cursor: none;
+}
+
 .vote-buttons {
     display: flex;
     flex-direction: row;
