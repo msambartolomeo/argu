@@ -120,12 +120,20 @@
                                                   arguments="${debate.subscribedUsersCount}"/></div>
             </div>
         </div>
-        <c:if test="${debate.image.id != null}">
-            <div class="image-width">
-                <img src="<c:url value="/images/${debate.image.id}"/>" class="limit-img responsive-img" alt="<spring:message
-                                    code="pages.debate-picture"/>"/>
-            </div>
-        </c:if>
+        <c:choose>
+            <c:when test="${debate.image.id != null}">
+                <div class="image-width">
+                    <img src="<c:url value="/images/${debate.image.id}"/>" class="limit-img responsive-img" alt="<spring:message
+                                        code="pages.debate-picture"/>"/>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="image-width">
+                <img src="<c:url value="/resources/images/debate_stock.png"/>" class="limit-img responsive-img" alt="<spring:message
+                        code="pages.debate-picture"/>">
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 
