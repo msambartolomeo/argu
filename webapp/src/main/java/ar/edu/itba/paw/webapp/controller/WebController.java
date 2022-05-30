@@ -48,6 +48,7 @@ public class WebController {
     @RequestMapping(value = "/moderator", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView moderatorPage(@ModelAttribute("moderatorForm") final ModeratorForm form, Authentication authentication) {
         if (authentication == null || authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MODERATOR"))) {
+            LOGGER.error("/moderator : User is already a moderator");
             throw new Exception403("User is already a moderator, cannot send a request to become one");
         }
         return new ModelAndView("pages/request-moderator");
@@ -56,6 +57,7 @@ public class WebController {
     @RequestMapping(value = "/moderator", method = { RequestMethod.POST })
     public ModelAndView moderatorPage(@Valid @ModelAttribute("moderatorForm") final ModeratorForm form, BindingResult errors, Authentication authentication) {
         if (authentication == null || authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MODERATOR"))) {
+            LOGGER.error("/moderator : User is already a moderator");
             throw new Exception403("User is already a moderator, cannot send a request to become one");
         }
         if (errors.hasErrors()) {
@@ -89,7 +91,10 @@ public class WebController {
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
     public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, Authentication auth, @RequestParam(value = "list", defaultValue = "subscribed") String list, @RequestParam(value = "page", defaultValue = "0") String page) {
-        if (!page.matches("-?\\d+")) throw new InvalidPageException();
+        if (!page.matches("-?\\d+")) {
+            LOGGER.error("/profile : Invalid page number {}", page);
+            throw new InvalidPageException();
+        }
 
         final ModelAndView mav = new ModelAndView("/pages/profile");
 
@@ -97,10 +102,14 @@ public class WebController {
             list = "subscribed";
 
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/profile : User is not logged in");
             throw new UnauthorizedUserException();
         }
 
-        User user = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
+        User user = userService.getUserByUsername(auth.getName()).orElseThrow(() -> {
+            LOGGER.error("/profile : User {} not found", auth.getName());
+            throw new UserNotFoundException();
+        });
         mav.addObject("user", user);
         mav.addObject("total_pages", debateService.getProfileDebatesPageCount(list, user.getUserId()));
         mav.addObject("debates", debateService.getProfileDebates(list, user.getUserId(), Integer.parseInt(page)));
@@ -109,14 +118,20 @@ public class WebController {
 
     @RequestMapping(value = "/user/{username}", method = { RequestMethod.GET, RequestMethod.HEAD})
     public ModelAndView userProfile(@PathVariable("username") final String username, Authentication auth, @RequestParam(value = "page", defaultValue = "0") String page) {
-        if (!page.matches("-?\\d+")) throw new InvalidPageException();
+        if (!page.matches("-?\\d+")) {
+            LOGGER.error("/user/{username} : Invalid page number {}", page);
+            throw new InvalidPageException();
+        }
 
         if (auth != null && auth.getPrincipal() != null && auth.getName().equals(username)) {
             return new ModelAndView("redirect:/profile");
         }
 
         final ModelAndView mav = new ModelAndView("/pages/user_profile");
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("/user/{username} : User {} not found", username);
+            throw new UserNotFoundException();
+        });
         mav.addObject("user", user);
         mav.addObject("total_pages", debateService.getUserDebatesPageCount(user.getUserId()));
         mav.addObject("debates", debateService.getUserDebates(user.getUserId(), Integer.parseInt(page)));
@@ -130,6 +145,7 @@ public class WebController {
             return profilePage(form, auth, "subscribed", "0");
         }
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/profile : User is not logged in");
             throw new UnauthorizedUserException();
         }
 
@@ -140,9 +156,15 @@ public class WebController {
     @ResponseBody
     @RequestMapping(value = "/images/{imageId}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public byte[] getImage(@PathVariable("imageId") final String imageId) {
-        if (!imageId.matches("\\d+")) throw new ImageNotFoundException();
+        if (!imageId.matches("\\d+")) {
+            LOGGER.error("/images/{imageId} : Invalid image id {}", imageId);
+            throw new ImageNotFoundException();
+        }
 
-        return imageService.getImage(Integer.parseInt(imageId)).orElseThrow(ImageNotFoundException::new).getData();
+        return imageService.getImage(Integer.parseInt(imageId)).orElseThrow(() -> {
+            LOGGER.error("/images/{imageId} : Image {} not found", imageId);
+            throw new ImageNotFoundException();
+        }).getData();
     }
 
     @RequestMapping(value = "/create_debate", method = { RequestMethod.GET, RequestMethod.HEAD })
@@ -160,6 +182,7 @@ public class WebController {
         }
 
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/create_debate : User is not logged in");
             throw new UnauthorizedUserException();
         }
 

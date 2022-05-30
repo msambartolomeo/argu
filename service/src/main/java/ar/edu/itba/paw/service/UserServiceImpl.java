@@ -6,6 +6,8 @@ import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -52,7 +55,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User updateImage(String username, byte[] image) {
-        User user = getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        Optional<User> optUser = userDao.getUserByUsername(username);
+        if (!optUser.isPresent()) {
+            LOGGER.error("Cannot update image for user {} because it does not exist", username);
+            throw new UserNotFoundException();
+        }
+
+        User user = optUser.get();
 
         Long imageId = null;
         if (user.getImage() != null)

@@ -2,6 +2,8 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.model.exceptions.MailingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,6 +16,8 @@ import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailServiceImpl implements EmailService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
     @Autowired
     private JavaMailSender emailSender;
     @Autowired
@@ -415,6 +419,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             emailSender.send(message);
         } catch (Exception e) {
+            LOGGER.error("Error sending email to {} with subject {}", env.getProperty("spring.mail.username"), subject);
             throw new MailingException("Error sending message to self");
         }
     }
@@ -441,6 +446,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setFrom("noreply@argu.com");
             emailSender.send(mimeMessage);
         } catch (Exception e) {
+            LOGGER.error("Error notifying new argument to {} from {} on debate id {}", to, from, debateId);
             throw new MailingException("Error notifying new argument.");
         }
     }
@@ -467,6 +473,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setFrom("noreply@argu.com");
             emailSender.send(mimeMessage);
         } catch (Exception e) {
+            LOGGER.error("Error notifying new invite to {} from {} on debate id {}", to, from, debateId);
             throw new MailingException("Error notifying user.");
         }
     }
