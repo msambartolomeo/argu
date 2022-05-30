@@ -107,6 +107,22 @@ public class WebController {
         return mav;
     }
 
+    @RequestMapping(value = "/user/{username}", method = { RequestMethod.GET, RequestMethod.HEAD})
+    public ModelAndView userProfile(@PathVariable("username") final String username, Authentication auth, @RequestParam(value = "page", defaultValue = "0") String page, @ModelAttribute("profileImageForm") final ProfileImageForm form) {
+        if (!page.matches("-?\\d+")) throw new InvalidPageException();
+
+        final ModelAndView mav = new ModelAndView("/pages/user_profile");
+        if (auth != null && auth.getPrincipal() != null && auth.getName().equals(username)) {
+            return profilePage(form, auth, "subscribed", "0");
+        }
+
+        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        mav.addObject("user", user);
+        mav.addObject("total_pages", debateService.getUserDebatesPageCount(user.getUserId()));
+        mav.addObject("debates", debateService.getUserDebates(user.getUserId(), Integer.parseInt(page)));
+        return mav;
+    }
+
     @RequestMapping(value = "/profile", method = { RequestMethod.POST})
     public ModelAndView editProfileImage(@Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
         if(errors.hasErrors()) {

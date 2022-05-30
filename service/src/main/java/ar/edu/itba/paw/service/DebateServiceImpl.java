@@ -6,7 +6,6 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.PublicDebate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -72,23 +70,35 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<Debate> getProfileDebates(String list, long userid, int page) {
+    public List<Debate> getProfileDebates(String list, long userId, int page) {
+        if (list.equals("mydebates"))
+            return getUserDebates(userId, page);
+
         if (page < 0) {
             return Collections.emptyList();
         }
-        User user = userService.getUserById(userid).orElseThrow(UserNotFoundException::new);
-         if (list.equals("subscribed"))
-             return debateDao.getSubscribedDebatesByUser(user, page);
-        else return debateDao.getMyDebates(user, page);
+        return debateDao.getSubscribedDebatesByUser(userId, page);
     }
 
     @Override
-    public int getProfileDebatesPageCount(String list, long userid) {
-        int count;
-        if (list.equals("subscribed"))
-            count = debateDao.getSubscribedDebatesByUserIdCount(userid);
-        else count = debateDao.getMyDebatesCount(userid);
-        return (int) Math.ceil(count / (double) PAGE_SIZE);
+    public List<Debate> getUserDebates(long userId, int page) {
+        if (page < 0) {
+            return Collections.emptyList();
+        }
+        return debateDao.getUserDebates(userId, page);
+    }
+
+    @Override
+    public int getProfileDebatesPageCount(String list, long userId) {
+        if (list.equals("mydebates"))
+            return getUserDebatesPageCount(userId);
+
+        return (int) Math.ceil(debateDao.getSubscribedDebatesByUserCount(userId) / (double) PAGE_SIZE);
+    }
+
+    @Override
+    public int getUserDebatesPageCount(long userId) {
+        return (int) Math.ceil(debateDao.getUserDebatesCount(userId) / (double) PAGE_SIZE);
     }
 
     @Transactional

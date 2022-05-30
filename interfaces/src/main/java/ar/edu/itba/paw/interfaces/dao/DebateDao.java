@@ -14,15 +14,15 @@ public interface DebateDao {
 
     Debate create(String name, String description, User creator, User opponent, Image image, DebateCategory category);
 
-    List<Debate> getSubscribedDebatesByUser(User user, int page);
+    List<Debate> getSubscribedDebatesByUser(long userId, int page);
 
-    int getSubscribedDebatesByUserIdCount(long userid);
+    int getSubscribedDebatesByUserCount(long userid);
 
     List<Debate> getDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
 
     int getDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date);
 
-    List<Debate> getMyDebates(User user, int page);
+    List<Debate> getUserDebates(long userId, int page);
 
-    int getMyDebatesCount(long userid);
+    int getUserDebatesCount(long userid);
 }
