@@ -5,6 +5,8 @@ import ar.edu.itba.paw.model.enums.UserRole;
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -56,6 +58,10 @@ public class User {
 
     public LocalDate getCreatedDate() {
         return createdDate;
+    }
+
+    public String getFormattedDate() {
+        return createdDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     public Image getImage() {

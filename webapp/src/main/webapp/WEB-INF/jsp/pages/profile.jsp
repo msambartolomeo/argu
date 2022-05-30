@@ -41,7 +41,7 @@
                     </h6>
                 </div>
                 <h6>
-                    <spring:message code="pages.profile.created-in"/> <c:out value="${user.createdDate}"/>
+                    <spring:message code="pages.profile.created-in"/> <c:out value="${user.formattedDate}"/>
                 </h6>
                 <a class="waves-effect waves-light btn logout-btn" href="<c:url value="/logout"/>">
                     <i class="material-icons left">logout</i>

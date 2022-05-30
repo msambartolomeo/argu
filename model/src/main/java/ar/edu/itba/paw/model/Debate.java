@@ -6,6 +6,7 @@ import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 @Entity
@@ -98,6 +99,10 @@ public class Debate {
 
     public LocalDateTime getCreatedDate() {
         return createdDate;
+    }
+
+    public String getFormattedDate() {
+        return createdDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     public DebateCategory getCategory() {
