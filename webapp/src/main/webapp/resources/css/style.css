@@ -651,6 +651,11 @@ div.category-list div.collection.with-header {
     margin-right: 10%;
 }
 
+.delete-account-btn {
+    margin-top: 1%;
+    margin-bottom: 10%;
+}
+
 .profile-image {
     position: relative;
     width: 15vw;

@@ -31,14 +31,6 @@
                 <div id="edit-profile-image" class="modal">
                     <%@include file="../components/profile-photo-form.jsp"%>
                 </div>
-                <!-- Modal Trigger -->
-                <a class="waves-effect waves-light btn modal-trigger" href="#delete-account">
-                    <spring:message code="delete.user"/>
-                </a>
-                <!-- Modal Structure -->
-                <div id="delete-account" class="modal">
-                    <%@include file="../components/confirmation-modal.jsp"%>
-                </div>
                 <h4>
                     <c:out value="${user.username}"/>
                 </h4>
@@ -55,6 +47,14 @@
                     <i class="material-icons left">logout</i>
                     <spring:message code="pages.profile.logout"/>
                 </a>
+                <!-- Modal Trigger -->
+                <a class="waves-effect waves-light btn modal-trigger delete-account-btn" href="#delete-account">
+                    <spring:message code="delete.user"/>
+                </a>
+                <!-- Modal Structure -->
+                <div id="delete-account" class="modal">
+                    <%@include file="../components/confirmation-modal.jsp"%>
+                </div>
             </div>
             <div class="debates-column">
                 <div class="section">
