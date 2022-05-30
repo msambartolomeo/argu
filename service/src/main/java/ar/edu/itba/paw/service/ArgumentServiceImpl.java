@@ -11,6 +11,8 @@ import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenArgumentException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ import java.util.Optional;
 
 @Service
 public class ArgumentServiceImpl implements ArgumentService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArgumentServiceImpl.class);
     private static final int PAGE_SIZE = 5;
     @Autowired
     private ArgumentDao argumentDao;
@@ -39,9 +43,17 @@ public class ArgumentServiceImpl implements ArgumentService {
     @Transactional
     @Override
     public Argument create(String username, long debateId, String content, byte[] image) {
-        Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        Debate debate = debateService.getDebateById(debateId).orElseThrow(() -> {
+            LOGGER.error("Cannot create new Argument because Debate {} does not exist", debateId);
+            return new DebateNotFoundException();
+        });
+        User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot create new Argument on Debate {} because User {} does not exist", debateId, username);
+            return new UserNotFoundException();
+        });
+
         if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED || (!debate.getCreator().getUsername().equals(username) && !debate.getOpponent().getUsername().equals(username))) {
+            LOGGER.error("Cannot create new Argument on Debate {} because it is closed or because the requesting user {} is not the creator or the opponent", debateId, username);
             throw new ForbiddenArgumentException();
         }
 
@@ -66,12 +78,16 @@ public class ArgumentServiceImpl implements ArgumentService {
         final String username = user.getUsername();
 
         if (!lastArgument.isPresent()) {
-            if (!creatorUsername.equals(username))
+            if (!creatorUsername.equals(username)) {
+                LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getDebateId(), username);
                 throw new ForbiddenArgumentException();
+            }
             return ArgumentStatus.INTRODUCTION;
         } else {
-            if (username.equals(lastArgument.get().getUser().getUsername()))
+            if (username.equals(lastArgument.get().getUser().getUsername())) {
+                LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getDebateId(), username);
                 throw new ForbiddenArgumentException();
+            }
 
             switch (lastArgument.get().getStatus()) {
                 case INTRODUCTION:
@@ -88,6 +104,7 @@ public class ArgumentServiceImpl implements ArgumentService {
                     debate.setStatus(DebateStatus.CLOSED);
                     return ArgumentStatus.CONCLUSION;
                 default:
+                    LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getDebateId(), username);
                     throw new ForbiddenArgumentException();
             }
         }
@@ -117,11 +134,17 @@ public class ArgumentServiceImpl implements ArgumentService {
     public List<Argument> getArgumentsByDebate(long debateId, String username, int page) {
         if (page < 0)
             return Collections.emptyList();
-        Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
+        Debate debate = debateService.getDebateById(debateId).orElseThrow(() -> {
+            LOGGER.error("Cannot get Arguments for Debate {} because it does not exist", debateId);
+            return new DebateNotFoundException();
+        });
         List<Argument> arguments = argumentDao.getArgumentsByDebate(debate, page);
 
         if (username != null) {
-            User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+            User user = userService.getUserByUsername(username).orElseThrow(() -> {
+                LOGGER.error("Cannot get Arguments for Debate {} because user {} does not exist", debateId, username);
+                return new UserNotFoundException();
+            });
             for (Argument argument : arguments) {
                 argument.setLikedByUser(likeService.isLiked(user, argument));
             }
@@ -132,7 +155,10 @@ public class ArgumentServiceImpl implements ArgumentService {
 
     @Override
     public Optional<Argument> getLastArgument(long debateId) {
-        final Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
+        final Debate debate = debateService.getDebateById(debateId).orElseThrow(() -> {
+            LOGGER.error("Cannot get last Argument for Debate {} because it does not exist", debateId);
+            return new DebateNotFoundException();
+        });
         return argumentDao.getLastArgument(debate);
     }
 }

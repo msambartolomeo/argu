@@ -11,6 +11,8 @@ import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,7 @@ import java.util.Optional;
 @Service
 public class DebateServiceImpl implements DebateService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DebateServiceImpl.class);
     private static final int PAGE_SIZE = 5;
     @Autowired
     private DebateDao debateDao;
@@ -43,8 +46,14 @@ public class DebateServiceImpl implements DebateService {
     @Transactional
     @Override
     public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
-        User creator = userService.getUserByUsername(creatorUsername).orElseThrow(UserNotFoundException::new);
-        User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(UserNotFoundException::new);
+        User creator = userService.getUserByUsername(creatorUsername).orElseThrow(() -> {
+            LOGGER.error("Cannot create new Debate with name {} because creator User {} does not exist", name, creatorUsername);
+            return new UserNotFoundException();
+        });
+        User opponent = userService.getUserByUsername(opponentUsername).orElseThrow(() -> {
+            LOGGER.error("Cannot create new Debate with name {} because opponent User {} does not exist", name, opponentUsername);
+            return new UserNotFoundException();
+        });
         Debate createdDebate;
         if (image.length == 0)
             createdDebate = debateDao.create(name, description, creator, opponent, null, category);
@@ -106,10 +115,15 @@ public class DebateServiceImpl implements DebateService {
     @Transactional
     @Override
     public void startConclusion(long id, String username) {
-        Debate debate = getDebateById(id).orElseThrow(DebateNotFoundException::new);
+        Debate debate = getDebateById(id).orElseThrow(() -> {
+            LOGGER.error("Cannot start conclusion of Debate with id {} because it does not exist", id);
+            return new DebateNotFoundException();
+        });
 
-        if (debate.getStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreator().getUsername()) || username.equals(debate.getOpponent().getUsername())))
+        if (debate.getStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreator().getUsername()) || username.equals(debate.getOpponent().getUsername()))) {
+            LOGGER.error("Cannot start conclusion of Debate with id {} because it is not open or the user {} is not the creator or the opponent", id, username);
             throw new ForbiddenDebateException();
+        }
 
         debate.setStatus(DebateStatus.CLOSING);
     }

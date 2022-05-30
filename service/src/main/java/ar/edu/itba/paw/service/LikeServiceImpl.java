@@ -10,6 +10,8 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserAlreadyLikedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import java.util.Optional;
 @Service
 public class LikeServiceImpl implements LikeService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LikeServiceImpl.class);
     @Autowired
     private LikeDao likeDao;
 
@@ -36,10 +39,19 @@ public class LikeServiceImpl implements LikeService {
     @Override
     @Transactional
     public void likeArgument(long argumentId, String username) {
-        Argument argument = argumentService.getArgumentById(argumentId).orElseThrow(ArgumentNotFoundException::new);
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        Argument argument = argumentService.getArgumentById(argumentId).orElseThrow(() -> {
+            LOGGER.error("Cannot like argument {} because it does not exist", argumentId);
+            return new ArgumentNotFoundException();
+        });
+        User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot like argument {} because user {} does not exist", argumentId, username);
+            return new UserNotFoundException();
+        });
 
-        getLike(argument, user).ifPresent(l -> {throw new UserAlreadyLikedException();});
+        getLike(argument, user).ifPresent(l -> {
+            LOGGER.error("Cannot like argument {} because user {} already liked it", argumentId, username);
+            throw new UserAlreadyLikedException();
+        });
 
         likeDao.likeArgument(user, argument);
     }
@@ -47,8 +59,14 @@ public class LikeServiceImpl implements LikeService {
     @Override
     @Transactional
     public void unlikeArgument(long argumentId, String username) {
-        Argument argument = argumentService.getArgumentById(argumentId).orElseThrow(ArgumentNotFoundException::new);
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        Argument argument = argumentService.getArgumentById(argumentId).orElseThrow(() -> {
+            LOGGER.error("Cannot unlike argument {} because it does not exist", argumentId);
+            return new ArgumentNotFoundException();
+        });
+        User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot unlike argument {} because user {} does not exist", argumentId, username);
+            return new UserNotFoundException();
+        });
 
         likeDao.unlikeArgument(user, argument);
     }

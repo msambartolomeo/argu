@@ -10,6 +10,8 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserAlreadySubscribedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import java.util.Optional;
 @Service
 public class SubscribedServiceImpl implements SubscribedService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubscribedServiceImpl.class);
     @Autowired
     SubscribedDao subscribedDao;
     @Autowired
@@ -29,9 +32,16 @@ public class SubscribedServiceImpl implements SubscribedService {
     @Override
     @Transactional
     public Subscribed subscribeToDebate(String username, long debateId) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
+        User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot subscribe to debate {} because user {} does not exist", debateId, username);
+            return new UserNotFoundException();
+        });
+        Debate debate = debateService.getDebateById(debateId).orElseThrow(() -> {
+            LOGGER.error("Cannot subscribe to debate {} because it does not exist", debateId);
+            return new DebateNotFoundException();
+        });
         if (subscribedDao.getSubscribed(user, debate).isPresent()) {
+            LOGGER.error("Cannot subscribe to debate {} because user {} already subscribed", debateId, username);
             throw new UserAlreadySubscribedException();
         }
         return subscribedDao.subscribeToDebate(user, debate);
@@ -40,10 +50,15 @@ public class SubscribedServiceImpl implements SubscribedService {
     @Override
     @Transactional
     public void unsubscribeToDebate(String username, long debateId) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
-        Optional<Subscribed> subscribed = subscribedDao.getSubscribed(user, debate);
-        subscribed.ifPresent(s -> subscribedDao.unsubscribe(s));
+        User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot unsubscribe to debate {} because user {} does not exist", debateId, username);
+            return new UserNotFoundException();
+        });
+        Debate debate = debateService.getDebateById(debateId).orElseThrow(() -> {
+            LOGGER.error("Cannot unsubscribe to debate {} because it does not exist", debateId);
+            return new DebateNotFoundException();
+        });
+        subscribedDao.getSubscribed(user, debate).ifPresent(s -> subscribedDao.unsubscribe(s));
     }
 
     @Override
@@ -53,8 +68,14 @@ public class SubscribedServiceImpl implements SubscribedService {
 
     @Override
     public Optional<Subscribed> getSubscribed(String username, long debateId) {
-        User user = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
-        Debate debate = debateService.getDebateById(debateId).orElseThrow(DebateNotFoundException::new);
+        User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot get subscription to debate {} because user {} does not exist", debateId, username);
+            return new UserNotFoundException();
+        });
+        Debate debate = debateService.getDebateById(debateId).orElseThrow(() -> {
+            LOGGER.error("Cannot get subscription to debate {} because it does not exist", debateId);
+            return new DebateNotFoundException();
+        });
         return subscribedDao.getSubscribed(user, debate);
     }
 }

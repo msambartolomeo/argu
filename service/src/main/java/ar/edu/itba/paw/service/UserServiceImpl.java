@@ -9,6 +9,8 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -58,7 +61,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User updateImage(String username, byte[] data) {
-        User user = getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        User user = getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot update image for user {} because it does not exist", username);
+            return new UserNotFoundException();
+        });
 
         Image image = null;
         if (user.getImage() != null)
@@ -79,7 +85,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(String username) {
-        User user = getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        User user = getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot delete User {} because it does not exist", username);
+            return new UserNotFoundException();
+        });
         user.removeUser();
     }
 }

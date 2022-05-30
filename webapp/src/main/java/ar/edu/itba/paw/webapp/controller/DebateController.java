@@ -54,12 +54,17 @@ public class DebateController {
                                     @RequestParam(value = "status", required = false) String status,
                                     @RequestParam(value = "date", required = false) String date) {
 
-        if (!page.matches("-?\\d+")) throw new InvalidPageException();
+        if (!page.matches("-?\\d+")) {
+            LOGGER.error("/debates : Invalid page number {}", page);
+            throw new InvalidPageException();
+        }
         String auxOrder = order;
         if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(auxOrder))) order = null;
         if (status != null && !status.equals("open") && !status.equals("closed")) status = null;
-        if (category != null && Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category)))
+        if (category != null && Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category))) {
+            LOGGER.error("/debates : Invalid category {}", category);
             throw new CategoryNotFoundException();
+        }
         if (date != null && !date.matches("\\d{2}-\\d{2}-\\d{4}")) date = null;
 
         final ModelAndView mav = new ModelAndView("pages/debates-list");
@@ -80,13 +85,22 @@ public class DebateController {
     public ModelAndView debate(@PathVariable("debateId") final String debateId, @ModelAttribute("argumentForm") final ArgumentForm form,
                                @RequestParam(value = "page", defaultValue = "0") String page, Authentication auth) {
 
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
-        if (!page.matches("-?\\d+")) throw new InvalidPageException();
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId} : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
+        if (!page.matches("-?\\d+")) {
+            LOGGER.error("/debates/{debateId} : Invalid page number {}", page);
+            throw new InvalidPageException();
+        }
         long debateIdNum = Long.parseLong(debateId);
         int pageNum = Integer.parseInt(page);
 
         final ModelAndView mav = new ModelAndView("pages/debate");
-        mav.addObject("debate", debateService.getDebateById(debateIdNum).orElseThrow(DebateNotFoundException::new));
+        mav.addObject("debate", debateService.getDebateById(debateIdNum).orElseThrow(() -> {
+            LOGGER.error("/debates/{debateId} : Debate not found {}", debateId);
+            return new DebateNotFoundException();
+        }));
 
         String username = null;
         if(auth != null && auth.getPrincipal() != null) {
@@ -103,8 +117,12 @@ public class DebateController {
 
     @RequestMapping(value = "/{debateId}/close", method = { RequestMethod.POST })
     public ModelAndView closeDebate(@PathVariable("debateId") final String debateId, Authentication auth) {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/close : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/close : User not logged in");
             throw new UnauthorizedUserException();
         }
 
@@ -120,9 +138,13 @@ public class DebateController {
             LOGGER.warn("Create argument form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return debate(debateId, form, "0", auth);
         }
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/argument : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
 
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/argument : User not logged in");
             throw new UnauthorizedUserException();
         }
 
@@ -132,8 +154,12 @@ public class DebateController {
 
     @RequestMapping(value = "/{debateId}/vote/for", method = {RequestMethod.POST})
     public ModelAndView voteFor(@PathVariable("debateId") final String debateId, Authentication auth) {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/vote/for : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/vote/for : User not logged in");
             throw new UnauthorizedUserException();
         }
 
@@ -143,8 +169,12 @@ public class DebateController {
 
     @RequestMapping(value = "/{debateId}/vote/against", method = {RequestMethod.POST})
     public ModelAndView voteAgainst(@PathVariable("debateId") final String debateId, Authentication auth) {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/vote/against : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/vote/against : User not logged in");
             throw new UnauthorizedUserException();
         }
 
@@ -153,9 +183,13 @@ public class DebateController {
     }
 
     @RequestMapping(value = "/{debateId}/unvote", method = {RequestMethod.POST, RequestMethod.DELETE})
-    public ModelAndView unvoteAgainst(@PathVariable("debateId") final String debateId, Authentication auth) {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+    public ModelAndView unvote(@PathVariable("debateId") final String debateId, Authentication auth) {
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/unvote : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/unvote : User not logged in");
             throw new UnauthorizedUserException();
         }
 
@@ -166,8 +200,12 @@ public class DebateController {
 
     @RequestMapping(value = "/{debateId}/subscribe", method = { RequestMethod.POST })
     public ModelAndView subscribe(@PathVariable("debateId") final String debateId, Authentication auth) {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/subscribe : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/subscribe : User not logged in");
             throw new UnauthorizedUserException();
         }
 
@@ -177,8 +215,12 @@ public class DebateController {
 
     @RequestMapping(value = "/{debateId}/unsubscribe", method = { RequestMethod.POST, RequestMethod.DELETE })
     public ModelAndView unsubscribe(@PathVariable("debateId") final String debateId, Authentication auth) {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/unsubscribe : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/unsubscribe : User not logged in");
             throw new UnauthorizedUserException();
         }
 
@@ -188,9 +230,16 @@ public class DebateController {
 
     @RequestMapping(value = "/{debateId}/like/{argumentId}", method = { RequestMethod.POST })
     public ModelAndView like(@PathVariable("argumentId") final String argumentId, @PathVariable("debateId") final String debateId ,Authentication auth) {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
-        if (!argumentId.matches("\\d+")) throw new ArgumentNotFoundException();
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/like/{argumentId} : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
+        if (!argumentId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/like/{argumentId} : ArgumentId {} not a valid id number", argumentId);
+            throw new ArgumentNotFoundException();
+        }
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/like/{argumentId} : User not logged in");
             throw new UnauthorizedUserException();
         }
 
@@ -200,9 +249,16 @@ public class DebateController {
 
     @RequestMapping(value = "/{debateId}/unlike/{argumentId}", method = { RequestMethod.POST, RequestMethod.DELETE })
     public ModelAndView unlike(@PathVariable("argumentId") final String argumentId, @PathVariable("debateId") final String debateId , Authentication auth) {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
-        if (!argumentId.matches("\\d+")) throw new ArgumentNotFoundException();
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/unlike/{argumentId} : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
+        if (!argumentId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/unlike/{argumentId} : ArgumentId {} not a valid id number", argumentId);
+            throw new ArgumentNotFoundException();
+        }
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/unlike/{argumentId} : User not logged in");
             throw new UnauthorizedUserException();
         }
 
