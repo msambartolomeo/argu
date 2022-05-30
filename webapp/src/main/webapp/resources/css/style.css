@@ -443,6 +443,15 @@ div.category-list div.collection.with-header {
     color: white;
 }
 
+.chip-delete{
+    background: red;
+    color: white;
+}
+
+.chip-delete:hover{
+    background: darkred;
+}
+
 .vote-buttons {
     display: flex;
     flex-direction: row;

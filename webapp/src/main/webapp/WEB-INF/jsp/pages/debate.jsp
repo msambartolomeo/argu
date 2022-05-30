@@ -20,19 +20,21 @@
                 <div class="debate-info-holder">
                     <h4 class="debate-title word-wrap"><c:out value="${debate.name}"/></h4>
                     <div class="right debate-buttons-display">
+                        <div class="col">
                         <c:if test="${debate.status.name == 'open' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
                             <c:url var="closeDebatePath" value="/debates/${debate.debateId}/close"/>
                             <form:form method="post" action="${closeDebatePath}">
-                                <button type="submit" class="btn waves-effect">
+                                <button type="submit" class="btn waves-effect chip">
                                     <spring:message code="pages.debate-close"/>
-                                    <i class="large material-icons right">close</i>
+                                    <i class="material-icons right">close</i>
                                 </button>
                             </form:form>
                         </c:if>
                         <c:if test="${debate.status.name != 'deleted' && pageContext.request.userPrincipal.name == debate.creator.username}">
                             <!-- Modal Trigger -->
-                            <a class="waves-effect waves-light btn modal-trigger red" href="#delete-debate">
-                                <i class="large material-icons">delete</i>
+                            <a class="btn waves-effect chip chip-delete modal-trigger" href="#delete-debate">
+                                <spring:message code="pages.debate-delete"/>
+                                <i class="material-icons right">delete</i>
                             </a>
                             <!-- Modal Structure -->
                             <div id="delete-debate" class="modal">
@@ -53,6 +55,7 @@
                                 </form:form>
                             </div>
                         </c:if>
+                        </div>
                     </div>
 
                 </div>
