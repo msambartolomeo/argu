@@ -78,9 +78,18 @@
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <h5 class="center">
-                                <spring:message code="pages.profile.no-debates-subscribed"/>
-                            </h5>
+                            <c:choose>
+                                <c:when test="${param.list == null || param.list == 'subscribed'}">
+                                    <h5 class="center">
+                                        <spring:message code="pages.profile.no-debates-subscribed"/>
+                                    </h5>
+                                </c:when>
+                                <c:otherwise>
+                                    <h5 class="center">
+                                        <spring:message code="pages.profile.no-debates-participated"/>
+                                    </h5>
+                                </c:otherwise>
+                            </c:choose>
                         </c:otherwise>
                     </c:choose>
 
