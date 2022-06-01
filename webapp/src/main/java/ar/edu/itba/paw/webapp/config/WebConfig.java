@@ -43,15 +43,6 @@ import java.util.Properties;
 @Configuration
 public class WebConfig {
 
-    @Value("classpath:schema-v0.sql")
-    private Resource schemaV0;
-    @Value("classpath:schema-v1.sql")
-    private Resource schemaV1;
-    @Value("classpath:schema-v2.sql")
-    private Resource schemaV2;
-    @Value("classpath:init-views.sql")
-    private Resource initViews;
-
     @Autowired
     private Environment env;
 
@@ -75,21 +66,6 @@ public class WebConfig {
         ds.setPassword(env.getProperty("spring.datasource.password"));
 
         return ds;
-    }
-
-    // TODO delete when jpa migration is done
-    @Bean
-    public DataSourceInitializer dataSourceInitializer() {
-        final DataSourceInitializer dsi = new DataSourceInitializer();
-        dsi.setDataSource(dataSource());
-        dsi.setDatabasePopulator(databasePopulator());
-        return dsi;
-    }
-
-    public DatabasePopulator databasePopulator() {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(initViews);
-        return populator;
     }
 
     @Bean
