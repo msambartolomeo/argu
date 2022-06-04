@@ -609,6 +609,7 @@ div.category-list div.collection.with-header {
     display: flex;
     flex-direction: row;
     align-items: baseline;
+    justify-content: space-evenly;
 }
 
 .comment-info {
