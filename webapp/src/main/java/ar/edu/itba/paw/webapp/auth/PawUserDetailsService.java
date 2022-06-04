@@ -38,12 +38,11 @@ public class PawUserDetailsService implements UserDetailsService {
 
     // TODO: Chack if this is a valid way of autologin
     // TODO: Confirm if there is no way to redirect to login post method and pass form with username and password from controller
-    public void authAfterRegistration(final User user, HttpServletRequest request) {
+    public void authAfterRegistration(final User user) {
         final Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("USER"));
 
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getUsername(), null, authorities);
-        auth.setDetails(new WebAuthenticationDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(auth);
     }

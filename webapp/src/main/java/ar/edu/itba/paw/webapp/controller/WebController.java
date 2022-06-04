@@ -18,7 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -82,13 +81,13 @@ public class WebController {
     }
 
     @RequestMapping(value = "/register", method = { RequestMethod.POST })
-    public ModelAndView register(@Valid @ModelAttribute("registerForm") final RegisterForm form, BindingResult errors, HttpServletRequest request) {
+    public ModelAndView register(@Valid @ModelAttribute("registerForm") final RegisterForm form, BindingResult errors) {
         if (errors.hasErrors()) {
             LOGGER.warn("Register form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return registerPage(form);
         }
         User user = userService.create(form.getUsername(), form.getPassword(), form.getEmail());
-        userDetailsService.authAfterRegistration(user, request);
+        userDetailsService.authAfterRegistration(user);
         return new ModelAndView("redirect:/");
     }
 
