@@ -8,6 +8,7 @@ import ar.edu.itba.paw.model.Like;
 import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
+import ar.edu.itba.paw.model.exceptions.ForbiddenArgumentException;
 import ar.edu.itba.paw.model.exceptions.UserAlreadyLikedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,6 +45,10 @@ public class LikeServiceImpl implements LikeService {
             LOGGER.error("Cannot like argument {} because it does not exist", argumentId);
             return new ArgumentNotFoundException();
         });
+        if(argument.getDeleted()) {
+            LOGGER.error("Cannot like argument {} because it is deleted", argumentId);
+            throw new ForbiddenArgumentException();
+        }
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot like argument {} because user {} does not exist", argumentId, username);
             return new UserNotFoundException();
@@ -63,6 +69,10 @@ public class LikeServiceImpl implements LikeService {
             LOGGER.error("Cannot unlike argument {} because it does not exist", argumentId);
             return new ArgumentNotFoundException();
         });
+        if(argument.getDeleted()) {
+            LOGGER.error("Cannot unlike argument {} because it is deleted", argumentId);
+            throw new ForbiddenArgumentException();
+        }
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot unlike argument {} because user {} does not exist", argumentId, username);
             return new UserNotFoundException();
@@ -74,5 +84,10 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public boolean isLiked(User user, Argument argument) {
         return getLike(argument, user).isPresent();
+    }
+
+    @Override
+    public List<Like> getArgumentLikes(Argument argument) {
+        return likeDao.getArgumentLikes(argument);
     }
 }

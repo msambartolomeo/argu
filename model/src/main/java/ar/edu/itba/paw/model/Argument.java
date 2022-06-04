@@ -42,6 +42,9 @@ public class Argument {
     @Formula("(SELECT COUNT(*) FROM likes WHERE likes.postid = postid)")
     private int likesCount;
 
+    @Column(nullable = false)
+    private Boolean deleted;
+
     @Transient
     private boolean isLikedByUser;
 
@@ -57,6 +60,7 @@ public class Argument {
         this.image = image;
         this.status = status;
         this.likesCount = 0;
+        this.deleted = false;
         this.isLikedByUser = false;
     }
 
@@ -106,5 +110,13 @@ public class Argument {
 
     public void setLikedByUser(boolean likedByUser) {
         isLikedByUser = likedByUser;
+    }
+
+    public void deleteArgument() {
+        this.deleted = true;
+    }
+
+    public Boolean getDeleted() {
+        return this.deleted;
     }
 }

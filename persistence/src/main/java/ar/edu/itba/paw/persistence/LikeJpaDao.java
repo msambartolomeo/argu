@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -32,6 +34,15 @@ public class LikeJpaDao implements LikeDao {
     public void unlikeArgument(User user, Argument argument){
         final Like toRemove = em.find(Like.class, new UserPostKey(user.getUserId(), argument.getArgumentId()));
         em.remove(toRemove);
+    }
+
+    @Override
+    public List<Like> getArgumentLikes(Argument argument) {
+//        final Query idQuery = em.createQuery("SELECT postid FROM likes ");
+        final TypedQuery<Like> query = em.createQuery("FROM Like l WHERE l.argument = :argument", Like.class);
+        query.setParameter("argument", argument);
+
+        return query.getResultList();
     }
 
 }
