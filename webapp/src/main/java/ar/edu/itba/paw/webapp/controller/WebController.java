@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.exceptions.*;
+import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -27,12 +29,15 @@ public class WebController {
     private final UserService userService;
     private final DebateService debateService;
     private final ImageService imageService;
+    // TODO: Check if using PawUserDetailsService in WebController is valid
+    private final PawUserDetailsService userDetailsService;
 
     @Autowired
-    public WebController(UserService userService, DebateService debateService, ImageService imageService) {
+    public WebController(UserService userService, DebateService debateService, ImageService imageService, PawUserDetailsService userDetailsService) {
         this.userService = userService;
         this.debateService = debateService;
         this.imageService = imageService;
+        this.userDetailsService = userDetailsService;
     }
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView home() {
@@ -77,13 +82,14 @@ public class WebController {
     }
 
     @RequestMapping(value = "/register", method = { RequestMethod.POST })
-    public ModelAndView register(@Valid @ModelAttribute("registerForm") final RegisterForm form, BindingResult errors) {
+    public ModelAndView register(@Valid @ModelAttribute("registerForm") final RegisterForm form, BindingResult errors, HttpServletRequest request) {
         if (errors.hasErrors()) {
             LOGGER.warn("Register form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return registerPage(form);
         }
-        userService.create(form.getUsername(), form.getPassword(), form.getEmail());
-        return new ModelAndView("redirect:/login");
+        User user = userService.create(form.getUsername(), form.getPassword(), form.getEmail());
+        userDetailsService.authAfterRegistration(user, request);
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
