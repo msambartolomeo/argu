@@ -42,7 +42,7 @@ public class Argument {
     @Formula("(SELECT COUNT(*) FROM likes WHERE likes.postid = postid)")
     private int likesCount;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean deleted;
 
     @Transient
