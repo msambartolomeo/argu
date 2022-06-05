@@ -5,19 +5,23 @@ import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -47,10 +51,20 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User create(String username, String password, String email) {
-        Optional<User> user = getUserByEmail(email);
-        if (user.isPresent())
-            return user.get().updateLegacyUser(username, passwordEncoder.encode(password));
-        return userDao.create(username, passwordEncoder.encode(password), email);
+        Optional<User> optionalUser = getUserByEmail(email);
+        if (optionalUser.isPresent())
+            return optionalUser.get().updateLegacyUser(username, passwordEncoder.encode(password));
+
+        User user = userDao.create(username, passwordEncoder.encode(password), email);
+
+        final Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("USER"));
+
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        return user;
     }
 
     @Override

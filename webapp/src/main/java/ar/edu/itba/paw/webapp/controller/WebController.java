@@ -28,15 +28,12 @@ public class WebController {
     private final UserService userService;
     private final DebateService debateService;
     private final ImageService imageService;
-    // TODO: Check if using PawUserDetailsService in WebController is valid
-    private final PawUserDetailsService userDetailsService;
 
     @Autowired
-    public WebController(UserService userService, DebateService debateService, ImageService imageService, PawUserDetailsService userDetailsService) {
+    public WebController(UserService userService, DebateService debateService, ImageService imageService) {
         this.userService = userService;
         this.debateService = debateService;
         this.imageService = imageService;
-        this.userDetailsService = userDetailsService;
     }
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView home() {
@@ -86,8 +83,7 @@ public class WebController {
             LOGGER.warn("Register form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return registerPage(form);
         }
-        User user = userService.create(form.getUsername(), form.getPassword(), form.getEmail());
-        userDetailsService.authAfterRegistration(user);
+        userService.create(form.getUsername(), form.getPassword(), form.getEmail());
         return new ModelAndView("redirect:/");
     }
 
