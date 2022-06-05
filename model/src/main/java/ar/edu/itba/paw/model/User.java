@@ -95,10 +95,10 @@ public class User {
         this.password = null;
         this.role = UserRole.USER;
         for (Debate debate : createdDebates) {
-            debate.setStatus(DebateStatus.CLOSED);
+            debate.closeDebate();
         }
         for (Debate debate : opponentDebates) {
-            debate.setStatus(DebateStatus.CLOSED);
+            debate.closeDebate();
         }
     }
 }

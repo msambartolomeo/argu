@@ -40,6 +40,9 @@ public class Debate {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
+    @Column(name = "closed_date")
+    private LocalDateTime closedDate;
+
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "category", nullable = false, length = 20)
     private DebateCategory category;
@@ -140,5 +143,10 @@ public class Debate {
     public int getAgainstCount() {
         return (int) Math.round((againstCount * 100.0) / (forCount + againstCount));
 
+    }
+
+    public void closeDebate() {
+        this.closedDate = LocalDateTime.now();
+        this.status = DebateStatus.CLOSED;
     }
 }
