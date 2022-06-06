@@ -36,6 +36,9 @@ public class User {
     @OneToMany(mappedBy = "opponent", fetch = FetchType.LAZY)
     private Set<Debate> opponentDebates;
 
+    @Column(name = "points", columnDefinition = "integer default 0")
+    private int points;
+
     public User() {}
 
     public User(String email, String username, String password) {
@@ -44,6 +47,7 @@ public class User {
         this.password = password;
         this.createdDate = LocalDate.now();
         this.role = UserRole.USER;
+        this.points = 0;
     }
 
     public Long getUserId() {
@@ -95,10 +99,39 @@ public class User {
         this.password = null;
         this.role = UserRole.USER;
         for (Debate debate : createdDebates) {
-            debate.closeDebate();
+            if (debate.getStatus() != DebateStatus.DELETED && debate.getStatus() != DebateStatus.CLOSED)
+                debate.closeDebate();
         }
         for (Debate debate : opponentDebates) {
-            debate.closeDebate();
+            if (debate.getStatus() != DebateStatus.DELETED && debate.getStatus() != DebateStatus.CLOSED)
+                debate.closeDebate();
         }
+    }
+
+    // TODO: Choose correct amount of points
+    public int getPoints() {
+        return points;
+    }
+    public void addLikePoints() {
+        this.points += 1;
+    }
+    public void removeLikePoints() {
+        this.points -= 1;
+    }
+    public void addSubPoints() {
+        this.points += 1;
+    }
+    public void removeSubPoints() {
+        this.points -= 1;
+    }
+    public void addWinPoints(int totalVotes) {
+        this.points += 10*totalVotes;
+    }
+    public void addLosePoints(int totalVotes) {
+        this.points += 5*totalVotes;
+    }
+
+    public void addDrawPoints(int totalVotes) {
+        this.points += 7*totalVotes;
     }
 }

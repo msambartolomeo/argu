@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @Async
+    //@Async TODO: Preguntar por qué explota todo cuando se usa esta anotación
     public void deleteUser(String username) {
         User user = getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot delete User {} because it does not exist", username);

@@ -144,4 +144,22 @@ public class DebateServiceImpl implements DebateService {
         debate.setStatus(DebateStatus.DELETED);
     }
 
+    @Override
+    public void closeVotes(long id, String username) {
+        Debate debate = getDebateById(id).orElseThrow(() -> {
+            LOGGER.error("Cannot close votes in Debate {} because it does not exist", id);
+            return new DebateNotFoundException();
+        });
+
+        if (debate.getStatus() == DebateStatus.DELETED || !username.equals(debate.getCreator().getUsername())) {
+            LOGGER.error("Cannot close votes in Debate {} because it is deleted or the user {} is not the creator", id, username);
+            throw new ForbiddenDebateException();
+        }
+
+        if (debate.getStatus() != DebateStatus.VOTING) {
+            LOGGER.error("Cannot close votes in Debate {} because it is not in voting state", id);
+            throw new ForbiddenDebateException();
+        }
+        debate.closeDebate();
+    }
 }

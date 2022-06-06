@@ -53,6 +53,10 @@ public class LikeServiceImpl implements LikeService {
             throw new UserAlreadyLikedException();
         });
 
+        User creator = argument.getUser();
+        if(!creator.equals(user)) {
+            creator.addLikePoints();
+        }
         likeDao.likeArgument(user, argument);
     }
 
@@ -68,6 +72,10 @@ public class LikeServiceImpl implements LikeService {
             return new UserNotFoundException();
         });
 
+        User creator = argument.getUser();
+        if(!creator.equals(user)) {
+            creator.removeLikePoints();
+        }
         likeDao.unlikeArgument(user, argument);
     }
 

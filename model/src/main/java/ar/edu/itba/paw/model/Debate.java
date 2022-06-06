@@ -40,8 +40,8 @@ public class Debate {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "closed_date")
-    private LocalDateTime closedDate;
+    //@Column(name = "closed_date")
+    //private LocalDateTime closedDate;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "category", nullable = false, length = 20)
@@ -81,12 +81,6 @@ public class Debate {
         this.status = status;
         this.createdDate = LocalDateTime.now();
     }
-
-    @Deprecated
-    public Debate(long id, String name, String description, Long creatorId, Long opponentId, LocalDateTime createdDate, Long imageId, DebateCategory category, DebateStatus debateStatus) {}
-
-    @Deprecated
-    public Debate(long id, String name, String description, Long creatorId, Long opponentId, LocalDateTime createdDate, DebateCategory category, DebateStatus debateStatus) {}
 
     public long getDebateId() {
         return debateId;
@@ -146,7 +140,39 @@ public class Debate {
     }
 
     public void closeDebate() {
-        this.closedDate = LocalDateTime.now();
+        //this.closedDate = LocalDateTime.now();
+        if (this.status == DebateStatus.VOTING)
+            addPointsToParticipants();
         this.status = DebateStatus.CLOSED;
+    }
+
+    public void startVoting() {
+        this.status = DebateStatus.VOTING;
+    }
+
+    private User getWinner() {
+        // TODO: Change when creator can be against
+        if (forCount > againstCount) {
+            return creator;
+        } else if (forCount < againstCount) {
+            return opponent;
+        } else {
+            return null;
+        }
+    }
+
+    private void addPointsToParticipants() {
+        // TODO: Change when creator can be against
+        int totalPoints = forCount + againstCount;
+        User winner = getWinner();
+        if (winner != null) {
+            User loser = creator.equals(winner) ? opponent : creator;
+            winner.addWinPoints(totalPoints);
+            loser.addLosePoints(totalPoints);
+        }
+        else {
+            creator.addDrawPoints(totalPoints);
+            opponent.addDrawPoints(totalPoints);
+        }
     }
 }

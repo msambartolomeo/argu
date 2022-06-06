@@ -101,7 +101,7 @@ public class ArgumentServiceImpl implements ArgumentService {
                     else
                         return ArgumentStatus.CONCLUSION;
                 case CONCLUSION:
-                    debate.closeDebate();
+                    debate.startVoting();
                     return ArgumentStatus.CONCLUSION;
                 default:
                     LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getDebateId(), username);
