@@ -52,7 +52,7 @@ public class ArgumentServiceImpl implements ArgumentService {
             return new UserNotFoundException();
         });
 
-        if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED || (!debate.getCreator().getUsername().equals(username) && !debate.getOpponent().getUsername().equals(username))) {
+        if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED || debate.getStatus() == DebateStatus.VOTING || (!debate.getCreator().getUsername().equals(username) && !debate.getOpponent().getUsername().equals(username))) {
             LOGGER.error("Cannot create new Argument on Debate {} because it is closed or because the requesting user {} is not the creator or the opponent", debateId, username);
             throw new ForbiddenArgumentException();
         }

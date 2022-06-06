@@ -149,7 +149,7 @@
                     <c:when test="${argument.status.name == 'argument' && (arguments[status.index - 1].status.name == 'introduction' || status.first)}">
                         <h5 class="center"><spring:message code="components.comment.argument" /></h5>
                     </c:when>
-                    <c:when test="${(debate.status.name == 'closing' && argument.status.name == 'conclusion') || (debate.status.name == 'closed' && argument.status.name == 'conclusion' && (status.index == 0 || arguments[status.index - 1].status.name == 'argument'))}">
+                    <c:when test="${(debate.status.name == 'closing' && argument.status.name == 'conclusion') || ((debate.status.name == 'closed' || debate.status.name == 'voting') && argument.status.name == 'conclusion' && (status.index == 0 || arguments[status.index - 1].status.name == 'argument'))}">
                         <h5 class="center"><spring:message code="components.comment.conclusion" /></h5>
                     </c:when>
                 </c:choose>
@@ -168,7 +168,7 @@
     </div>
 
     <div class="post-comments">
-        <c:if test="${debate.status.name != 'closed' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
+        <c:if test="${debate.status.name != 'closed' && debate.status.name != 'voting' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
             <div class="card no-top-margin">
                 <div class="card-content">
                     <c:choose>
@@ -197,7 +197,7 @@
         <c:choose>
             <c:when test="${pageContext.request.userPrincipal.name != null && debate.creator.username != null && debate.opponent.username != null}">
                 <div class="card vote-section no-top-margin">
-                    <c:if test="${debate.status.name == 'voting'}">
+                    <c:if test="${debate.status.name == 'voting' && (pageContext.request.userPrincipal.name == debate.creator.username)}">
                         <div class="conclude-voting-btn">
                             <c:url var="concludeVotingPath" value="/debates/${debate.debateId}/concludeVoting"/>
                             <form:form method="post" action="${concludeVotingPath}">
@@ -209,7 +209,7 @@
                         </div>
                     </c:if>
                     <c:choose>
-                        <c:when test="${userVote == null}">
+                        <c:when test="${userVote == null && (debate.status.name == 'voting' || debate.status.name == 'open')}">
                             <h5 class="center"><spring:message code="pages.debate.who-wins"/></h5>
                             <div class="vote-buttons">
                                 <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>
@@ -239,11 +239,13 @@
                                     </div>
                                 </c:if>
                             </div>
-                            <h6><spring:message code="page.debate.change-vote"/></h6>
-                            <c:url var="unvotePath" value="/debates/${debate.debateId}/unvote"/>
-                            <form:form method="delete" action="${unvotePath}">
-                                <button class="btn waves-effect" type="submit"><spring:message code="page.debate.unvote"/></button>
-                            </form:form>
+                            <c:if test="${debate.status.name == 'open' || debate.status.name == 'voting'}">
+                                <h6><spring:message code="page.debate.change-vote"/></h6>
+                                <c:url var="unvotePath" value="/debates/${debate.debateId}/unvote"/>
+                                <form:form method="delete" action="${unvotePath}">
+                                    <button class="btn waves-effect" type="submit"><spring:message code="page.debate.unvote"/></button>
+                                </form:form>
+                            </c:if>
                         </c:otherwise>
                     </c:choose>
                 </div>
