@@ -114,7 +114,7 @@
                     </c:choose>
                 </sec:authorize>
                 <a class="chip btn" href="<c:url value="/debates?category=${debate.category.name}"/>"><spring:message code="category.${debate.category.name}"/></a>
-                <button class="chip btn" onclick="dateFilter('${debate.formattedDate}')"><spring:message code="components.debate-created-on"/> ${debate.formattedDate}</button>
+                <button class="chip btn" onclick="dateFilter('${debate.formattedDate}')"><spring:message code="components.debate-created-on"/> <c:out value="${debate.formattedDate}"/></button>
                 <a class="chip btn" href="<c:url value="/debates?status=${debate.status.name == 'closed' ? 'closed' : 'open'}"/>"><spring:message code="status.${debate.status.name}"/></a>
                 <div class="chip non-clickable-chip btn" ><spring:message code="page.debate.subscribed"
                                                   arguments="${debate.subscribedUsersCount}"/></div>
@@ -203,28 +203,28 @@
                             <div class="vote-buttons">
                                 <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>
                                 <form:form method="post" action="${voteForPath}">
-                                    <button class="btn waves-effect" type="submit">${debate.creator.username}</button>
+                                    <button class="btn waves-effect" type="submit"><c:out value="${debate.creator.username}"/></button>
                                 </form:form>
 
                                 <c:url var="voteAgainstPath" value="/debates/${debate.debateId}/vote/against"/>
                                 <form:form method="post" action="${voteAgainstPath}">
-                                    <button class="btn waves-effect" type="submit">${debate.opponent.username}</button>
+                                    <button class="btn waves-effect" type="submit"><c:out value="${debate.opponent.username}"/></button>
                                 </form:form>
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <h6><spring:message code="pages.debate.voted"/> ${userVote}</h6>
+                            <h6><spring:message code="pages.debate.voted"/> <c:out value="${userVote}"/></h6>
                             <div class="progress red">
                                 <c:if test="${debate.forCount > 0}">
                                     <div class="votes-format blue" style="width: ${debate.forCount}%">
-                                        <span>${debate.creator.username}</span>
-                                        <span>${debate.forCount}%</span>
+                                        <span><c:out value="${debate.creator.username}"/></span>
+                                        <span><c:out value="${debate.forCount}"/>%</span>
                                     </div>
                                 </c:if>
                                 <c:if test="${debate.againstCount > 0}">
                                     <div class="votes-format" style="width: ${debate.againstCount}%">
-                                        <span>${debate.opponent.username}</span>
-                                        <span>${debate.againstCount}%</span>
+                                        <span><c:out value="${debate.opponent.username}"/></span>
+                                        <span><c:out value="${debate.againstCount}"/>%</span>
                                     </div>
                                 </c:if>
                             </div>
@@ -245,14 +245,14 @@
                             <div class="progress red">
                                 <c:if test="${debate.forCount > 0}">
                                     <div class="votes-format blue" style="width: ${debate.forCount}%">
-                                        <span>${debate.creator.username}</span>
-                                        <span>${debate.forCount}%</span>
+                                        <span><c:out value="${debate.creator.username}"/></span>
+                                        <span><c:out value="${debate.forCount}"/>%</span>
                                     </div>
                                 </c:if>
                                 <c:if test="${debate.againstCount > 0}">
                                     <div class="votes-format" style="width: ${debate.againstCount}%">
-                                        <span>${debate.opponent.username}</span>
-                                        <span>${debate.againstCount}%</span>
+                                        <span><c:out value="${debate.opponent.username}"/></span>
+                                        <span><c:out value="${debate.againstCount}"/>%</span>
                                     </div>
                                 </c:if>
                             </div>

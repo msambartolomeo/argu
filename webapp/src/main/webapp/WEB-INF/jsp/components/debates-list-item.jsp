@@ -23,7 +23,7 @@
             </div>
             <div class="debate-footer">
                 <div class="chip"><spring:message code="category.${debate.category.name}"/></div>
-                <div class="chip"><spring:message code="components.debate-created-on"/> ${debate.formattedDate}</div>
+                <div class="chip"><spring:message code="components.debate-created-on"/> <c:out value="${debate.formattedDate}"/></div>
                 <div class="chip"><spring:message code="status.${debate.status.name}"/></div>
                 <div class="chip"><spring:message code="page.debate.subscribed" arguments="${debate.subscribedUsersCount}"/></div>
             </div>
