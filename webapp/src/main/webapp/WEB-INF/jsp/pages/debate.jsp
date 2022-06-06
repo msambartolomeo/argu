@@ -223,8 +223,8 @@
                                 </c:if>
                                 <c:if test="${debate.againstCount > 0}">
                                     <div class="votes-format" style="width: ${debate.againstCount}%">
-                                        <span>${debate.opponent.username}</span>
                                         <span>${debate.againstCount}%</span>
+                                        <span>${debate.opponent.username}</span>
                                     </div>
                                 </c:if>
                             </div>
@@ -251,8 +251,8 @@
                                 </c:if>
                                 <c:if test="${debate.againstCount > 0}">
                                     <div class="votes-format" style="width: ${debate.againstCount}%">
-                                        <span>${debate.opponent.username}</span>
                                         <span>${debate.againstCount}%</span>
+                                        <span>${debate.opponent.username}</span>
                                     </div>
                                 </c:if>
                             </div>
