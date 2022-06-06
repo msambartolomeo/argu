@@ -7,6 +7,6 @@ public class ForbiddenArgumentException extends Exception403 {
 
     @Override
     public String getMessageCode() {
-        return "error.post.not.found";
+        return "error.forbidden.argument";
     }
 }
