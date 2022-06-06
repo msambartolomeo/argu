@@ -36,13 +36,4 @@ public class LikeJpaDao implements LikeDao {
         em.remove(toRemove);
     }
 
-    @Override
-    public List<Like> getArgumentLikes(Argument argument) {
-//        final Query idQuery = em.createQuery("SELECT postid FROM likes ");
-        final TypedQuery<Like> query = em.createQuery("FROM Like l WHERE l.argument = :argument", Like.class);
-        query.setParameter("argument", argument);
-
-        return query.getResultList();
-    }
-
 }

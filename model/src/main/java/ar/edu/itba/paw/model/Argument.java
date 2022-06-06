@@ -6,6 +6,7 @@ import org.hibernate.annotations.Formula;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -44,6 +45,9 @@ public class Argument {
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean deleted;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "argument")
+    private List<Like> likes;
 
     @Transient
     private boolean isLikedByUser;
@@ -118,5 +122,9 @@ public class Argument {
 
     public Boolean getDeleted() {
         return this.deleted;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
     }
 }

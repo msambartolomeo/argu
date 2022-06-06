@@ -167,14 +167,19 @@ public class ArgumentServiceImpl implements ArgumentService {
             LOGGER.error("Cannot delete argument {} because it does not exist", argumentId);
             return new ArgumentNotFoundException();
         });
+
         if(!argument.getUser().getUsername().equals(username)) {
             LOGGER.error("Cannot delete argument {} because user is not the creator", argumentId);
             throw new ForbiddenArgumentException();
         }
-        List<Like> likes = likeService.getArgumentLikes(argument);
+
+        imageService.deleteImage(argument.getImage());
+
+        List<Like> likes = argument.getLikes();
         for(Like like : likes) {
             likeService.unlikeArgument(like.getArgument().getArgumentId(), like.getUser().getUsername());
         }
+
         argument.deleteArgument();
     }
 }

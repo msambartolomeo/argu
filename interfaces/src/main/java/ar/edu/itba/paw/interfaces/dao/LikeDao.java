@@ -11,5 +11,4 @@ public interface LikeDao {
     Optional<Like> getLike(User user, Argument argument);
     void likeArgument(User user, Argument argument);
     void unlikeArgument(User user, Argument argument);
-    List<Like> getArgumentLikes(Argument argument);
 }

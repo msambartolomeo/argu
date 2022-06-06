@@ -86,8 +86,4 @@ public class LikeServiceImpl implements LikeService {
         return getLike(argument, user).isPresent();
     }
 
-    @Override
-    public List<Like> getArgumentLikes(Argument argument) {
-        return likeDao.getArgumentLikes(argument);
-    }
 }

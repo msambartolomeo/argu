@@ -12,5 +12,4 @@ public interface LikeService{
     void likeArgument(long argumentId, String username);
     void unlikeArgument(long argumentId, String username);
     boolean isLiked(User user, Argument argument);
-    List<Like> getArgumentLikes(Argument argument);
 }
