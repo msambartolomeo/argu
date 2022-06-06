@@ -7,7 +7,6 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
-import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.junit.Test;
@@ -45,9 +44,9 @@ public class ArgumentServiceImplTest {
     private final static String DEBATE_NAME = "Debate Name Test";
     private final static String DEBATE_DESCRIPTION = "Debate Description Test";
 
-    private final static User USER = new User(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
-    private final static User USER_2 = new User(USER_USERNAME_2, USER_PASSWORD_2, USER_EMAIL_2);
-    private final static Debate DEBATE = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, USER, USER_2, null, DebateCategory.OTHER, DebateStatus.OPEN);
+    private final static User USER = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+    private final static User USER_2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
+    private final static Debate DEBATE = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, USER, USER_2, null, DebateCategory.OTHER);
 
     @InjectMocks
     private ArgumentServiceImpl argumentService = new ArgumentServiceImpl();

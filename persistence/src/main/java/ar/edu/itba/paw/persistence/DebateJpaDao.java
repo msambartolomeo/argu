@@ -26,7 +26,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public Debate create(String name, String description, User creator, User opponent, Image image, DebateCategory category) {
-        Debate debate = new Debate(name, description, creator, opponent, image, category, DebateStatus.OPEN);
+        Debate debate = new Debate(name, description, creator, opponent, image, category);
         em.persist(debate);
         return debate;
     }

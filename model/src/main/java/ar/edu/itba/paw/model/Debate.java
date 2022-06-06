@@ -68,14 +68,14 @@ public class Debate {
 
     Debate() {}
 
-    public Debate(String name, String description, User creator, User opponent, Image image, DebateCategory category, DebateStatus status) {
+    public Debate(String name, String description, User creator, User opponent, Image image, DebateCategory category) {
         this.name = name;
         this.description = description;
         this.creator = creator;
         this.opponent = opponent;
         this.image = image;
         this.category = category;
-        this.status = status;
+        this.status = DebateStatus.OPEN;
         this.createdDate = LocalDateTime.now();
     }
 
