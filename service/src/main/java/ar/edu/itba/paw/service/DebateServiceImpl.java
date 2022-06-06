@@ -45,7 +45,9 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
-    public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
+    public Debate create(String name, String description, String creatorUsername, boolean isCreatorFor, String opponentUsername,
+                         byte[] image,
+                         DebateCategory category) {
         User creator = userService.getUserByUsername(creatorUsername).orElseThrow(() -> {
             LOGGER.error("Cannot create new Debate with name {} because creator User {} does not exist", name, creatorUsername);
             return new UserNotFoundException();
@@ -56,9 +58,9 @@ public class DebateServiceImpl implements DebateService {
         });
         Debate createdDebate;
         if (image.length == 0)
-            createdDebate = debateDao.create(name, description, creator, opponent, null, category);
+            createdDebate = debateDao.create(name, description, creator, isCreatorFor, opponent, null, category);
         else
-            createdDebate = debateDao.create(name, description, creator, opponent, imageService.createImage(image), category);
+            createdDebate = debateDao.create(name, description, creator, isCreatorFor, opponent, imageService.createImage(image), category);
         emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate.getDebateId(), createdDebate.getName());
         return createdDebate;
     }

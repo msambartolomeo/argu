@@ -24,6 +24,24 @@
                     <form:textarea path="description" maxlength="280" cssClass="materialize-textarea ${not empty descriptionErrors ? 'invalid' : ''}"/>
                     <form:errors path="description" element="span" cssClass="error" />
                 </div>
+                
+                <table class="no-borders">
+                    <tr>
+                        <td>
+                            <form:label path="isCreatorFor"><spring:message code="components.create-debate-position"/></form:label>
+                        </td>
+                        <td>
+                            <form:radiobutton path="isCreatorFor" value="true" id="for" cssClass="radio-button"/>
+                            <form:label path="isCreatorFor" for="for"><spring:message
+                                    code="components.create-debate-position-for"/></form:label>
+                        </td>
+                        <td>
+                            <form:radiobutton path="isCreatorFor" value="false" id="against" cssClass="radio-button"/>
+                            <form:label path="isCreatorFor" for="against"><spring:message
+                                    code="components.create-debate-position-against"/></form:label>
+                        </td>
+                    </tr>
+                </table>
 
                 <div class="input-field">
                     <c:set var="usernameError"><form:errors path="opponentUsername"/></c:set>

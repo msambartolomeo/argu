@@ -200,6 +200,7 @@ public class WebController {
         debateService.create(form.getTitle(),
                 form.getDescription(),
                 auth.getName(),
+                form.getIsCreatorFor(),
                 form.getOpponentUsername(),
                 form.getImage().getBytes(),
                 form.getCategory());

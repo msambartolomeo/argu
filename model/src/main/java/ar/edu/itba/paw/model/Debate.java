@@ -24,10 +24,12 @@ public class Debate {
     @Column(name = "description", nullable = false, columnDefinition = "text")
     private String description;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "creatorid")
     private User creator;
+
+    @Column(name = "iscreatorfor", nullable = false, columnDefinition = "boolean default 'true'")
+    private boolean isCreatorFor;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "opponentid")
@@ -68,10 +70,12 @@ public class Debate {
 
     Debate() {}
 
-    public Debate(String name, String description, User creator, User opponent, Image image, DebateCategory category, DebateStatus status) {
+    public Debate(String name, String description, User creator, boolean isCreatorFor, User opponent, Image image, DebateCategory category,
+                  DebateStatus status) {
         this.name = name;
         this.description = description;
         this.creator = creator;
+        this.isCreatorFor = isCreatorFor;
         this.opponent = opponent;
         this.image = image;
         this.category = category;
@@ -141,4 +145,10 @@ public class Debate {
         return (int) Math.round((againstCount * 100.0) / (forCount + againstCount));
 
     }
+
+    public boolean isCreatorFor() {
+        return isCreatorFor;
+    }
+
+
 }
