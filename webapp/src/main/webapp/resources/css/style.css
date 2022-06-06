@@ -729,3 +729,18 @@ div.card.debate-list-header {
     margin: 1% 3%;
     color: white !important;
 }
+
+table.radio-button-class tbody tr td input {
+    opacity: 100% !important;
+    position: relative !important;
+    margin-top: 1%;
+}
+
+table.radio-button-class tbody tr td label {
+    font-size: 1rem;
+}
+
+table.radio-button-class {
+    /*border-color: black;*/
+    border-bottom-color: black !important;
+}

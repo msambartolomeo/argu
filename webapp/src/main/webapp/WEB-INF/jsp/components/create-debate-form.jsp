@@ -25,15 +25,18 @@
                     <form:errors path="description" element="span" cssClass="error" />
                 </div>
                 
-                <table class="no-borders">
+                <table class="radio-button-class">
                     <tr>
                         <td>
                             <form:label path="isCreatorFor"><spring:message code="components.create-debate-position"/></form:label>
                         </td>
+<%--                    </tr>--%>
+<%--                    <tr>--%>
                         <td>
-                            <form:radiobutton path="isCreatorFor" value="true" id="for" cssClass="radio-button"/>
+                            <form:radiobutton path="isCreatorFor" value="true" id="for" cssClass="radio-button">
                             <form:label path="isCreatorFor" for="for"><spring:message
                                     code="components.create-debate-position-for"/></form:label>
+                                </form:radiobutton>
                         </td>
                         <td>
                             <form:radiobutton path="isCreatorFor" value="false" id="against" cssClass="radio-button"/>
