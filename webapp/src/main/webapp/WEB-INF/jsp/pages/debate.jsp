@@ -63,32 +63,66 @@
                 </div>
                 <hr class="dashed">
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
-                <div class="username-container">
-                    <h6>
-                        <b><spring:message code="pages.debate.for"/></b>
-                        <c:choose>
-                            <c:when test="${debate.creator.username != null}">
-                                <a class="link" href="<c:url value="/user/${debate.creator.username}"/>"> <c:out value="${debate.creator.username}"/></a>
-                            </c:when>
-                            <c:otherwise>
-                                <i><spring:message code="username.deleted"/></i>
-                            </c:otherwise>
-                        </c:choose>
-                    </h6>
-                </div>
-                <div class="username-container">
-                    <h6>
-                        <b><spring:message code="pages.debate.against"/></b>
-                        <c:choose>
-                            <c:when test="${debate.opponent.username != null}">
-                                <a class="link" href="<c:url value="/user/${debate.opponent.username}"/>"> <c:out value="${debate.opponent.username}"/></a>
-                            </c:when>
-                            <c:otherwise>
-                                <i><spring:message code="username.deleted"/></i>
-                            </c:otherwise>
-                        </c:choose>
-                    </h6>
-                </div>
+                <c:choose>
+                    <c:when test="${debate.isCreatorFor}">
+                        <div class="username-container">
+                            <h6>
+                                <b><spring:message code="pages.debate.for"/></b>
+                                <c:choose>
+                                    <c:when test="${debate.creator.username != null}">
+                                        <a class="link" href="<c:url value="/user/${debate.creator.username}"/>"> <c:out value="${debate.creator.username}"/></a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i><spring:message code="username.deleted"/></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </h6>
+                        </div>
+                        <div class="username-container">
+                            <h6>
+                                <b><spring:message code="pages.debate.against"/></b>
+                                <c:choose>
+                                    <c:when test="${debate.opponent.username != null}">
+                                        <a class="link" href="<c:url value="/user/${debate.opponent.username}"/>"> <c:out value="${debate.opponent.username}"/></a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i><spring:message code="username.deleted"/></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </h6>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="username-container">
+                            <h6>
+                                <b><spring:message code="pages.debate.for"/></b>
+                                <c:choose>
+                                    <c:when test="${debate.opponent.username != null}">
+                                        <a class="link" href="<c:url value="/user/${debate.opponent.username}"/>"> <c:out
+                                                value="${debate.opponent.username}"/></a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i><spring:message code="username.deleted"/></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </h6>
+                        </div>
+                        <div class="username-container">
+                            <h6>
+                                <b><spring:message code="pages.debate.against"/></b>
+                                <c:choose>
+                                    <c:when test="${debate.creator.username != null}">
+                                        <a class="link" href="<c:url value="/user/${debate.creator.username}"/>"> <c:out
+                                                value="${debate.creator.username}"/></a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i><spring:message code="username.deleted"/></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </h6>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
             <div class="debate-footer">
                 <sec:authorize access="hasAuthority('USER')">

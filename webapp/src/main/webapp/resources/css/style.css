@@ -718,7 +718,7 @@ div.category-list div.collection.with-header {
 }
 
 .no-borders {
-    border-collapse: collapse;
+    border-collapse: separate !important;
 }
 
 div.card.debate-list-header {
@@ -738,9 +738,13 @@ table.radio-button-class tbody tr td input {
 
 table.radio-button-class tbody tr td label {
     font-size: 1rem;
+    color: black !important;
+}
+
+table.radio-button-class tbody tr td.radio-button-label label {
+    padding-left: 5% !important;
+    margin-left: -5% !important;
 }
 
 table.radio-button-class {
-    /*border-color: black;*/
-    border-bottom-color: black !important;
 }

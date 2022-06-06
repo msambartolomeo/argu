@@ -25,7 +25,7 @@ public class CreateDebateForm {
     private DebateCategory category;
 
     @NotNull
-    private boolean isCreatorFor = true;
+    private boolean isCreatorFor;
 
     @Size(max = 64)
     @NotEmpty
@@ -91,7 +91,7 @@ public class CreateDebateForm {
         return isCreatorFor;
     }
 
-    public void setCreatorFor(boolean creatorFor) {
+    public void setIsCreatorFor(boolean creatorFor) {
         isCreatorFor = creatorFor;
     }
 }

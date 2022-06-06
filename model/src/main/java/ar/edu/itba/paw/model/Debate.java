@@ -146,9 +146,7 @@ public class Debate {
 
     }
 
-    public boolean isCreatorFor() {
+    public boolean getIsCreatorFor() {
         return isCreatorFor;
     }
-
-
 }
