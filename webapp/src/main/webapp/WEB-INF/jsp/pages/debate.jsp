@@ -180,8 +180,8 @@
                                 </a>
                             </div>
                         </c:when>
-                        <c:when test="">
-                        </c:when>
+<%--                        <c:when test="">--%>
+<%--                        </c:when>--%>
                         <c:when test="${((empty lastArgument && pageContext.request.userPrincipal.name == debate.creator.username) || (not empty lastArgument && pageContext.request.userPrincipal.name != lastArgument.user.username))}">
                             <%@include file="../components/post-comment.jsp" %>
                         </c:when>
@@ -241,7 +241,7 @@
                 <div class="card vote-section no-top-margin">
                     <c:choose>
                         <c:when test="${debate.forCount + debate.againstCount > 0}">
-                            <h5>Votes</h5>
+                            <h5><spring:message code="pages.debate-votes"/></h5>
                             <div class="progress red">
                                 <c:if test="${debate.forCount > 0}">
                                     <div class="votes-format blue" style="width: ${debate.forCount}%">
@@ -258,7 +258,7 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <h5 class="center">No votes yet</h5>
+                            <h5 class="center"><spring:message code="pages.debate-no-votes"/></h5>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -268,9 +268,5 @@
 
 </div>
 <%@include file="../components/JS_imports.jsp" %>
-<%--<script>--%>
-<%--    const elem = document.getElementById('delete-debate');--%>
-<%--    const instance = M.Modal.init(elem);--%>
-<%--</script>--%>
 </body>
 </html>
