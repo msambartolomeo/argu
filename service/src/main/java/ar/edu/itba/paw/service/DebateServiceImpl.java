@@ -145,6 +145,7 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
+    @Transactional
     public void closeVotes(long id, String username) {
         Debate debate = getDebateById(id).orElseThrow(() -> {
             LOGGER.error("Cannot close votes in Debate {} because it does not exist", id);
