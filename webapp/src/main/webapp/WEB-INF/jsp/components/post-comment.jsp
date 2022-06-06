@@ -49,8 +49,7 @@
             </div>
             <a id="x" class="material-icons ${empty imageError? 'x' : ''}" onclick="resetFileValue('file', 'fileName')">close</a>
         </div>
-        <button class="btn waves-effect center-block" type="submit"
-                onclick="this.disabled=true; document.getElementById('postform').submit()">
+        <button class="btn waves-effect center-block submitBtn" type="submit" name="argument" form="postform">
             <c:choose>
                 <c:when test="${empty lastArgument || (lastArgument.status.name == 'introduction' && lastArgument.user.username == debate.creator.username)}">
                     <spring:message code="components.post-intro.submit"/>

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "chats")
@@ -53,5 +54,9 @@ public class Chat {
 
     public LocalDateTime getCreationDate() {
         return creationDate;
+    }
+
+    public String getFormattedDate() {
+        return creationDate.format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
     }
 }

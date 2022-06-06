@@ -49,7 +49,7 @@ public class ChatJpaDao implements ChatDao {
         query.setParameter("ids", ids);
 
         List<Chat> chats = query.getResultList();
-        chats.sort(Comparator.comparing(Chat::getCreationDate).reversed());
+        chats.sort(Comparator.comparing(Chat::getCreationDate));
         return chats;
     }
 

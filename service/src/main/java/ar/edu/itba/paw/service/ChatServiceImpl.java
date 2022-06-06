@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +33,7 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     private DebateService debateService;
 
+    @Transactional
     @Override
     public Chat create(String username, long debateId, String message) {
         Debate debate = debateService.getDebateById(debateId).orElseThrow(() -> {
@@ -66,7 +68,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public int getDebateChatsCount(long debateId) {
+    public int getDebateChatPageCount(long debateId) {
         return (int) Math.ceil(chatDao.getDebateChatsCount(debateId) / (double) PAGE_SIZE);
     }
 }

@@ -264,13 +264,15 @@
                 </div>
             </c:otherwise>
         </c:choose>
+        <div class="card">
+            <c:if test="${(debate.status.name != 'open' && debate.status.name != 'closing') || (pageContext.request.userPrincipal == null ||
+                        (pageContext.request.userPrincipal.name != debate.creator.username && pageContext.request.userPrincipal.name != debate.opponent.username))}">
+                <c:set var="chats" value="${chats}" scope="request"/>
+                <%@include file="../components/chat.jsp" %>
+            </c:if>
+        </div>
     </div>
-
 </div>
 <%@include file="../components/JS_imports.jsp" %>
-<%--<script>--%>
-<%--    const elem = document.getElementById('delete-debate');--%>
-<%--    const instance = M.Modal.init(elem);--%>
-<%--</script>--%>
 </body>
 </html>
