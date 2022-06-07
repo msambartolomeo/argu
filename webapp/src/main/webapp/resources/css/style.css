@@ -718,7 +718,7 @@ div.category-list div.collection.with-header {
 }
 
 .no-borders {
-    border-collapse: collapse;
+    border-collapse: separate !important;
 }
 
 div.card.debate-list-header {
@@ -728,4 +728,23 @@ div.card.debate-list-header {
     background-color: var(--primary-color);
     margin: 1% 3%;
     color: white !important;
+}
+
+table.radio-button-class tbody tr td input {
+    opacity: 100% !important;
+    position: relative !important;
+    margin-top: 1%;
+}
+
+table.radio-button-class tbody tr td label {
+    font-size: 1rem;
+    color: black !important;
+}
+
+table.radio-button-class tbody tr td.radio-button-label label {
+    padding-left: 5% !important;
+    margin-left: -5% !important;
+}
+
+table.radio-button-class {
 }

@@ -47,7 +47,7 @@ public class ArgumentServiceImplTest {
 
     private final static User USER = new User(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
     private final static User USER_2 = new User(USER_USERNAME_2, USER_PASSWORD_2, USER_EMAIL_2);
-    private final static Debate DEBATE = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, USER, USER_2, null, DebateCategory.OTHER, DebateStatus.OPEN);
+    private final static Debate DEBATE = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, USER, true, USER_2, null, DebateCategory.OTHER, DebateStatus.OPEN);
 
     @InjectMocks
     private ArgumentServiceImpl argumentService = new ArgumentServiceImpl();
@@ -129,7 +129,7 @@ public class ArgumentServiceImplTest {
 
         argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE);
     }
-//
+
 //    @Test
 //    public void testGetPostsByDebatePageCount() {
 //        int postCount = 47;
