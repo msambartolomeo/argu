@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Repository
 public class ChatJpaDao implements ChatDao {
 
-    private static final int PAGE_SIZE = 15;
+    static final int PAGE_SIZE = 15;
     @PersistenceContext
     private EntityManager em;
 

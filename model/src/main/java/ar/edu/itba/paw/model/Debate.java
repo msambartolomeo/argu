@@ -21,7 +21,8 @@ public class Debate {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "description", nullable = false, columnDefinition = "text")
+    @Lob
+    @Column(name = "description", nullable = false)
     private String description;
 
 
