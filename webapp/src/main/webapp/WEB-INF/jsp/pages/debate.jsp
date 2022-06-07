@@ -245,13 +245,27 @@
                             <div class="progress red">
                                 <c:if test="${debate.forCount > 0}">
                                     <div class="votes-format blue" style="width: ${debate.forCount}%">
-                                        <span><c:out value="${debate.creator.username}"/></span>
+                                        <c:choose>
+                                            <c:when test="${debate.creator.username != null}">
+                                                <span><c:out value="${debate.creator.username}"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span><spring:message code="username.deleted"/></span>
+                                            </c:otherwise>
+                                        </c:choose>
                                         <span><c:out value="${debate.forCount}"/>%</span>
                                     </div>
                                 </c:if>
                                 <c:if test="${debate.againstCount > 0}">
                                     <div class="votes-format" style="width: ${debate.againstCount}%">
-                                        <span><c:out value="${debate.opponent.username}"/></span>
+                                        <c:choose>
+                                            <c:when test="${debate.opponent.username != null}">
+                                                <span><c:out value="${debate.opponent.username}"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span><spring:message code="username.deleted"/></span>
+                                            </c:otherwise>
+                                        </c:choose>
                                         <span><c:out value="${debate.againstCount}"/>%</span>
                                     </div>
                                 </c:if>
