@@ -145,7 +145,6 @@ public class Debate {
     }
 
     public void closeDebate() {
-        //this.closedDate = LocalDateTime.now();
         if (this.status == DebateStatus.VOTING)
             addPointsToParticipants();
         this.status = DebateStatus.CLOSED;
