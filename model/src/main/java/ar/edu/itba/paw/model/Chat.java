@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +24,7 @@ public class Chat {
     private Debate debate;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(nullable = false)
     private String message;
 

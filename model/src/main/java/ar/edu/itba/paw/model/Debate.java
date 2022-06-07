@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ public class Debate {
     private String name;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "description", nullable = false)
     private String description;
 

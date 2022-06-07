@@ -2,6 +2,7 @@ package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ public class Argument {
     private Debate debate;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(nullable = false)
     private String content;
 
