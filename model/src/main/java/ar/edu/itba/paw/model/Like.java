@@ -30,4 +30,12 @@ public class Like {
         this.argument = argument;
         this.userPostKey = new UserPostKey(user.getUserId(), argument.getArgumentId());
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Argument getArgument() {
+        return argument;
+    }
 }

@@ -300,4 +300,22 @@ public class DebateController {
         debateService.deleteDebate(Long.parseLong(debateId), auth.getName());
         return new ModelAndView("redirect:/debates");
     }
+
+    @RequestMapping(value = "/{debateId}/delete/{postId}", method = {RequestMethod.POST, RequestMethod.DELETE})
+    public ModelAndView deleteArgument(@PathVariable("postId") final String argumentId, @PathVariable("debateId") final String debateId, Authentication auth) {
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/delete/{argumentId} : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
+        if (!argumentId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/delete/{argumentId} : ArgumentId {} not a valid id number", argumentId);
+            throw new ArgumentNotFoundException();
+        }
+        if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/delete/{argumentId} : User not logged in");
+            throw new UnauthorizedUserException();
+        }
+        argumentService.deleteArgument(Long.parseLong(argumentId), auth.getName());
+        return new ModelAndView("redirect:/debates/" + debateId);
+    }
 }

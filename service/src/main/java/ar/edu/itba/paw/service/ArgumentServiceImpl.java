@@ -2,12 +2,10 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.ArgumentDao;
 import ar.edu.itba.paw.interfaces.services.*;
-import ar.edu.itba.paw.model.Argument;
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenArgumentException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
@@ -164,5 +162,28 @@ public class ArgumentServiceImpl implements ArgumentService {
             return new DebateNotFoundException();
         });
         return argumentDao.getLastArgument(debate);
+    }
+
+    @Override
+    @Transactional
+    public void deleteArgument(long argumentId, String username) {
+        Argument argument = argumentDao.getArgumentById(argumentId).orElseThrow(() -> {
+            LOGGER.error("Cannot delete argument {} because it does not exist", argumentId);
+            return new ArgumentNotFoundException();
+        });
+
+        if(!argument.getUser().getUsername().equals(username)) {
+            LOGGER.error("Cannot delete argument {} because user is not the creator", argumentId);
+            throw new ForbiddenArgumentException();
+        }
+
+        imageService.deleteImage(argument.getImage());
+
+        List<Like> likes = argument.getLikes();
+        for(Like like : likes) {
+            likeService.unlikeArgument(like.getArgument().getArgumentId(), like.getUser().getUsername());
+        }
+
+        argument.deleteArgument();
     }
 }
