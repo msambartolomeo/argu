@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -44,9 +45,9 @@ public class ArgumentServiceImplTest {
     private final static String DEBATE_NAME = "Debate Name Test";
     private final static String DEBATE_DESCRIPTION = "Debate Description Test";
 
-    private final static User USER = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-    private final static User USER_2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
-    private final static Debate DEBATE = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, USER, USER_2, null, DebateCategory.OTHER);
+    private User user;
+    private User user2;
+    private Debate debate;
 
     @InjectMocks
     private ArgumentServiceImpl argumentService = new ArgumentServiceImpl();
@@ -64,12 +65,19 @@ public class ArgumentServiceImplTest {
     @Mock
     private LikeService likeService;
 
+    @Before
+    public void setUp() {
+        user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
+        debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, user, user2, null, DebateCategory.OTHER);
+    }
+
     @Test
     public void testGetArgumentsByDebate() {
         List<Argument> arguments = new ArrayList<>();
-        arguments.add(new Argument(USER, DEBATE, POST_CONTENT, null, ArgumentStatus.ARGUMENT));
+        arguments.add(new Argument(user, debate, POST_CONTENT, null, ArgumentStatus.ARGUMENT));
 
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(DEBATE));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt())).thenReturn(arguments);
 
         List<Argument> a = argumentService.getArgumentsByDebate(ID, null, VALID_PAGE);
@@ -83,7 +91,7 @@ public class ArgumentServiceImplTest {
 
     @Test
     public void testGetArgumentsByDebateNotFound() {
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(DEBATE));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
         List<Argument> p = argumentService.getArgumentsByDebate(ID, null, VALID_PAGE);
 
@@ -105,10 +113,10 @@ public class ArgumentServiceImplTest {
     @Test
     public void testGetArgumentsByDebateWithUserLike() {
         List<Argument> arguments = new ArrayList<>();
-        arguments.add(new Argument(USER, DEBATE, POST_CONTENT, null, ArgumentStatus.ARGUMENT));
+        arguments.add(new Argument(user, debate, POST_CONTENT, null, ArgumentStatus.ARGUMENT));
 
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(DEBATE));
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(USER));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
         when(likeService.isLiked(any(User.class), any(Argument.class))).thenReturn(true);
         when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt())).thenReturn(arguments);
 
@@ -124,7 +132,7 @@ public class ArgumentServiceImplTest {
 
     @Test(expected = UserNotFoundException.class)
     public void testGetArgumentsByDebateWithUserLikeNotValidUser() {
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(DEBATE));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
         argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE);
     }

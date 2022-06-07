@@ -11,6 +11,7 @@ import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenChatException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -42,9 +43,9 @@ public class ChatServiceImplTest {
     private final static String DEBATE_NAME = "Debate Name Test";
     private final static String DEBATE_DESCRIPTION = "Debate Description Test";
 
-    private final static User USER = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-    private final static User USER_2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
-    private final static Debate DEBATE = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, USER, USER_2, null, DebateCategory.OTHER);
+    private User user;
+    private User user2;
+    private Debate debate;
 
     private final static int VALID_PAGE = 0;
     private final static int INVALID_PAGE = -1;
@@ -58,6 +59,13 @@ public class ChatServiceImplTest {
     @Mock
     private DebateService debateService;
 
+    @Before
+    public void setUp() {
+        user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
+        debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, user, user2, null, DebateCategory.OTHER);
+    }
+
     @Test(expected = DebateNotFoundException.class)
     public void testCreateChatNoDebate() {
         chatService.create(CHAT_USERNAME, DEBATE_ID, MESSAGE);
@@ -65,35 +73,35 @@ public class ChatServiceImplTest {
 
     @Test(expected = UserNotFoundException.class)
     public void testCreateChatNoUser() {
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(DEBATE));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
         chatService.create(CHAT_USERNAME, DEBATE_ID, MESSAGE);
     }
 
     @Test(expected = ForbiddenChatException.class)
     public void testCreateChatClosedDebate() {
-        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, USER, USER_2, null, DebateCategory.OTHER);
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, user, user2, null, DebateCategory.OTHER);
         debate.setStatus(DebateStatus.CLOSED);
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(USER));
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
         chatService.create(CHAT_USERNAME, DEBATE_ID, MESSAGE);
     }
 
     @Test(expected = ForbiddenChatException.class)
     public void testCreateChatUserIsParticipant() {
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(DEBATE));
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(USER_2));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user2));
 
         chatService.create(USER_USERNAME, DEBATE_ID, MESSAGE);
     }
 
     @Test
     public void testCreateChat() {
-        Chat chat = new Chat(USER, DEBATE, MESSAGE);
+        Chat chat = new Chat(user, debate, MESSAGE);
         when(chatDao.create(any(User.class), any(Debate.class), anyString())).thenReturn(chat);
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(DEBATE));
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(USER));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
         Chat c = chatService.create(CHAT_USERNAME, DEBATE_ID, MESSAGE);
 
@@ -117,8 +125,8 @@ public class ChatServiceImplTest {
     @Test
     public void testGetDebateChat() {
         List<Chat> chats = new ArrayList<>();
-        chats.add(new Chat(USER, DEBATE, MESSAGE));
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(DEBATE));
+        chats.add(new Chat(user, debate, MESSAGE));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(chatDao.getDebateChat(any(Debate.class), anyInt())).thenReturn(chats);
 
         List<Chat> c = chatService.getDebateChat(DEBATE_ID, VALID_PAGE);

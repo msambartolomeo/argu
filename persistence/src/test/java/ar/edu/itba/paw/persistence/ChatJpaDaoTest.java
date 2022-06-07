@@ -41,7 +41,6 @@ public class ChatJpaDaoTest {
     private final static int PAGE = 0;
 
     private User user;
-    private User user2;
     private Debate debate;
 
     @PersistenceContext
@@ -53,7 +52,7 @@ public class ChatJpaDaoTest {
     @Before
     public void setUp() {
         user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-        user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
+        User user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
         debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, user, user2, null, DebateCategory.OTHER);
         em.persist(user);
         em.persist(user2);
