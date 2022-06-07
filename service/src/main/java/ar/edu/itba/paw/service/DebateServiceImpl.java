@@ -14,6 +14,8 @@ import ar.edu.itba.paw.model.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -145,22 +147,12 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
+    //@Async TODO: Preguntar esto
     @Transactional
-    public void closeVotes(long id, String username) {
-        Debate debate = getDebateById(id).orElseThrow(() -> {
-            LOGGER.error("Cannot close votes in Debate {} because it does not exist", id);
-            return new DebateNotFoundException();
-        });
-
-        if (debate.getStatus() == DebateStatus.DELETED || !username.equals(debate.getCreator().getUsername())) {
-            LOGGER.error("Cannot close votes in Debate {} because it is deleted or the user {} is not the creator", id, username);
-            throw new ForbiddenDebateException();
+    @Scheduled(cron = "0 0 0 * * *") // Runs at midnight every day
+    public void closeVotes() {
+        for (Debate debate : debateDao.getDebatesToClose()) {
+            debate.closeDebate();
         }
-
-        if (debate.getStatus() != DebateStatus.VOTING) {
-            LOGGER.error("Cannot close votes in Debate {} because it is not in voting state", id);
-            throw new ForbiddenDebateException();
-        }
-        debate.closeDebate();
     }
 }

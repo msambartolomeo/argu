@@ -197,17 +197,6 @@ public class DebateController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/{debateId:\\d+}/concludeVoting", method = {RequestMethod.POST})
-    public ModelAndView concludeVoting(@PathVariable("debateId") final String debateId, Authentication auth) {
-        if (auth == null || auth.getPrincipal() == null) {
-            LOGGER.error("/debates/{debateId}/concludeVoting : User not logged in");
-            throw new UnauthorizedUserException();
-        }
-
-        debateService.closeVotes(Long.parseLong(debateId), auth.getName());
-        return new ModelAndView("redirect:/debates/" + debateId);
-    }
-
     @RequestMapping(value = "/{debateId}/subscribe", method = { RequestMethod.POST })
     public ModelAndView subscribe(@PathVariable("debateId") final String debateId, Authentication auth) {
         if (!debateId.matches("\\d+")) {

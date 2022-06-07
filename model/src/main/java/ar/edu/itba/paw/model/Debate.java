@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.enums.DebateStatus;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
@@ -40,8 +41,8 @@ public class Debate {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-    //@Column(name = "closed_date")
-    //private LocalDateTime closedDate;
+    @Column(name = "date_to_close")
+    private LocalDate dateToClose;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "category", nullable = false, length = 20)
@@ -139,6 +140,10 @@ public class Debate {
 
     }
 
+    public LocalDate getDateToClose() {
+        return dateToClose;
+    }
+
     public void closeDebate() {
         //this.closedDate = LocalDateTime.now();
         if (this.status == DebateStatus.VOTING)
@@ -147,6 +152,7 @@ public class Debate {
     }
 
     public void startVoting() {
+        this.dateToClose = LocalDate.now().plusDays(7); // TODO: Decide on a correct date to close
         this.status = DebateStatus.VOTING;
     }
 

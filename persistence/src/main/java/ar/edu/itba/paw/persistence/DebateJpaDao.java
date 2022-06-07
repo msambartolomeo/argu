@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -201,5 +202,15 @@ public class DebateJpaDao implements DebateDao {
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();
         return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
+    }
+
+    @Override
+    public List<Debate> getDebatesToClose() {
+        LocalDate date = LocalDate.now();
+        final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.status = :status AND d.dateToClose = :date", Debate.class);
+        query.setParameter("status", DebateStatus.VOTING);
+        query.setParameter("date", date);
+
+        return query.getResultList();
     }
 }

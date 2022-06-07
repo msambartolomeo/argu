@@ -197,17 +197,6 @@
         <c:choose>
             <c:when test="${pageContext.request.userPrincipal.name != null && debate.creator.username != null && debate.opponent.username != null}">
                 <div class="card vote-section no-top-margin">
-                    <c:if test="${debate.status.name == 'voting' && (pageContext.request.userPrincipal.name == debate.creator.username)}">
-                        <div class="conclude-voting-btn">
-                            <c:url var="concludeVotingPath" value="/debates/${debate.debateId}/concludeVoting"/>
-                            <form:form method="post" action="${concludeVotingPath}">
-                                <button type="submit" class="btn waves-effect chip">
-                                    <spring:message code="pages.debate.conclude-voting"/>
-                                    <i class="material-icons right">close</i>
-                                </button>
-                            </form:form>
-                        </div>
-                    </c:if>
                     <c:choose>
                         <c:when test="${userVote == null && (debate.status.name == 'voting' || debate.status.name == 'open')}">
                             <h5 class="center"><spring:message code="pages.debate.who-wins"/></h5>
