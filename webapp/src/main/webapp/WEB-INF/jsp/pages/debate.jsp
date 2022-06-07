@@ -232,7 +232,7 @@
             <c:when test="${pageContext.request.userPrincipal.name != null && debate.creator.username != null && debate.opponent.username != null}">
                 <div class="card vote-section no-top-margin">
                     <c:choose>
-                        <c:when test="${userVote == null && (debate.status.name == 'voting' || debate.status.name == 'open')}">
+                        <c:when test="${userVote == null && (debate.status.name == 'voting' || debate.status.name == 'open' || debate.status.name == 'closing')}">
                             <h5 class="center"><spring:message code="pages.debate.who-wins"/></h5>
                             <div class="vote-buttons">
                                 <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>
@@ -262,7 +262,7 @@
                                     </div>
                                 </c:if>
                             </div>
-                            <c:if test="${debate.status.name == 'open' || debate.status.name == 'voting'}">
+                            <c:if test="${debate.status.name == 'open' || debate.status.name == 'voting' || debate.status.name == 'voting'}">
                                 <h6><spring:message code="page.debate.change-vote"/></h6>
                                 <c:url var="unvotePath" value="/debates/${debate.debateId}/unvote"/>
                                 <form:form method="delete" action="${unvotePath}">
