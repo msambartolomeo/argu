@@ -39,6 +39,7 @@ public class DebateServiceImpl implements DebateService {
     private EmailService emailService;
 
     @Override
+    @Transactional
     public Optional<Debate> getDebateById(long debateId) {
         Optional<Debate> debate = debateDao.getDebateById(debateId);
         if(debate.isPresent() && debate.get().getStatus() == DebateStatus.DELETED) return Optional.empty();
@@ -68,6 +69,7 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
+    @Transactional
     public List<Debate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         if (page < 0)
             return Collections.emptyList();
@@ -80,11 +82,13 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
+    @Transactional
     public List<Debate> getMostSubscribed() {
         return debateDao.getDebatesDiscovery(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
     }
 
     @Override
+    @Transactional
     public List<Debate> getProfileDebates(String list, long userId, int page) {
         if (list.equals("mydebates"))
             return getUserDebates(userId, page);
@@ -96,6 +100,7 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
+    @Transactional
     public List<Debate> getUserDebates(long userId, int page) {
         if (page < 0) {
             return Collections.emptyList();
@@ -112,6 +117,7 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
+    @Transactional
     public int getUserDebatesPageCount(long userId) {
         return (int) Math.ceil(debateDao.getUserDebatesCount(userId) / (double) PAGE_SIZE);
     }

@@ -55,6 +55,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
+    @Transactional
     public List<Chat> getDebateChat(long debateId, int page) {
         if (page < 0) {
             return Collections.emptyList();
