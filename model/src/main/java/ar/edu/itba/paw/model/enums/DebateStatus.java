@@ -4,7 +4,8 @@ public enum DebateStatus {
     OPEN("open"),
     CLOSED("closed"),
     DELETED("deleted"),
-    CLOSING("closing");
+    CLOSING("closing"),
+    VOTING("voting");
 
     private final String name;
 

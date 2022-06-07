@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.enums.DebateStatus;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
@@ -42,6 +43,9 @@ public class Debate {
 
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
+
+    @Column(name = "date_to_close")
+    private LocalDate dateToClose;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "category", nullable = false, length = 20)
@@ -82,12 +86,6 @@ public class Debate {
         this.status = DebateStatus.OPEN;
         this.createdDate = LocalDateTime.now();
     }
-
-    @Deprecated
-    public Debate(long id, String name, String description, Long creatorId, Long opponentId, LocalDateTime createdDate, Long imageId, DebateCategory category, DebateStatus debateStatus) {}
-
-    @Deprecated
-    public Debate(long id, String name, String description, Long creatorId, Long opponentId, LocalDateTime createdDate, DebateCategory category, DebateStatus debateStatus) {}
 
     public long getDebateId() {
         return debateId;
@@ -148,5 +146,46 @@ public class Debate {
 
     public boolean getIsCreatorFor() {
         return isCreatorFor;
+    }
+
+    public LocalDate getDateToClose() {
+        return dateToClose;
+    }
+
+    public void closeDebate() {
+        if (this.status == DebateStatus.VOTING)
+            addPointsToParticipants();
+        this.status = DebateStatus.CLOSED;
+    }
+
+    public void startVoting() {
+        this.dateToClose = LocalDate.now().plusDays(7); // TODO: Decide on a correct date to close
+        this.status = DebateStatus.VOTING;
+    }
+
+    private User getWinner() {
+        // TODO: Change when creator can be against
+        if (forCount > againstCount) {
+            return creator;
+        } else if (forCount < againstCount) {
+            return opponent;
+        } else {
+            return null;
+        }
+    }
+
+    private void addPointsToParticipants() {
+        // TODO: Change when creator can be against
+        int totalPoints = forCount + againstCount;
+        User winner = getWinner();
+        if (winner != null) {
+            User loser = creator.equals(winner) ? opponent : creator;
+            winner.addWinPoints(totalPoints);
+            loser.addLosePoints(totalPoints);
+        }
+        else {
+            creator.addDrawPoints(totalPoints);
+            opponent.addDrawPoints(totalPoints);
+        }
     }
 }

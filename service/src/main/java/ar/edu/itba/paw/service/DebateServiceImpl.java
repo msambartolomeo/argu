@@ -14,6 +14,8 @@ import ar.edu.itba.paw.model.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -146,4 +148,13 @@ public class DebateServiceImpl implements DebateService {
         debate.setStatus(DebateStatus.DELETED);
     }
 
+    @Override
+    //@Async TODO: Preguntar esto
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *") // Runs at midnight every day
+    public void closeVotes() {
+        for (Debate debate : debateDao.getDebatesToClose()) {
+            debate.closeDebate();
+        }
+    }
 }

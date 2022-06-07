@@ -25,4 +25,6 @@ public interface DebateDao {
     List<Debate> getUserDebates(long userId, int page);
 
     int getUserDebatesCount(long userid);
+
+    List<Debate> getDebatesToClose();
 }

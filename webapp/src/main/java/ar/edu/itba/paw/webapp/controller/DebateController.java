@@ -198,7 +198,6 @@ public class DebateController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-
     @RequestMapping(value = "/{debateId}/subscribe", method = { RequestMethod.POST })
     public ModelAndView subscribe(@PathVariable("debateId") final String debateId, Authentication auth) {
         if (!debateId.matches("\\d+")) {

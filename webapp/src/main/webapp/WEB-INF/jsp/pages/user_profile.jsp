@@ -26,6 +26,10 @@
                 <h4>
                     <c:out value="${user.username}"/>
                 </h4>
+                <h5>
+                    <i class="material-icons left">stars</i>
+                    <c:out value="${user.points}"/>
+                </h5>
                 <h6>
                     <spring:message code="pages.profile.created-in"/> <c:out value="${user.createdDate}"/>
                 </h6>

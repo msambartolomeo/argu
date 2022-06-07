@@ -7,10 +7,12 @@ import ar.edu.itba.paw.interfaces.services.VoteService;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Vote;
+import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserAlreadyVotedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.VotingForbiddenException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,11 @@ public class VoteServiceImpl implements VoteService {
             LOGGER.error("Cannot vote winner in debate {} because it does not exist", debateId);
             return new DebateNotFoundException();
         });
+        DebateStatus status = debate.getStatus();
+        if (status == DebateStatus.DELETED || status == DebateStatus.CLOSED) {
+            LOGGER.error("Cannot vote winner in debate {} because it is closed or deleted", debateId);
+            throw new VotingForbiddenException();
+        }
         Optional<Vote> voteOptional = voteDao.getVote(user, debate);
         if (voteOptional.isPresent()) {
             LOGGER.error("Cannot vote winner in debate {} because user {} already voted", debateId, username);
@@ -75,6 +82,11 @@ public class VoteServiceImpl implements VoteService {
             LOGGER.error("Cannot remove vote in debate {} because it does not exist", debateId);
             return new DebateNotFoundException();
         });
+        DebateStatus status = debate.getStatus();
+        if (status == DebateStatus.DELETED || status == DebateStatus.CLOSED) {
+            LOGGER.error("Cannot remove vote in debate {} because it is closed or deleted", debateId);
+            throw new VotingForbiddenException();
+        }
         voteDao.getVote(user, debate).ifPresent(vote -> voteDao.delete(vote)); // TODO: why get before delete?
     }
 }
