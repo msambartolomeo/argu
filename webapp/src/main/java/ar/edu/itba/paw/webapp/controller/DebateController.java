@@ -1,16 +1,13 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.services.DebateService;
-import ar.edu.itba.paw.interfaces.services.LikeService;
-import ar.edu.itba.paw.interfaces.services.ArgumentService;
-import ar.edu.itba.paw.interfaces.services.SubscribedService;
-import ar.edu.itba.paw.interfaces.services.VoteService;
+import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.form.ArgumentForm;
+import ar.edu.itba.paw.webapp.form.ChatForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +32,17 @@ public class DebateController {
     private final VoteService voteService;
     private final ArgumentService argumentService;
     private final LikeService likeService;
+    private final ChatService chatService;
     private static final Logger LOGGER = LoggerFactory.getLogger(DebateController.class);
 
     @Autowired
-    public DebateController(DebateService debateService, ArgumentService argumentService, LikeService likeService, SubscribedService subscribedService, VoteService voteService) {
+    public DebateController(DebateService debateService, ArgumentService argumentService, LikeService likeService, SubscribedService subscribedService, VoteService voteService, ChatService chatService) {
         this.debateService = debateService;
         this.argumentService = argumentService;
         this.likeService = likeService;
         this.subscribedService = subscribedService;
         this.voteService = voteService;
+        this.chatService = chatService;
     }
 
     @RequestMapping(method = { RequestMethod.GET, RequestMethod.HEAD })
@@ -82,14 +81,14 @@ public class DebateController {
     }
 
     @RequestMapping(value = "/{debateId}", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView debate(@PathVariable("debateId") final String debateId, @ModelAttribute("argumentForm") final ArgumentForm form,
-                               @RequestParam(value = "page", defaultValue = "0") String page, Authentication auth) {
+    public ModelAndView debate(@PathVariable("debateId") final String debateId, @ModelAttribute("argumentForm") final ArgumentForm form, @ModelAttribute("chatForm") final ChatForm chatForm,
+                               @RequestParam(value = "page", defaultValue = "0") String page, Authentication auth, @RequestParam(value = "chatPage", defaultValue = "0") String chatPage) {
 
         if (!debateId.matches("\\d+")) {
             LOGGER.error("/debates/{debateId} : DebateId {} not a valid id number", debateId);
             throw new DebateNotFoundException();
         }
-        if (!page.matches("-?\\d+")) {
+        if (!page.matches("-?\\d+") || !chatPage.matches("-?\\d+")) {
             LOGGER.error("/debates/{debateId} : Invalid page number {}", page);
             throw new InvalidPageException();
         }
@@ -111,6 +110,8 @@ public class DebateController {
         }
         mav.addObject("arguments", argumentService.getArgumentsByDebate(debateIdNum, username, pageNum));
         mav.addObject("total_pages", argumentService.getArgumentByDebatePageCount(debateIdNum));
+        mav.addObject("chats", chatService.getDebateChat(debateIdNum, Integer.parseInt(chatPage)));
+        mav.addObject("total_chat_pages", chatService.getDebateChatPageCount(debateIdNum));
 
         return mav;
     }
@@ -130,13 +131,13 @@ public class DebateController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/{debateId}", method = { RequestMethod.POST })
-    public ModelAndView createArgument(@PathVariable("debateId") final String debateId,
+    @RequestMapping(value = "/{debateId}", method = { RequestMethod.POST }, params = "content")
+    public ModelAndView createArgument(@PathVariable("debateId") final String debateId, @ModelAttribute("chatForm") final ChatForm chatForm,
                                    @Valid @ModelAttribute("argumentForm") final ArgumentForm form, BindingResult errors, Authentication auth) throws IOException {
 
         if (errors.hasErrors()) {
             LOGGER.warn("Create argument form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return debate(debateId, form, "0", auth);
+            return debate(debateId, form, chatForm,"0", auth, "0");
         }
         if (!debateId.matches("\\d+")) {
             LOGGER.error("/debates/{debateId} : DebateId {} not a valid id number", debateId);
@@ -266,10 +267,34 @@ public class DebateController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
+    @RequestMapping(value = "/{debateId}", method = { RequestMethod.POST }, params = "message")
+    public ModelAndView chat(@PathVariable("debateId") final String debateId, Authentication auth, @ModelAttribute("argumentForm") ArgumentForm argumentForm, @Valid @ModelAttribute("chatForm") ChatForm form, BindingResult errors) {
+        if (errors.hasErrors()) {
+            LOGGER.warn("Create chat form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
+            return debate(debateId, argumentForm, form,"0", auth, "0");
+        }
+
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/chat : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
+        if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/chat : User not logged in");
+            throw new UnauthorizedUserException();
+        }
+
+        chatService.create(auth.getName(), Long.parseLong(debateId), form.getMessage());
+        return new ModelAndView("redirect:/debates/" + debateId);
+    }
+
     @RequestMapping(value = "/{debateId}/delete", method = {RequestMethod.POST, RequestMethod.DELETE})
     public ModelAndView deleteDebate(@PathVariable("debateId") final String debateId, Authentication auth) {
-        if (!debateId.matches("\\d+")) throw new DebateNotFoundException();
+        if (!debateId.matches("\\d+")) {
+            LOGGER.error("/debates/{debateId}/delete : DebateId {} not a valid id number", debateId);
+            throw new DebateNotFoundException();
+        }
         if (auth == null || auth.getPrincipal() == null) {
+            LOGGER.error("/debates/{debateId}/delete : User not logged in");
             throw new UnauthorizedUserException();
         }
 

@@ -25,7 +25,8 @@ public class Argument {
     @JoinColumn(name = "debateid")
     private Debate debate;
 
-    @Column(columnDefinition = "text", nullable = false)
+    @Lob
+    @Column(nullable = false)
     private String content;
 
     @Column(name = "created_date", nullable = false)

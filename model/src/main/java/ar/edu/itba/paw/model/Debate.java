@@ -21,7 +21,8 @@ public class Debate {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "description", nullable = false, columnDefinition = "text")
+    @Lob
+    @Column(name = "description", nullable = false)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -70,8 +71,7 @@ public class Debate {
 
     Debate() {}
 
-    public Debate(String name, String description, User creator, boolean isCreatorFor, User opponent, Image image, DebateCategory category,
-                  DebateStatus status) {
+    public Debate(String name, String description, User creator, boolean isCreatorFor, User opponent, Image image, DebateCategory category) {
         this.name = name;
         this.description = description;
         this.creator = creator;
@@ -79,7 +79,7 @@ public class Debate {
         this.opponent = opponent;
         this.image = image;
         this.category = category;
-        this.status = status;
+        this.status = DebateStatus.OPEN;
         this.createdDate = LocalDateTime.now();
     }
 
