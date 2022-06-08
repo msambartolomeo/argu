@@ -177,7 +177,8 @@ public class ArgumentServiceImpl implements ArgumentService {
             throw new ForbiddenArgumentException();
         }
 
-        imageService.deleteImage(argument.getImage());
+        if(argument.getImage() != null)
+            imageService.deleteImage(argument.getImage());
 
         List<Like> likes = argument.getLikes();
         for(Like like : likes) {
