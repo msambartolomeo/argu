@@ -105,7 +105,7 @@ public class DebateController {
         if(auth != null && auth.getPrincipal() != null) {
             username = auth.getName();
             mav.addObject("isSubscribed", subscribedService.isUserSubscribed(auth.getName(), debateIdNum));
-            voteService.getVote(debateIdNum, auth.getName()).ifPresent(v -> mav.addObject("userVote", v));
+            voteService.getVote(debateIdNum, auth.getName()).ifPresent(v -> mav.addObject("userVote", v.getVote()));
             argumentService.getLastArgument(debateIdNum).ifPresent(lastArgument -> mav.addObject("lastArgument", lastArgument));
         }
         mav.addObject("arguments", argumentService.getArgumentsByDebate(debateIdNum, username, pageNum));
