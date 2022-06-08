@@ -30,7 +30,7 @@
                         </c:forEach>
                         <spring:param name="page" value="${page - 1}"/>
                     </spring:url>
-                    <a href="${link}">${page}</a>
+                    <a href="${link}"><c:out value="${page}"/></a>
                 </li>
             </c:forEach>
             <c:if test="${param.page + 1 < total_pages}">
