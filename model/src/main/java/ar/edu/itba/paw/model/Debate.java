@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateResult;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
@@ -165,29 +166,36 @@ public class Debate {
         this.status = DebateStatus.VOTING;
     }
 
-    private User getWinner() {
-        // TODO: Change when creator can be against
-        if (forCount > againstCount) {
-            return creator;
-        } else if (forCount < againstCount) {
-            return opponent;
-        } else {
-            return null;
-        }
+    public DebateResult getDebateResult() {
+        if (forCount == againstCount)
+            return DebateResult.DRAW;
+        else if (forCount > againstCount)
+            return DebateResult.FOR;
+        else
+            return DebateResult.AGAINST;
     }
 
     private void addPointsToParticipants() {
-        // TODO: Change when creator can be against
         int totalPoints = forCount + againstCount;
-        User winner = getWinner();
-        if (winner != null) {
-            User loser = creator.equals(winner) ? opponent : creator;
-            winner.addWinPoints(totalPoints);
-            loser.addLosePoints(totalPoints);
+        DebateResult result = getDebateResult();
+        User winner;
+        User loser;
+        switch (result) {
+            case FOR:
+                winner = creator;
+                loser = opponent;
+                break;
+            case AGAINST:
+                winner = opponent;
+                loser = creator;
+                break;
+            case DRAW:
+            default:
+                creator.addDrawPoints(totalPoints);
+                opponent.addDrawPoints(totalPoints);
+                return;
         }
-        else {
-            creator.addDrawPoints(totalPoints);
-            opponent.addDrawPoints(totalPoints);
-        }
+        winner.addWinPoints(totalPoints);
+        loser.addLosePoints(totalPoints);
     }
 }
