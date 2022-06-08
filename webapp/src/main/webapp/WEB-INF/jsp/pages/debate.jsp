@@ -262,6 +262,31 @@
                                     </div>
                                 </c:if>
                             </div>
+                            <c:if test="${debate.status.name == 'closed'}">
+                                <c:choose>
+                                    <c:when test="${debate.debateResult == 'DRAW'}">
+                                        <h6><spring:message code="pages.debate.draw"/></h6>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h6><spring:message code="pages.debate.winner"/>
+                                            <c:choose>
+                                                <c:when test="${debate.debateResult == 'FOR'}">
+                                                    <c:choose>
+                                                        <c:when test="${debate.isCreatorFor}"><c:out value="${debate.creator.username}"/></c:when>
+                                                        <c:otherwise><c:out value="${debate.opponent.username}"/> </c:otherwise>
+                                                    </c:choose>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:choose>
+                                                        <c:when test="${debate.isCreatorFor}"><c:out value="${debate.opponent.username}"/></c:when>
+                                                        <c:otherwise><c:out value="${debate.creator.username}"/> </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </h6>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:if>
                             <c:if test="${debate.status.name == 'open' || debate.status.name == 'voting' || debate.status.name == 'voting'}">
                                 <h6><spring:message code="page.debate.change-vote"/></h6>
                                 <c:url var="unvotePath" value="/debates/${debate.debateId}/unvote"/>
@@ -306,6 +331,31 @@
                                     </div>
                                 </c:if>
                             </div>
+                            <c:if test="${debate.status.name == 'closed'}">
+                                <c:choose>
+                                    <c:when test="${debate.debateResult == 'DRAW'}">
+                                        <h6><spring:message code="pages.debate.draw"/></h6>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h6><spring:message code="pages.debate.winner"/>
+                                            <c:choose>
+                                                <c:when test="${debate.debateResult == 'FOR'}">
+                                                    <c:choose>
+                                                        <c:when test="${debate.isCreatorFor}"><c:out value="${debate.creator.username}"/></c:when>
+                                                        <c:otherwise><c:out value="${debate.opponent.username}"/> </c:otherwise>
+                                                    </c:choose>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:choose>
+                                                        <c:when test="${debate.isCreatorFor}"><c:out value="${debate.opponent.username}"/></c:when>
+                                                        <c:otherwise><c:out value="${debate.creator.username}"/> </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </h6>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:if>
                         </c:when>
                         <c:otherwise>
                             <h5 class="center"><spring:message code="pages.debate-no-votes"/></h5>
