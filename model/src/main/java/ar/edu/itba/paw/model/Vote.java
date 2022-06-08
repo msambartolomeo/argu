@@ -42,4 +42,8 @@ public class Vote {
     public DebateVote getVote() {
         return vote;
     }
+
+    public User getUser() {
+        return user;
+    }
 }

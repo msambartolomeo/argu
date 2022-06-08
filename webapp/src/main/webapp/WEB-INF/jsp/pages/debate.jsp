@@ -247,7 +247,7 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <h6><spring:message code="pages.debate.voted"/> <c:out value="${userVote}"/></h6>
+                            <h6><spring:message code="pages.debate.voted"/> <c:out value="${userVote.user.username}"/></h6>
                             <div class="progress red">
                                 <c:if test="${debate.forCount > 0}">
                                     <div class="votes-format blue" style="width: ${debate.forCount}%">
