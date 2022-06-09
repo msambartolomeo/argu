@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div class="parallax-container">
+        <div class="dark-container">
             <div class="container">
                 <div class="section email-format">
                     <img class="image-size" src="<c:url value="/resources/images/create-participate-debate.png"/>">
@@ -56,7 +56,6 @@
                     </div>
                 </div>
             </div>
-            <div class="parallax"><img src="<c:url value="/resources/images/conference-debate.webp"/>" alt="Unsplashed background img 2"></div>
         </div>
 
         <div class="container">

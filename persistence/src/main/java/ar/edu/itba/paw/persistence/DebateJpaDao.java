@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,8 +26,8 @@ public class DebateJpaDao implements DebateDao {
     private EntityManager em;
 
     @Override
-    public Debate create(String name, String description, User creator, User opponent, Image image, DebateCategory category) {
-        Debate debate = new Debate(name, description, creator, opponent, image, category, DebateStatus.OPEN);
+    public Debate create(String name, String description, User creator, boolean isCreatorFor, User opponent, Image image, DebateCategory category) {
+        Debate debate = new Debate(name, description, creator, isCreatorFor, opponent, image, category);
         em.persist(debate);
         return debate;
     }
@@ -68,34 +69,39 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public List<Debate> getDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
-        StringBuilder queryString = new StringBuilder("SELECT debateid FROM public_debates WHERE TRUE");
-        Map<String, Object> params = setupDiscovery(searchQuery, category, queryString, status, date);
-
-        queryString.append(" ORDER BY");
+        StringBuilder queryString;
         DebateOrder orderBy;
+
         if (order == null)
             orderBy = DebateOrder.DATE_DESC;
         else
             orderBy = order;
 
+        if (orderBy == DebateOrder.SUBS_DESC || orderBy == DebateOrder.SUBS_ASC)
+            queryString = new StringBuilder("SELECT d.debateid FROM debates d LEFT JOIN subscribed s ON d.debateid = s.debateid WHERE TRUE");
+        else
+            queryString = new StringBuilder("SELECT debateid FROM debates WHERE TRUE");
+
+        Map<String, Object> params = setupDiscovery(searchQuery, category, queryString, status, date);
+
         switch(orderBy) {
             case DATE_ASC:
-                queryString.append(" created_date ASC");
+                queryString.append(" ORDER BY created_date ASC");
                 break;
             case DATE_DESC:
-                queryString.append(" created_date DESC");
+                queryString.append(" ORDER BY created_date DESC");
                 break;
             case ALPHA_ASC:
-                queryString.append(" name ASC");
+                queryString.append(" ORDER BY name ASC");
                 break;
             case ALPHA_DESC:
-                queryString.append(" name DESC");
+                queryString.append(" ORDER BY name DESC");
                 break;
             case SUBS_ASC:
-                queryString.append(" subscribedcount ASC");
+                queryString.append(" GROUP BY d.debateid ORDER BY COUNT(DISTINCT s.userid) ASC");
                 break;
             case SUBS_DESC:
-                queryString.append(" subscribedcount DESC");
+                queryString.append(" GROUP BY d.debateid ORDER BY COUNT(DISTINCT s.userid) DESC");
                 break;
         }
 
@@ -127,7 +133,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public int getDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date) {
-        StringBuilder queryString = new StringBuilder("SELECT COUNT(*) FROM public_debates WHERE TRUE");
+        StringBuilder queryString = new StringBuilder("SELECT COUNT(*) FROM debates WHERE TRUE");
 
         Map<String, Object> params = setupDiscovery(searchQuery, category, queryString, status, date);
 
@@ -196,5 +202,15 @@ public class DebateJpaDao implements DebateDao {
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();
         return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
+    }
+
+    @Override
+    public List<Debate> getDebatesToClose() {
+        LocalDate date = LocalDate.now();
+        final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.status = :status AND d.dateToClose = :date", Debate.class);
+        query.setParameter("status", DebateStatus.VOTING);
+        query.setParameter("date", date);
+
+        return query.getResultList();
     }
 }

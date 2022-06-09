@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface DebateDao {
     Optional<Debate> getDebateById(long id);
 
-    Debate create(String name, String description, User creator, User opponent, Image image, DebateCategory category);
+    Debate create(String name, String description, User creator, boolean isCreatorFor, User opponent, Image image, DebateCategory category);
 
     List<Debate> getSubscribedDebatesByUser(long userId, int page);
 
@@ -25,4 +25,6 @@ public interface DebateDao {
     List<Debate> getUserDebates(long userId, int page);
 
     int getUserDebatesCount(long userid);
+
+    List<Debate> getDebatesToClose();
 }

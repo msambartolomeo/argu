@@ -7,6 +7,6 @@ public class ForbiddenDebateException extends Exception403{
     }
     @Override
     public String getMessageCode() {
-        return "error.debate.not.found";
+        return "error.forbidden.debate";
     }
 }

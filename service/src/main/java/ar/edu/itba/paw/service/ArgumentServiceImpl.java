@@ -2,12 +2,10 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.ArgumentDao;
 import ar.edu.itba.paw.interfaces.services.*;
-import ar.edu.itba.paw.model.Argument;
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenArgumentException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
@@ -52,7 +50,7 @@ public class ArgumentServiceImpl implements ArgumentService {
             return new UserNotFoundException();
         });
 
-        if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED || (!debate.getCreator().getUsername().equals(username) && !debate.getOpponent().getUsername().equals(username))) {
+        if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED || debate.getStatus() == DebateStatus.VOTING || (!debate.getCreator().getUsername().equals(username) && !debate.getOpponent().getUsername().equals(username))) {
             LOGGER.error("Cannot create new Argument on Debate {} because it is closed or because the requesting user {} is not the creator or the opponent", debateId, username);
             throw new ForbiddenArgumentException();
         }
@@ -71,6 +69,7 @@ public class ArgumentServiceImpl implements ArgumentService {
     }
 
     // Package-private for testing
+    @Transactional
     ArgumentStatus getArgumentStatus(Debate debate, User user) {
         Optional<Argument> lastArgument = getLastArgument(debate.getDebateId());
 
@@ -101,7 +100,7 @@ public class ArgumentServiceImpl implements ArgumentService {
                     else
                         return ArgumentStatus.CONCLUSION;
                 case CONCLUSION:
-                    debate.setStatus(DebateStatus.CLOSED);
+                    debate.startVoting();
                     return ArgumentStatus.CONCLUSION;
                 default:
                     LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getDebateId(), username);
@@ -121,6 +120,7 @@ public class ArgumentServiceImpl implements ArgumentService {
     }
 
     @Override
+    @Transactional
     public Optional<Argument> getArgumentById(long argumentId) {
         return argumentDao.getArgumentById(argumentId);
     }
@@ -131,6 +131,7 @@ public class ArgumentServiceImpl implements ArgumentService {
     }
 
     @Override
+    @Transactional
     public List<Argument> getArgumentsByDebate(long debateId, String username, int page) {
         if (page < 0)
             return Collections.emptyList();
@@ -154,11 +155,31 @@ public class ArgumentServiceImpl implements ArgumentService {
     }
 
     @Override
+    @Transactional
     public Optional<Argument> getLastArgument(long debateId) {
         final Debate debate = debateService.getDebateById(debateId).orElseThrow(() -> {
             LOGGER.error("Cannot get last Argument for Debate {} because it does not exist", debateId);
             return new DebateNotFoundException();
         });
         return argumentDao.getLastArgument(debate);
+    }
+
+    @Override
+    @Transactional
+    public void deleteArgument(long argumentId, String username) {
+        Argument argument = argumentDao.getArgumentById(argumentId).orElseThrow(() -> {
+            LOGGER.error("Cannot delete argument {} because it does not exist", argumentId);
+            return new ArgumentNotFoundException();
+        });
+
+        if(!argument.getUser().getUsername().equals(username)) {
+            LOGGER.error("Cannot delete argument {} because user is not the creator", argumentId);
+            throw new ForbiddenArgumentException();
+        }
+
+        if(argument.getImage() != null)
+            imageService.deleteImage(argument.getImage());
+
+        argument.deleteArgument();
     }
 }

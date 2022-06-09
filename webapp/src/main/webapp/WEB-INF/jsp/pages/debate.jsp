@@ -63,32 +63,66 @@
                 </div>
                 <hr class="dashed">
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
-                <div class="username-container">
-                    <h6>
-                        <b><spring:message code="pages.debate.for"/></b>
-                        <c:choose>
-                            <c:when test="${debate.creator.username != null}">
-                                <a class="link" href="<c:url value="/user/${debate.creator.username}"/>"> <c:out value="${debate.creator.username}"/></a>
-                            </c:when>
-                            <c:otherwise>
-                                <i><spring:message code="username.deleted"/></i>
-                            </c:otherwise>
-                        </c:choose>
-                    </h6>
-                </div>
-                <div class="username-container">
-                    <h6>
-                        <b><spring:message code="pages.debate.against"/></b>
-                        <c:choose>
-                            <c:when test="${debate.opponent.username != null}">
-                                <a class="link" href="<c:url value="/user/${debate.opponent.username}"/>"> <c:out value="${debate.opponent.username}"/></a>
-                            </c:when>
-                            <c:otherwise>
-                                <i><spring:message code="username.deleted"/></i>
-                            </c:otherwise>
-                        </c:choose>
-                    </h6>
-                </div>
+                <c:choose>
+                    <c:when test="${debate.isCreatorFor}">
+                        <div class="username-container">
+                            <h6>
+                                <b><spring:message code="pages.debate.for"/></b>
+                                <c:choose>
+                                    <c:when test="${debate.creator.username != null}">
+                                        <a class="link" href="<c:url value="/user/${debate.creator.username}"/>"> <c:out value="${debate.creator.username}"/></a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i><spring:message code="username.deleted"/></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </h6>
+                        </div>
+                        <div class="username-container">
+                            <h6>
+                                <b><spring:message code="pages.debate.against"/></b>
+                                <c:choose>
+                                    <c:when test="${debate.opponent.username != null}">
+                                        <a class="link" href="<c:url value="/user/${debate.opponent.username}"/>"> <c:out value="${debate.opponent.username}"/></a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i><spring:message code="username.deleted"/></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </h6>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="username-container">
+                            <h6>
+                                <b><spring:message code="pages.debate.for"/></b>
+                                <c:choose>
+                                    <c:when test="${debate.opponent.username != null}">
+                                        <a class="link" href="<c:url value="/user/${debate.opponent.username}"/>"> <c:out
+                                                value="${debate.opponent.username}"/></a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i><spring:message code="username.deleted"/></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </h6>
+                        </div>
+                        <div class="username-container">
+                            <h6>
+                                <b><spring:message code="pages.debate.against"/></b>
+                                <c:choose>
+                                    <c:when test="${debate.creator.username != null}">
+                                        <a class="link" href="<c:url value="/user/${debate.creator.username}"/>"> <c:out
+                                                value="${debate.creator.username}"/></a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i><spring:message code="username.deleted"/></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </h6>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
             <div class="debate-footer">
                 <sec:authorize access="hasAuthority('USER')">
@@ -114,7 +148,7 @@
                     </c:choose>
                 </sec:authorize>
                 <a class="chip btn" href="<c:url value="/debates?category=${debate.category.name}"/>"><spring:message code="category.${debate.category.name}"/></a>
-                <button class="chip btn" onclick="dateFilter('${debate.formattedDate}')"><spring:message code="components.debate-created-on"/> ${debate.formattedDate}</button>
+                <button class="chip btn" onclick="dateFilter('${debate.formattedDate}')"><spring:message code="components.debate-created-on"/> <c:out value="${debate.formattedDate}"/></button>
                 <a class="chip btn" href="<c:url value="/debates?status=${debate.status.name == 'closed' ? 'closed' : 'open'}"/>"><spring:message code="status.${debate.status.name}"/></a>
                 <div class="chip non-clickable-chip btn" ><spring:message code="page.debate.subscribed"
                                                   arguments="${debate.subscribedUsersCount}"/></div>
@@ -149,7 +183,7 @@
                     <c:when test="${argument.status.name == 'argument' && (arguments[status.index - 1].status.name == 'introduction' || status.first)}">
                         <h5 class="center"><spring:message code="components.comment.argument" /></h5>
                     </c:when>
-                    <c:when test="${(debate.status.name == 'closing' && argument.status.name == 'conclusion') || (debate.status.name == 'closed' && argument.status.name == 'conclusion' && (status.index == 0 || arguments[status.index - 1].status.name == 'argument'))}">
+                    <c:when test="${(debate.status.name == 'closing' && argument.status.name == 'conclusion') || ((debate.status.name == 'closed' || debate.status.name == 'voting') && argument.status.name == 'conclusion' && (status.index == 0 || arguments[status.index - 1].status.name == 'argument'))}">
                         <h5 class="center"><spring:message code="components.comment.conclusion" /></h5>
                     </c:when>
                 </c:choose>
@@ -168,7 +202,7 @@
     </div>
 
     <div class="post-comments">
-        <c:if test="${debate.status.name != 'closed' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
+        <c:if test="${debate.status.name != 'closed' && debate.status.name != 'voting' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
             <div class="card no-top-margin">
                 <div class="card-content">
                     <c:choose>
@@ -180,8 +214,8 @@
                                 </a>
                             </div>
                         </c:when>
-                        <c:when test="">
-                        </c:when>
+<%--                        <c:when test="">--%>
+<%--                        </c:when>--%>
                         <c:when test="${((empty lastArgument && pageContext.request.userPrincipal.name == debate.creator.username) || (not empty lastArgument && pageContext.request.userPrincipal.name != lastArgument.user.username))}">
                             <%@include file="../components/post-comment.jsp" %>
                         </c:when>
@@ -198,41 +232,96 @@
             <c:when test="${pageContext.request.userPrincipal.name != null && debate.creator.username != null && debate.opponent.username != null}">
                 <div class="card vote-section no-top-margin">
                     <c:choose>
-                        <c:when test="${userVote == null}">
+                        <c:when test="${userVote == null && (debate.status.name == 'voting' || debate.status.name == 'open' || debate.status.name == 'closing')}">
                             <h5 class="center"><spring:message code="pages.debate.who-wins"/></h5>
                             <div class="vote-buttons">
                                 <c:url var="voteForPath" value="/debates/${debate.debateId}/vote/for"/>
                                 <form:form method="post" action="${voteForPath}">
-                                    <button class="btn waves-effect" type="submit">${debate.creator.username}</button>
+                                    <c:choose>
+                                        <c:when test="${debate.isCreatorFor}">
+                                            <button class="btn waves-effect" type="submit"><c:out value="${debate.creator.username}"/></button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button class="btn waves-effect" type="submit"><c:out value="${debate.opponent.username}"/></button>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </form:form>
 
                                 <c:url var="voteAgainstPath" value="/debates/${debate.debateId}/vote/against"/>
                                 <form:form method="post" action="${voteAgainstPath}">
-                                    <button class="btn waves-effect" type="submit">${debate.opponent.username}</button>
+                                    <c:choose>
+                                        <c:when test="${debate.isCreatorFor}">
+                                            <button class="btn waves-effect" type="submit"><c:out value="${debate.opponent.username}"/></button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button class="btn waves-effect" type="submit"><c:out value="${debate.creator.username}"/></button>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </form:form>
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <h6><spring:message code="pages.debate.voted"/> ${userVote}</h6>
+                            <h6><spring:message code="pages.debate.voted"/> <c:out value="${userVote}"/></h6>
                             <div class="progress red">
                                 <c:if test="${debate.forCount > 0}">
                                     <div class="votes-format blue" style="width: ${debate.forCount}%">
-                                        <span>${debate.creator.username}</span>
-                                        <span>${debate.forCount}%</span>
+                                        <c:choose>
+                                            <c:when test="${debate.isCreatorFor}">
+                                                <span><c:out value="${debate.creator.username}"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span><c:out value="${debate.opponent.username}"/></span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <span><c:out value="${debate.forCount}"/>%</span>
                                     </div>
                                 </c:if>
                                 <c:if test="${debate.againstCount > 0}">
                                     <div class="votes-format" style="width: ${debate.againstCount}%">
-                                        <span>${debate.opponent.username}</span>
                                         <span>${debate.againstCount}%</span>
+                                        <c:choose>
+                                            <c:when test="${debate.isCreatorFor}">
+                                                <span><c:out value="${debate.opponent.username}"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span><c:out value="${debate.creator.username}"/></span>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                 </c:if>
                             </div>
-                            <h6><spring:message code="page.debate.change-vote"/></h6>
-                            <c:url var="unvotePath" value="/debates/${debate.debateId}/unvote"/>
-                            <form:form method="delete" action="${unvotePath}">
-                                <button class="btn waves-effect" type="submit"><spring:message code="page.debate.unvote"/></button>
-                            </form:form>
+                            <c:if test="${debate.status.name == 'closed'}">
+                                <c:choose>
+                                    <c:when test="${debate.debateResult == 'DRAW'}">
+                                        <h6><spring:message code="pages.debate.draw"/></h6>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h6><spring:message code="pages.debate.winner"/>
+                                            <c:choose>
+                                                <c:when test="${debate.debateResult == 'FOR'}">
+                                                    <c:choose>
+                                                        <c:when test="${debate.isCreatorFor}"><c:out value="${debate.creator.username}"/></c:when>
+                                                        <c:otherwise><c:out value="${debate.opponent.username}"/> </c:otherwise>
+                                                    </c:choose>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:choose>
+                                                        <c:when test="${debate.isCreatorFor}"><c:out value="${debate.opponent.username}"/></c:when>
+                                                        <c:otherwise><c:out value="${debate.creator.username}"/> </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </h6>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:if>
+                            <c:if test="${debate.status.name == 'open' || debate.status.name == 'voting' || debate.status.name == 'voting'}">
+                                <h6><spring:message code="page.debate.change-vote"/></h6>
+                                <c:url var="unvotePath" value="/debates/${debate.debateId}/unvote"/>
+                                <form:form method="delete" action="${unvotePath}">
+                                    <button class="btn waves-effect" type="submit"><spring:message code="page.debate.unvote"/></button>
+                                </form:form>
+                            </c:if>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -241,36 +330,77 @@
                 <div class="card vote-section no-top-margin">
                     <c:choose>
                         <c:when test="${debate.forCount + debate.againstCount > 0}">
-                            <h5>Votes</h5>
+                            <h5><spring:message code="pages.debate-votes"/></h5>
                             <div class="progress red">
                                 <c:if test="${debate.forCount > 0}">
                                     <div class="votes-format blue" style="width: ${debate.forCount}%">
-                                        <span>${debate.creator.username}</span>
-                                        <span>${debate.forCount}%</span>
+                                        <c:choose>
+                                            <c:when test="${debate.creator.username != null}">
+                                                <span><c:out value="${debate.creator.username}"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span><spring:message code="username.deleted"/></span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <span><c:out value="${debate.forCount}"/>%</span>
                                     </div>
                                 </c:if>
                                 <c:if test="${debate.againstCount > 0}">
                                     <div class="votes-format" style="width: ${debate.againstCount}%">
-                                        <span>${debate.opponent.username}</span>
-                                        <span>${debate.againstCount}%</span>
+                                        <span><c:out value="${debate.againstCount}"/>%</span>
+                                        <c:choose>
+                                            <c:when test="${debate.opponent.username != null}">
+                                                <span><c:out value="${debate.opponent.username}"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span><spring:message code="username.deleted"/></span>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                 </c:if>
                             </div>
+                            <c:if test="${debate.status.name == 'closed'}">
+                                <c:choose>
+                                    <c:when test="${debate.debateResult == 'DRAW'}">
+                                        <h6><spring:message code="pages.debate.draw"/></h6>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h6><spring:message code="pages.debate.winner"/>
+                                            <c:choose>
+                                                <c:when test="${debate.debateResult == 'FOR'}">
+                                                    <c:choose>
+                                                        <c:when test="${debate.isCreatorFor}"><c:out value="${debate.creator.username}"/></c:when>
+                                                        <c:otherwise><c:out value="${debate.opponent.username}"/> </c:otherwise>
+                                                    </c:choose>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:choose>
+                                                        <c:when test="${debate.isCreatorFor}"><c:out value="${debate.opponent.username}"/></c:when>
+                                                        <c:otherwise><c:out value="${debate.creator.username}"/> </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </h6>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:if>
                         </c:when>
                         <c:otherwise>
-                            <h5 class="center">No votes yet</h5>
+                            <h5 class="center"><spring:message code="pages.debate-no-votes"/></h5>
                         </c:otherwise>
                     </c:choose>
                 </div>
             </c:otherwise>
         </c:choose>
+        <div class="card">
+            <c:if test="${(debate.status.name != 'open' && debate.status.name != 'closing') || (pageContext.request.userPrincipal == null ||
+                        (pageContext.request.userPrincipal.name != debate.creator.username && pageContext.request.userPrincipal.name != debate.opponent.username))}">
+                <c:set var="chats" value="${chats}" scope="request"/>
+                <%@include file="../components/chat.jsp" %>
+            </c:if>
+        </div>
     </div>
-
 </div>
 <%@include file="../components/JS_imports.jsp" %>
-<%--<script>--%>
-<%--    const elem = document.getElementById('delete-debate');--%>
-<%--    const instance = M.Modal.init(elem);--%>
-<%--</script>--%>
 </body>
 </html>

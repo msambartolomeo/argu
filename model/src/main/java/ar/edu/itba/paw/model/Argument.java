@@ -2,10 +2,12 @@ package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -25,7 +27,9 @@ public class Argument {
     @JoinColumn(name = "debateid")
     private Debate debate;
 
-    @Column(columnDefinition = "text", nullable = false)
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(nullable = false)
     private String content;
 
     @Column(name = "created_date", nullable = false)
@@ -42,6 +46,9 @@ public class Argument {
     @Formula("(SELECT COUNT(*) FROM likes WHERE likes.postid = postid)")
     private int likesCount;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private Boolean deleted;
+
     @Transient
     private boolean isLikedByUser;
 
@@ -57,6 +64,7 @@ public class Argument {
         this.image = image;
         this.status = status;
         this.likesCount = 0;
+        this.deleted = false;
         this.isLikedByUser = false;
     }
 
@@ -106,5 +114,13 @@ public class Argument {
 
     public void setLikedByUser(boolean likedByUser) {
         isLikedByUser = likedByUser;
+    }
+
+    public void deleteArgument() {
+        this.deleted = true;
+    }
+
+    public Boolean getDeleted() {
+        return this.deleted;
     }
 }

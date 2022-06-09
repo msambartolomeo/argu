@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,11 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.DatabasePopulator;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -21,6 +16,7 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.MultipartResolver;
@@ -37,20 +33,12 @@ import java.util.Properties;
 
 @EnableTransactionManagement
 @EnableAsync
+@EnableScheduling
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.service", "ar.edu.itba.paw.persistence" })
 @PropertySource("classpath:application.properties")
 @EnableWebMvc
 @Configuration
 public class WebConfig {
-
-    @Value("classpath:schema-v0.sql")
-    private Resource schemaV0;
-    @Value("classpath:schema-v1.sql")
-    private Resource schemaV1;
-    @Value("classpath:schema-v2.sql")
-    private Resource schemaV2;
-    @Value("classpath:init-views.sql")
-    private Resource initViews;
 
     @Autowired
     private Environment env;
@@ -75,21 +63,6 @@ public class WebConfig {
         ds.setPassword(env.getProperty("spring.datasource.password"));
 
         return ds;
-    }
-
-    // TODO delete when jpa migration is done
-    @Bean
-    public DataSourceInitializer dataSourceInitializer() {
-        final DataSourceInitializer dsi = new DataSourceInitializer();
-        dsi.setDataSource(dataSource());
-        dsi.setDatabasePopulator(databasePopulator());
-        return dsi;
-    }
-
-    public DatabasePopulator databasePopulator() {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(initViews);
-        return populator;
     }
 
     @Bean

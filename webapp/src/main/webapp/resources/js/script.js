@@ -37,3 +37,9 @@ function resetFileValue(fileId, fileNameId) {
 function updateVisibilityOfX() {
     document.getElementById("x").classList.remove("x");
 }
+
+$(document).ready(() => {
+    $("form").submit((e) => {
+        $(".submitBtn").attr("disabled", true);
+    });
+});

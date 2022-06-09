@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.enums.DebateCategory;
+import ar.edu.itba.paw.model.enums.DebateResult;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
@@ -21,13 +24,17 @@ public class Debate {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "description", nullable = false, columnDefinition = "text")
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "description", nullable = false)
     private String description;
-
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "creatorid")
     private User creator;
+
+    @Column(name = "iscreatorfor", nullable = false, columnDefinition = "boolean default 'true'")
+    private boolean isCreatorFor;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "opponentid")
@@ -39,6 +46,9 @@ public class Debate {
 
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
+
+    @Column(name = "date_to_close")
+    private LocalDate dateToClose;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "category", nullable = false, length = 20)
@@ -68,22 +78,17 @@ public class Debate {
 
     Debate() {}
 
-    public Debate(String name, String description, User creator, User opponent, Image image, DebateCategory category, DebateStatus status) {
+    public Debate(String name, String description, User creator, boolean isCreatorFor, User opponent, Image image, DebateCategory category) {
         this.name = name;
         this.description = description;
         this.creator = creator;
+        this.isCreatorFor = isCreatorFor;
         this.opponent = opponent;
         this.image = image;
         this.category = category;
-        this.status = status;
+        this.status = DebateStatus.OPEN;
         this.createdDate = LocalDateTime.now();
     }
-
-    @Deprecated
-    public Debate(long id, String name, String description, Long creatorId, Long opponentId, LocalDateTime createdDate, Long imageId, DebateCategory category, DebateStatus debateStatus) {}
-
-    @Deprecated
-    public Debate(long id, String name, String description, Long creatorId, Long opponentId, LocalDateTime createdDate, DebateCategory category, DebateStatus debateStatus) {}
 
     public long getDebateId() {
         return debateId;
@@ -140,5 +145,57 @@ public class Debate {
     public int getAgainstCount() {
         return (int) Math.round((againstCount * 100.0) / (forCount + againstCount));
 
+    }
+
+    public boolean getIsCreatorFor() {
+        return isCreatorFor;
+    }
+
+    public LocalDate getDateToClose() {
+        return dateToClose;
+    }
+
+    public void closeDebate() {
+        if (this.status == DebateStatus.VOTING)
+            addPointsToParticipants();
+        this.status = DebateStatus.CLOSED;
+    }
+
+    public void startVoting() {
+        this.dateToClose = LocalDate.now().plusDays(7); // TODO: Decide on a correct date to close
+        this.status = DebateStatus.VOTING;
+    }
+
+    public DebateResult getDebateResult() {
+        if (forCount == againstCount)
+            return DebateResult.DRAW;
+        else if (forCount > againstCount)
+            return DebateResult.FOR;
+        else
+            return DebateResult.AGAINST;
+    }
+
+    private void addPointsToParticipants() {
+        int totalPoints = forCount + againstCount;
+        DebateResult result = getDebateResult();
+        User winner;
+        User loser;
+        switch (result) {
+            case FOR:
+                winner = creator;
+                loser = opponent;
+                break;
+            case AGAINST:
+                winner = opponent;
+                loser = creator;
+                break;
+            case DRAW:
+            default:
+                creator.addDrawPoints(totalPoints);
+                opponent.addDrawPoints(totalPoints);
+                return;
+        }
+        winner.addWinPoints(totalPoints);
+        loser.addLosePoints(totalPoints);
     }
 }

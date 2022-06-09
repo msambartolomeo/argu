@@ -90,8 +90,8 @@ public class DebateServiceImplTest {
         assertEquals(debate.getAgainstCount(), d.get().getAgainstCount());*/
     }
 
-    @Test
-    public void testGetPublicDebateByIdNotFound() {
+//    @Test
+//    public void testGetPublicDebateByIdNotFound() {
         /*when(debateDao.getPublicDebateById(DEBATE_ID)).thenReturn(Optional.empty());
 
         Optional<PublicDebate> d = debateService.getPublicDebateById(DEBATE_ID);
@@ -99,12 +99,12 @@ public class DebateServiceImplTest {
         assertFalse(d.isPresent());*/
     }
 
-    @Test(expected = UserNotFoundException.class)
-    public void testCreateCreatorOrOpponentNotFound() {
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.empty());
-
-        debateService.create(DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_DATA, DebateCategory.OTHER);
-    }
+//    @Test(expected = UserNotFoundException.class)
+//    public void testCreateCreatorOrOpponentNotFound() {
+//        when(userService.getUserByUsername(anyString())).thenReturn(Optional.empty());
+//
+//        debateService.create(DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_DATA, DebateCategory.OTHER);
+//    }
 
     /*@Test
     public void testCreateNoImage() {
@@ -534,4 +534,4 @@ public class DebateServiceImplTest {
 
         verify(debateDao).changeDebateStatus(anyLong(), eq(DebateStatus.CLOSING));
     }*/
-}
+//}

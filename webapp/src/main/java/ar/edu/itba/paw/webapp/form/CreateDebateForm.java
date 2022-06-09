@@ -24,6 +24,9 @@ public class CreateDebateForm {
     @NotNull
     private DebateCategory category;
 
+    @NotNull
+    private boolean isCreatorFor;
+
     @Size(max = 64)
     @NotEmpty
     @ExistingUser
@@ -82,5 +85,13 @@ public class CreateDebateForm {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public boolean getIsCreatorFor() {
+        return isCreatorFor;
+    }
+
+    public void setIsCreatorFor(boolean creatorFor) {
+        isCreatorFor = creatorFor;
     }
 }

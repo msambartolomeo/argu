@@ -14,6 +14,8 @@ import ar.edu.itba.paw.model.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +39,7 @@ public class DebateServiceImpl implements DebateService {
     private EmailService emailService;
 
     @Override
+    @Transactional
     public Optional<Debate> getDebateById(long debateId) {
         Optional<Debate> debate = debateDao.getDebateById(debateId);
         if(debate.isPresent() && debate.get().getStatus() == DebateStatus.DELETED) return Optional.empty();
@@ -45,7 +48,9 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
-    public Debate create(String name, String description, String creatorUsername, String opponentUsername, byte[] image, DebateCategory category) {
+    public Debate create(String name, String description, String creatorUsername, boolean isCreatorFor, String opponentUsername,
+                         byte[] image,
+                         DebateCategory category) {
         User creator = userService.getUserByUsername(creatorUsername).orElseThrow(() -> {
             LOGGER.error("Cannot create new Debate with name {} because creator User {} does not exist", name, creatorUsername);
             return new UserNotFoundException();
@@ -56,14 +61,15 @@ public class DebateServiceImpl implements DebateService {
         });
         Debate createdDebate;
         if (image.length == 0)
-            createdDebate = debateDao.create(name, description, creator, opponent, null, category);
+            createdDebate = debateDao.create(name, description, creator, isCreatorFor, opponent, null, category);
         else
-            createdDebate = debateDao.create(name, description, creator, opponent, imageService.createImage(image), category);
+            createdDebate = debateDao.create(name, description, creator, isCreatorFor, opponent, imageService.createImage(image), category);
         emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate.getDebateId(), createdDebate.getName());
         return createdDebate;
     }
 
     @Override
+    @Transactional
     public List<Debate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
         if (page < 0)
             return Collections.emptyList();
@@ -76,11 +82,13 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
+    @Transactional
     public List<Debate> getMostSubscribed() {
         return debateDao.getDebatesDiscovery(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
     }
 
     @Override
+    @Transactional
     public List<Debate> getProfileDebates(String list, long userId, int page) {
         if (list.equals("mydebates"))
             return getUserDebates(userId, page);
@@ -92,6 +100,7 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
+    @Transactional
     public List<Debate> getUserDebates(long userId, int page) {
         if (page < 0) {
             return Collections.emptyList();
@@ -108,6 +117,7 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
+    @Transactional
     public int getUserDebatesPageCount(long userId) {
         return (int) Math.ceil(debateDao.getUserDebatesCount(userId) / (double) PAGE_SIZE);
     }
@@ -144,4 +154,13 @@ public class DebateServiceImpl implements DebateService {
         debate.setStatus(DebateStatus.DELETED);
     }
 
+    @Override
+    //@Async TODO: Preguntar esto
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *") // Runs at midnight every day
+    public void closeVotes() {
+        for (Debate debate : debateDao.getDebatesToClose()) {
+            debate.closeDebate();
+        }
+    }
 }

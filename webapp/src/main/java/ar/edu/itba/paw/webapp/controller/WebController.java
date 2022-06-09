@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.exceptions.*;
+import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +84,7 @@ public class WebController {
             return registerPage(form);
         }
         userService.create(form.getUsername(), form.getPassword(), form.getEmail());
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
@@ -200,6 +201,7 @@ public class WebController {
         debateService.create(form.getTitle(),
                 form.getDescription(),
                 auth.getName(),
+                form.getIsCreatorFor(),
                 form.getOpponentUsername(),
                 form.getImage().getBytes(),
                 form.getCategory());

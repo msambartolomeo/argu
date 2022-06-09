@@ -34,6 +34,10 @@
                 <h4>
                     <c:out value="${user.username}"/>
                 </h4>
+                <h5>
+                    <i class="material-icons left">stars</i>
+                    <c:out value="${user.points}"/>
+                </h5>
                 <div class="email-format">
                     <i class="material-icons">email</i>
                     <h6>
