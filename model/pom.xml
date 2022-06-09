@@ -4,11 +4,11 @@
   <parent>
     <artifactId>PAW-webapp</artifactId>
     <groupId>ar.edu.itba.paw</groupId>
-    <version>4.0.0</version>
+    <version>5.0.0</version>
   </parent>
 
   <artifactId>model</artifactId>
-  <version>4.0.0</version>
+  <version>5.0.0</version>
 
   <dependencies>
     <dependency>
