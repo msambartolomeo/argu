@@ -10,6 +10,7 @@ import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -94,8 +95,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Async
     @Transactional
-    //@Async TODO: Preguntar por qué explota todo cuando se usa esta anotación
     public void deleteUser(String username) {
         User user = getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot delete User {} because it does not exist", username);
