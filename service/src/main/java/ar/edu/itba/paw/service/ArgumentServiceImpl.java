@@ -180,11 +180,6 @@ public class ArgumentServiceImpl implements ArgumentService {
         if(argument.getImage() != null)
             imageService.deleteImage(argument.getImage());
 
-        List<Like> likes = argument.getLikes();
-        for(Like like : likes) {
-            likeService.unlikeArgument(like.getArgument().getArgumentId(), like.getUser().getUsername());
-        }
-
         argument.deleteArgument();
     }
 }
