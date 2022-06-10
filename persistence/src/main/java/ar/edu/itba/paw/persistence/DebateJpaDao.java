@@ -12,7 +12,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -212,5 +211,69 @@ public class DebateJpaDao implements DebateDao {
         query.setParameter("date", date);
 
         return query.getResultList();
+    }
+
+    @Override
+    public List<Debate> getRecommendedDebatesByDebateID(long debateid) {
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM subscribed WHERE debateid != :debateid" +
+                " AND userid IN (SELECT userid FROM subscribed WHERE debateid = :debateid) GROUP BY debateid ORDER BY count(distinct userid) DESC LIMIT 3;");
+        idQuery.setParameter("debateid", debateid);
+
+        @SuppressWarnings("unchecked")
+        List<Long> ids = (List<Long>) idQuery.getResultList().stream()
+                .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
+
+        if (ids.isEmpty()) {
+            // TODO: Algún otro parámetro
+            return Collections.emptyList();
+        }
+
+        final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
+        query.setParameter("ids", ids);
+
+        List<Debate> unsortedList = query.getResultList();
+        List<Debate> sortedList = new ArrayList<>();
+        for (Long id: ids)
+            sortedList.add(unsortedList.stream().filter(debate -> debate.getDebateId() == id).findFirst().get());
+        return sortedList;
+    }
+
+    @Override
+    public List<Debate> getDebateSameCategory(long debateid) {
+        Debate debate = getDebateById(debateid).orElseThrow(() -> new IllegalArgumentException("Debate not found")); // TODO?
+
+        Query idQuery = em.createNativeQuery("SELECT d.debateid\n" +
+                "FROM debates d LEFT JOIN (\n" +
+                "    SELECT s.debateid, count(distinct userid) AS c\n" +
+                "    FROM subscribed s\n" +
+                "    WHERE s.debateid IN (\n" +
+                "        SELECT debateid\n" +
+                "        FROM debates d\n" +
+                "        WHERE category = :category AND d.debateid != :debateid\n" +
+                "        )\n" +
+                "    GROUP BY s.debateid\n" +
+                "    ) as q on d.debateid = q.debateid\n" +
+                "WHERE category = :category AND d.debateid != :debateid\n" +
+                "ORDER BY COALESCE(c, 0) DESC\n" +
+                "LIMIT 3");
+        idQuery.setParameter("category", debate.getCategory().ordinal());
+        idQuery.setParameter("debateid", debateid);
+
+        @SuppressWarnings("unchecked")
+        List<Long> ids = (List<Long>) idQuery.getResultList().stream()
+                .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
+
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
+        query.setParameter("ids", ids);
+
+        List<Debate> unsortedList = query.getResultList();
+        List<Debate> sortedList = new ArrayList<>();
+        for (Long id: ids)
+            sortedList.add(unsortedList.stream().filter(d -> d.getDebateId() == id).findFirst().get());
+        return sortedList;
     }
 }
