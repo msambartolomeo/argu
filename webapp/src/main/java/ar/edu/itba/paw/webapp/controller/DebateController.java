@@ -5,7 +5,9 @@ import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.DebateVote;
-import ar.edu.itba.paw.model.exceptions.*;
+import ar.edu.itba.paw.model.exceptions.CategoryNotFoundException;
+import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
+import ar.edu.itba.paw.model.exceptions.InvalidPageException;
 import ar.edu.itba.paw.webapp.form.ArgumentForm;
 import ar.edu.itba.paw.webapp.form.ChatForm;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -81,11 +84,19 @@ public class DebateController {
         return mav;
     }
 
+    @ModelAttribute("chatForm")
+    public ChatForm chatForm() {
+        return new ChatForm();
+    }
+
+    @ModelAttribute("argumentForm")
+    public ArgumentForm argumentForm() {
+        return new ArgumentForm();
+    }
+
     @RequestMapping(value = "/{debateId:\\d+}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public ModelAndView debate(
             @PathVariable("debateId") final String debateId,
-            @ModelAttribute("argumentForm") final ArgumentForm form,
-            @ModelAttribute("chatForm") final ChatForm chatForm,
             @RequestParam(value = "page", defaultValue = "0") String page,
             Authentication auth,
             @RequestParam(value = "chatPage", defaultValue = "0") String chatPage
@@ -125,20 +136,23 @@ public class DebateController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/{debateId:\\d+}", method = { RequestMethod.POST }, params = "content")
+    @RequestMapping(value = "/{debateId:\\d+}/argument", method = { RequestMethod.POST })
     public ModelAndView createArgument(
             @PathVariable("debateId") final String debateId,
-            @ModelAttribute("chatForm") final ChatForm chatForm,
-            @Valid @ModelAttribute("argumentForm") final ArgumentForm form,
+            @Valid @ModelAttribute("argumentForm") final ArgumentForm argumentForm,
             BindingResult errors,
+            RedirectAttributes redirectAttributes,
             Authentication auth
     ) throws IOException {
+
         if (errors.hasErrors()) {
             LOGGER.warn("Create argument form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return debate(debateId, form, chatForm,"0", auth, "0");
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.argumentForm", errors);
+            redirectAttributes.addFlashAttribute("argumentForm", argumentForm);
+            return new ModelAndView("redirect:/debates/" + debateId);
         }
 
-        argumentService.create(auth.getName(), Long.parseLong(debateId), form.getContent(), form.getFile().getBytes());
+        argumentService.create(auth.getName(), Long.parseLong(debateId), argumentForm.getContent(), argumentForm.getFile().getBytes());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
@@ -184,20 +198,22 @@ public class DebateController {
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 
-    @RequestMapping(value = "/{debateId:\\d+}", method = { RequestMethod.POST }, params = "message")
+    @RequestMapping(value = "/{debateId:\\d+}/chat", method = { RequestMethod.POST })
     public ModelAndView chat(
             @PathVariable("debateId") final String debateId,
             Authentication auth,
-            @ModelAttribute("argumentForm") ArgumentForm argumentForm,
-            @Valid @ModelAttribute("chatForm") ChatForm form,
-            BindingResult errors
+            @Valid @ModelAttribute("chatForm") ChatForm chatForm,
+            BindingResult errors,
+            RedirectAttributes redirectAttributes
     ) {
         if (errors.hasErrors()) {
             LOGGER.warn("Create chat form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return debate(debateId, argumentForm, form,"0", auth, "0");
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.chatForm", errors);
+            redirectAttributes.addFlashAttribute("chatForm", chatForm);
+            return new ModelAndView("redirect:/debates/" + debateId);
         }
 
-        chatService.create(auth.getName(), Long.parseLong(debateId), form.getMessage());
+        chatService.create(auth.getName(), Long.parseLong(debateId), chatForm.getMessage());
         return new ModelAndView("redirect:/debates/" + debateId);
     }
 

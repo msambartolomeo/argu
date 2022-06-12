@@ -29,7 +29,7 @@
     </div>
 
     <c:if test="${pageContext.request.userPrincipal != null && (debate.status.name != 'closed' && debate.status.name != 'deleted')}">
-        <c:url value="/debates/${debate.debateId}" var="postPath"/>
+        <c:url value="/debates/${debate.debateId}/chat" var="postPath"/>
         <%--@elvariable id="chatForm" type="ar.edu.itba.paw.webapp.form.ChatForm"--%>
         <form:form modelAttribute="chatForm" action="${postPath}" method="post" acceptCharset="utf-8" id="postForm">
             <div class="send-chat">

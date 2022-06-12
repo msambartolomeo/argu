@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -48,13 +49,13 @@ public class WebController {
     }
 
     @RequestMapping(value = "/moderator", method = { RequestMethod.POST })
-    public ModelAndView moderatorPage(@Valid @ModelAttribute("moderatorForm") final ModeratorForm form, BindingResult errors, Authentication authentication) {
+    public ModelAndView moderatorPage(@Valid @ModelAttribute("moderatorForm") final ModeratorForm form, BindingResult errors, Authentication auth) {
         if (errors.hasErrors()) {
             LOGGER.warn("Moderator page form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return moderatorPage(form);
         }
-        LOGGER.info("user {} requested moderator status because reason: {}", authentication.getName(), form.getReason());
-        userService.requestModerator(authentication.getName(), form.getReason());
+        LOGGER.info("user {} requested moderator status because reason: {}", auth.getName(), form.getReason());
+        userService.requestModerator(auth.getName(), form.getReason());
         return new ModelAndView("redirect:/debates");
     }
 
@@ -78,8 +79,22 @@ public class WebController {
         return new ModelAndView("redirect:/");
     }
 
+    @ModelAttribute("profileImageForm")
+    public ProfileImageForm profileImageForm() {
+        return new ProfileImageForm();
+    }
+
+    @ModelAttribute("confirmationModal")
+    public ConfirmationForm confirmationForm() {
+        return new ConfirmationForm();
+    }
+
     @RequestMapping(value = "/profile", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView profilePage(@ModelAttribute("profileImageForm") final ProfileImageForm form, @ModelAttribute("confirmationModal") final ConfirmationForm userForm, Authentication auth, @RequestParam(value = "list", defaultValue = "subscribed") String list, @RequestParam(value = "page", defaultValue = "0") String page) {
+    public ModelAndView profilePage(
+            Authentication auth,
+            @RequestParam(value = "list", defaultValue = "subscribed") String list,
+            @RequestParam(value = "page", defaultValue = "0") String page
+    ) {
         if (!page.matches("-?\\d+")) {
             LOGGER.error("/profile : Invalid page number {}", page);
             throw new InvalidPageException();
@@ -101,7 +116,11 @@ public class WebController {
     }
 
     @RequestMapping(value = "/user/{username}", method = { RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView userProfile(@PathVariable("username") final String username, Authentication auth, @RequestParam(value = "page", defaultValue = "0") String page) {
+    public ModelAndView userProfile(
+            @PathVariable("username") final String username,
+            Authentication auth,
+            @RequestParam(value = "page", defaultValue = "0") String page
+    ) {
         if (!page.matches("-?\\d+")) {
             LOGGER.error("/user/{username} : Invalid page number {}", page);
             throw new InvalidPageException();
@@ -122,22 +141,34 @@ public class WebController {
         return mav;
     }
 
-    @RequestMapping(value = "/profile", method = { RequestMethod.POST}, params = "editImage")
-    public ModelAndView editProfileImage(@ModelAttribute("confirmationModal") final ConfirmationForm confirmationForm, @Valid @ModelAttribute("profileImageForm") final ProfileImageForm form, BindingResult errors, Authentication auth) throws IOException {
-        if(errors.hasErrors()) {
+    @RequestMapping(value = "/profile/image", method = { RequestMethod.POST })
+    public ModelAndView editProfileImage(
+            @Valid @ModelAttribute("profileImageForm") ProfileImageForm profileImageForm,
+            BindingResult errors,
+            RedirectAttributes redirectAttributes,
+            Authentication auth
+    ) throws IOException {
+        if (errors.hasErrors()) {
             LOGGER.warn("Profile image form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return profilePage(form, confirmationForm, auth, "subscribed", "0");
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.profileImageForm", errors);
+            redirectAttributes.addFlashAttribute("profileImageForm", profileImageForm);
+            return new ModelAndView("redirect:/profile");
         }
-
-        userService.updateImage(auth.getName(), form.getFile().getBytes());
+        userService.updateImage(auth.getName(), profileImageForm.getFile().getBytes());
         return new ModelAndView("redirect:/profile");
     }
 
-    @RequestMapping(value = "/profile", method = { RequestMethod.POST}, params = "deleteAccount")
-    public ModelAndView deleteUser(@ModelAttribute("profileImageForm") final ProfileImageForm imageForm, @Valid @ModelAttribute("confirmationModal") final ConfirmationForm form, BindingResult errors, Authentication auth) {
+    @RequestMapping(value = "/profile/delete", method = { RequestMethod.POST, RequestMethod.DELETE })
+    public ModelAndView deleteUser(@Valid @ModelAttribute("confirmationModal") final ConfirmationForm confirmationModal,
+                                   BindingResult errors,
+                                   RedirectAttributes redirectAttributes,
+                                   Authentication auth
+    ) {
         if(errors.hasErrors()) {
             LOGGER.warn("Confirmation form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return profilePage(imageForm, form, auth, "subscribed", "0");
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.confirmationModal", errors);
+            redirectAttributes.addFlashAttribute("confirmationModal", confirmationModal);
+            return new ModelAndView("redirect:/profile");
         }
 
         userService.deleteUser(auth.getName());
@@ -161,7 +192,11 @@ public class WebController {
     }
 
     @RequestMapping(value = "/create_debate", method = { RequestMethod.POST })
-    public ModelAndView createDebate(@Valid @ModelAttribute("createDebateForm") final CreateDebateForm form, BindingResult errors, Authentication auth) throws IOException {
+    public ModelAndView createDebate(
+            @Valid @ModelAttribute("createDebateForm") final CreateDebateForm form,
+            BindingResult errors,
+            Authentication auth
+    ) throws IOException {
         if (errors.hasErrors()) {
             LOGGER.warn("Create debate form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return createDebatePage(form);
