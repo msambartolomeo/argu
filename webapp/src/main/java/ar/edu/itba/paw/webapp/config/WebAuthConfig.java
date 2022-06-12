@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -40,10 +41,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                 .and().authorizeRequests()
-                    .antMatchers("/", "/debates", "/debates/{\\d+}").permitAll()
+                    .antMatchers("/", "/debates", "/user/{username}").permitAll()
+                    .antMatchers(HttpMethod.GET, "/debates/{\\d+}").permitAll()
+                    .antMatchers(HttpMethod.POST, "/debates/{\\d+}").authenticated()
                     .antMatchers("/login", "/register").anonymous()
                     .antMatchers("/create_debate").hasAuthority("MODERATOR")
-                    .antMatchers("/debates/{\\d+}/**", "/moderator", "/profile").authenticated()
+                    .antMatchers("/moderator").hasAuthority("USER")
+                    .antMatchers("/debates/{\\d+}/**", "/profile").authenticated()
                 .and().formLogin()
                     .usernameParameter("username")
                     .passwordParameter("password")

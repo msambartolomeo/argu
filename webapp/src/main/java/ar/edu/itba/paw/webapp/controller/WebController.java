@@ -6,7 +6,6 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.exceptions.*;
-import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,23 +43,15 @@ public class WebController {
     }
 
     @RequestMapping(value = "/moderator", method = { RequestMethod.GET, RequestMethod.HEAD })
-    public ModelAndView moderatorPage(@ModelAttribute("moderatorForm") final ModeratorForm form, Authentication authentication) {
-        if (authentication == null || authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MODERATOR"))) {
-            LOGGER.error("/moderator : User is already a moderator");
-            throw new Exception403("User is already a moderator, cannot send a request to become one");
-        }
+    public ModelAndView moderatorPage(@ModelAttribute("moderatorForm") final ModeratorForm form) {
         return new ModelAndView("pages/request-moderator");
     }
 
     @RequestMapping(value = "/moderator", method = { RequestMethod.POST })
     public ModelAndView moderatorPage(@Valid @ModelAttribute("moderatorForm") final ModeratorForm form, BindingResult errors, Authentication authentication) {
-        if (authentication == null || authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MODERATOR"))) {
-            LOGGER.error("/moderator : User is already a moderator");
-            throw new Exception403("User is already a moderator, cannot send a request to become one");
-        }
         if (errors.hasErrors()) {
             LOGGER.warn("Moderator page form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
-            return moderatorPage(form, authentication);
+            return moderatorPage(form);
         }
         LOGGER.info("user {} requested moderator status because reason: {}", authentication.getName(), form.getReason());
         userService.requestModerator(authentication.getName(), form.getReason());
@@ -98,11 +89,6 @@ public class WebController {
 
         if (!list.equals("subscribed") && !list.equals("mydebates"))
             list = "subscribed";
-
-        if (auth == null || auth.getPrincipal() == null) {
-            LOGGER.error("/profile : User is not logged in");
-            throw new UnauthorizedUserException();
-        }
 
         User user = userService.getUserByUsername(auth.getName()).orElseThrow(() -> {
             LOGGER.error("/profile : User {} not found", auth.getName());
@@ -142,10 +128,6 @@ public class WebController {
             LOGGER.warn("Profile image form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return profilePage(form, confirmationForm, auth, "subscribed", "0");
         }
-        if (auth == null || auth.getPrincipal() == null) {
-            LOGGER.error("/profile : User is not logged in");
-            throw new UnauthorizedUserException();
-        }
 
         userService.updateImage(auth.getName(), form.getFile().getBytes());
         return new ModelAndView("redirect:/profile");
@@ -157,22 +139,14 @@ public class WebController {
             LOGGER.warn("Confirmation form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return profilePage(imageForm, form, auth, "subscribed", "0");
         }
-        if (auth == null || auth.getPrincipal() == null) {
-            throw new UnauthorizedUserException();
-        }
-        // TODO: Verify password
+
         userService.deleteUser(auth.getName());
         return new ModelAndView("redirect:/logout");
     }
 
     @ResponseBody
-    @RequestMapping(value = "/images/{imageId}", method = { RequestMethod.GET, RequestMethod.HEAD })
+    @RequestMapping(value = "/images/{imageId:\\d+}", method = { RequestMethod.GET, RequestMethod.HEAD })
     public byte[] getImage(@PathVariable("imageId") final String imageId) {
-        if (!imageId.matches("\\d+")) {
-            LOGGER.error("/images/{imageId} : Invalid image id {}", imageId);
-            throw new ImageNotFoundException();
-        }
-
         return imageService.getImage(Integer.parseInt(imageId)).orElseThrow(() -> {
             LOGGER.error("/images/{imageId} : Image {} not found", imageId);
             return new ImageNotFoundException();
@@ -191,11 +165,6 @@ public class WebController {
         if (errors.hasErrors()) {
             LOGGER.warn("Create debate form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return createDebatePage(form);
-        }
-
-        if (auth == null || auth.getPrincipal() == null) {
-            LOGGER.error("/create_debate : User is not logged in");
-            throw new UnauthorizedUserException();
         }
 
         debateService.create(form.getTitle(),
