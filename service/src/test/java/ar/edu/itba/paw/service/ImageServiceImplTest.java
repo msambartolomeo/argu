@@ -6,12 +6,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ImageServiceImplTest {
@@ -27,7 +27,7 @@ public class ImageServiceImplTest {
 
     @Test
     public void testGetImageEmpty() {
-        Mockito.when(imageDao.getImage(IMAGE_ID)).thenReturn(Optional.empty());
+        when(imageDao.getImage(anyLong())).thenReturn(Optional.empty());
 
         Optional<Image> i = imageService.getImage(IMAGE_ID);
 
@@ -36,8 +36,8 @@ public class ImageServiceImplTest {
 
     @Test
     public void testGetImage() {
-        Image image = new Image(IMAGE_ID, IMAGE_DATA);
-        Mockito.when(imageDao.getImage(IMAGE_ID)).thenReturn(Optional.of(image));
+        Image image = new Image(IMAGE_DATA);
+        when(imageDao.getImage(anyLong())).thenReturn(Optional.of(image));
 
         Optional<Image> i = imageService.getImage(IMAGE_ID);
 
@@ -47,8 +47,8 @@ public class ImageServiceImplTest {
 
     @Test
     public void testCreateImage() {
-        Image image = new Image(IMAGE_ID, IMAGE_DATA);
-        Mockito.when(imageDao.createImage(Mockito.any())).thenReturn(image);
+        Image image = new Image(IMAGE_DATA);
+        when(imageDao.createImage(any(byte[].class))).thenReturn(image);
 
         Image i = imageService.createImage(IMAGE_DATA);
 

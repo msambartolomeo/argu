@@ -15,17 +15,9 @@ public class Image {
     @Column(nullable = false)
     private byte[] data;
 
-    /* default */ Image() {
-        // just hibernate
-    }
+    Image() {}
 
     public Image(byte[] data) {
-        this.data = data;
-    }
-
-    // TODO deprecate
-    public Image(long id, byte[] data) {
-        this.id = id;
         this.data = data;
     }
 
