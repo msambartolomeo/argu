@@ -5,7 +5,7 @@
 
 <html>
 <body>
-<c:url value="/debates/${debate.debateId}" var="postPath"/>
+<c:url value="/debates/${debate.debateId}/argument" var="postPath"/>
 <%--@elvariable id="argumentForm" type="ar.edu.itba.paw.webapp.form.ArgumentForm"--%>
 <form:form enctype="multipart/form-data" modelAttribute="argumentForm" action="${postPath}"
            method="post" acceptCharset="utf-8" id="postform">

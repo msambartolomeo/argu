@@ -5,9 +5,9 @@
 
 <html>
 <body>
-<c:url value="/profile" var="deleteUserPostPath"/>
+<c:url value="/profile/delete" var="deleteUserPostPath"/>
 <%--@elvariable id="confirmationModal" type="ar.edu.itba.paw.webapp.form.ConfirmationForm"--%>
-<form:form modelAttribute="confirmationModal" method="post" action="${deleteUserPostPath}"
+<form:form modelAttribute="confirmationModal" method="delete" action="${deleteUserPostPath}"
            acceptCharset="utf-8" id="confirmationForm" enctype="multipart/form-data">
     <c:set var="deleteError" scope="request"><form:errors path="password"/></c:set>
     <div class="modal-content">

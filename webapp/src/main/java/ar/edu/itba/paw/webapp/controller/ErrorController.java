@@ -21,13 +21,6 @@ public class ErrorController {
         return mav;
     }
 
-    @ExceptionHandler(UnauthorizedUserException.class)
-    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
-    public ModelAndView handleExceptionUnauthorizedUser(UnauthorizedUserException e) {
-        LOGGER.error("error 401 - {}", e.toString());
-        return new ModelAndView("pages/login");
-    }
-
     @ExceptionHandler(Exception403.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     public ModelAndView handleForbiddenArgumentException(Exception403 e) {
