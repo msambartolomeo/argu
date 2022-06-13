@@ -21,14 +21,16 @@ public class Like {
     @JoinColumn(name = "postid")
     private Argument argument;
 
-    /*default*/public Like() {
-        // Just for Hibernate
-    }
+    public Like() {}
 
     public Like(User user, Argument argument) {
         this.user = user;
         this.argument = argument;
         this.userPostKey = new UserPostKey(user.getUserId(), argument.getArgumentId());
+    }
+
+    public UserPostKey getUserPostKey() {
+        return userPostKey;
     }
 
     public User getUser() {

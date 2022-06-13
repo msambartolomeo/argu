@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
@@ -28,7 +27,7 @@ import static org.junit.Assert.*;
 public class ArgumentJpaDaoTest {
 
     private final static String CONTENT = "content";
-    private final static long ARGUMENT_ID = 1;
+    private final static long ID = 1;
 
     private final static String USER_USERNAME = "username";
     private final static String USER_PASSWORD = "password";
@@ -45,7 +44,6 @@ public class ArgumentJpaDaoTest {
 
     private User user;
     private Debate debate;
-    private Image image;
 
     @PersistenceContext
     private EntityManager em;
@@ -73,7 +71,7 @@ public class ArgumentJpaDaoTest {
 
     @Test
     public void testGetArgumentByIdDoesntExist() {
-        Optional<Argument> argument = argumentJpaDao.getArgumentById(ARGUMENT_ID);
+        Optional<Argument> argument = argumentJpaDao.getArgumentById(ID);
 
         assertFalse(argument.isPresent());
     }
