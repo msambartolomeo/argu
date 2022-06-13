@@ -7,11 +7,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = PasswordEqualityValidator.class)
-@Target(ElementType.TYPE)
+@Constraint(validatedBy = StringEqualityValidator.class)
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PasswordEquality {
+public @interface StringEquality {
     String message() default "The passwords don't match";
+    String string1();
+    String string2();
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }
