@@ -16,11 +16,6 @@ public class UserJpaDao implements UserDao {
     private EntityManager em;
 
     @Override
-    public Optional<User> getUserById(long id) {
-        return Optional.ofNullable(em.find(User.class, id));
-    }
-
-    @Override
     public Optional<User> getUserByUsername(String username) {
         final TypedQuery<User> query = em.createQuery("FROM User u WHERE u.username = :username", User.class);
         query.setParameter("username", username);

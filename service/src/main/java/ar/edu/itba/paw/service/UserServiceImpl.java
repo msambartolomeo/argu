@@ -37,11 +37,6 @@ public class UserServiceImpl implements UserService {
     private EmailService emailService;
 
     @Override
-    public Optional<User> getUserById(long userId) {
-        return userDao.getUserById(userId);
-    }
-
-    @Override
     public Optional<User> getUserByUsername(String username) {
         return userDao.getUserByUsername(username);
     }

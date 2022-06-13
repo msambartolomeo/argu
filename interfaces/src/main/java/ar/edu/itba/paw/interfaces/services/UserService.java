@@ -5,7 +5,6 @@ import ar.edu.itba.paw.model.User;
 import java.util.Optional;
 
 public interface UserService {
-    Optional<User> getUserById(long userId);
     Optional<User> getUserByUsername(String username);
     User create(String username, String password, String email);
     Optional<User> getUserByEmail(String email);

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Chat;
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import org.junit.Before;
@@ -61,12 +62,10 @@ public class ChatJpaDaoTest {
 
     @Test
     public void testCreateChat() {
-        Chat c = chatJpaDao.create(user, debate, MESSAGE);
+        final Chat chat = chatJpaDao.create(user, debate, MESSAGE);
 
-        assertNotNull(c);
-        assertEquals(MESSAGE, c.getMessage());
-        assertEquals(user.getUserId(), c.getUser().getUserId());
-        assertEquals(debate.getDebateId(), c.getDebate().getDebateId());
+        assertNotNull(chat);
+        assertEquals(chat, em.find(Chat.class, chat.getChatId()));
     }
 
     @Test

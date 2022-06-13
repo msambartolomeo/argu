@@ -137,4 +137,11 @@ public class UserServiceImplTest {
 
         userService.updateImage(USER_USERNAME, IMAGE_DATA);
     }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testDeleteUserNoValidUser() {
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.empty());
+
+        userService.deleteUser(USER_USERNAME);
+    }
 }

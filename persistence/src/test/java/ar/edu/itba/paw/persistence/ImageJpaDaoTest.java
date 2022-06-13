@@ -51,7 +51,7 @@ public class ImageJpaDaoTest {
         Optional<Image> i = imageJpaDao.getImage(image.getId());
 
         assertTrue(i.isPresent());
-        assertArrayEquals(image.getData(), i.get().getData());
+        assertEquals(image, i.get());
     }
 
     @Test
