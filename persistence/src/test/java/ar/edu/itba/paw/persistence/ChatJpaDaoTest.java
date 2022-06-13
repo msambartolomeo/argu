@@ -77,16 +77,17 @@ public class ChatJpaDaoTest {
 
     @Test
     public void testGetDebateChat() {
-        em.persist(new Chat(user, debate, MESSAGE));
+        Chat chat = new Chat(user, debate, MESSAGE);
+        em.persist(chat);
 
         List<Chat> chats = chatJpaDao.getDebateChat(debate, PAGE);
 
         assertFalse(chats.isEmpty());
         assertEquals(1, chats.size());
-        assertEquals(MESSAGE, chats.get(0).getMessage());
+        assertEquals(chat, chats.get(0));
     }
 
-    @Test
+    @Test // TODO: delete this test :(
     public void testGetDebateChatPaginationAndOrder() throws InterruptedException {
         for (int i = 0; i <= ChatJpaDao.PAGE_SIZE; i++) { // Create one more than a page
             em.persist(new Chat(user, debate, MESSAGE + i));

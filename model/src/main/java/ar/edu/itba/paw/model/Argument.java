@@ -52,9 +52,7 @@ public class Argument {
     @Transient
     private boolean isLikedByUser;
 
-    /*default*/Argument() {
-        // Just for Hibernate
-    }
+    Argument() {}
 
     public Argument(final User user, final Debate debate, final String content, final Image image, final ArgumentStatus status) {
         this.debate = debate;
