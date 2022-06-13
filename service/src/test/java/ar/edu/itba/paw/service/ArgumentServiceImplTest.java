@@ -30,9 +30,7 @@ public class ArgumentServiceImplTest {
 
     private final static int VALID_PAGE = 0;
     private final static int NOT_VALID_PAGE = -1;
-
-    private final static long ARGUMENT_ID = 1;
-    private final static long DEBATE_ID = 1;
+    
     private final static String CONTENT = "Content";
 
     private final static long ID = 1;
@@ -85,7 +83,7 @@ public class ArgumentServiceImplTest {
 
     @Test
     public void getArgumentByIdNotFound() {
-        Optional<Argument> a = argumentService.getArgumentById(ARGUMENT_ID);
+        Optional<Argument> a = argumentService.getArgumentById(ID);
 
         assertFalse(a.isPresent());
     }
@@ -95,7 +93,7 @@ public class ArgumentServiceImplTest {
         Argument argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
         when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
 
-        Optional<Argument> a = argumentService.getArgumentById(ARGUMENT_ID);
+        Optional<Argument> a = argumentService.getArgumentById(ID);
 
         assertTrue(a.isPresent());
         assertEquals(argument.getContent(), a.get().getContent());
@@ -168,14 +166,14 @@ public class ArgumentServiceImplTest {
 
     @Test(expected = DebateNotFoundException.class)
     public void testGetLastArgumentNoValidDebate() {
-        argumentService.getLastArgument(DEBATE_ID);
+        argumentService.getLastArgument(ID);
     }
 
     @Test
     public void testGetLastArgumentNotFound() {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        Optional<Argument> a = argumentService.getLastArgument(DEBATE_ID);
+        Optional<Argument> a = argumentService.getLastArgument(ID);
 
         assertFalse(a.isPresent());
     }
@@ -186,7 +184,7 @@ public class ArgumentServiceImplTest {
         when(argumentDao.getLastArgument(any(Debate.class))).thenReturn(Optional.of(argument));
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        Optional<Argument> a = argumentService.getLastArgument(DEBATE_ID);
+        Optional<Argument> a = argumentService.getLastArgument(ID);
 
         assertTrue(a.isPresent());
         assertEquals(argument.getContent(), a.get().getContent());
@@ -194,7 +192,7 @@ public class ArgumentServiceImplTest {
 
     @Test(expected = ArgumentNotFoundException.class)
     public void testDeleteArgumentNoValidArgument() {
-        argumentService.deleteArgument(ARGUMENT_ID, USER_USERNAME);
+        argumentService.deleteArgument(ID, USER_USERNAME);
     }
 
     @Test
@@ -202,7 +200,7 @@ public class ArgumentServiceImplTest {
         Argument argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
         when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
 
-        argumentService.deleteArgument(ARGUMENT_ID, USER_USERNAME);
+        argumentService.deleteArgument(ID, USER_USERNAME);
     }
 
     @Test(expected = ForbiddenArgumentException.class)
@@ -210,7 +208,7 @@ public class ArgumentServiceImplTest {
         Argument argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
         when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
 
-        argumentService.deleteArgument(ARGUMENT_ID, USER_USERNAME_2);
+        argumentService.deleteArgument(ID, USER_USERNAME_2);
     }
 
     @Test // image must be deleted
@@ -218,7 +216,7 @@ public class ArgumentServiceImplTest {
         Argument argument = new Argument(user, debate, CONTENT, image, ArgumentStatus.ARGUMENT);
         when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
 
-        argumentService.deleteArgument(ARGUMENT_ID, USER_USERNAME);
+        argumentService.deleteArgument(ID, USER_USERNAME);
 
         verify(imageService).deleteImage(any(Image.class));
     }
@@ -229,7 +227,7 @@ public class ArgumentServiceImplTest {
         int expectedPageCount = 10;
         when(argumentDao.getArgumentsByDebateCount(anyLong())).thenReturn(argumentCount);
 
-        int pc = argumentService.getArgumentByDebatePageCount(ARGUMENT_ID);
+        int pc = argumentService.getArgumentByDebatePageCount(ID);
 
         assertEquals(expectedPageCount, pc);
     }
@@ -240,7 +238,7 @@ public class ArgumentServiceImplTest {
         int expectedPageCount = 0;
         when(argumentDao.getArgumentsByDebateCount(anyLong())).thenReturn(argumentCount);
 
-        int pc = argumentService.getArgumentByDebatePageCount(ARGUMENT_ID);
+        int pc = argumentService.getArgumentByDebatePageCount(ID);
 
         assertEquals(expectedPageCount, pc);
     }
@@ -249,7 +247,7 @@ public class ArgumentServiceImplTest {
     private Debate debateMock;
 
     @Test
-    public void testSendEmailToSubscribedUsersSubscribedUserArgumented() {
+    public void testSendEmailToSubscribedUsersSubscribedUserArgument() {
         Set<User> users = new HashSet<>();
         users.add(user);
         // Mock debate with subscribed users
@@ -266,7 +264,7 @@ public class ArgumentServiceImplTest {
         users.add(user);
         // Mock debate with subscribed users
         when(debateMock.getSubscribedUsers()).thenReturn(users);
-        when(debateMock.getDebateId()).thenReturn(DEBATE_ID);
+        when(debateMock.getDebateId()).thenReturn(ID);
         when(debateMock.getName()).thenReturn(DEBATE_NAME);
 
         argumentService.sendEmailToSubscribedUsers(debateMock, user2);
@@ -347,14 +345,14 @@ public class ArgumentServiceImplTest {
 
     @Test(expected = DebateNotFoundException.class)
     public void testCreateArgumentNoDebate() {
-        argumentService.create(USER_USERNAME, DEBATE_ID, CONTENT, null);
+        argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
     @Test(expected = UserNotFoundException.class)
     public void testCreateArgumentNoUser() {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        argumentService.create(USER_USERNAME, DEBATE_ID, CONTENT, null);
+        argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
     @Test(expected = ForbiddenArgumentException.class)
@@ -363,7 +361,7 @@ public class ArgumentServiceImplTest {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
-        argumentService.create(USER_USERNAME, DEBATE_ID, CONTENT, null);
+        argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
     @Test(expected = ForbiddenArgumentException.class)
@@ -372,7 +370,7 @@ public class ArgumentServiceImplTest {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
-        argumentService.create(USER_USERNAME, DEBATE_ID, CONTENT, null);
+        argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
     @Test(expected = ForbiddenArgumentException.class)
@@ -381,7 +379,7 @@ public class ArgumentServiceImplTest {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
-        argumentService.create(USER_USERNAME, DEBATE_ID, CONTENT, null);
+        argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
     @Test(expected = ForbiddenArgumentException.class)
@@ -389,7 +387,7 @@ public class ArgumentServiceImplTest {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user3));
 
-        argumentService.create(USER_USERNAME, DEBATE_ID, CONTENT, IMAGE_DATA);
+        argumentService.create(USER_USERNAME, ID, CONTENT, IMAGE_DATA);
     }
 
     @Test
@@ -399,7 +397,7 @@ public class ArgumentServiceImplTest {
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
         when(argumentDao.create(any(User.class), any(Debate.class), anyString(), any(), any(ArgumentStatus.class))).thenReturn(argument);
 
-        Argument a = argumentService.create(USER_USERNAME, DEBATE_ID, CONTENT, new byte[0]);
+        Argument a = argumentService.create(USER_USERNAME, ID, CONTENT, new byte[0]);
 
         assertNotNull(a);
         assertEquals(argument, a);
@@ -413,80 +411,10 @@ public class ArgumentServiceImplTest {
         when(imageService.createImage(any(byte[].class))).thenReturn(image);
         when(argumentDao.create(any(User.class), any(Debate.class), anyString(), any(), any(ArgumentStatus.class))).thenReturn(argument);
 
-        Argument a = argumentService.create(USER_USERNAME, DEBATE_ID, CONTENT, IMAGE_DATA);
+        Argument a = argumentService.create(USER_USERNAME, ID, CONTENT, IMAGE_DATA);
 
         assertNotNull(a);
         assertEquals(argument, a);
         assertEquals(image, a.getImage());
     }
-
-//    @Test
-//    public void testlikeArgument() {
-//        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-//        Argument argument = new Argument(ARGUMENT_ID, ARGUMENT_USERNAME, DEBATE_ID, CONTENT, LIKES, ARGUMENT_DATE, IMAGE_ID, ArgumentStatus.ARGUMENT);
-//        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-//        when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
-//
-//        argumentService.likeArgument(ARGUMENT_ID, USER_USERNAME);
-//
-//        verify(argumentDao).likeArgument(anyLong(), anyLong());
-//    }
-//
-//    @Test(expected = UserNotFoundException.class)
-//    public void testLikeArgumentNotValidUser() {
-//        when(userService.getUserByUsername(anyString())).thenReturn(Optional.empty());
-//
-//        argumentService.likeArgument(ARGUMENT_ID, USER_USERNAME);
-//    }
-//
-//    @Test(expected = ArgumentNotFoundException.class)
-//    public void testLikeArgumentNotValidArgument() {
-//        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-//        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-//
-//        argumentService.likeArgument(ARGUMENT_ID, USER_USERNAME);
-//    }
-//    @Test(expected = UserAlreadyLikedException.class)
-//    public void testLikeArgumentAlreadyLiked() {
-//        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-//        Argument argument = new Argument(ARGUMENT_ID, ARGUMENT_USERNAME, DEBATE_ID, CONTENT, LIKES, ARGUMENT_DATE, IMAGE_ID, ArgumentStatus.ARGUMENT);
-//        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-//        when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
-//        when(argumentDao.hasLiked(anyLong(), anyLong())).thenReturn(true);
-//
-//        argumentService.likeArgument(ARGUMENT_ID, USER_USERNAME);
-//    }
-//
-//    @Test
-//    public void testUnlikeArgument() {
-//        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-//        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-//
-//        argumentService.unlikeArgument(ARGUMENT_ID, USER_USERNAME);
-//
-//        verify(argumentDao).unlikeArgument(anyLong(), anyLong());
-//    }
-//
-//    @Test(expected = UserNotFoundException.class)
-//    public void testUnlikeArgumentNotValidUser() {
-//        when(userService.getUserByUsername(anyString())).thenReturn(Optional.empty());
-//
-//        argumentService.unlikeArgument(ARGUMENT_ID, USER_USERNAME);
-//    }
-//
-//    @Test(expected = UserNotFoundException.class)
-//    public void testHasLikedInvalidUser() {
-//        argumentService.hasLiked(ARGUMENT_ID, USER_USERNAME);
-//    }
-//
-//    @Test
-//    public void testHasLiked() {
-//        User user = new User(USER_ID, DEBATE_CREATOR, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-//        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-//        when(argumentDao.hasLiked(anyLong(), anyLong())).thenReturn(true);
-//
-//        boolean hasLiked = argumentService.hasLiked(ARGUMENT_ID, DEBATE_CREATOR);
-//
-//        assertTrue(hasLiked);
-//    }
 }
