@@ -66,11 +66,6 @@ public class Argument {
         this.isLikedByUser = false;
     }
 
-    @Deprecated
-    public Argument(final long argumentId, final User user, final Long debateId, final String content, final LocalDateTime creationDate, final Image image, final ArgumentStatus status) {
-
-    }
-
     public Long getArgumentId() {
         return argumentId;
     }
