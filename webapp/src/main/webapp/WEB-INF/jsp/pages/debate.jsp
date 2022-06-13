@@ -19,7 +19,7 @@
             <div class="debate-text-holder">
                 <div class="debate-info-holder">
                     <h4 class="debate-title word-wrap"><c:out value="${debate.name}"/></h4>
-                    <sec:authorize access="hasAuthority('USER')">
+                    <c:if test="${pageContext.request.userPrincipal.name != null}">
                     <div class="right debate-buttons-display">
                         <div class="col">
                         <c:if test="${debate.status.name == 'open' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
@@ -58,8 +58,7 @@
                         </c:if>
                         </div>
                     </div>
-
-                    </sec:authorize>
+                    </c:if>
                 </div>
                 <hr class="dashed">
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
@@ -125,7 +124,7 @@
                 </c:choose>
             </div>
             <div class="debate-footer">
-                <sec:authorize access="hasAuthority('USER')">
+                <c:if test="${pageContext.request.userPrincipal.name != null}">
                     <c:choose>
                         <c:when test="${isSubscribed == false}">
                             <c:url var="subscribePath" value="/debates/${debate.debateId}/subscribe"/>
@@ -146,7 +145,7 @@
                             </form:form>
                         </c:otherwise>
                     </c:choose>
-                </sec:authorize>
+                </c:if>
                 <a class="chip btn" href="<c:url value="/debates?category=${debate.category.name}"/>"><spring:message code="category.${debate.category.name}"/></a>
                 <button class="chip btn" onclick="dateFilter('${debate.formattedDate}')"><spring:message code="components.debate-created-on"/> <c:out value="${debate.formattedDate}"/></button>
                 <a class="chip btn" href="<c:url value="/debates?status=${debate.status.name == 'closed' ? 'closed' : 'open'}"/>"><spring:message code="status.${debate.status.name}"/></a>
