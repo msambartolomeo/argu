@@ -155,6 +155,10 @@ public class Debate {
         return dateToClose;
     }
 
+    public void setDateToClose(LocalDate dateToClose) {
+        this.dateToClose = dateToClose;
+    }
+
     public void closeDebate() {
         if (this.status == DebateStatus.VOTING)
             addPointsToParticipants();
