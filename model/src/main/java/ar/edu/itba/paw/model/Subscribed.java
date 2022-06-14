@@ -28,4 +28,9 @@ public class Subscribed {
         this.debate = debate;
         this.userDebateKey = new UserDebateKey(user.getUserId(), debate.getDebateId());
     }
+
+    public UserDebateKey getUserDebateKey() {
+        return userDebateKey;
+    }
+
 }
