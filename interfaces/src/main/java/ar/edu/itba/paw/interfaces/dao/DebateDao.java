@@ -28,7 +28,7 @@ public interface DebateDao {
 
     List<Debate> getDebatesToClose();
 
-    List<Debate> getRecommendedDebatesByDebateID(long debateid);
+    List<Debate> getRecommendedDebates(Debate debate);
 
-    List<Debate> getDebateSameCategory(long debateid);
+    List<Debate> getRecommendedDebates(Debate debate, User user);
 }

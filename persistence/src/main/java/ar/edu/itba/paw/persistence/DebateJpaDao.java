@@ -214,17 +214,35 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    public List<Debate> getRecommendedDebatesByDebateID(long debateid) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM subscribed WHERE debateid != :debateid" +
-                " AND userid IN (SELECT userid FROM subscribed WHERE debateid = :debateid) GROUP BY debateid ORDER BY count(distinct userid) DESC LIMIT 3;");
-        idQuery.setParameter("debateid", debateid);
+    public List<Debate> getRecommendedDebates(Debate debate) {
+        Query idQuery = em.createNativeQuery("WITH selected_ids AS (\n" +
+                "    SELECT debateid\n" +
+                "    FROM subscribed s\n" +
+                "    WHERE s.debateid IN (\n" +
+                "        SELECT debateid\n" +
+                "        FROM debates d\n" +
+                "        WHERE category = :category\n" +
+                "    )\n" +
+                "       OR s.userid IN (\n" +
+                "        SELECT userid\n" +
+                "        FROM subscribed\n" +
+                "        WHERE debateid = :debateid\n" +
+                "    )\n" +
+                "    GROUP BY s.debateid\n" +
+                ")\n" +
+                "SELECT si.debateid, count(distinct s.userid)\n" +
+                "FROM selected_ids si LEFT JOIN subscribed s ON si.debateid = s.debateid\n" +
+                "WHERE si.debateid != :debateid\n" +
+                "GROUP BY si.debateid\n" +
+                "ORDER BY count(distinct s.userid) DESC LIMIT 3");
+        idQuery.setParameter("category", debate.getCategory().ordinal());
+        idQuery.setParameter("debateid", debate.getDebateId());
 
         @SuppressWarnings("unchecked")
         List<Long> ids = (List<Long>) idQuery.getResultList().stream()
                 .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
 
         if (ids.isEmpty()) {
-            // TODO: Algún otro parámetro
             return Collections.emptyList();
         }
 
@@ -234,30 +252,38 @@ public class DebateJpaDao implements DebateDao {
         List<Debate> unsortedList = query.getResultList();
         List<Debate> sortedList = new ArrayList<>();
         for (Long id: ids)
-            sortedList.add(unsortedList.stream().filter(debate -> debate.getDebateId() == id).findFirst().get());
+            sortedList.add(unsortedList.stream().filter(d -> d.getDebateId() == id).findFirst().get());
         return sortedList;
     }
-
     @Override
-    public List<Debate> getDebateSameCategory(long debateid) {
-        Debate debate = getDebateById(debateid).orElseThrow(() -> new IllegalArgumentException("Debate not found")); // TODO?
-
-        Query idQuery = em.createNativeQuery("SELECT d.debateid\n" +
-                "FROM debates d LEFT JOIN (\n" +
-                "    SELECT s.debateid, count(distinct userid) AS c\n" +
+    public List<Debate> getRecommendedDebates(Debate debate, User user) {
+        Query idQuery = em.createNativeQuery("WITH selected_ids AS (\n" +
+                "    SELECT debateid\n" +
                 "    FROM subscribed s\n" +
                 "    WHERE s.debateid IN (\n" +
                 "        SELECT debateid\n" +
                 "        FROM debates d\n" +
-                "        WHERE category = :category AND d.debateid != :debateid\n" +
-                "        )\n" +
+                "        WHERE category = :category\n" +
+                "    )\n" +
+                "       OR s.userid IN (\n" +
+                "        SELECT userid\n" +
+                "        FROM subscribed\n" +
+                "        WHERE debateid = :debateid\n" +
+                "    )\n" +
                 "    GROUP BY s.debateid\n" +
-                "    ) as q on d.debateid = q.debateid\n" +
-                "WHERE category = :category AND d.debateid != :debateid\n" +
-                "ORDER BY COALESCE(c, 0) DESC\n" +
-                "LIMIT 3");
+                ")\n" +
+                "SELECT si.debateid, count(distinct s.userid)\n" +
+                "FROM selected_ids si NATURAL JOIN subscribed s\n" +
+                "WHERE si.debateid != :debateid AND si.debateid NOT IN (\n" +
+                "    SELECT debateid\n" +
+                "    FROM subscribed s\n" +
+                "    WHERE s.userid = :userid\n" +
+                "    )\n" +
+                "GROUP BY si.debateid\n" +
+                "ORDER BY count(distinct s.userid) DESC LIMIT 3");
         idQuery.setParameter("category", debate.getCategory().ordinal());
-        idQuery.setParameter("debateid", debateid);
+        idQuery.setParameter("debateid", debate.getDebateId());
+        idQuery.setParameter("userid", user.getUserId());
 
         @SuppressWarnings("unchecked")
         List<Long> ids = (List<Long>) idQuery.getResultList().stream()

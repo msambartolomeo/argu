@@ -14,7 +14,6 @@ import ar.edu.itba.paw.model.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -162,5 +161,27 @@ public class DebateServiceImpl implements DebateService {
         for (Debate debate : debateDao.getDebatesToClose()) {
             debate.closeDebate();
         }
+    }
+
+    @Override
+    public List<Debate> getRecommendedDebates(long debateid) {
+        Debate debate = getDebateById(debateid).orElseThrow(() -> {
+            LOGGER.error("Cannot get recommended debates for Debate with id {} because it does not exist", debateid);
+            return new DebateNotFoundException();
+        });
+        return debateDao.getRecommendedDebates(debate);
+    }
+
+    @Override
+    public List<Debate> getRecommendedDebates(long debateid, String username) {
+        Debate debate = getDebateById(debateid).orElseThrow(() -> {
+            LOGGER.error("Cannot get recommended debates for Debate with id {} because it does not exist", debateid);
+            return new DebateNotFoundException();
+        });
+        User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot get recommended debates for Debate with id {} because user with id {} does not exist", debateid, userid);
+            return new UserNotFoundException();
+        });
+        return debateDao.getRecommendedDebates(debate, user);
     }
 }
