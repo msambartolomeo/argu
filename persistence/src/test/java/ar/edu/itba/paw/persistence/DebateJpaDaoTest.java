@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.Subscribed;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
@@ -42,10 +43,13 @@ public class DebateJpaDaoTest {
 
     private final static boolean IS_CREATOR_FOR = true;
 
+    private final static byte[] IMAGE_DATA = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+
     private final static int PAGE = 0;
 
     private User creator;
     private User opponent;
+    private Image image;
 
     @PersistenceContext
     private EntityManager em;
@@ -57,8 +61,10 @@ public class DebateJpaDaoTest {
     public void setUp() {
         creator = new User(CREATOR_EMAIL, CREATOR_USERNAME, CREATOR_PASSWORD);
         opponent = new User(OPPONENT_EMAIL, OPPONENT_USERNAME, OPPONENT_PASSWORD);
+        image = new Image(IMAGE_DATA);
         em.persist(creator);
         em.persist(opponent);
+        em.persist(image);
     }
 
     @Test
@@ -77,7 +83,17 @@ public class DebateJpaDaoTest {
 
     @Test
     public void testCreateDebateWithImage() {
-        // TODO: Preguntar si autowirear imageJpaDao
+        Debate debate = debateJpaDao.create(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR,
+                opponent, image, DEBATE_CATEGORY);
+
+        assertNotNull(debate);
+        assertEquals(DEBATE_NAME, debate.getName());
+        assertEquals(DEBATE_DESCRIPTION, debate.getDescription());
+        assertEquals(creator.getUserId(), debate.getCreator().getUserId());
+        assertTrue(debate.getIsCreatorFor());
+        assertEquals(opponent.getUserId(), debate.getOpponent().getUserId());
+        assertEquals(image.getData(), debate.getImage().getData());
+        assertEquals(DEBATE_CATEGORY, debate.getCategory());
     }
 
     @Test
