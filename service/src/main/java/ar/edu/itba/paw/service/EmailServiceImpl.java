@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.exceptions.MailingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -453,7 +454,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void notifyNewInvite(String to, String from, long debateId, String debateName) {
+    public void notifyNewInvite(String to, String from, Debate debate, String debateName) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
@@ -461,7 +462,7 @@ public class EmailServiceImpl implements EmailService {
                 "                                                                            We are reaching out to you to let you know " +
                 "                                                                            that " + from + " just created the new " +
                 "                                                                            debate" +
-                "                                                                            <a href=\"" + baseUrl + "debates/" + debateId +
+                "                                                                            <a href=\"" + baseUrl + "debates/" + debate.getDebateId() +
                 "                                                                            \">" + debateName + "</a>" +
                 "                                                                            and invited you to be his opponent in it!\n" +
                 htmlMailSecondHalf;
@@ -473,7 +474,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setFrom("noreply@argu.com");
             emailSender.send(mimeMessage);
         } catch (Exception e) {
-            LOGGER.error("Error notifying new invite to {} from {} on debate id {}", to, from, debateId);
+            LOGGER.error("Error notifying new invite to {} from {} on debate id {}", to, from, debate.getDebateId());
             throw new MailingException("Error notifying user.");
         }
     }
