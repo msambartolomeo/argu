@@ -10,6 +10,7 @@ import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -75,7 +76,7 @@ public class WebController {
             LOGGER.warn("Register form has {} errors: {}", errors.getErrorCount(), errors.getAllErrors());
             return registerPage(form);
         }
-        userService.create(form.getUsername(), form.getPassword(), form.getEmail());
+        userService.create(form.getUsername(), form.getPassword(), form.getEmail(), LocaleContextHolder.getLocale());
         return new ModelAndView("redirect:/");
     }
 

@@ -16,6 +16,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.mail.internet.MimeMessage;
+import java.util.Locale;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -33,7 +34,8 @@ public class EmailServiceImpl implements EmailService {
 
     private final SpringTemplateEngine templateEngine;
 
-    private final String baseUrl = "http://pawserver.it.itba.edu.ar/paw-2022a-06/";
+//    private final String baseUrl = "http://pawserver.it.itba.edu.ar/paw-2022a-06/";
+    private final String baseUrl = "http://localhost:8080/";
 
     @Autowired
     public EmailServiceImpl(SpringTemplateEngine templateEngine) {
@@ -57,22 +59,22 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void notifyNewArgument(String to, String from, long debateId, String debateName) {
+    public void notifyNewArgument(String to, String from, long debateId, String debateName, Locale locale) {
         String subject = messageSource.getMessage("new-argument.subject", null, LocaleContextHolder.getLocale());
         String message = messageSource.getMessage("new-argument.message", null, LocaleContextHolder.getLocale());
-        sendEmail(to, from, debateName, baseUrl + "debates/" + debateId, subject, message);
+        sendEmail(to, from, debateName, baseUrl + "debates/" + debateId, subject, message, locale);
     }
 
     @Async
     @Override
-    public void notifyNewInvite(String to, String from, long debateId, String debateName) {
+    public void notifyNewInvite(String to, String from, long debateId, String debateName, Locale locale) {
         String subject = messageSource.getMessage("new-invite.subject", null, LocaleContextHolder.getLocale());
         String message = messageSource.getMessage("new-invite.message", null, LocaleContextHolder.getLocale());
-        sendEmail(to, from, debateName, baseUrl + "debates/" + debateId, subject, message);
+        sendEmail(to, from, debateName, baseUrl + "debates/" + debateId, subject, message, locale);
     }
 
-    private void sendEmail(String to, String from, String debateName, String url, String subject, String message) {
-        final Context ctx = new Context(LocaleContextHolder.getLocale());
+    private void sendEmail(String to, String from, String debateName, String url, String subject, String message, Locale locale) {
+        final Context ctx = new Context(locale);
         ctx.setVariable("senderName", from);
         ctx.setVariable("url", url);
         ctx.setVariable("debateName", debateName);

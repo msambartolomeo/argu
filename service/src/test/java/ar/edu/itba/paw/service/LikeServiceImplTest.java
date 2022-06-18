@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -53,8 +54,8 @@ public class LikeServiceImplTest {
 
     @Before
     public void setUp() {
-        user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-        User user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
+        user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
+        User user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2, Locale.ENGLISH);
         Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, user, true, user2, null, DebateCategory.OTHER);
         argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
     }

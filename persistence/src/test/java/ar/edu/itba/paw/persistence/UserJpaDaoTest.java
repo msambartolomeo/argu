@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -31,7 +32,7 @@ public class UserJpaDaoTest {
 
     @Test
     public void testCreate() {
-        final User user = userJpaDao.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
+        final User user = userJpaDao.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL, Locale.ENGLISH);
 
         assertNotNull(user);
         assertEquals(user, em.find(User.class, user.getUserId()));
@@ -46,7 +47,7 @@ public class UserJpaDaoTest {
 
     @Test
     public void getUserByUsername() {
-        final User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        final User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
         em.persist(user);
 
         Optional<User> u = userJpaDao.getUserByUsername(USER_USERNAME);
@@ -64,7 +65,7 @@ public class UserJpaDaoTest {
 
     @Test
     public void getUserByEmail() {
-        final User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        final User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
         em.persist(user);
 
         Optional<User> u = userJpaDao.getUserByEmail(USER_EMAIL);
