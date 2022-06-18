@@ -179,7 +179,7 @@ public class DebateServiceImpl implements DebateService {
             return new DebateNotFoundException();
         });
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
-            LOGGER.error("Cannot get recommended debates for Debate with id {} because user with id {} does not exist", debateid, userid);
+            LOGGER.error("Cannot get recommended debates for Debate with id {} because user with username {} does not exist", debateid, username);
             return new UserNotFoundException();
         });
         return debateDao.getRecommendedDebates(debate, user);
