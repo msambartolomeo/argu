@@ -15,6 +15,9 @@
             <c:when test="${empty lastArgument || (lastArgument.status.name == 'introduction' && lastArgument.user.username == debate.creator.username)}">
                 <span class="card-title"><spring:message code="components.post-comment.introduction"/></span>
             </c:when>
+            <c:when test="${lastArgument.status.name == 'introduction'}">
+                <span class="card-title"><spring:message code="components.post-comment.argument"/></span>
+            </c:when>
             <c:when test="${debate.status.name == 'closing'}">
                 <span class="card-title"><spring:message code="components.post-comment.conclusion"/></span>
             </c:when>

@@ -160,8 +160,9 @@ public class DebateJpaDao implements DebateDao {
         if (status != null && status != DebateStatus.DELETED) {
             params.put("status", status.ordinal());
             if (status == DebateStatus.OPEN) {
-                queryString.append(" AND (status = :status OR status = :statusAux)");
+                queryString.append(" AND (status = :status OR status = :statusAux OR status = :statusAux2)");
                 params.put("statusAux", DebateStatus.CLOSING.ordinal());
+                params.put("statusAux2", DebateStatus.VOTING.ordinal());
             } else {
                 queryString.append(" AND status = :status");
             }
