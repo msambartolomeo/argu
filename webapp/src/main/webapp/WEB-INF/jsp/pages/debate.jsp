@@ -97,7 +97,7 @@
                                 <b><spring:message code="pages.debate.for"/></b>
                                 <c:choose>
                                     <c:when test="${debate.opponent.username != null}">
-                                        <a class="link" href="<c:url value="/user/${debate.opponent.username}"/>"> <c:out
+                                        <a class="link" href="<c:url value="/user/${debate.opponent.url}"/>"> <c:out
                                                 value="${debate.opponent.username}"/></a>
                                     </c:when>
                                     <c:otherwise>
@@ -111,7 +111,7 @@
                                 <b><spring:message code="pages.debate.against"/></b>
                                 <c:choose>
                                     <c:when test="${debate.creator.username != null}">
-                                        <a class="link" href="<c:url value="/user/${debate.creator.username}"/>"> <c:out
+                                        <a class="link" href="<c:url value="/user/${debate.creator.url}"/>"> <c:out
                                                 value="${debate.creator.username}"/></a>
                                     </c:when>
                                     <c:otherwise>

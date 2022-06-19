@@ -4,6 +4,8 @@ import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.UserRole;
 
 import javax.persistence.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
@@ -106,6 +108,10 @@ public class User {
             if (debate.getStatus() != DebateStatus.DELETED && debate.getStatus() != DebateStatus.CLOSED)
                 debate.closeDebate();
         }
+    }
+
+    public String getUrl() throws UnsupportedEncodingException {
+        return URLEncoder.encode(this.username, "UTF-8");
     }
 
     // TODO: Choose correct amount of points

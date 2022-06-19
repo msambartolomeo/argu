@@ -20,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 @Controller
 public class WebController {
@@ -115,16 +117,18 @@ public class WebController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/{username}", method = { RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = "/user/{usernameUrl:.+}", method = { RequestMethod.GET, RequestMethod.HEAD})
     public ModelAndView userProfile(
-            @PathVariable("username") final String username,
+            @PathVariable("usernameUrl") final String usernameUrl,
             Authentication auth,
             @RequestParam(value = "page", defaultValue = "0") String page
-    ) {
+    ) throws UnsupportedEncodingException {
         if (!page.matches("-?\\d+")) {
             LOGGER.error("/user/{username} : Invalid page number {}", page);
             throw new InvalidPageException();
         }
+
+        String username = URLDecoder.decode(usernameUrl, "UTF-8");
 
         if (auth != null && auth.getPrincipal() != null && auth.getName().equals(username)) {
             return new ModelAndView("redirect:/profile");
