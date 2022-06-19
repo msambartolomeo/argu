@@ -323,6 +323,9 @@
                             </c:if>
                         </c:otherwise>
                     </c:choose>
+                    <c:if test="${debate.status.name == 'voting'}">
+                        <h6><spring:message code="page.debate.voting-ends" arguments="${debate.formattedDateToClose}"/></h6>
+                    </c:if>
                 </div>
             </c:when>
             <c:otherwise>
@@ -388,6 +391,9 @@
                             <h5 class="center"><spring:message code="pages.debate-no-votes"/></h5>
                         </c:otherwise>
                     </c:choose>
+                    <c:if test="${debate.status.name == 'voting'}">
+                        <h6><spring:message code="page.debate.voting-ends" arguments="${debate.formattedDateToClose}"/></h6>
+                    </c:if>
                 </div>
             </c:otherwise>
         </c:choose>

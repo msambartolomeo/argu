@@ -155,6 +155,10 @@ public class Debate {
         return dateToClose;
     }
 
+    public String getFormattedDateToClose() {
+        return dateToClose.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
     public void closeDebate() {
         if (this.status == DebateStatus.VOTING)
             addPointsToParticipants();
