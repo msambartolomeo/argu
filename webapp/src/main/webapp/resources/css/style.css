@@ -124,7 +124,6 @@ div.input-field.margin-left div.selects-container div.select-wrapper input.selec
 
 div.order-div {
     display: flex;
-    /*align-items: center;*/
     align-self: center;
 }
 
@@ -351,7 +350,6 @@ div.category-list div.collection.with-header {
 
 .order-div {
     display: flex;
-    align-items: baseline;
 }
 
 .margin-left {
@@ -415,7 +413,6 @@ div.category-list div.collection.with-header {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: baseline;
     padding-top: 1%;
 }
 
