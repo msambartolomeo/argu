@@ -40,7 +40,7 @@ public class User {
     @Column(name = "points", columnDefinition = "integer default 0")
     private int points;
 
-    @Column(name = "locale", nullable = false, columnDefinition = "varchar default 'en'")
+    @Column(name = "locale", nullable = false, columnDefinition = "varchar(255) default 'en'")
     private Locale locale;
 
     public User() {}
