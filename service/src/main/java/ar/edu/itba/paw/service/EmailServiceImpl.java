@@ -34,8 +34,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final SpringTemplateEngine templateEngine;
 
-//    private final String baseUrl = "http://pawserver.it.itba.edu.ar/paw-2022a-06/";
-    private final String baseUrl = "http://localhost:8080/";
+    private final String baseUrl = "http://pawserver.it.itba.edu.ar/paw-2022a-06/";
 
     @Autowired
     public EmailServiceImpl(SpringTemplateEngine templateEngine) {
@@ -60,16 +59,16 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void notifyNewArgument(String to, String from, long debateId, String debateName, Locale locale) {
-        String subject = messageSource.getMessage("new-argument.subject", null, LocaleContextHolder.getLocale());
-        String message = messageSource.getMessage("new-argument.message", null, LocaleContextHolder.getLocale());
+        String subject = messageSource.getMessage("new-argument.subject", null, locale);
+        String message = messageSource.getMessage("new-argument.message", null, locale);
         sendEmail(to, from, debateName, baseUrl + "debates/" + debateId, subject, message, locale);
     }
 
     @Async
     @Override
     public void notifyNewInvite(String to, String from, long debateId, String debateName, Locale locale) {
-        String subject = messageSource.getMessage("new-invite.subject", null, LocaleContextHolder.getLocale());
-        String message = messageSource.getMessage("new-invite.message", null, LocaleContextHolder.getLocale());
+        String subject = messageSource.getMessage("new-invite.subject", null, locale);
+        String message = messageSource.getMessage("new-invite.message", null, locale);
         sendEmail(to, from, debateName, baseUrl + "debates/" + debateId, subject, message, locale);
     }
 
