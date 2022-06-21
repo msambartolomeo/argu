@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Set;
 
 @Entity
@@ -41,15 +42,19 @@ public class User {
     @Column(name = "points", columnDefinition = "integer default 0")
     private int points;
 
+    @Column(name = "locale", nullable = false, columnDefinition = "varchar(255) default 'en'")
+    private Locale locale;
+
     public User() {}
 
-    public User(String email, String username, String password) {
+    public User(String email, String username, String password, Locale locale) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.createdDate = LocalDate.now();
         this.role = UserRole.USER;
         this.points = 0;
+        this.locale = locale;
     }
 
     public Long getUserId() {
@@ -81,6 +86,10 @@ public class User {
     }
     public UserRole getRole() {
         return role;
+    }
+
+    public Locale getLocale() {
+        return locale;
     }
 
     public void updateImage(byte[] data) {

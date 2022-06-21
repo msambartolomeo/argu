@@ -2,11 +2,12 @@ package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.model.User;
 
+import java.util.Locale;
 import java.util.Optional;
 
 public interface UserService {
     Optional<User> getUserByUsername(String username);
-    User create(String username, String password, String email);
+    User create(String username, String password, String email, Locale locale);
     Optional<User> getUserByEmail(String email);
     User updateImage(String username, byte[] image);
     void requestModerator(String username, String reason);

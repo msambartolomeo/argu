@@ -74,9 +74,9 @@ public class ArgumentServiceImplTest {
 
     @Before
     public void setUp() {
-        user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-        user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
-        user3 = new User(USER_EMAIL_3, USER_USERNAME_3, USER_PASSWORD_3);
+        user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
+        user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2, Locale.ENGLISH);
+        user3 = new User(USER_EMAIL_3, USER_USERNAME_3, USER_PASSWORD_3, Locale.ENGLISH);
         debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, user, true, user2, null, DebateCategory.OTHER);
         image = new Image(IMAGE_DATA);
     }
@@ -255,7 +255,7 @@ public class ArgumentServiceImplTest {
 
         argumentService.sendEmailToSubscribedUsers(debateMock, user);
 
-        verify(emailService, times(0)).notifyNewArgument(anyString(), anyString(), anyLong(), anyString());
+        verify(emailService, times(0)).notifyNewArgument(anyString(), anyString(), anyLong(), anyString(), Locale.ENGLISH);
     }
 
     @Test
@@ -269,7 +269,7 @@ public class ArgumentServiceImplTest {
 
         argumentService.sendEmailToSubscribedUsers(debateMock, user2);
 
-        verify(emailService).notifyNewArgument(anyString(), anyString(), anyLong(), anyString());
+        verify(emailService).notifyNewArgument(anyString(), anyString(), anyLong(), anyString(), Locale.ENGLISH);
     }
 
     @Test

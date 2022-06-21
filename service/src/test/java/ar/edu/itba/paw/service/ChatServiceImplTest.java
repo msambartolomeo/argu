@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -61,8 +62,8 @@ public class ChatServiceImplTest {
 
     @Before
     public void setUp() {
-        user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-        user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
+        user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
+        user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2, Locale.ENGLISH);
         debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, user, true, user2, null, DebateCategory.OTHER);
     }
 

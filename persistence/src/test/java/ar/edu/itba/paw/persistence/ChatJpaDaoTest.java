@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
@@ -52,8 +53,8 @@ public class ChatJpaDaoTest {
 
     @Before
     public void setUp() {
-        user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-        User user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2);
+        user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
+        User user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2, Locale.ENGLISH);
         debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, user, true, user2, null, DebateCategory.OTHER);
         em.persist(user);
         em.persist(user2);

@@ -116,7 +116,7 @@ public class ArgumentServiceImpl implements ArgumentService {
             return;
         for (User u : debate.getSubscribedUsers()) {
             if (!u.getUsername().equals(user.getUsername())) { // Si no es el usuario que creo el post
-                emailService.notifyNewArgument(u.getEmail(), user.getUsername(), debate.getDebateId(), debate.getName());
+                emailService.notifyNewArgument(u.getEmail(), user.getUsername(), debate.getDebateId(), debate.getName(), u.getLocale());
             }
         }
     }
