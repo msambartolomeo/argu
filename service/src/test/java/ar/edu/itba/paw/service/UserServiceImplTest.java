@@ -38,7 +38,7 @@ public class UserServiceImplTest {
     @Test
     public void testCreateUserNew() {
         User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
-        when(userDao.create(anyString(), anyString(), anyString(), Locale.ENGLISH)).thenReturn(user);
+        when(userDao.create(anyString(), anyString(), anyString(), any(Locale.class))).thenReturn(user);
         when(passwordEncoder.encode(anyString())).thenReturn(USER_PASSWORD);
 
         User u = userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL, Locale.ENGLISH);

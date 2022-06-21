@@ -255,7 +255,7 @@ public class ArgumentServiceImplTest {
 
         argumentService.sendEmailToSubscribedUsers(debateMock, user);
 
-        verify(emailService, times(0)).notifyNewArgument(anyString(), anyString(), anyLong(), anyString(), Locale.ENGLISH);
+        verify(emailService, times(0)).notifyNewArgument(anyString(), anyString(), anyLong(), anyString(), any(Locale.class));
     }
 
     @Test
@@ -269,7 +269,7 @@ public class ArgumentServiceImplTest {
 
         argumentService.sendEmailToSubscribedUsers(debateMock, user2);
 
-        verify(emailService).notifyNewArgument(anyString(), anyString(), anyLong(), anyString(), Locale.ENGLISH);
+        verify(emailService).notifyNewArgument(anyString(), anyString(), anyLong(), anyString(), any(Locale.class));
     }
 
     @Test
