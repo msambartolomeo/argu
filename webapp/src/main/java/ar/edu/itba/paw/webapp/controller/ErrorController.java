@@ -1,11 +1,16 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.exceptions.*;
+import ar.edu.itba.paw.model.exceptions.Exception400;
+import ar.edu.itba.paw.model.exceptions.Exception403;
+import ar.edu.itba.paw.model.exceptions.Exception404;
+import ar.edu.itba.paw.model.exceptions.Exception500;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
@@ -42,7 +47,7 @@ public class ErrorController {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ModelAndView handleMethodNotAllowed(HttpRequestMethodNotSupportedException e) {
-        LOGGER.error("error 400", e);
+        LOGGER.error("error 400 - {}", e.toString());
         return new ModelAndView("error/400");
     }
 

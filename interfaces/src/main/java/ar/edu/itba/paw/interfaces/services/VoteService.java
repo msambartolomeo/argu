@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.interfaces.services;
 
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Vote;
 import ar.edu.itba.paw.model.enums.DebateVote;
 

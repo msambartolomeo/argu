@@ -44,7 +44,6 @@
                     </c:forEach>
                 </div>
             </div>
-<%--            <div class="parallax"><img src="<c:url value="/resources/images/group-discussion.jpeg"/>" alt="Unsplashed background img 3"></div>--%>
         </div>
 
         <div class="container">

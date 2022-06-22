@@ -2,7 +2,10 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.ArgumentDao;
 import ar.edu.itba.paw.interfaces.services.*;
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Argument;
+import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
@@ -174,7 +177,7 @@ public class ArgumentServiceImpl implements ArgumentService {
             return new ArgumentNotFoundException();
         });
 
-        if(!argument.getUser().getUsername().equals(username)) {
+        if(argument.getUser().getUsername() == null || !argument.getUser().getUsername().equals(username)) {
             LOGGER.error("Cannot delete argument {} because user is not the creator", argumentId);
             throw new ForbiddenArgumentException();
         }

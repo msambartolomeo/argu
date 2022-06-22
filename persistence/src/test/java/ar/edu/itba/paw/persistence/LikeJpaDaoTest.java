@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Argument;
+import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Like;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import org.junit.Before;
@@ -13,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.Locale;
 import java.util.Optional;
 
@@ -71,7 +73,7 @@ public class LikeJpaDaoTest {
         Like like = new Like(user, argument);
         em.persist(like);
 
-        likeJpaDao.unlikeArgument(user, argument);
+        likeJpaDao.unlikeArgument(like);
 
         assertNull(em.find(Like.class, like.getUserPostKey()));
     }

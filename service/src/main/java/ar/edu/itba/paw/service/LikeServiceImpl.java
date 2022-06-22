@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.LikeDao;
-import ar.edu.itba.paw.interfaces.services.LikeService;
 import ar.edu.itba.paw.interfaces.services.ArgumentService;
+import ar.edu.itba.paw.interfaces.services.LikeService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.model.Like;
 import ar.edu.itba.paw.model.Argument;
+import ar.edu.itba.paw.model.Like;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenArgumentException;
@@ -79,11 +79,14 @@ public class LikeServiceImpl implements LikeService {
             return new UserNotFoundException();
         });
 
-        User creator = argument.getUser();
-        if(!creator.equals(user)) {
-            creator.removeLikePoints();
-        }
-        likeDao.unlikeArgument(user, argument);
+
+        likeDao.getLike(user, argument).ifPresent(l -> {
+            User creator = argument.getUser();
+            if(!creator.equals(user)) {
+                creator.removeLikePoints();
+            }
+            likeDao.unlikeArgument(l);
+        });
     }
 
     @Override

@@ -201,32 +201,37 @@
     </div>
 
     <div class="post-comments">
-        <c:if test="${debate.status.name != 'closed' && debate.status.name != 'voting' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
-            <div class="card no-top-margin">
-                <div class="card-content">
-                    <c:choose>
-                        <c:when test="${pageContext.request.userPrincipal.name == null}">
-                            <div class="card-title card-title-margins">
-                                <spring:message code="components.post-need-to-log-in"/>
-                                <a href="<c:url value="/login"/>">
-                                    <spring:message code="components.first-log-in"/>
-                                </a>
-                            </div>
-                        </c:when>
-<%--                        <c:when test="">--%>
-<%--                        </c:when>--%>
-                        <c:when test="${((empty lastArgument && pageContext.request.userPrincipal.name == debate.creator.username) || (not empty lastArgument && pageContext.request.userPrincipal.name != lastArgument.user.username))}">
-                            <%@include file="../components/post-comment.jsp" %>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="card-title card-title-margins">
-                                <spring:message code="components.post-comment.wait-turn"/>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
+        <c:choose>
+            <c:when test="${debate.status.name != 'closed' && debate.status.name != 'voting' && (pageContext.request.userPrincipal.name ==
+            debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
+                <div class="card no-top-margin">
+                    <div class="card-content">
+                        <c:choose>
+                            <c:when test="${((empty lastArgument && pageContext.request.userPrincipal.name == debate.creator.username) || (not empty lastArgument && pageContext.request.userPrincipal.name != lastArgument.user.username))}">
+                                <%@include file="../components/post-comment.jsp" %>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="card-title card-title-margins">
+                                    <spring:message code="components.post-comment.wait-turn"/>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
-            </div>
-        </c:if>
+            </c:when>
+            <c:when test="${pageContext.request.userPrincipal.name == null}">
+                <div class="card no-top-margin">
+                    <div class="card-content">
+                        <div class="card-title card-title-margins">
+                            <spring:message code="components.post-need-to-log-in"/>
+                            <a href="<c:url value="/login"/>">
+                                <spring:message code="components.first-log-in"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </c:when>
+        </c:choose>
         <c:choose>
             <c:when test="${pageContext.request.userPrincipal.name != null && debate.creator.username != null && debate.opponent.username != null}">
                 <div class="card vote-section no-top-margin">
@@ -260,7 +265,21 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <h6><spring:message code="pages.debate.voted"/> <c:out value="${userVote}"/></h6>
+                            <h6><spring:message code="pages.debate.voted"/>
+                                <c:choose>
+                                    <c:when test="${(userVote.ordinal() == 0 && debate.isCreatorFor) || (userVote.ordinal() == 1 &&
+                                    !debate.isCreatorFor) && debate.creator.username != null}">
+                                        <c:out value="${debate.creator.username}"/>
+                                    </c:when>
+                                    <c:when test="${(userVote.ordinal() == 1 && debate.isCreatorFor) || (userVote.ordinal() == 0 &&
+                                    !debate.isCreatorFor) && debate.opponent.username != null}">
+                                        <c:out value="${debate.opponent.username}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <spring:message code="username.deleted"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </h6>
                             <div class="progress red">
                                 <c:if test="${debate.forCount > 0}">
                                     <div class="votes-format blue" style="width: ${debate.forCount}%">
@@ -324,7 +343,7 @@
                         </c:otherwise>
                     </c:choose>
                     <c:if test="${debate.status.name == 'voting'}">
-                        <h6><spring:message code="page.debate.voting-ends" arguments="${debate.formattedDateToClose}"/></h6>
+                        <h6 class="center"><spring:message code="page.debate.voting-ends" arguments="${debate.formattedDateToClose}"/></h6>
                     </c:if>
                 </div>
             </c:when>
@@ -392,7 +411,7 @@
                         </c:otherwise>
                     </c:choose>
                     <c:if test="${debate.status.name == 'voting'}">
-                        <h6><spring:message code="page.debate.voting-ends" arguments="${debate.formattedDateToClose}"/></h6>
+                        <h6 class="center"><spring:message code="page.debate.voting-ends" arguments="${debate.formattedDateToClose}"/></h6>
                     </c:if>
                 </div>
             </c:otherwise>

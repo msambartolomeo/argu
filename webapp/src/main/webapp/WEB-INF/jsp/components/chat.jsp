@@ -99,9 +99,6 @@
                 </ul>
             </div>
         </c:when>
-        <c:otherwise>
-            <a href="<c:url value="/login"/>" class="center"><spring:message code="components.chat.login-to-chat"/></a>
-        </c:otherwise>
     </c:choose>
 </div>
 <script>

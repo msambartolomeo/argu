@@ -20,8 +20,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Locale;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SubscribedServiceImplTest {

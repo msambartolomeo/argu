@@ -100,7 +100,6 @@
                         <p><spring:message code="pages.debates-list-create-your-debate"/></p>
                     </div>
                 </div>
-<%--                <h5 class="center white-text"><spring:message code="pages.debates-list.no-debates"/></h5>--%>
             </c:if>
             <%@include file="../components/pagination.jsp"%>
         </div>

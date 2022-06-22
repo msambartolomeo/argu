@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;

@@ -3,7 +3,10 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.LikeDao;
 import ar.edu.itba.paw.interfaces.services.ArgumentService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Argument;
+import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Like;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
@@ -143,12 +146,14 @@ public class LikeServiceImplTest {
 
     @Test
     public void testUnlikeArgument() {
+        Like like = new Like(user, argument);
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
         when(argumentService.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
+        when(likeDao.getLike(any(User.class), any(Argument.class))).thenReturn(Optional.of(like));
 
         likeService.unlikeArgument(ID, USER_USERNAME);
 
-        verify(likeDao).unlikeArgument(any(User.class), any(Argument.class));
+        verify(likeDao).unlikeArgument(any(Like.class));
     }
 
     @Test
