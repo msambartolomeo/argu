@@ -213,8 +213,8 @@ public class DebateJpaDao implements DebateDao {
                 "    )\n" +
                 "    GROUP BY s.debateid\n" +
                 ")\n" +
-                "SELECT si.debateid\n" +
-                "FROM selected_ids si NATURAL JOIN subscribed s\n" +
+                "SELECT si.debateid, count(distinct s.userid)\n" +
+                "FROM selected_ids si LEFT JOIN subscribed s ON si.debateid = s.debateid\n" +
                 "WHERE si.debateid != :debateid AND si.debateid NOT IN (\n" +
                 "    SELECT debateid\n" +
                 "    FROM subscribed s\n" +
