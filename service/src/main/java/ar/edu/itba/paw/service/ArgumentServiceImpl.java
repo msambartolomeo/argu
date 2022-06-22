@@ -110,13 +110,13 @@ public class ArgumentServiceImpl implements ArgumentService {
     }
 
     // Package-private for testing
-    @Async // TODO: test that it works
+    @Async
     void sendEmailToSubscribedUsers(Debate debate, User user) {
         if (debate.getSubscribedUsers() == null)
             return;
         for (User u : debate.getSubscribedUsers()) {
             if (!u.getUsername().equals(user.getUsername())) { // Si no es el usuario que creo el post
-                emailService.notifyNewArgument(u.getEmail(), user.getUsername(), debate.getDebateId(), debate.getName(), u.getLocale());
+                emailService.notifyNewArgument(u.getEmail(), user.getUsername(), debate, u.getLocale());
             }
         }
     }

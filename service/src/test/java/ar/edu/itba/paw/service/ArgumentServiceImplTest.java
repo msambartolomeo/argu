@@ -255,7 +255,7 @@ public class ArgumentServiceImplTest {
 
         argumentService.sendEmailToSubscribedUsers(debateMock, user);
 
-        verify(emailService, times(0)).notifyNewArgument(anyString(), anyString(), anyLong(), anyString(), any(Locale.class));
+        verify(emailService, times(0)).notifyNewArgument(anyString(), anyString(), any(Debate.class), any(Locale.class));
     }
 
     @Test
@@ -264,12 +264,10 @@ public class ArgumentServiceImplTest {
         users.add(user);
         // Mock debate with subscribed users
         when(debateMock.getSubscribedUsers()).thenReturn(users);
-        when(debateMock.getDebateId()).thenReturn(ID);
-        when(debateMock.getName()).thenReturn(DEBATE_NAME);
 
         argumentService.sendEmailToSubscribedUsers(debateMock, user2);
 
-        verify(emailService).notifyNewArgument(anyString(), anyString(), anyLong(), anyString(), any(Locale.class));
+        verify(emailService).notifyNewArgument(anyString(), anyString(), any(Debate.class), any(Locale.class));
     }
 
     @Test

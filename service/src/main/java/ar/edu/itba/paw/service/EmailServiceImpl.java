@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.model.Debate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,18 +59,18 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void notifyNewArgument(String to, String from, long debateId, String debateName, Locale locale) {
+    public void notifyNewArgument(String to, String from, Debate debate, Locale locale) {
         String subject = messageSource.getMessage("new-argument.subject", null, locale);
         String message = messageSource.getMessage("new-argument.message", null, locale);
-        sendEmail(to, from, debateName, baseUrl + "debates/" + debateId, subject, message, locale);
+        sendEmail(to, from, debate.getName(), baseUrl + "debates/" + debate.getDebateId(), subject, message, locale);
     }
 
     @Async
     @Override
-    public void notifyNewInvite(String to, String from, long debateId, String debateName, Locale locale) {
+    public void notifyNewInvite(String to, String from, Debate debate, Locale locale) {
         String subject = messageSource.getMessage("new-invite.subject", null, locale);
         String message = messageSource.getMessage("new-invite.message", null, locale);
-        sendEmail(to, from, debateName, baseUrl + "debates/" + debateId, subject, message, locale);
+        sendEmail(to, from, debate.getName(), baseUrl + "debates/" + debate.getDebateId(), subject, message, locale);
     }
 
     private void sendEmail(String to, String from, String debateName, String url, String subject, String message, Locale locale) {

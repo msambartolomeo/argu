@@ -64,8 +64,7 @@ public class DebateServiceImpl implements DebateService {
             createdDebate = debateDao.create(name, description, creator, isCreatorFor, opponent, null, category);
         else
             createdDebate = debateDao.create(name, description, creator, isCreatorFor, opponent, imageService.createImage(image), category);
-        emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate.getDebateId(), createdDebate.getName(),
-                opponent.getLocale());
+        emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate, opponent.getLocale());
         return createdDebate;
     }
 

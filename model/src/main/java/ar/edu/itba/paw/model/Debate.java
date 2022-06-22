@@ -90,7 +90,7 @@ public class Debate {
         this.createdDate = LocalDateTime.now();
     }
 
-    public long getDebateId() {
+    public Long getDebateId() {
         return debateId;
     }
 
@@ -157,6 +157,10 @@ public class Debate {
 
     public String getFormattedDateToClose() {
         return dateToClose.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public void setDateToClose(LocalDate dateToClose) {
+        this.dateToClose = dateToClose;
     }
 
     public void closeDebate() {
