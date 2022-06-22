@@ -45,8 +45,8 @@ public class ChatServiceImpl implements ChatService {
             return new UserNotFoundException();
         });
 
-        // TODO: check condition with extended voting in debate
-        if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED || debate.getCreator().getUsername().equals(username) || debate.getOpponent().getUsername().equals(username)) {
+        if (debate.getStatus() != DebateStatus.VOTING && (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED
+                || debate.getCreator().getUsername().equals(username) || debate.getOpponent().getUsername().equals(username))) {
             LOGGER.error("Cannot create new Chat on Debate {} because it is closed or because the requesting user {} is the creator or the opponent", debateId, username);
             throw new ForbiddenChatException();
         }

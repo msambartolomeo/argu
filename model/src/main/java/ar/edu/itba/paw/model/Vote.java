@@ -35,6 +35,10 @@ public class Vote {
         this.userDebateKey = new UserDebateKey(user.getUserId(), debate.getDebateId());
     }
 
+    public UserDebateKey getUserDebateKey() {
+        return userDebateKey;
+    }
+
     public void setVote(DebateVote vote) {
         this.vote = vote;
     }

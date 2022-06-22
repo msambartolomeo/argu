@@ -19,7 +19,7 @@
             <div class="debate-text-holder">
                 <div class="debate-info-holder">
                     <h4 class="debate-title word-wrap"><c:out value="${debate.name}"/></h4>
-                    <sec:authorize access="hasAuthority('USER')">
+                    <c:if test="${pageContext.request.userPrincipal.name != null}">
                     <div class="right debate-buttons-display">
                         <div class="col">
                         <c:if test="${debate.status.name == 'open' && (pageContext.request.userPrincipal.name == debate.creator.username || pageContext.request.userPrincipal.name == debate.opponent.username)}">
@@ -58,8 +58,7 @@
                         </c:if>
                         </div>
                     </div>
-
-                    </sec:authorize>
+                    </c:if>
                 </div>
                 <hr class="dashed">
                 <h5 class="debate-description word-wrap"><c:out value="${debate.description}"/></h5>
@@ -98,7 +97,7 @@
                                 <b><spring:message code="pages.debate.for"/></b>
                                 <c:choose>
                                     <c:when test="${debate.opponent.username != null}">
-                                        <a class="link" href="<c:url value="/user/${debate.opponent.username}"/>"> <c:out
+                                        <a class="link" href="<c:url value="/user/${debate.opponent.url}"/>"> <c:out
                                                 value="${debate.opponent.username}"/></a>
                                     </c:when>
                                     <c:otherwise>
@@ -112,7 +111,7 @@
                                 <b><spring:message code="pages.debate.against"/></b>
                                 <c:choose>
                                     <c:when test="${debate.creator.username != null}">
-                                        <a class="link" href="<c:url value="/user/${debate.creator.username}"/>"> <c:out
+                                        <a class="link" href="<c:url value="/user/${debate.creator.url}"/>"> <c:out
                                                 value="${debate.creator.username}"/></a>
                                     </c:when>
                                     <c:otherwise>
@@ -125,7 +124,7 @@
                 </c:choose>
             </div>
             <div class="debate-footer">
-                <sec:authorize access="hasAuthority('USER')">
+                <c:if test="${pageContext.request.userPrincipal.name != null}">
                     <c:choose>
                         <c:when test="${isSubscribed == false}">
                             <c:url var="subscribePath" value="/debates/${debate.debateId}/subscribe"/>
@@ -146,7 +145,7 @@
                             </form:form>
                         </c:otherwise>
                     </c:choose>
-                </sec:authorize>
+                </c:if>
                 <a class="chip btn" href="<c:url value="/debates?category=${debate.category.name}"/>"><spring:message code="category.${debate.category.name}"/></a>
                 <button class="chip btn" onclick="dateFilter('${debate.formattedDate}')"><spring:message code="components.debate-created-on"/> <c:out value="${debate.formattedDate}"/></button>
                 <a class="chip btn" href="<c:url value="/debates?status=${debate.status.name == 'closed' ? 'closed' : 'open'}"/>"><spring:message code="status.${debate.status.name}"/></a>
@@ -324,6 +323,9 @@
                             </c:if>
                         </c:otherwise>
                     </c:choose>
+                    <c:if test="${debate.status.name == 'voting'}">
+                        <h6><spring:message code="page.debate.voting-ends" arguments="${debate.formattedDateToClose}"/></h6>
+                    </c:if>
                 </div>
             </c:when>
             <c:otherwise>
@@ -389,6 +391,9 @@
                             <h5 class="center"><spring:message code="pages.debate-no-votes"/></h5>
                         </c:otherwise>
                     </c:choose>
+                    <c:if test="${debate.status.name == 'voting'}">
+                        <h6><spring:message code="page.debate.voting-ends" arguments="${debate.formattedDateToClose}"/></h6>
+                    </c:if>
                 </div>
             </c:otherwise>
         </c:choose>
@@ -399,8 +404,58 @@
                 <%@include file="../components/chat.jsp" %>
             </c:if>
         </div>
+        <c:if test="${recommendedDebates.size() > 0}">
+            <div class="card vote-section">
+                <h5><spring:message code="pages.debate.recommended-debates"/></h5>
+                <div class="row">
+                    <div class="slideshow-container">
+                        <c:forEach var="debate" items="${recommendedDebates}">
+                            <div class="mySlides fade">
+                                <%@include file="../components/debates-list-item.jsp"%>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </div>
+                <div class="image-selector">
+                    <c:if test="${recommendedDebates.size() > 1}">
+                        <a class="prev btn image-selector" onclick="plusSlides(-1)">❮</a>
+                    </c:if>
+                    <c:if test="${recommendedDebates.size() > 1}">
+                        <a class="next btn image-selector" onclick="plusSlides(1)">❯</a>
+                    </c:if>
+                </div>
+            </div>
+
+        </c:if>
     </div>
 </div>
 <%@include file="../components/JS_imports.jsp" %>
+<script>
+    let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let slides = document.getElementsByClassName("mySlides");
+                let dots = document.getElementsByClassName("dot");
+                if (n > slides.length) {slideIndex = 1}
+                if (n < 1) {slideIndex = slides.length}
+                for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+                }
+                for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+                }
+                slides[slideIndex-1].style.display = "block";
+                dots[slideIndex-1].className += " active";
+                }
+</script>
 </body>
 </html>

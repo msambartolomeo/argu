@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 @Repository
 public class ArgumentJpaDao implements ArgumentDao {
 
+    static final int PAGE_SIZE = 5;
+
     @PersistenceContext
     private EntityManager em;
 
@@ -40,7 +42,7 @@ public class ArgumentJpaDao implements ArgumentDao {
     public List<Argument> getArgumentsByDebate(Debate debate, int page) {
         final Query idQuery = em.createNativeQuery("SELECT postid FROM posts WHERE debateid = :debateid ORDER BY created_date LIMIT 5 OFFSET :offset");
         idQuery.setParameter("debateid", debate.getDebateId());
-        idQuery.setParameter("offset", page * 5);
+        idQuery.setParameter("offset", page * PAGE_SIZE);
 
         @SuppressWarnings("unchecked")
         List<Long> ids = (List<Long>) idQuery.getResultList().stream().map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());

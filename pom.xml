@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ar.edu.itba.paw</groupId>
   <artifactId>PAW-webapp</artifactId>
-  <version>5.0.0</version>
+  <version>6.0.0</version>
   <packaging>pom</packaging>
     
   <properties>
@@ -28,6 +28,7 @@
     <junit.version>4.11</junit.version>
     <org.hibernate.version>5.1.0.Final</org.hibernate.version>
     <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
+    <org.thymeleaf.version>3.0.11.RELEASE</org.thymeleaf.version>
   </properties>
 
   <modules>
@@ -195,6 +196,16 @@
         <groupId>org.hibernate.javax.persistence</groupId>
         <artifactId>hibernate-jpa-2.1-api</artifactId>
         <version>${org.hibernate.jpa.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.thymeleaf</groupId>
+        <artifactId>thymeleaf</artifactId>
+        <version>${org.thymeleaf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.thymeleaf</groupId>
+        <artifactId>thymeleaf-spring4</artifactId>
+        <version>${org.thymeleaf.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

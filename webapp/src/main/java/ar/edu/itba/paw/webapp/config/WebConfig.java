@@ -25,6 +25,9 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -119,12 +122,22 @@ public class WebConfig {
         jpaProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         jpaProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
 
-        // TODO Only for development, delete on deployment
-        jpaProperties.setProperty("hibernate.show_sql", "true");
-        jpaProperties.setProperty("format_sql", "true");
-
         entityFactory.setJpaProperties(jpaProperties);
 
         return entityFactory;
+    }
+
+    @Bean
+    public SpringResourceTemplateResolver templateResolver(){
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        return templateResolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine(){
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver());
+        return templateEngine;
     }
 }

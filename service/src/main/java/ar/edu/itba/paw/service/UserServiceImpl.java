@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
@@ -37,23 +38,18 @@ public class UserServiceImpl implements UserService {
     private EmailService emailService;
 
     @Override
-    public Optional<User> getUserById(long userId) {
-        return userDao.getUserById(userId);
-    }
-
-    @Override
     public Optional<User> getUserByUsername(String username) {
         return userDao.getUserByUsername(username);
     }
 
     @Transactional
     @Override
-    public User create(String username, String password, String email) {
+    public User create(String username, String password, String email, Locale locale) {
         Optional<User> optionalUser = getUserByEmail(email);
         if (optionalUser.isPresent())
             return optionalUser.get().updateLegacyUser(username, passwordEncoder.encode(password));
 
-        User user = userDao.create(username, passwordEncoder.encode(password), email);
+        User user = userDao.create(username, passwordEncoder.encode(password), email, locale);
 
         final Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("USER"));

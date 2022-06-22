@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -36,11 +37,11 @@ public class UserServiceImplTest {
 
     @Test
     public void testCreateUserNew() {
-        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
-        when(userDao.create(anyString(), anyString(), anyString())).thenReturn(user);
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
+        when(userDao.create(anyString(), anyString(), anyString(), any(Locale.class))).thenReturn(user);
         when(passwordEncoder.encode(anyString())).thenReturn(USER_PASSWORD);
 
-        User u = userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
+        User u = userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL, Locale.ENGLISH);
 
         assertEquals(user.getUsername(), u.getUsername());
         assertEquals(user.getPassword(), u.getPassword());
@@ -50,11 +51,11 @@ public class UserServiceImplTest {
 
     @Test
     public void testCreateUserUpdateLegacy() {
-        User user = new User(USER_EMAIL, null, null);
+        User user = new User(USER_EMAIL, null, null, Locale.ENGLISH);
         when(userDao.getUserByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.encode(anyString())).thenReturn(USER_PASSWORD);
 
-        User u = userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL);
+        User u = userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL, Locale.ENGLISH);
 
         assertEquals(user.getUsername(), u.getUsername());
         assertEquals(user.getPassword(), u.getPassword());
@@ -64,7 +65,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUserByUsername() {
-        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
         when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
         Optional<User> u = userService.getUserByUsername(USER_USERNAME);
@@ -87,7 +88,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUserByEmail() {
-        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
         when(userDao.getUserByEmail(anyString())).thenReturn(Optional.of(user));
 
         Optional<User> u = userService.getUserByEmail(USER_EMAIL);
@@ -110,7 +111,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testUpdateImage() {
-        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
         user.updateImage(IMAGE_DATA);
         when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
@@ -122,7 +123,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testUpdateImageNoPreviousImage() {
-        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD);
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
         when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
         User u = userService.updateImage(USER_USERNAME, IMAGE_DATA);
@@ -136,5 +137,12 @@ public class UserServiceImplTest {
         when(userDao.getUserByUsername(anyString())).thenReturn(Optional.empty());
 
         userService.updateImage(USER_USERNAME, IMAGE_DATA);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testDeleteUserNoValidUser() {
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.empty());
+
+        userService.deleteUser(USER_USERNAME);
     }
 }

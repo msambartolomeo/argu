@@ -9,18 +9,14 @@ import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.*;
 import ar.edu.itba.paw.model.exceptions.*;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -28,32 +24,30 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class DebateServiceImplTest {
 
-    private final static int PAGE = 1;
     private final static long DEBATE_ID = 1;
     private final static String DEBATE_NAME = "Debate Name Test";
     private final static String DEBATE_DESCRIPTION = "Debate Description Test";
-    private static final String DEBATE_CREATOR = "debateCreator";
-    private static final String DEBATE_OPPONENT = "debateOpponent";
-    private final static int FOR_COUNT = 1;
-    private final static int AGAINST_COUNT = 1;
-    private final static int SUBSCRIBED_COUNT = 1;
-    private final static LocalDateTime DEBATE_DATE = LocalDateTime.of(2018, 1, 1, 0, 0);
+    private final static DebateCategory DEBATE_CATEGORY = DebateCategory.OTHER;
 
-    private final static long IMAGE_ID = 1;
     private final static byte[] IMAGE_DATA = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
-    private final static long USER_ID = 1;
-    private final static long USER_ID_2 = 2;
-    private final static String USER_USERNAME = "username";
-    private final static String USER_USERNAME_2 = "username2";
-    private final static String USER_PASSWORD = "password";
-    private final static String USER_EMAIL = "test@test.com";
-    private final static String USER_EMAIL_2 = "test2@test.com";
-    private final static Date USER_DATE = Date.valueOf(LocalDate.parse("2022-01-01"));
-    private final static UserRole USER_ROLE = UserRole.USER;
+    private final static long CREATOR_ID = 1;
+    private final static String CREATOR_USERNAME = "creator_username";
+    private final static String OPPONENT_USERNAME = "opponent_username";
+    private final static String CREATOR_PASSWORD = "c_password";
+    private final static String OPPONENT_PASSWORD = "o_password";
+    private final static String CREATOR_EMAIL = "creator@test.com";
+    private final static String OPPONENT_EMAIL = "opponent@test.com";
+    private final static boolean IS_CREATOR_FOR = true;
+
+    private final static String INVALID_USERNAME = "invalid_username";
 
     private final static int VALID_PAGE = 0;
     private final static int INVALID_PAGE = -1;
+
+    private User creator;
+    private User opponent;
+    private Image image;
 
     @InjectMocks
     private DebateServiceImpl debateService = new DebateServiceImpl();
@@ -67,73 +61,104 @@ public class DebateServiceImplTest {
     @Mock
     private EmailService emailService;
 
+    @Before
+    public void setUp() {
+        creator = new User(CREATOR_EMAIL, CREATOR_USERNAME, CREATOR_PASSWORD, Locale.ENGLISH);
+        opponent = new User(OPPONENT_EMAIL, OPPONENT_USERNAME, OPPONENT_PASSWORD, Locale.ENGLISH);
+        image = new Image(IMAGE_DATA);
+    }
+
     @Test
-    public void testGetPublicDebateById() {
-        /*PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT, AGAINST_COUNT);
+    public void testGetDebateById() {
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
 
-        when(debateDao.getPublicDebateById(DEBATE_ID)).thenReturn(Optional.of(debate));
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        Optional<PublicDebate> d = debateService.getPublicDebateById(DEBATE_ID);
-
+        Optional<Debate> d = debateService.getDebateById(DEBATE_ID);
         assertTrue(d.isPresent());
-        assertEquals(debate.getDebateId(), d.get().getDebateId());
-        assertEquals(debate.getName(), d.get().getName());
-        assertEquals(debate.getDescription(), d.get().getDescription());
-        assertEquals(debate.getCreatorUsername(), d.get().getCreatorUsername());
-        assertEquals(debate.getOpponentUsername(), d.get().getOpponentUsername());
-        assertEquals(debate.getImageId(), d.get().getImageId());
-        assertEquals(debate.getCreatedDate(), d.get().getCreatedDate());
-        assertEquals(debate.getDebateCategory(), d.get().getDebateCategory());
-        assertEquals(debate.getSubscribedUsers(), d.get().getSubscribedUsers());
-        assertEquals(debate.getDebateStatus(), d.get().getDebateStatus());
-        assertEquals(debate.getForCount(), d.get().getForCount());
-        assertEquals(debate.getAgainstCount(), d.get().getAgainstCount());*/
+        assertEquals(d.get().getName(), DEBATE_NAME);
+        assertEquals(d.get().getDescription(), DEBATE_DESCRIPTION);
+        assertEquals(d.get().getCreator(), creator);
+        assertTrue(d.get().getIsCreatorFor());
+        assertEquals(d.get().getOpponent(), opponent);
+        assertEquals(d.get().getImage().getData(), IMAGE_DATA);
+        assertEquals(d.get().getCategory(), DEBATE_CATEGORY);
     }
 
-//    @Test
-//    public void testGetPublicDebateByIdNotFound() {
-        /*when(debateDao.getPublicDebateById(DEBATE_ID)).thenReturn(Optional.empty());
+    @Test
+    public void testGetDebateByIdNotFound() {
+        when(debateDao.getDebateById(DEBATE_ID)).thenReturn(Optional.empty());
 
-        Optional<PublicDebate> d = debateService.getPublicDebateById(DEBATE_ID);
+        Optional<Debate> d = debateService.getDebateById(DEBATE_ID);
 
-        assertFalse(d.isPresent());*/
+        assertFalse(d.isPresent());
     }
 
-//    @Test(expected = UserNotFoundException.class)
-//    public void testCreateCreatorOrOpponentNotFound() {
-//        when(userService.getUserByUsername(anyString())).thenReturn(Optional.empty());
-//
-//        debateService.create(DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_DATA, DebateCategory.OTHER);
-//    }
+    @Test
+    public void testCreateDebate() {
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
 
-    /*@Test
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(opponent));
+        when(debateDao.create(anyString(), anyString(), any(User.class), anyBoolean(), any(User.class), any(), any(DebateCategory.class)))
+                .thenReturn(debate);
+
+        Debate d = debateService.create(DEBATE_NAME, DEBATE_DESCRIPTION, CREATOR_USERNAME, IS_CREATOR_FOR, OPPONENT_USERNAME, IMAGE_DATA, DEBATE_CATEGORY);
+
+        assertNotNull(d);
+        assertEquals(debate, d);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testCreateCreatorNotFound() {
+        debateService.create(DEBATE_NAME, DEBATE_DESCRIPTION, CREATOR_USERNAME, IS_CREATOR_FOR, OPPONENT_USERNAME, IMAGE_DATA, DebateCategory.OTHER);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testCreateOpponentNotFound() {
+        when(userService.getUserByUsername(CREATOR_USERNAME)).thenReturn(Optional.of(creator));
+
+        debateService.create(DEBATE_NAME, DEBATE_DESCRIPTION, CREATOR_USERNAME, IS_CREATOR_FOR, OPPONENT_USERNAME, IMAGE_DATA, DebateCategory.OTHER);
+    }
+
+    @Test
     public void testCreateNoImage() {
-        User creator = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        User opponent = new User(USER_ID_2, USER_USERNAME_2, USER_PASSWORD, USER_EMAIL_2, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(DEBATE_CREATOR)).thenReturn(Optional.of(creator));
-        when(userService.getUserByUsername(DEBATE_OPPONENT)).thenReturn(Optional.of(opponent));
-        Debate debate = new Debate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, USER_ID, USER_ID_2, DEBATE_DATE, null, DebateCategory.OTHER, DebateStatus.OPEN);
-        when(debateDao.create(anyString(), anyString(), anyLong(), anyLong(), any(), any(DebateCategory.class))).thenReturn(debate);
+        when(userService.getUserByUsername(CREATOR_USERNAME)).thenReturn(Optional.of(creator));
+        when(userService.getUserByUsername(OPPONENT_USERNAME)).thenReturn(Optional.of(opponent));
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, null, DEBATE_CATEGORY);
+        when(debateDao.create(anyString(), anyString(), any(User.class), anyBoolean(), any(User.class), any(), any(DebateCategory.class))).thenReturn(debate);
+
+        Debate d = debateService.create(DEBATE_NAME, DEBATE_DESCRIPTION, CREATOR_USERNAME, IS_CREATOR_FOR, OPPONENT_USERNAME, new byte[0], DebateCategory.OTHER);
+
+        assertEquals(debate.getName(), d.getName());
+        assertEquals(debate.getDescription(), d.getDescription());
+        assertEquals(debate.getCreator(), d.getCreator());
+        assertTrue(d.getIsCreatorFor());
+        assertEquals(debate.getOpponent(), d.getOpponent());
+        assertEquals(debate.getCategory(), d.getCategory());
+        assertNull(debate.getImage());
+        assertNull(d.getImage());
+    }
 
     @Test
     public void testGetDebates() {
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT,AGAINST_COUNT );
-        List<PublicDebate> debates = new ArrayList<>();
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, null, DEBATE_CATEGORY);
+        List<Debate> debates = new ArrayList<>();
         debates.add(debate);
-        when(debateDao.getPublicDebatesDiscovery(anyInt(),anyInt(),any(), any(), any(), any(), any())).thenReturn(debates);
+        when(debateDao.getDebatesDiscovery(anyInt(), anyInt(), any(), any(), any(), any(), any()))
+                .thenReturn(debates);
 
-        List<PublicDebate> dl = debateService.get(VALID_PAGE, null, null, null, null, null);
+        List<Debate> dl = debateService.get(VALID_PAGE, null, null, null, null, null);
 
         assertFalse(dl.isEmpty());
-        assertEquals(debate.getDebateId(), dl.get(0).getDebateId());
         assertEquals(debate.getName(), dl.get(0).getName());
         assertEquals(debate.getDescription(), dl.get(0).getDescription());
-        assertEquals(debate.getCreatorUsername(), dl.get(0).getCreatorUsername());
-        assertEquals(debate.getOpponentUsername(), dl.get(0).getOpponentUsername());
-        assertEquals(debate.getImageId(), dl.get(0).getImageId());
-        assertEquals(debate.getDebateCategory(), dl.get(0).getDebateCategory());
-        assertEquals(debate.getDebateStatus(), dl.get(0).getDebateStatus());
-        assertEquals(debate.getImageId(), dl.get(0).getImageId());
+        assertEquals(debate.getCreator(), dl.get(0).getCreator());
+        assertEquals(debate.getOpponent(), dl.get(0).getOpponent());
+        assertEquals(debate.getImage(), dl.get(0).getImage());
+        assertEquals(debate.getCategory(), dl.get(0).getCategory());
+        assertEquals(debate.getStatus(), dl.get(0).getStatus());
+        assertTrue(dl.get(0).getIsCreatorFor());
         assertEquals(debate.getCreatedDate(), dl.get(0).getCreatedDate());
         assertEquals(debate.getSubscribedUsers(), dl.get(0).getSubscribedUsers());
         assertEquals(debate.getForCount(), dl.get(0).getForCount());
@@ -143,37 +168,36 @@ public class DebateServiceImplTest {
 
     @Test
     public void testGetDebatesEmpty() {
-        List<PublicDebate> dl = debateService.get(VALID_PAGE, null, null, null, null, null);
+        List<Debate> dl = debateService.get(VALID_PAGE, null, null, null, null, null);
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
     public void testGetDebatesInvalidPage() {
-        List<PublicDebate> dl = debateService.get(INVALID_PAGE, null, null, null, null, null);
+        List<Debate> dl = debateService.get(INVALID_PAGE, null, null, null, null, null);
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
     public void testGetMostSubscribed() {
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT,AGAINST_COUNT );
-        List<PublicDebate> debates = new ArrayList<>();
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        List<Debate> debates = new ArrayList<>();
         debates.add(debate);
-        when(debateDao.getPublicDebatesDiscovery(anyInt(),anyInt(),any(), any(), eq(DebateOrder.SUBS_DESC), any(), any())).thenReturn(debates);
+        when(debateDao.getDebatesDiscovery(anyInt(), anyInt(), any(), any(), eq(DebateOrder.SUBS_DESC), any(), any())).thenReturn(debates);
 
-        List<PublicDebate> dl = debateService.getMostSubscribed();
+        List<Debate> dl = debateService.getMostSubscribed();
 
         assertFalse(dl.isEmpty());
-        assertEquals(debate.getDebateId(), dl.get(0).getDebateId());
         assertEquals(debate.getName(), dl.get(0).getName());
         assertEquals(debate.getDescription(), dl.get(0).getDescription());
-        assertEquals(debate.getCreatorUsername(), dl.get(0).getCreatorUsername());
-        assertEquals(debate.getOpponentUsername(), dl.get(0).getOpponentUsername());
-        assertEquals(debate.getImageId(), dl.get(0).getImageId());
-        assertEquals(debate.getDebateCategory(), dl.get(0).getDebateCategory());
-        assertEquals(debate.getDebateStatus(), dl.get(0).getDebateStatus());
-        assertEquals(debate.getImageId(), dl.get(0).getImageId());
+        assertEquals(debate.getCategory(), dl.get(0).getCategory());
+        assertEquals(debate.getOpponent(), dl.get(0).getOpponent());
+        assertTrue(dl.get(0).getIsCreatorFor());
+        assertEquals(debate.getImage(), dl.get(0).getImage());
+        assertEquals(debate.getCategory(), dl.get(0).getCategory());
+        assertEquals(debate.getStatus(), dl.get(0).getStatus());
         assertEquals(debate.getCreatedDate(), dl.get(0).getCreatedDate());
         assertEquals(debate.getSubscribedUsers(), dl.get(0).getSubscribedUsers());
         assertEquals(debate.getForCount(), dl.get(0).getForCount());
@@ -183,21 +207,17 @@ public class DebateServiceImplTest {
 
     @Test
     public void testGetMostSubscribedEmpty() {
-        List<PublicDebate> dl = debateService.getMostSubscribed();
+        List<Debate> dl = debateService.getMostSubscribed();
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
-    public void testGetPages() {
-
-    }
-
-    @Test
     public void testGetDebatePageCount() {
-        int postCount = 47;
+        int argumentCount = 47;
         int expectedPageCount = 10;
-        when(debateDao.getPublicDebatesCount(any(), any(), any(), any())).thenReturn(postCount);
+        when(debateDao.getDebatesCount(any(), any(), any(), any()))
+                .thenReturn(argumentCount);
 
         int pc = debateService.getPages(null, null, null, null);
 
@@ -205,110 +225,34 @@ public class DebateServiceImplTest {
     }
 
     @Test
-    public void testGetDebatePageCountNoPosts() {
-        int postCount = 0;
+    public void testGetDebatePageCountNoArguments() {
+        int argumentCount = 0;
         int expectedPageCount = 0;
-        when(debateDao.getPublicDebatesCount(any(), any(), any(), any())).thenReturn(postCount);
+        when(debateDao.getDebatesCount(any(), any(), any(), any())).thenReturn(argumentCount);
 
         int pc = debateService.getPages(null, null, null, null);
 
         assertEquals(expectedPageCount, pc);
-    }
-
-    @Test
-    public void testSubscribeToDebate() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.OPEN, FOR_COUNT,AGAINST_COUNT );
-        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
-
-        debateService.subscribeToDebate(USER_USERNAME, DEBATE_ID);
-
-        verify(debateDao).subscribeToDebate(anyLong(), anyLong());
-    }
-
-    @Test(expected = DebateNotFoundException.class)
-    public void testSubscribeToDebateNotValidDebate() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-
-        debateService.subscribeToDebate(USER_USERNAME, DEBATE_ID);
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void testSubscribeToDebateNotValidUser() {
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.empty());
-
-        debateService.subscribeToDebate(USER_USERNAME, DEBATE_ID);
-    }
-
-    @Test
-    public void testUnsubscribeToDebate() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-
-        debateService.unsubscribeToDebate(USER_USERNAME, DEBATE_ID);
-
-        verify(debateDao).unsubscribeToDebate(anyLong(), anyLong());
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void testUnsubscribeToDebateNotValidUser() {
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.empty());
-
-        debateService.unsubscribeToDebate(USER_USERNAME, DEBATE_ID);
-    }
-
-    @Test
-    public void testIsUserSubscribed() {
-        boolean isSubscribed = true;
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        when(debateDao.isUserSubscribed(anyLong(), anyLong())).thenReturn(isSubscribed);
-
-        boolean s = debateService.isUserSubscribed(USER_USERNAME, DEBATE_ID);
-
-        assertEquals(isSubscribed, s);
-    }
-
-    @Test
-    public void testIsUserNotSubscribed() {
-        boolean isSubscribed = false;
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        when(debateDao.isUserSubscribed(anyLong(), anyLong())).thenReturn(isSubscribed);
-
-        boolean s = debateService.isUserSubscribed(USER_USERNAME, DEBATE_ID);
-
-        assertEquals(isSubscribed, s);
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void testIsUserSubscribedNotValidUser() {
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.empty());
-
-        debateService.unsubscribeToDebate(USER_USERNAME, DEBATE_ID);
     }
 
     @Test
     public void testGetProfileDebatesSubscribed() {
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT,AGAINST_COUNT );
-        List<PublicDebate> debates = new ArrayList<>();
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        List<Debate> debates = new ArrayList<>();
         debates.add(debate);
-        when(debateDao.getSubscribedDebatesByUserId(anyLong(), anyInt())).thenReturn(debates);
+        when(debateDao.getSubscribedDebatesByUser(anyLong(), anyInt())).thenReturn(debates);
 
-        List<PublicDebate> dl = debateService.getProfileDebates("subscribed", USER_ID, VALID_PAGE);
+        List<Debate> dl = debateService.getProfileDebates("subscribed", CREATOR_ID, VALID_PAGE);
 
         assertFalse(dl.isEmpty());
-        assertEquals(debate.getDebateId(), dl.get(0).getDebateId());
         assertEquals(debate.getName(), dl.get(0).getName());
         assertEquals(debate.getDescription(), dl.get(0).getDescription());
-        assertEquals(debate.getCreatorUsername(), dl.get(0).getCreatorUsername());
-        assertEquals(debate.getOpponentUsername(), dl.get(0).getOpponentUsername());
-        assertEquals(debate.getImageId(), dl.get(0).getImageId());
-        assertEquals(debate.getDebateCategory(), dl.get(0).getDebateCategory());
-        assertEquals(debate.getDebateStatus(), dl.get(0).getDebateStatus());
-        assertEquals(debate.getImageId(), dl.get(0).getImageId());
+        assertEquals(debate.getCreator(), dl.get(0).getCreator());
+        assertEquals(debate.getOpponent(), dl.get(0).getOpponent());
+        assertTrue(dl.get(0).getIsCreatorFor());
+        assertEquals(debate.getImage(), dl.get(0).getImage());
+        assertEquals(debate.getCategory(), dl.get(0).getCategory());
+        assertEquals(debate.getStatus(), dl.get(0).getStatus());
         assertEquals(debate.getCreatedDate(), dl.get(0).getCreatedDate());
         assertEquals(debate.getSubscribedUsers(), dl.get(0).getSubscribedUsers());
         assertEquals(debate.getForCount(), dl.get(0).getForCount());
@@ -316,24 +260,23 @@ public class DebateServiceImplTest {
     }
 
     @Test
-    public void testGetProfileMyDebates() {
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT,AGAINST_COUNT );
-        List<PublicDebate> debates = new ArrayList<>();
+    public void testGetProfileUserDebates() {
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        List<Debate> debates = new ArrayList<>();
         debates.add(debate);
-        when(debateDao.getMyDebates(anyLong(), anyInt())).thenReturn(debates);
+        when(debateDao.getUserDebates(anyLong(), anyInt())).thenReturn(debates);
 
-        List<PublicDebate> dl = debateService.getProfileDebates("mydebates", USER_ID, VALID_PAGE);
+        List<Debate> dl = debateService.getProfileDebates("mydebates", CREATOR_ID, VALID_PAGE);
 
         assertFalse(dl.isEmpty());
-        assertEquals(debate.getDebateId(), dl.get(0).getDebateId());
         assertEquals(debate.getName(), dl.get(0).getName());
         assertEquals(debate.getDescription(), dl.get(0).getDescription());
-        assertEquals(debate.getCreatorUsername(), dl.get(0).getCreatorUsername());
-        assertEquals(debate.getOpponentUsername(), dl.get(0).getOpponentUsername());
-        assertEquals(debate.getImageId(), dl.get(0).getImageId());
-        assertEquals(debate.getDebateCategory(), dl.get(0).getDebateCategory());
-        assertEquals(debate.getDebateStatus(), dl.get(0).getDebateStatus());
-        assertEquals(debate.getImageId(), dl.get(0).getImageId());
+        assertEquals(debate.getCreator(), dl.get(0).getCreator());
+        assertEquals(debate.getOpponent(), dl.get(0).getOpponent());
+        assertTrue(dl.get(0).getIsCreatorFor());
+        assertEquals(debate.getImage(), dl.get(0).getImage());
+        assertEquals(debate.getCategory(), dl.get(0).getCategory());
+        assertEquals(debate.getStatus(), dl.get(0).getStatus());
         assertEquals(debate.getCreatedDate(), dl.get(0).getCreatedDate());
         assertEquals(debate.getSubscribedUsers(), dl.get(0).getSubscribedUsers());
         assertEquals(debate.getForCount(), dl.get(0).getForCount());
@@ -342,196 +285,178 @@ public class DebateServiceImplTest {
 
     @Test
     public void testGetProfileInvalidPage() {
-        List<PublicDebate> dl = debateService.getProfileDebates("subscribed", USER_ID, INVALID_PAGE);
+        List<Debate> dl = debateService.getProfileDebates("subscribed", CREATOR_ID, INVALID_PAGE);
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
-    public void testGetProfileMyDebatesEmpty() {
-        List<PublicDebate> dl = debateService.getProfileDebates("subscribed", USER_ID, VALID_PAGE);
+    public void testGetUserDebatesInvalidPage() {
+        List<Debate> dl = debateService.getUserDebates(CREATOR_ID, INVALID_PAGE);
+
+        assertTrue(dl.isEmpty());
+    }
+
+    @Test
+    public void testGetProfileUserDebatesEmpty() {
+        List<Debate> dl = debateService.getProfileDebates("mydebates", CREATOR_ID, VALID_PAGE);
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
     public void testGetProfileSubscribedEmpty() {
-        List<PublicDebate> dl = debateService.getProfileDebates("subscribed", USER_ID, VALID_PAGE);
+        List<Debate> dl = debateService.getProfileDebates("subscribed", CREATOR_ID, VALID_PAGE);
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
-    public void testProfileMyDebatesPageCount() {
-        int postCount = 47;
+    public void testProfileUserDebatesPageCount() {
+        int argumentCount = 47;
         int expectedPageCount = 10;
-        when(debateDao.getMyDebatesCount(anyLong())).thenReturn(postCount);
+        when(debateDao.getUserDebatesCount(anyLong())).thenReturn(argumentCount);
 
-        int pc = debateService.getProfileDebatesPageCount("mydebates", USER_ID);
+        int pc = debateService.getProfileDebatesPageCount("mydebates", CREATOR_ID);
 
         assertEquals(expectedPageCount, pc);
     }
 
     @Test
     public void testProfileSubscribedPageCount() {
-        int postCount = 47;
+        int argumentCount = 47;
         int expectedPageCount = 10;
-        when(debateDao.getSubscribedDebatesByUserIdCount(anyLong())).thenReturn(postCount);
+        when(debateDao.getSubscribedDebatesByUserCount(anyLong())).thenReturn(argumentCount);
 
-        int pc = debateService.getProfileDebatesPageCount("subscribed", USER_ID);
+        int pc = debateService.getProfileDebatesPageCount("subscribed", CREATOR_ID);
 
         assertEquals(expectedPageCount, pc);
     }
 
-    @Test
-    public void testAddVote() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT,AGAINST_COUNT );
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        when(debateDao.hasUserVoted(anyLong(), anyLong())).thenReturn(false);
-        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
-
-        debateService.addVote(DEBATE_ID, USER_USERNAME, DebateVote.FOR);
-
-        verify(debateDao).addVote(anyLong(), anyLong(), any(DebateVote.class));
-    }
-
-    @Test(expected = UserAlreadyVotedException.class)
-    public void testAddVoteAlreadyVoted() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.DELETED, FOR_COUNT,AGAINST_COUNT );
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        when(debateDao.hasUserVoted(anyLong(), anyLong())).thenReturn(true);
-        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
-
-        debateService.addVote(DEBATE_ID, USER_USERNAME, DebateVote.FOR);
-
-    }
-
-    @Test(expected = DebateNotFoundException.class)
-    public void testAddVoteDebateNotFound() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-
-        debateService.addVote(DEBATE_ID, USER_USERNAME, DebateVote.FOR);
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void testAddVoteNotValidUser() {
-        debateService.addVote(DEBATE_ID, USER_USERNAME, DebateVote.FOR);
-    }
-
-    @Test
-    public void testRemoveVote() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-
-        debateService.removeVote(DEBATE_ID, USER_USERNAME);
-
-        verify(debateDao).removeVote(anyLong(), anyLong());
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void testRemoveVoteNotValidUser() {
-        debateService.removeVote(DEBATE_ID, USER_USERNAME);
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void testGetUserVoteInvalidUser() {
-        debateService.getUserVote(DEBATE_ID, USER_USERNAME);
-    }
-
-    @Test(expected = DebateNotFoundException.class)
-    public void testGetUserVoteInvalidDebate() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-
-        debateService.getUserVote(DEBATE_ID, USER_USERNAME);
-    }
-
-    @Test
-    public void testGetUserVoteNotVoted() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.OPEN, FOR_COUNT, AGAINST_COUNT);
-        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
-
-        String vote = debateService.getUserVote(DEBATE_ID, USER_USERNAME);
-
-        assertNull(vote);
-    }
-
-    @Test
-    public void testGetUserVoteFor() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.OPEN, FOR_COUNT, AGAINST_COUNT);
-        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
-        when(debateDao.hasUserVoted(anyLong(), anyLong())).thenReturn(true);
-        when(debateDao.getUserVote(anyLong(), anyLong())).thenReturn(DebateVote.FOR);
-
-        String vote = debateService.getUserVote(DEBATE_ID, USER_USERNAME);
-
-        assertEquals(DEBATE_CREATOR, vote);
-    }
-
-    @Test
-    public void testGetUserVoteAgainst() {
-        User user = new User(USER_ID, USER_USERNAME, USER_PASSWORD, USER_EMAIL, USER_DATE, USER_ROLE);
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.OPEN, FOR_COUNT, AGAINST_COUNT);
-        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
-        when(debateDao.hasUserVoted(anyLong(), anyLong())).thenReturn(true);
-        when(debateDao.getUserVote(anyLong(), anyLong())).thenReturn(DebateVote.AGAINST);
-
-        String vote = debateService.getUserVote(DEBATE_ID, USER_USERNAME);
-
-        assertEquals(DEBATE_OPPONENT, vote);
-    }
-
-    @Test
-    public void testCloseDebate() {
-        debateService.closeDebate(DEBATE_ID);
-
-        verify(debateDao).changeDebateStatus(anyLong(), eq(DebateStatus.CLOSED));
-    }
-
     @Test(expected = DebateNotFoundException.class)
     public void testStartConclusionNotValidDebate() {
-        debateService.startConclusion(DEBATE_ID, USER_USERNAME);
+        debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
     }
 
     @Test(expected = ForbiddenDebateException.class)
     public void testStartConclusionInvalidUser() {
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.OPEN, FOR_COUNT, AGAINST_COUNT);
-        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        debateService.startConclusion(DEBATE_ID, USER_USERNAME);
+        debateService.startConclusion(DEBATE_ID, INVALID_USERNAME);
     }
 
     @Test(expected = ForbiddenDebateException.class)
     public void testStartConclusionAlreadyStarted() {
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.CLOSING, FOR_COUNT, AGAINST_COUNT);
-        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        debate.setStatus(DebateStatus.CLOSING);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        debateService.startConclusion(DEBATE_ID, DEBATE_CREATOR);
+        debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
+    }
+
+    @Test(expected = DebateNotFoundException.class)
+    public void testStartConclusionDebateDeleted() {
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        debate.setStatus(DebateStatus.DELETED);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+
+        debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
     }
 
     @Test(expected = ForbiddenDebateException.class)
     public void testStartConclusionClosed() {
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.CLOSED, FOR_COUNT, AGAINST_COUNT);
-        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        debate.setStatus(DebateStatus.CLOSED);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        debateService.startConclusion(DEBATE_ID, DEBATE_CREATOR);
+        debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
     }
 
     @Test
     public void testStartConclusion() {
-        PublicDebate debate = new PublicDebate(DEBATE_ID, DEBATE_NAME, DEBATE_DESCRIPTION, DEBATE_CREATOR, DEBATE_OPPONENT, IMAGE_ID, DEBATE_DATE, DebateCategory.OTHER, SUBSCRIBED_COUNT, DebateStatus.OPEN, FOR_COUNT, AGAINST_COUNT);
-        when(debateDao.getPublicDebateById(anyLong())).thenReturn(Optional.of(debate));
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        debateService.startConclusion(DEBATE_ID, DEBATE_CREATOR);
+        debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
 
-        verify(debateDao).changeDebateStatus(anyLong(), eq(DebateStatus.CLOSING));
-    }*/
-//}
+        assertEquals(DebateStatus.CLOSING, debateService.getDebateById(DEBATE_ID).get().getStatus());
+    }
+
+    @Test(expected = ForbiddenDebateException.class)
+    public void testDeleteDebateInvalidUser() {
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+
+        debateService.deleteDebate(DEBATE_ID, INVALID_USERNAME);
+    }
+
+    @Test(expected = DebateNotFoundException.class)
+    public void testDeleteAlreadyDeletedDebate() {
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        debate.setStatus(DebateStatus.DELETED);
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+
+        debateService.deleteDebate(DEBATE_ID, INVALID_USERNAME);
+    }
+
+    @Test
+    public void testDeleteDebate() {
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+
+        debateService.deleteDebate(DEBATE_ID, CREATOR_USERNAME);
+
+        assertFalse(debateService.getDebateById(DEBATE_ID).isPresent());
+    }
+
+    @Test(expected = DebateNotFoundException.class)
+    public void testGetRecommendedDebatesWithUserDebateNotFound() {
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID, CREATOR_USERNAME);
+
+        assertTrue(dl.isEmpty());
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testGetRecommendedDebatesWithUserUserNotFound() {
+        final Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID, CREATOR_USERNAME);
+
+        assertTrue(dl.isEmpty());
+    }
+
+    @Test(expected = DebateNotFoundException.class)
+    public void testGetRecommendedDebatesDebateNotFound() {
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID);
+
+        assertTrue(dl.isEmpty());
+    }
+
+    @Test
+    public void testGetRecommendedDebates() {
+        final Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+        when(debateDao.getRecommendedDebates(any(Debate.class))).thenReturn(Collections.singletonList(debate));
+
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID);
+
+        assertFalse(dl.isEmpty());
+        assertEquals(debate, dl.get(0));
+    }
+
+    @Test
+    public void testGetRecommendedDebatesWithUser() {
+        final Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
+        when(debateDao.getRecommendedDebates(any(Debate.class), any(User.class))).thenReturn(Collections.singletonList(debate));
+
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID, CREATOR_USERNAME);
+
+        assertFalse(dl.isEmpty());
+        assertEquals(debate, dl.get(0));
+    }
+}

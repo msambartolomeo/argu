@@ -9,8 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -25,9 +23,10 @@ public class LikeJpaDao implements LikeDao {
     }
 
     @Override
-    public void likeArgument(User user, Argument argument) {
+    public Like likeArgument(User user, Argument argument) {
         final Like like = new Like(user, argument);
         em.persist(like);
+        return like;
     }
 
     @Override

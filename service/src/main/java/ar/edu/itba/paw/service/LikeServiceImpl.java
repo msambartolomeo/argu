@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,10 +25,8 @@ public class LikeServiceImpl implements LikeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LikeServiceImpl.class);
     @Autowired
     private LikeDao likeDao;
-
     @Autowired
     private ArgumentService argumentService;
-
     @Autowired
     private UserService userService;
 
@@ -40,7 +37,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     @Transactional
-    public void likeArgument(long argumentId, String username) {
+    public Like likeArgument(long argumentId, String username) {
         Argument argument = argumentService.getArgumentById(argumentId).orElseThrow(() -> {
             LOGGER.error("Cannot like argument {} because it does not exist", argumentId);
             return new ArgumentNotFoundException();
@@ -63,7 +60,7 @@ public class LikeServiceImpl implements LikeService {
         if(!creator.equals(user)) {
             creator.addLikePoints();
         }
-        likeDao.likeArgument(user, argument);
+        return likeDao.likeArgument(user, argument);
     }
 
     @Override

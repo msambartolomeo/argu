@@ -29,53 +29,10 @@
             <div class="parallax"><img src="<c:url value="/resources/images/speech-bubbles.jpeg"/>" alt="Debate background image"></div>
         </div>
 
-        <div class="container">
-            <div class="section">
-                <div>
-                    <h2 class="light">
-                        <spring:message code="pages.landing.page.about"/>
-                    </h2>
-                    <p><spring:message code="pages.landing-page.description"/></p>
-                    <p><spring:message code="pages.landing-page.structure"/></p>
-                    <p><spring:message code="pages.landing-page.turns"/></p>
-                </div>
-                <img src="<c:url value="/resources/images/debate-icon.png"/>">
-
-            </div>
-        </div>
-
-        <div class="dark-container">
-            <div class="container">
-                <div class="section email-format">
-                    <img class="image-size" src="<c:url value="/resources/images/create-participate-debate.png"/>">
-                    <div class="right-text">
-                        <h2 class="light"><spring:message code="pages.landing-page.participate"/></h2>
-                        <p><spring:message code="pages.landing-page.create-debate"/></p>
-                        <p><spring:message code="pages.landing-page.only-moderators"/></p>
-                        <p><spring:message code="pages.landing-page.become-moderator"/></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="section">
-                <div>
-                    <h2 class="light">
-                        <spring:message code="pages.landing-page.choose-favorites"/>
-                    </h2>
-                    <p><spring:message code="pages.landing-page.subscribe"/></p>
-                    <p><spring:message code="pages.landing-page.like"/></p>
-                    <p><spring:message code="pages.landing-page.vote"/></p>
-                </div>
-                <img class="image-size" src="<c:url value="/resources/images/subscribe-like-vote.png"/>" alt="Subscribe, like and vote">
-            </div>
-        </div>
-
-        <div class="parallax-container">
+        <div class="hottest-debates-container">
             <div class="section no-pad-bot">
                 <div class="container">
-                    <h2 class="header center light">
+                    <h2 class="header center light hottest-title">
                         <i class="medium material-icons">local_fire_department</i>
                         <spring:message code="pages.landing.page.hottest.debates"/>
                     </h2>
@@ -87,7 +44,50 @@
                     </c:forEach>
                 </div>
             </div>
-            <div class="parallax"><img src="<c:url value="/resources/images/group-discussion.jpeg"/>" alt="Unsplashed background img 3"></div>
+<%--            <div class="parallax"><img src="<c:url value="/resources/images/group-discussion.jpeg"/>" alt="Unsplashed background img 3"></div>--%>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <div class="about-container">
+                    <h2 class="light">
+                        <spring:message code="pages.landing.page.about"/>
+                    </h2>
+                    <h6><spring:message code="pages.landing-page.description"/></h6>
+                    <h6><spring:message code="pages.landing-page.structure"/></h6>
+                    <h6><spring:message code="pages.landing-page.turns"/></h6>
+                </div>
+                <img src="<c:url value="/resources/images/debate-icon.png"/>" alt="Image of two humans arguing">
+
+            </div>
+        </div>
+
+        <div class="dark-container">
+            <div class="container">
+                <div class="section email-format">
+                    <img class="image-size" src="<c:url value="/resources/images/create-participate-debate.png"/>">
+                    <div class="right-text about-container">
+                        <h2 class="light"><spring:message code="pages.landing-page.participate"/></h2>
+                        <h6><spring:message code="pages.landing-page.create-debate"/></h6>
+                        <h6><spring:message code="pages.landing-page.only-moderators"/></h6>
+                        <h6><spring:message code="pages.landing-page.become-moderator"/></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <div class="about-container">
+                    <h2 class="light">
+                        <spring:message code="pages.landing-page.choose-favorites"/>
+                    </h2>
+                    <h6><spring:message code="pages.landing-page.subscribe"/></h6>
+                    <h6><spring:message code="pages.landing-page.like"/></h6>
+                    <h6><spring:message code="pages.landing-page.vote"/></h6>
+                </div>
+                <img class="image-size" src="<c:url value="/resources/images/subscribe-like-vote.png"/>" alt="Subscribe, like and vote">
+            </div>
         </div>
 
         <footer class="page-footer">

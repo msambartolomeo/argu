@@ -71,20 +71,20 @@ public class ArgumentServiceImpl implements ArgumentService {
     // Package-private for testing
     @Transactional
     ArgumentStatus getArgumentStatus(Debate debate, User user) {
-        Optional<Argument> lastArgument = getLastArgument(debate.getDebateId());
+        Optional<Argument> lastArgument = argumentDao.getLastArgument(debate);
 
         final String creatorUsername = debate.getCreator().getUsername();
         final String username = user.getUsername();
 
         if (!lastArgument.isPresent()) {
             if (!creatorUsername.equals(username)) {
-                LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getDebateId(), username);
+                LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getName(), username);
                 throw new ForbiddenArgumentException();
             }
             return ArgumentStatus.INTRODUCTION;
         } else {
             if (username.equals(lastArgument.get().getUser().getUsername())) {
-                LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getDebateId(), username);
+                LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getName(), username);
                 throw new ForbiddenArgumentException();
             }
 
@@ -103,18 +103,20 @@ public class ArgumentServiceImpl implements ArgumentService {
                     debate.startVoting();
                     return ArgumentStatus.CONCLUSION;
                 default:
-                    LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getDebateId(), username);
+                    LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getName(), username);
                     throw new ForbiddenArgumentException();
             }
         }
     }
 
     // Package-private for testing
-    @Async // TODO: test that it works
+    @Async
     void sendEmailToSubscribedUsers(Debate debate, User user) {
+        if (debate.getSubscribedUsers() == null)
+            return;
         for (User u : debate.getSubscribedUsers()) {
-            if (u.getUserId().equals(user.getUserId())) { // Si no es el usuario que creo el post
-                emailService.notifyNewArgument(u.getEmail(), user.getUsername(), debate.getDebateId(), debate.getName());
+            if (!u.getUsername().equals(user.getUsername())) { // Si no es el usuario que creo el post
+                emailService.notifyNewArgument(u.getEmail(), user.getUsername(), debate, u.getLocale());
             }
         }
     }

@@ -14,9 +14,7 @@ public class UserPostKey implements Serializable {
     @Column(name = "postid")
     private Long postId;
 
-    /*default*/UserPostKey() {
-        // Just for Hibernate
-    }
+    UserPostKey() {}
 
     public UserPostKey(Long userId, Long postId) {
         this.userId = userId;

@@ -12,7 +12,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,22 +39,7 @@ public class DebateJpaDao implements DebateDao {
     @Override
     public List<Debate> getSubscribedDebatesByUser(long userId, int page) {
         Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
-        idQuery.setParameter("userid", userId);
-        idQuery.setParameter("offset", page * 5);
-        @SuppressWarnings("unchecked")
-        List<Long> ids = (List<Long>) idQuery.getResultList().stream()
-                .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
-
-        if (ids.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
-        query.setParameter("ids", ids);
-
-        List<Debate> debates = query.getResultList();
-        debates.sort(Comparator.comparing(Debate::getCreatedDate).reversed());
-        return debates;
+        return getDebatesReusable(userId, page, idQuery);
     }
 
     @Override
@@ -113,22 +97,7 @@ public class DebateJpaDao implements DebateDao {
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             idQuery.setParameter(entry.getKey(), entry.getValue());
         }
-        @SuppressWarnings("unchecked")
-        List<Long> ids = (List<Long>) idQuery.getResultList().stream()
-                .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
-
-        if (ids.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
-        query.setParameter("ids", ids);
-
-        List<Debate> unsortedList = query.getResultList();
-        List<Debate> sortedList = new ArrayList<>();
-        for (Long id: ids)
-            sortedList.add(unsortedList.stream().filter(debate -> debate.getDebateId() == id).findFirst().get());
-        return sortedList;
+        return getDebatesReusable(idQuery);
     }
 
     @Override
@@ -160,8 +129,9 @@ public class DebateJpaDao implements DebateDao {
         if (status != null && status != DebateStatus.DELETED) {
             params.put("status", status.ordinal());
             if (status == DebateStatus.OPEN) {
-                queryString.append(" AND (status = :status OR status = :statusAux)");
+                queryString.append(" AND (status = :status OR status = :statusAux OR status = :statusAux2)");
                 params.put("statusAux", DebateStatus.CLOSING.ordinal());
+                params.put("statusAux2", DebateStatus.VOTING.ordinal());
             } else {
                 queryString.append(" AND status = :status");
             }
@@ -177,22 +147,7 @@ public class DebateJpaDao implements DebateDao {
     @Override
     public List<Debate> getUserDebates(long userId, int page) {
         Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE (creatorid = :userid OR opponentid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
-        idQuery.setParameter("userid", userId);
-        idQuery.setParameter("offset", page * 5);
-        @SuppressWarnings("unchecked")
-        List<Long> ids = (List<Long>) idQuery.getResultList().stream()
-                .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
-
-        if (ids.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
-        query.setParameter("ids", ids);
-
-        List<Debate> debates = query.getResultList();
-        debates.sort(Comparator.comparing(Debate::getCreatedDate).reversed());
-        return debates;
+        return getDebatesReusable(userId, page, idQuery);
     }
 
     @Override
@@ -212,5 +167,91 @@ public class DebateJpaDao implements DebateDao {
         query.setParameter("date", date);
 
         return query.getResultList();
+    }
+
+    @Override
+    public List<Debate> getRecommendedDebates(Debate debate) {
+        Query idQuery = em.createNativeQuery("WITH selected_ids AS (\n" +
+                "    SELECT debateid\n" +
+                "    FROM subscribed s\n" +
+                "    WHERE s.debateid IN (\n" +
+                "        SELECT debateid\n" +
+                "        FROM debates d\n" +
+                "        WHERE category = :category\n" +
+                "    )\n" +
+                "       OR s.userid IN (\n" +
+                "        SELECT userid\n" +
+                "        FROM subscribed\n" +
+                "        WHERE debateid = :debateid\n" +
+                "    )\n" +
+                "    GROUP BY s.debateid\n" +
+                ")\n" +
+                "SELECT si.debateid\n" +
+                "FROM selected_ids si LEFT JOIN subscribed s ON si.debateid = s.debateid\n" +
+                "WHERE si.debateid != :debateid\n" +
+                "GROUP BY si.debateid\n" +
+                "ORDER BY count(distinct s.userid) DESC LIMIT 3");
+        idQuery.setParameter("category", debate.getCategory().ordinal());
+        idQuery.setParameter("debateid", debate.getDebateId());
+
+        return getDebatesReusable(idQuery);
+    }
+    @Override
+    public List<Debate> getRecommendedDebates(Debate debate, User user) {
+        Query idQuery = em.createNativeQuery("WITH selected_ids AS (\n" +
+                "    SELECT debateid\n" +
+                "    FROM subscribed s\n" +
+                "    WHERE s.debateid IN (\n" +
+                "        SELECT debateid\n" +
+                "        FROM debates d\n" +
+                "        WHERE category = :category\n" +
+                "    )\n" +
+                "       OR s.userid IN (\n" +
+                "        SELECT userid\n" +
+                "        FROM subscribed\n" +
+                "        WHERE debateid = :debateid\n" +
+                "    )\n" +
+                "    GROUP BY s.debateid\n" +
+                ")\n" +
+                "SELECT si.debateid, count(distinct s.userid)\n" +
+                "FROM selected_ids si LEFT JOIN subscribed s ON si.debateid = s.debateid\n" +
+                "WHERE si.debateid != :debateid AND si.debateid NOT IN (\n" +
+                "    SELECT debateid\n" +
+                "    FROM subscribed s\n" +
+                "    WHERE s.userid = :userid\n" +
+                "    )\n" +
+                "GROUP BY si.debateid\n" +
+                "ORDER BY count(distinct s.userid) DESC LIMIT 3");
+        idQuery.setParameter("category", debate.getCategory().ordinal());
+        idQuery.setParameter("debateid", debate.getDebateId());
+        idQuery.setParameter("userid", user.getUserId());
+
+        return getDebatesReusable(idQuery);
+    }
+
+    // Extracted code to simplify methods
+    private List<Debate> getDebatesReusable(long userId, int page, Query idQuery) {
+        idQuery.setParameter("userid", userId);
+        idQuery.setParameter("offset", page * 5);
+        return getDebatesReusable(idQuery);
+    }
+
+    private List<Debate> getDebatesReusable(Query idQuery) {
+        @SuppressWarnings("unchecked")
+        List<Long> ids = (List<Long>) idQuery.getResultList().stream()
+                .map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
+
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final TypedQuery<Debate> query = em.createQuery("FROM Debate d WHERE d.id IN :ids", Debate.class);
+        query.setParameter("ids", ids);
+
+        List<Debate> unsortedList = query.getResultList();
+        List<Debate> sortedList = new ArrayList<>();
+        for (Long id: ids)
+            sortedList.add(unsortedList.stream().filter(d -> d.getDebateId().equals(id)).findFirst().get());
+        return sortedList;
     }
 }

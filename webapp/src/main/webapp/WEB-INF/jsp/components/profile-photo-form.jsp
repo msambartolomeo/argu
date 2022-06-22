@@ -5,7 +5,7 @@
 
 <html>
   <body>
-    <c:url value="/profile" var="imagePostPath" />
+    <c:url value="/profile/image" var="imagePostPath" />
     <%--@elvariable id="profileImageForm" type="ar.edu.itba.paw.webapp.form.ProfileImageForm"--%>
     <form:form modelAttribute="profileImageForm" method="post" action="${imagePostPath}"
                acceptCharset="utf-8" id="photoForm" enctype="multipart/form-data">

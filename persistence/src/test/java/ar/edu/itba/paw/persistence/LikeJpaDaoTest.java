@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.Chat;
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,18 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Transactional
-public class ChatJpaDaoTest {
+public class LikeJpaDaoTest {
 
-    private final static String MESSAGE = "message";
+    private final static String CONTENT = "content";
 
     private final static String USER_USERNAME = "username";
     private final static String USER_PASSWORD = "password";
@@ -40,67 +37,60 @@ public class ChatJpaDaoTest {
     private final static String DEBATE_NAME = "Debate Name Test";
     private final static String DEBATE_DESCRIPTION = "Debate Description Test";
 
-    private final static int PAGE = 0;
-
     private User user;
-    private Debate debate;
+    private Argument argument;
 
     @PersistenceContext
     private EntityManager em;
 
     @Autowired
-    private ChatJpaDao chatJpaDao;
+    private LikeJpaDao likeJpaDao;
 
     @Before
     public void setUp() {
         user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
         User user2 = new User(USER_EMAIL_2, USER_USERNAME_2, USER_PASSWORD_2, Locale.ENGLISH);
-        debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, user, true, user2, null, DebateCategory.OTHER);
+        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, user, true, user2, null, DebateCategory.OTHER);
+        argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
         em.persist(user);
         em.persist(user2);
         em.persist(debate);
+        em.persist(argument);
     }
 
     @Test
-    public void testCreateChat() {
-        final Chat chat = chatJpaDao.create(user, debate, MESSAGE);
+    public void testLikeArgument() {
+        final Like like = likeJpaDao.likeArgument(user, argument);
 
-        assertNotNull(chat);
-        assertEquals(chat, em.find(Chat.class, chat.getChatId()));
+        assertNotNull(like);
+        assertEquals(like, em.find(Like.class, like.getUserPostKey()));
     }
 
     @Test
-    public void testGetDebateChatDoesntExist() {
-        List<Chat> chats = chatJpaDao.getDebateChat(debate, PAGE);
+    public void testUnlikeArgument() {
+        Like like = new Like(user, argument);
+        em.persist(like);
 
-        assertTrue(chats.isEmpty());
+        likeJpaDao.unlikeArgument(user, argument);
+
+        assertNull(em.find(Like.class, like.getUserPostKey()));
     }
 
     @Test
-    public void testGetDebateChat() {
-        Chat chat = new Chat(user, debate, MESSAGE);
-        em.persist(chat);
+    public void testGetLikeDoesntExist() {
+        Optional<Like> like = likeJpaDao.getLike(user, argument);
 
-        List<Chat> chats = chatJpaDao.getDebateChat(debate, PAGE);
-
-        assertFalse(chats.isEmpty());
-        assertEquals(1, chats.size());
-        assertEquals(chat, chats.get(0));
+        assertFalse(like.isPresent());
     }
 
     @Test
-    public void testGetDebateChatsCountNoChats() {
-        int count = chatJpaDao.getDebateChatsCount(debate.getDebateId());
+    public void testGetLike() {
+        Like like = new Like(user, argument);
+        em.persist(like);
 
-        assertEquals(0, count);
-    }
+        Optional<Like> l = likeJpaDao.getLike(user, argument);
 
-    @Test
-    public void testGetDebateChatsCount() {
-        em.persist(new Chat(user, debate, MESSAGE));
-
-        int count = chatJpaDao.getDebateChatsCount(debate.getDebateId());
-
-        assertEquals(1, count);
+        assertTrue(l.isPresent());
+        assertEquals(like, l.get());
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Locale;
 import java.util.Optional;
 
 @Repository
@@ -14,11 +15,6 @@ public class UserJpaDao implements UserDao {
 
     @PersistenceContext
     private EntityManager em;
-
-    @Override
-    public Optional<User> getUserById(long id) {
-        return Optional.ofNullable(em.find(User.class, id));
-    }
 
     @Override
     public Optional<User> getUserByUsername(String username) {
@@ -35,8 +31,8 @@ public class UserJpaDao implements UserDao {
     }
 
     @Override
-    public User create(String username, String password, String email) {
-        final User user = new User(email, username, password);
+    public User create(String username, String password, String email, Locale locale) {
+        final User user = new User(email, username, password, locale);
         em.persist(user);
         return user;
     }

@@ -14,7 +14,6 @@ import ar.edu.itba.paw.model.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +63,7 @@ public class DebateServiceImpl implements DebateService {
             createdDebate = debateDao.create(name, description, creator, isCreatorFor, opponent, null, category);
         else
             createdDebate = debateDao.create(name, description, creator, isCreatorFor, opponent, imageService.createImage(image), category);
-        emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate.getDebateId(), createdDebate.getName());
+        emailService.notifyNewInvite(opponent.getEmail(), creatorUsername, createdDebate, opponent.getLocale());
         return createdDebate;
     }
 
@@ -155,12 +154,33 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    //@Async TODO: Preguntar esto
     @Transactional
     @Scheduled(cron = "0 0 0 * * *") // Runs at midnight every day
     public void closeVotes() {
         for (Debate debate : debateDao.getDebatesToClose()) {
             debate.closeDebate();
         }
+    }
+
+    @Override
+    public List<Debate> getRecommendedDebates(long debateid) {
+        Debate debate = getDebateById(debateid).orElseThrow(() -> {
+            LOGGER.error("Cannot get recommended debates for Debate with id {} because it does not exist", debateid);
+            return new DebateNotFoundException();
+        });
+        return debateDao.getRecommendedDebates(debate);
+    }
+
+    @Override
+    public List<Debate> getRecommendedDebates(long debateid, String username) {
+        Debate debate = getDebateById(debateid).orElseThrow(() -> {
+            LOGGER.error("Cannot get recommended debates for Debate with id {} because it does not exist", debateid);
+            return new DebateNotFoundException();
+        });
+        User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot get recommended debates for Debate with id {} because user with username {} does not exist", debateid, username);
+            return new UserNotFoundException();
+        });
+        return debateDao.getRecommendedDebates(debate, user);
     }
 }

@@ -52,9 +52,7 @@ public class Argument {
     @Transient
     private boolean isLikedByUser;
 
-    /*default*/Argument() {
-        // Just for Hibernate
-    }
+    Argument() {}
 
     public Argument(final User user, final Debate debate, final String content, final Image image, final ArgumentStatus status) {
         this.debate = debate;
@@ -66,11 +64,6 @@ public class Argument {
         this.likesCount = 0;
         this.deleted = false;
         this.isLikedByUser = false;
-    }
-
-    @Deprecated
-    public Argument(final long argumentId, final User user, final Long debateId, final String content, final LocalDateTime creationDate, final Image image, final ArgumentStatus status) {
-
     }
 
     public Long getArgumentId() {

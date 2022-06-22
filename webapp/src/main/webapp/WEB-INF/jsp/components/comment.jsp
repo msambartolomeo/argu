@@ -15,7 +15,7 @@
         </h6>
         <div class="comment-extra">
             <c:if test="${!argument.deleted}">
-                <sec:authorize access="hasAuthority('USER')">
+                <c:if test="${pageContext.request.userPrincipal.name != null}">
                     <c:choose>
                         <c:when test="${!argument.likedByUser}">
                             <c:url var="likePath" value="/debates/${debate.debateId}/like/${argument.argumentId}"/>
@@ -34,7 +34,7 @@
                             </form:form>
                         </c:otherwise>
                     </c:choose>
-                </sec:authorize>
+                </c:if>
                 <c:if test="${pageContext.request.userPrincipal == null}">
                     <a href="<c:url value="/login"/>" class="btn-flat">
                         <i class="large material-icons">favorite_border</i>

@@ -4,8 +4,11 @@ import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.UserRole;
 
 import javax.persistence.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Set;
 
 @Entity
@@ -39,15 +42,19 @@ public class User {
     @Column(name = "points", columnDefinition = "integer default 0")
     private int points;
 
+    @Column(name = "locale", nullable = false, columnDefinition = "varchar(255) default 'en'")
+    private Locale locale;
+
     public User() {}
 
-    public User(String email, String username, String password) {
+    public User(String email, String username, String password, Locale locale) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.createdDate = LocalDate.now();
         this.role = UserRole.USER;
         this.points = 0;
+        this.locale = locale;
     }
 
     public Long getUserId() {
@@ -81,6 +88,10 @@ public class User {
         return role;
     }
 
+    public Locale getLocale() {
+        return locale;
+    }
+
     public void updateImage(byte[] data) {
         this.image = new Image(data);
     }
@@ -108,7 +119,10 @@ public class User {
         }
     }
 
-    // TODO: Choose correct amount of points
+    public String getUrl() throws UnsupportedEncodingException {
+        return URLEncoder.encode(this.username, "UTF-8");
+    }
+
     public int getPoints() {
         return points;
     }
@@ -117,12 +131,16 @@ public class User {
     }
     public void removeLikePoints() {
         this.points -= 1;
+        if (this.points < 0)
+            this.points = 0;
     }
     public void addSubPoints() {
-        this.points += 1;
+        this.points += 10;
     }
     public void removeSubPoints() {
-        this.points -= 1;
+        this.points -= 10;
+        if (this.points < 0)
+            this.points = 0;
     }
     public void addWinPoints(int totalVotes) {
         this.points += 10*totalVotes;

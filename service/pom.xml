@@ -4,11 +4,11 @@
   <parent>
     <artifactId>PAW-webapp</artifactId>
     <groupId>ar.edu.itba.paw</groupId>
-    <version>5.0.0</version>
+    <version>6.0.0</version>
   </parent>
 
   <artifactId>service</artifactId>
-  <version>5.0.0</version>
+  <version>6.0.0</version>
 
   <dependencies>
     <dependency>
@@ -48,6 +48,18 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.thymeleaf</groupId>
+      <artifactId>thymeleaf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.thymeleaf</groupId>
+      <artifactId>thymeleaf-spring4</artifactId>
     </dependency>
   </dependencies>
 
