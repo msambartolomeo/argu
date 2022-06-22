@@ -121,6 +121,9 @@ public class DebateController {
             mav.addObject("isSubscribed", subscribedService.isUserSubscribed(auth.getName(), debateIdNum));
             voteService.getVote(debateIdNum, auth.getName()).ifPresent(v -> mav.addObject("userVote", v.getVote()));
             argumentService.getLastArgument(debateIdNum).ifPresent(lastArgument -> mav.addObject("lastArgument", lastArgument));
+            mav.addObject("recommendedDebates", debateService.getRecommendedDebates(debateIdNum, username));
+        } else {
+            mav.addObject("recommendedDebates", debateService.getRecommendedDebates(debateIdNum));
         }
         mav.addObject("arguments", argumentService.getArgumentsByDebate(debateIdNum, username, pageNum));
         mav.addObject("total_pages", argumentService.getArgumentByDebatePageCount(debateIdNum));
