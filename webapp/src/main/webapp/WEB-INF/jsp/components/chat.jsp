@@ -52,10 +52,10 @@
             </c:if>
 
 
-            <p class="center"><spring:message code="components.chat.pages"/></p>
             <div class="center pagination-margin">
                 <ul class="pagination">
                     <c:if test="${total_chat_pages > 0}">
+                        <p class="center"><spring:message code="components.chat.pages"/></p>
                         <c:if test="${param.chatPage != null && param.chatPage > 0}">
                             <li class="active page-number">
                                 <spring:url value="" var="prevPage">
