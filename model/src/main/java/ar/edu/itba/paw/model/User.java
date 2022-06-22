@@ -131,12 +131,16 @@ public class User {
     }
     public void removeLikePoints() {
         this.points -= 1;
+        if (this.points < 0)
+            this.points = 0;
     }
     public void addSubPoints() {
         this.points += 10;
     }
     public void removeSubPoints() {
         this.points -= 10;
+        if (this.points < 0)
+            this.points = 0;
     }
     public void addWinPoints(int totalVotes) {
         this.points += 10*totalVotes;
