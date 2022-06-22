@@ -265,7 +265,21 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <h6><spring:message code="pages.debate.voted"/> <c:out value="${userVote}"/></h6>
+                            <h6><spring:message code="pages.debate.voted"/>
+                                <c:choose>
+                                    <c:when test="${(userVoteValue == 0 && debate.isCreatorFor) || (userVoteValue == 1 &&
+                                    !debate.isCreatorFor) && debate.creator.username != null}">
+                                        <c:out value="${debate.creator.username}"/>
+                                    </c:when>
+                                    <c:when test="${(userVoteValue == 1 && debate.isCreatorFor) || (userVoteValue == 0 &&
+                                    !debate.isCreatorFor) && debate.opponent.username != null}">
+                                        <c:out value="${debate.opponent.username}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <spring:message code="username.deleted"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </h6>
                             <div class="progress red">
                                 <c:if test="${debate.forCount > 0}">
                                     <div class="votes-format blue" style="width: ${debate.forCount}%">

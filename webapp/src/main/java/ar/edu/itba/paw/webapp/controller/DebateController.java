@@ -120,6 +120,7 @@ public class DebateController {
             username = auth.getName();
             mav.addObject("isSubscribed", subscribedService.isUserSubscribed(auth.getName(), debateIdNum));
             voteService.getVote(debateIdNum, auth.getName()).ifPresent(v -> mav.addObject("userVote", v.getVote()));
+            voteService.getVote(debateIdNum, auth.getName()).ifPresent(v -> mav.addObject("userVoteValue", v.getVote().ordinal()));
             argumentService.getLastArgument(debateIdNum).ifPresent(lastArgument -> mav.addObject("lastArgument", lastArgument));
             mav.addObject("recommendedDebates", debateService.getRecommendedDebates(debateIdNum, username));
         } else {
