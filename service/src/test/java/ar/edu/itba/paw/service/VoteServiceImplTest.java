@@ -88,7 +88,6 @@ public class VoteServiceImplTest {
         voteService.addVote(DEBATE_ID, USER_USERNAME, DebateVote.FOR);
     }
 
-    // TODO: Check what is wrong -> debateId = null (add setId?)
     @Test(expected = UserAlreadyVotedException.class)
     public void testAddVoteAlreadyVoted() {
         Vote vote = new Vote(user, debate, DebateVote.FOR);
@@ -133,7 +132,6 @@ public class VoteServiceImplTest {
         assertFalse(vote.isPresent());
     }
 
-    // TODO: Check what is wrong -> debateId = null (add setId?)
     @Test
     public void testGetUserVoteFor() {
         Vote vote = new Vote(user, debate, DebateVote.FOR);
@@ -147,7 +145,6 @@ public class VoteServiceImplTest {
         assertEquals(vote, v.get());
     }
 
-    // TODO: Check what is wrong -> debateId = null (add setId?)
     @Test
     public void testGetUserVoteAgainst() {
         Vote vote = new Vote(user, debate, DebateVote.AGAINST);

@@ -87,6 +87,6 @@ public class VoteServiceImpl implements VoteService {
             LOGGER.error("Cannot remove vote in debate {} because it is closed or deleted", debateId);
             throw new VotingForbiddenException();
         }
-        voteDao.getVote(user, debate).ifPresent(vote -> voteDao.delete(vote)); // TODO: why get before delete?
+        voteDao.getVote(user, debate).ifPresent(vote -> voteDao.delete(vote));
     }
 }

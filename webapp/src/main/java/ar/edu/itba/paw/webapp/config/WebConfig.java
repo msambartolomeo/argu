@@ -122,10 +122,6 @@ public class WebConfig {
         jpaProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         jpaProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
 
-        // TODO Only for development, delete on deployment
-        jpaProperties.setProperty("hibernate.show_sql", "true");
-        jpaProperties.setProperty("format_sql", "true");
-
         entityFactory.setJpaProperties(jpaProperties);
 
         return entityFactory;
