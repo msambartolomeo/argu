@@ -171,16 +171,6 @@ public class DebateJpaDaoTest {
     }
 
     @Test
-    public void getDebatesDiscovery() {
-        // TODO: Do tests with discovery
-    }
-
-    @Test
-    public void testGetDebatesCountEmpty() {
-        // TODO: Do tests with discovery
-    }
-
-    @Test
     public void testGetUserDebatesEmpty() {
         List<Debate> userDebates = debateJpaDao.getUserDebates(creator.getUserId(), PAGE);
 

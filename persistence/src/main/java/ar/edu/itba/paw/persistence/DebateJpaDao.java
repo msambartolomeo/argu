@@ -251,7 +251,7 @@ public class DebateJpaDao implements DebateDao {
         List<Debate> unsortedList = query.getResultList();
         List<Debate> sortedList = new ArrayList<>();
         for (Long id: ids)
-            sortedList.add(unsortedList.stream().filter(d -> d.getDebateId() == id).findFirst().get());
+            sortedList.add(unsortedList.stream().filter(d -> d.getDebateId().equals(id)).findFirst().get());
         return sortedList;
     }
 }

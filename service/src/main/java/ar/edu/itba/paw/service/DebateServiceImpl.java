@@ -154,7 +154,6 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    //@Async TODO: Preguntar esto
     @Transactional
     @Scheduled(cron = "0 0 0 * * *") // Runs at midnight every day
     public void closeVotes() {

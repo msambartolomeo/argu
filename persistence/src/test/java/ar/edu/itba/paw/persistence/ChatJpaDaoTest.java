@@ -88,29 +88,6 @@ public class ChatJpaDaoTest {
         assertEquals(chat, chats.get(0));
     }
 
-    @Test // TODO: delete this test :(
-    public void testGetDebateChatPaginationAndOrder() throws InterruptedException {
-        for (int i = 0; i <= ChatJpaDao.PAGE_SIZE; i++) { // Create one more than a page
-            em.persist(new Chat(user, debate, MESSAGE + i));
-            TimeUnit.MILLISECONDS.sleep(1); // TODO: Ask if this is good practice
-        }
-
-        List<Chat> chats = chatJpaDao.getDebateChat(debate, PAGE);
-
-        assertFalse(chats.isEmpty());
-        assertEquals(ChatJpaDao.PAGE_SIZE, chats.size());
-
-        // Check that the first one is not present
-        for (Chat chat : chats) {
-            assertNotEquals(MESSAGE + 0, chat.getMessage());
-        }
-
-        // test correct order
-        for (int i = 1; i <= ChatJpaDao.PAGE_SIZE; i++) {
-            assertEquals(MESSAGE + i, chats.get(i - 1).getMessage());
-        }
-    }
-
     @Test
     public void testGetDebateChatsCountNoChats() {
         int count = chatJpaDao.getDebateChatsCount(debate.getDebateId());

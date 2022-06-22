@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Subscribed;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
@@ -90,6 +91,10 @@ public class DebateJpaDaoParamTest {
                 opponent, null, DEBATE_CATEGORY_3);
         debate3.setStatus(DebateStatus.CLOSED);
         em.persist(debate3);
+
+        em.persist(new Subscribed(creator, debate1));
+        em.persist(new Subscribed(opponent, debate1));
+        em.persist(new Subscribed(creator, debate2));
     }
 
     @Parameters
@@ -110,25 +115,26 @@ public class DebateJpaDaoParamTest {
                 {0, 2, null, null, DebateOrder.ALPHA_ASC, null, null, 3, Arrays.asList( // Shows pagination limit
                         debate1, debate2)
                 },
-                {0, 3, "a deBate", null, DebateOrder.ALPHA_ASC, null, null, 1, Arrays.asList( // Shows case insensitive search by name
+                {0, 3, "a deBate", null, DebateOrder.ALPHA_DESC, null, null, 1, Collections.singletonList( // Shows case insensitive search by name
                         debate1)
                 },
                 {0, 3, "no results", null, DebateOrder.ALPHA_ASC, null, null, 0, Collections.emptyList()}, // Shows no results
-                {0, 3, null, DEBATE_CATEGORY_2, null, null, null, 1, Arrays.asList( // Shows filter by category
+                {0, 3, null, DEBATE_CATEGORY_2, null, null, null, 1, Collections.singletonList( // Shows filter by category
                         debate2)
                 },
                 {0, 3, null, null, DebateOrder.SUBS_ASC, DebateStatus.OPEN, null, 2, Arrays.asList( // Shows filter by status Open
-                        debate1, debate2)
+                        debate2, debate1)
                 },
-                {0, 3, null, null, null, DebateStatus.CLOSED, null, 1, Arrays.asList( // Shows filter by status Closed
+                {0, 3, null, null, null, DebateStatus.CLOSED, null, 1, Collections.singletonList( // Shows filter by status Closed
                         debate3)
                 },
                 {0, 3, null, null, null, null, DEBATE_DATE, 3, Arrays.asList( // Shows filter by date from
                         debate3, debate2, debate1)
                 },
-                {0, 3, "test", DEBATE_CATEGORY_1, DebateOrder.DATE_ASC, DebateStatus.OPEN, DEBATE_DATE, 1, Arrays.asList(
+                {0, 3, "test", DEBATE_CATEGORY_1, DebateOrder.DATE_ASC, DebateStatus.OPEN, DEBATE_DATE, 1, Collections.singletonList(
                         debate1)
                 },
+                {0, 3, null, null, DebateOrder.SUBS_DESC, null, null, 3, Arrays.asList(debate1, debate2, debate3)},
         });
     }
 
