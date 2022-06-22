@@ -267,11 +267,11 @@
                         <c:otherwise>
                             <h6><spring:message code="pages.debate.voted"/>
                                 <c:choose>
-                                    <c:when test="${(userVoteValue == 0 && debate.isCreatorFor) || (userVoteValue == 1 &&
+                                    <c:when test="${(userVote.ordinal() == 0 && debate.isCreatorFor) || (userVote.ordinal() == 1 &&
                                     !debate.isCreatorFor) && debate.creator.username != null}">
                                         <c:out value="${debate.creator.username}"/>
                                     </c:when>
-                                    <c:when test="${(userVoteValue == 1 && debate.isCreatorFor) || (userVoteValue == 0 &&
+                                    <c:when test="${(userVote.ordinal() == 1 && debate.isCreatorFor) || (userVote.ordinal() == 0 &&
                                     !debate.isCreatorFor) && debate.opponent.username != null}">
                                         <c:out value="${debate.opponent.username}"/>
                                     </c:when>
