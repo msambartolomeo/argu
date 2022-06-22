@@ -123,7 +123,6 @@ public class User {
         return URLEncoder.encode(this.username, "UTF-8");
     }
 
-    // TODO: Choose correct amount of points
     public int getPoints() {
         return points;
     }
@@ -134,10 +133,10 @@ public class User {
         this.points -= 1;
     }
     public void addSubPoints() {
-        this.points += 1;
+        this.points += 10;
     }
     public void removeSubPoints() {
-        this.points -= 1;
+        this.points -= 10;
     }
     public void addWinPoints(int totalVotes) {
         this.points += 10*totalVotes;

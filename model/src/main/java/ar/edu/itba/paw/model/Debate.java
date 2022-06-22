@@ -170,7 +170,8 @@ public class Debate {
     }
 
     public void startVoting() {
-        this.dateToClose = LocalDate.now().plusDays(7); // TODO: Decide on a correct date to close
+        // 3 días después de cerrar un debate, se cierra la votación.
+        this.dateToClose = LocalDate.now().plusDays(3);
         this.status = DebateStatus.VOTING;
     }
 
