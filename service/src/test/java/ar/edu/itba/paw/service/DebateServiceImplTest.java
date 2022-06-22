@@ -16,10 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import javax.persistence.Id;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -113,8 +111,13 @@ public class DebateServiceImplTest {
     }
 
     @Test(expected = UserNotFoundException.class)
-    public void testCreateCreatorOrOpponentNotFound() {
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.empty());
+    public void testCreateCreatorNotFound() {
+        debateService.create(DEBATE_NAME, DEBATE_DESCRIPTION, CREATOR_USERNAME, IS_CREATOR_FOR, OPPONENT_USERNAME, IMAGE_DATA, DebateCategory.OTHER);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testCreateOpponentNotFound() {
+        when(userService.getUserByUsername(CREATOR_USERNAME)).thenReturn(Optional.of(creator));
 
         debateService.create(DEBATE_NAME, DEBATE_DESCRIPTION, CREATOR_USERNAME, IS_CREATOR_FOR, OPPONENT_USERNAME, IMAGE_DATA, DebateCategory.OTHER);
     }
@@ -289,8 +292,15 @@ public class DebateServiceImplTest {
     }
 
     @Test
+    public void testGetUserDebatesInvalidPage() {
+        List<Debate> dl = debateService.getUserDebates(CREATOR_ID, INVALID_PAGE);
+
+        assertTrue(dl.isEmpty());
+    }
+
+    @Test
     public void testGetProfileUserDebatesEmpty() {
-        List<Debate> dl = debateService.getProfileDebates("subscribed", CREATOR_ID, VALID_PAGE);
+        List<Debate> dl = debateService.getProfileDebates("mydebates", CREATOR_ID, VALID_PAGE);
 
         assertTrue(dl.isEmpty());
     }
@@ -402,8 +412,52 @@ public class DebateServiceImplTest {
         assertFalse(debateService.getDebateById(DEBATE_ID).isPresent());
     }
 
+    @Test(expected = DebateNotFoundException.class)
+    public void testGetRecommendedDebatesWithUserDebateNotFound() {
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID, CREATOR_USERNAME);
+
+        assertTrue(dl.isEmpty());
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testGetRecommendedDebatesWithUserUserNotFound() {
+        final Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID, CREATOR_USERNAME);
+
+        assertTrue(dl.isEmpty());
+    }
+
+    @Test(expected = DebateNotFoundException.class)
+    public void testGetRecommendedDebatesDebateNotFound() {
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID);
+
+        assertTrue(dl.isEmpty());
+    }
+
     @Test
-    public void testCloseVotes() {
-        // TODO: Figure out how to test with scheduled
+    public void testGetRecommendedDebates() {
+        final Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+        when(debateDao.getRecommendedDebates(any(Debate.class))).thenReturn(Collections.singletonList(debate));
+
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID);
+
+        assertFalse(dl.isEmpty());
+        assertEquals(debate, dl.get(0));
+    }
+
+    @Test
+    public void testGetRecommendedDebatesWithUser() {
+        final Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
+        when(debateDao.getRecommendedDebates(any(Debate.class), any(User.class))).thenReturn(Collections.singletonList(debate));
+
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID, CREATOR_USERNAME);
+
+        assertFalse(dl.isEmpty());
+        assertEquals(debate, dl.get(0));
     }
 }
