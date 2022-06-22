@@ -177,7 +177,7 @@ public class ArgumentServiceImpl implements ArgumentService {
             return new ArgumentNotFoundException();
         });
 
-        if(!argument.getUser().getUsername().equals(username)) {
+        if(argument.getUser().getUsername() == null || !argument.getUser().getUsername().equals(username)) {
             LOGGER.error("Cannot delete argument {} because user is not the creator", argumentId);
             throw new ForbiddenArgumentException();
         }

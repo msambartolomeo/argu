@@ -131,7 +131,8 @@ public class DebateServiceImpl implements DebateService {
             return new DebateNotFoundException();
         });
 
-        if (debate.getStatus() != DebateStatus.OPEN || !(username.equals(debate.getCreator().getUsername()) || username.equals(debate.getOpponent().getUsername()))) {
+        if (debate.getStatus() != DebateStatus.OPEN || debate.getCreator().getUsername() == null || debate.getOpponent().getUsername() == null
+                || !(username.equals(debate.getCreator().getUsername()) || username.equals(debate.getOpponent().getUsername()))) {
             LOGGER.error("Cannot start conclusion of Debate with id {} because it is not open or the user {} is not the creator or the opponent", id, username);
             throw new ForbiddenDebateException();
         }
@@ -147,7 +148,7 @@ public class DebateServiceImpl implements DebateService {
             return new DebateNotFoundException();
         });
 
-        if (debate.getStatus() == DebateStatus.DELETED || !username.equals(debate.getCreator().getUsername())) {
+        if (debate.getStatus() == DebateStatus.DELETED || debate.getCreator().getUsername() == null || !username.equals(debate.getCreator().getUsername())) {
             LOGGER.error("Cannot delete Debate {} because it is already deleted or the user {} is not the creator", id, username);
             throw new ForbiddenDebateException();
         }
