@@ -90,7 +90,7 @@ public class Debate {
         this.createdDate = LocalDateTime.now();
     }
 
-    public long getDebateId() {
+    public Long getDebateId() {
         return debateId;
     }
 

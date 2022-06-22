@@ -181,7 +181,6 @@ public class VoteServiceImplTest {
         voteService.removeVote(DEBATE_ID, USER_USERNAME);
     }
 
-    // TODO: Check what is wrong -> debateId = null (add setId?)
     @Test
     public void testRemoveVote() {
         Vote vote = new Vote(user, debate, DebateVote.FOR);
@@ -189,9 +188,9 @@ public class VoteServiceImplTest {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(voteDao.getVote(any(User.class), any(Debate.class))).thenReturn(Optional.of(vote));
 
-        voteService.addVote(DEBATE_ID, USER_USERNAME, DebateVote.FOR);
+        voteService.removeVote(DEBATE_ID, USER_USERNAME);
 
-        verify(voteDao).addVote(any(User.class), any(Debate.class), any(DebateVote.class));
+        verify(voteDao).delete(any(Vote.class));
     }
 
 }

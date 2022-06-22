@@ -74,7 +74,6 @@ public class SubscribedServiceImplTest {
         subscribedService.subscribeToDebate(USER_USERNAME, ID);
     }
 
-    // TODO: Check what is wrong -> debateId = null (add setId?)
     @Test(expected = UserAlreadySubscribedException.class)
     public void testSubscribeToDebateAlreadySubscribed() {
         Subscribed subscribed = new Subscribed(user, debate);
@@ -85,7 +84,6 @@ public class SubscribedServiceImplTest {
         subscribedService.subscribeToDebate(USER_USERNAME, ID);
     }
 
-    // TODO: Check what is wrong -> debateId = null (add setId?)
     @Test
     public void testSubscribeToDebate() {
         Subscribed subscribed = new Subscribed(user, debate);
@@ -110,7 +108,6 @@ public class SubscribedServiceImplTest {
         subscribedService.unsubscribeToDebate(USER_USERNAME, ID);
     }
 
-    // TODO: Check what is wrong -> debateId = null (add setId?)
     @Test
     public void testUnsubscribeToDebate() {
         Subscribed subscribed = new Subscribed(user, debate);
@@ -129,16 +126,22 @@ public class SubscribedServiceImplTest {
         assertFalse(subscribedService.isUserSubscribed(USER_USERNAME, ID));
     }
 
-//    @Test
-//    public void testIsUserSubscribedNotSubscribed() {
-//        assertFalse(subscribedService.isUserSubscribed(USER_USERNAME, ID));
-//    }
+    @Test
+    public void testIsUserSubscribedNotSubscribed() {
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-    // TODO: Check what is wrong -> debateId = null (add setId?)
+        boolean isSubscribed = subscribedService.isUserSubscribed(USER_USERNAME, ID);
+
+        assertFalse(isSubscribed);
+    }
+
     @Test
     public void testIsUserSubscribedSubscribed() {
         Subscribed subscribed = new Subscribed(user, debate);
-        when(subscribedService.getSubscribed(anyString(), anyLong())).thenReturn(Optional.of(subscribed));
+        when(subscribedDao.getSubscribed(any(User.class), any(Debate.class))).thenReturn(Optional.of(subscribed));
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
         boolean isSubscribed = subscribedService.isUserSubscribed(USER_USERNAME, ID);
 
@@ -168,7 +171,6 @@ public class SubscribedServiceImplTest {
         assertFalse(subscribed.isPresent());
     }
 
-    // TODO: Check what is wrong -> debateId = null (add setId?)
     @Test
     public void testGetSubscribed() {
         Subscribed subscribed = new Subscribed(user, debate);
