@@ -511,9 +511,10 @@ div.category-list div.collection.with-header {
 }
 
 .slideshow-container {
-    width: 32%;
-    position: relative;
+    position: relative !important;
     margin: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .mySlides {
@@ -522,8 +523,6 @@ div.category-list div.collection.with-header {
 
 .prev, .next {
     cursor: pointer;
-    position: absolute;
-    top: 50%;
     width: auto;
     padding: 16px;
     margin-top: -22px;
@@ -542,17 +541,6 @@ div.category-list div.collection.with-header {
 
 .prev:hover, .next:hover {
     background-color: rgba(0,0,0,0.8);
-}
-
-.dot {
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6s ease;
 }
 
 .active, .dot:hover {

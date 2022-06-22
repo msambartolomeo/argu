@@ -402,27 +402,23 @@
         <c:if test="${recommendedDebates.size() > 0}">
             <div class="card vote-section">
                 <h5><spring:message code="pages.debate.recommended-debates"/></h5>
-                <div class="slideshow-container">
-<%--                    <div class="image-selector">--%>
+                <div class="row">
+                    <div class="slideshow-container">
                         <c:forEach var="debate" items="${recommendedDebates}">
                             <div class="mySlides fade">
                                 <%@include file="../components/debates-list-item.jsp"%>
                             </div>
                         </c:forEach>
-                        <div class="image-selector">
-                            <c:if test="${recommendedDebates.size() > 1}">
-                                <a class="prev btn" onclick="plusSlides(-1)">❮</a>
-                            </c:if>
-                            <c:if test="${recommendedDebates.size() > 1}">
-                                <a class="next btn" onclick="plusSlides(1)">❯</a>
-                            </c:if>
-                        </div>
-<%--                    </div>--%>
+                    </div>
                 </div>
-                    <%--@elvariable id="i" type="int"--%>
-                <c:forEach var="i" begin="${1}" end="${recommendedDebates.size()}">
-                    <span class="dot" onclick="currentSlide(i)"></span>
-                </c:forEach>
+                <div class="image-selector">
+                    <c:if test="${recommendedDebates.size() > 1}">
+                        <a class="prev btn image-selector" onclick="plusSlides(-1)">❮</a>
+                    </c:if>
+                    <c:if test="${recommendedDebates.size() > 1}">
+                        <a class="next btn image-selector" onclick="plusSlides(1)">❯</a>
+                    </c:if>
+                </div>
             </div>
 
         </c:if>
