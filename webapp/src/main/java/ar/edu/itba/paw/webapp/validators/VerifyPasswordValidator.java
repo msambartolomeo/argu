@@ -26,11 +26,8 @@ public class VerifyPasswordValidator implements ConstraintValidator<VerifyPasswo
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || auth.getPrincipal() == null) {
-            return false;
-        }
-        String username = auth.getName();
-        User toDelete = userService.getUserByUsername(username).orElseThrow(UserNotFoundException::new);
+        if (value == null) return false;
+        User toDelete = userService.getUserByUsername(auth.getName()).orElseThrow(UserNotFoundException::new);
         return passwordEncoder.matches(value, toDelete.getPassword());
     }
 }
