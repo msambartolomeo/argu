@@ -47,7 +47,7 @@ public class ErrorController {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ModelAndView handleMethodNotAllowed(HttpRequestMethodNotSupportedException e) {
-        LOGGER.error("error 400", e);
+        LOGGER.error("error 400 - {}", e.toString());
         return new ModelAndView("error/400");
     }
 
