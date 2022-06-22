@@ -79,11 +79,14 @@ public class LikeServiceImpl implements LikeService {
             return new UserNotFoundException();
         });
 
-        User creator = argument.getUser();
-        if(!creator.equals(user)) {
-            creator.removeLikePoints();
-        }
-        likeDao.unlikeArgument(user, argument);
+
+        likeDao.getLike(user, argument).ifPresent(l -> {
+            User creator = argument.getUser();
+            if(!creator.equals(user)) {
+                creator.removeLikePoints();
+            }
+            likeDao.unlikeArgument(l);
+        });
     }
 
     @Override

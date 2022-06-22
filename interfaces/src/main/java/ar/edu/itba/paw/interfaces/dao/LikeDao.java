@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface LikeDao {
     Optional<Like> getLike(User user, Argument argument);
     Like likeArgument(User user, Argument argument);
-    void unlikeArgument(User user, Argument argument);
+    void unlikeArgument(Like like);
 }

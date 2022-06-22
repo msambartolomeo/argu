@@ -30,9 +30,8 @@ public class LikeJpaDao implements LikeDao {
     }
 
     @Override
-    public void unlikeArgument(User user, Argument argument){
-        final Like toRemove = em.find(Like.class, new UserPostKey(user.getUserId(), argument.getArgumentId()));
-        em.remove(toRemove);
+    public void unlikeArgument(Like like){
+        em.remove(like);
     }
 
 }

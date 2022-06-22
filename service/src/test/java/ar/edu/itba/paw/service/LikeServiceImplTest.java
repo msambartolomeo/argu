@@ -146,12 +146,14 @@ public class LikeServiceImplTest {
 
     @Test
     public void testUnlikeArgument() {
+        Like like = new Like(user, argument);
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
         when(argumentService.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
+        when(likeDao.getLike(any(User.class), any(Argument.class))).thenReturn(Optional.of(like));
 
         likeService.unlikeArgument(ID, USER_USERNAME);
 
-        verify(likeDao).unlikeArgument(any(User.class), any(Argument.class));
+        verify(likeDao).unlikeArgument(any(Like.class));
     }
 
     @Test

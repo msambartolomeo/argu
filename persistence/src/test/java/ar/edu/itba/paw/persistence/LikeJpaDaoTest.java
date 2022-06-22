@@ -73,7 +73,7 @@ public class LikeJpaDaoTest {
         Like like = new Like(user, argument);
         em.persist(like);
 
-        likeJpaDao.unlikeArgument(user, argument);
+        likeJpaDao.unlikeArgument(like);
 
         assertNull(em.find(Like.class, like.getUserPostKey()));
     }

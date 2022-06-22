@@ -64,13 +64,15 @@ public class SubscribedServiceImpl implements SubscribedService {
             LOGGER.error("Cannot unsubscribe to debate {} because it does not exist", debateId);
             return new DebateNotFoundException();
         });
-        User creator = debate.getCreator();
-        User opponent = debate.getOpponent();
-        if (!user.equals(creator) && !user.equals(opponent)) {
-            creator.removeSubPoints();
-            opponent.removeSubPoints();
-        }
-        subscribedDao.getSubscribed(user, debate).ifPresent(s -> subscribedDao.unsubscribe(s));
+        subscribedDao.getSubscribed(user, debate).ifPresent(s -> {
+            User creator = debate.getCreator();
+            User opponent = debate.getOpponent();
+            if (!user.equals(creator) && !user.equals(opponent)) {
+                creator.removeSubPoints();
+                opponent.removeSubPoints();
+            }
+            subscribedDao.unsubscribe(s);
+        });
     }
 
     @Override
