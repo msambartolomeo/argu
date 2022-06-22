@@ -555,9 +555,6 @@ div.category-list div.collection.with-header {
     background-color: rgba(0,0,0,0.8);
 }
 
-.active, .dot:hover {
-    background-color: #717171;
-}
 
 .fade {
     animation-name: fade;
