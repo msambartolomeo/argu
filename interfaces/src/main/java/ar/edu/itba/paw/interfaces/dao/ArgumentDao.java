@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Argument;
+import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 
 import java.util.List;

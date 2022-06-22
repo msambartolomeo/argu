@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.ArgumentDao;
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Argument;
+import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import org.springframework.stereotype.Repository;
 
