@@ -1,0 +1,16 @@
+:root {
+    --primary-color: #212d40;
+    --secondary-color: #d66853;
+    --white: white;
+    --badge-color: #364156;
+    --error: red;
+    --champagne-pink: #f1ddcf;
+    --charcoal: #364156;
+    --selected-button: #4076bd;
+    --forColor: #abcbe5;
+    --againstColor: var(--champagne-pink);
+}
+
+body {
+    background: var(--secondary-color);
+}

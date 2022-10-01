@@ -1,3 +1,7 @@
+// NOTE: import base css
+import "materialize-css/dist/css/materialize.min.css";
+import "./root.css";
+
 import logo from "./logo.svg";
 import "./App.css";
 
