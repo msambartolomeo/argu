@@ -18,6 +18,21 @@
     },
     "plugins": ["react", "@typescript-eslint"],
     "rules": {
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "no-console":"warn",
+        "eqeqeq":["error", "smart"],
+        "no-lonely-if":"warn",
+        "no-floating-decimal":"warn",
+        "no-else-return":"warn",
+        "no-implicit-coercion":"warn",
+        "dot-location":["warn", "property"],
+        "no-eq-null":"warn",
+        "no-eval":"warn",
+        "no-extend-native":"warn"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }
