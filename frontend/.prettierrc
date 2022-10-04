@@ -1,6 +1,25 @@
 {
     "semi": true,
-    "printWidth": 100,
+    "printWidth": 80,
     "tabWidth": 4,
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "proseWrap": "preserve",
+    "arrowParens": "always",
+    "endOfLine": "lf",
+    "overrides": [
+        {
+            "files": "*.json",
+            "options": {
+                "singleQuote": false
+            }
+        },
+        {
+            "files": ".*rc",
+            "options": {
+                "singleQuote": false,
+                "parser": "json"
+            }
+        }
+    ]
 }
