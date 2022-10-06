@@ -1,11 +1,10 @@
-import { FC } from "react";
 import "./SubmitButton.css";
 
 interface ButtonProps {
     text: string;
 }
 
-const SubmitButton: FC<ButtonProps> = ({ text }): JSX.Element => {
+const SubmitButton = ({ text }: ButtonProps) => {
     return (
         <>
             <button type="submit" className="btn waves-effect center-block">
