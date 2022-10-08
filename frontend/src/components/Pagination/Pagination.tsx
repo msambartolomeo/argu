@@ -28,7 +28,7 @@ function Pagination({ param, totalPages }: Props) {
                     "selected-button": i === currentPage,
                 })}
             >
-                <a href={getUrl(i)}>{i}</a>
+                <a href={getUrl(i)}>{i + 1}</a>
             </li>
         );
     }
