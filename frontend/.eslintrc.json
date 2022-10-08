@@ -16,19 +16,30 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "plugins": ["react", "@typescript-eslint"],
+    "plugins": [
+        "react",
+        "@typescript-eslint",
+        "prettier"
+    ],
     "rules": {
         "react/react-in-jsx-scope": "off",
-        "no-console":"warn",
-        "eqeqeq":["error", "smart"],
-        "no-lonely-if":"warn",
-        "no-floating-decimal":"warn",
-        "no-else-return":"warn",
-        "no-implicit-coercion":"warn",
-        "dot-location":["warn", "property"],
-        "no-eq-null":"warn",
-        "no-eval":"warn",
-        "no-extend-native":"warn"
+        "no-console": "warn",
+        "eqeqeq": [
+            "error",
+            "smart"
+        ],
+        "no-lonely-if": "warn",
+        "no-floating-decimal": "warn",
+        "no-else-return": "warn",
+        "no-implicit-coercion": "warn",
+        "dot-location": [
+            "warn",
+            "property"
+        ],
+        "no-eq-null": "warn",
+        "no-eval": "warn",
+        "no-extend-native": "warn",
+        "camelcase": "warn"
     },
     "settings": {
         "react": {
