@@ -8,7 +8,12 @@ interface Props {
 
 function Pagination({ param, totalPages }: Props) {
     // TODO: Get page number from router
-    const currentPage = 0;
+    const params = new URLSearchParams(document.location.search);
+    let paramValue = params.get(param);
+    if (paramValue === null) {
+        paramValue = "0";
+    }
+    const currentPage = parseInt(paramValue);
 
     // TODO: Get url from router and keep current params
     const getUrl = (page: number) => `http://localhost:3000?${param}=${page}`;
@@ -16,7 +21,13 @@ function Pagination({ param, totalPages }: Props) {
     const buttons = [];
     for (let i = 0; i < totalPages; i++) {
         buttons.push(
-            <li className={cn({ "selected-button": i === currentPage })}>
+            <li
+                key={i}
+                className={cn({
+                    active: true,
+                    "selected-button": i === currentPage,
+                })}
+            >
                 <a href={getUrl(i)}>{i}</a>
             </li>
         );
@@ -28,15 +39,15 @@ function Pagination({ param, totalPages }: Props) {
                 <div className="center pagination-margin">
                     <ul className="pagination">
                         {currentPage > 0 && (
-                            <li>
+                            <li className="active">
                                 <a href={getUrl(currentPage - 1)}>{"<"}</a>
                             </li>
                         )}
 
                         {buttons}
 
-                        {currentPage < totalPages && (
-                            <li>
+                        {totalPages > currentPage + 1 && (
+                            <li className="active">
                                 <a href={getUrl(currentPage + 1)}>{">"}</a>
                             </li>
                         )}
