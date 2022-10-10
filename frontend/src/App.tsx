@@ -5,7 +5,14 @@ import "./root.css";
 import logo from "./logo.svg";
 import "./App.css";
 
+import { useEffect } from "react";
+import M from "materialize-css";
+
 function App() {
+    useEffect(() => {
+        M.AutoInit();
+    }, []);
+
     return (
         <div className="App">
             <header className="App-header">
