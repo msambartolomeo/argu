@@ -21,15 +21,18 @@ function Pagination({ param, totalPages }: Props) {
     const buttons = [];
     for (let i = 0; i < totalPages; i++) {
         buttons.push(
-            <li
-                key={i}
-                className={cn({
-                    active: true,
-                    "selected-button": i === currentPage,
-                })}
-            >
-                <a href={getUrl(i)}>{i + 1}</a>
-            </li>
+            <span key={i}>
+                <span> </span>
+                <li
+                    className={cn({
+                        active: true,
+                        "selected-button": i === currentPage,
+                    })}
+                >
+                    <a href={getUrl(i)}>{i + 1}</a>
+                </li>
+                <span> </span>
+            </span>
         );
     }
 
@@ -43,9 +46,9 @@ function Pagination({ param, totalPages }: Props) {
                                 <a href={getUrl(currentPage - 1)}>{"<"}</a>
                             </li>
                         )}
-
+                        <span> </span>
                         {buttons}
-
+                        <span> </span>
                         {totalPages > currentPage + 1 && (
                             <li className="active">
                                 <a href={getUrl(currentPage + 1)}>{">"}</a>
