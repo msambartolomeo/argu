@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.controller.old;
 
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
@@ -18,16 +18,34 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+// TODO: Delete
+@Deprecated
 @Controller
 public class WebController {
+
+    class ModelAndView {
+        public ModelAndView(String hola) {
+        }
+
+        public void addObject(String string, Object object) {
+
+        }
+    }
+
+    class RedirectAttributes {
+        public RedirectAttributes() {
+        }
+
+        public void addFlashAttribute(String string, Object object) {
+
+        }
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebController.class);
     private final UserService userService;

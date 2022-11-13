@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.controller.old;
 
 import ar.edu.itba.paw.model.exceptions.Exception400;
 import ar.edu.itba.paw.model.exceptions.Exception403;
@@ -11,10 +11,29 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
 
+// TODO: Delete
+@Deprecated
 @ControllerAdvice
 public class ErrorController {
+
+    class ModelAndView {
+        public ModelAndView(String hola) {
+        }
+
+        public void addObject(String string, Object object) {
+
+        }
+    }
+
+    class RedirectAttributes {
+        public RedirectAttributes() {
+        }
+
+        public void addFlashAttribute(String string, Object object) {
+
+        }
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ErrorController.class);
     @ExceptionHandler(Exception404.class)

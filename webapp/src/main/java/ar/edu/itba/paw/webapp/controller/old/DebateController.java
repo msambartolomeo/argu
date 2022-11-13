@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.controller.old;
 
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.model.enums.DebateCategory;
@@ -17,8 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -26,9 +24,29 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
+// TODO: Delete
+@Deprecated
 @Controller
 @RequestMapping("/debates")
 public class DebateController {
+
+    class ModelAndView {
+        public ModelAndView(String hola) {
+        }
+
+        public void addObject(String string, Object object) {
+
+        }
+    }
+
+    class RedirectAttributes {
+        public RedirectAttributes() {
+        }
+
+        public void addFlashAttribute(String string, Object object) {
+
+        }
+    }
 
     private final DebateService debateService;
     private final SubscribedService subscribedService;
