@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
@@ -41,17 +43,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().headers().cacheControl().disable()
-                .and().authorizeRequests()
-//                    .antMatchers("/", "/debates", "/user/{username}", "/debates/{\\d+}").permitAll()
-//                    .antMatchers("/login", "/register").anonymous()
-//                    .antMatchers("/create_debate").hasAuthority("MODERATOR")
-//                    .antMatchers("/moderator").hasAuthority("USER")
-//                    .antMatchers("/debates/{\\d+}/**", "/profile", "/profile/**").authenticated()
-                    .antMatchers("/**").permitAll()
-                .and().exceptionHandling()
-                    .accessDeniedPage("/403")
-                .and()/*.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)*/.csrf().disable();
+            .and().headers().cacheControl().disable()
+            .and().authorizeRequests()
+                .antMatchers("/**").permitAll()
+            .and().exceptionHandling()
+                .authenticationEntryPoint((request, response, ex) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))
+            .and()/*.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)*/.csrf().disable();
     }
     @Override
     public void configure(final WebSecurity web) throws Exception {
