@@ -18,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import java.util.concurrent.TimeUnit;
-
 @Configuration
 @EnableWebSecurity
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
@@ -42,8 +40,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        http.sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
 //                    .antMatchers("/", "/debates", "/user/{username}", "/debates/{\\d+}").permitAll()
@@ -54,7 +51,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/**").permitAll()
                 .and().exceptionHandling()
                     .accessDeniedPage("/403")
-                .and().addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class).csrf().disable();
+                .and()/*.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)*/.csrf().disable();
     }
     @Override
     public void configure(final WebSecurity web) throws Exception {
