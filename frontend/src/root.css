@@ -14,3 +14,8 @@
 body {
     background: var(--secondary-color);
 }
+
+.error {
+    color: var(--error) !important;
+    font-size: 12px;
+}
