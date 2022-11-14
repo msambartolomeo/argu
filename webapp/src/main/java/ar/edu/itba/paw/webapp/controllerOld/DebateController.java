@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.old;
+package ar.edu.itba.paw.webapp.controllerOld;
 
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.model.enums.DebateCategory;

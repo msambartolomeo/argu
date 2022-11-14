@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.old;
+package ar.edu.itba.paw.webapp.controllerOld;
 
 import ar.edu.itba.paw.model.exceptions.Exception400;
 import ar.edu.itba.paw.model.exceptions.Exception403;
