@@ -1,0 +1,27 @@
+.search-close {
+    position: absolute;
+    background-color: transparent;
+}
+
+.search-color {
+    background: var(--white);
+}
+
+.search {
+    min-height: 56px;
+    height: inherit;
+}
+
+.search i.material-icons {
+    line-height: 56px;
+}
+
+.search-input {
+    min-height: inherit;
+    height: inherit !important;
+    padding-left: 4rem !important;
+    width: calc(100% - 4rem) !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: white;
+}
