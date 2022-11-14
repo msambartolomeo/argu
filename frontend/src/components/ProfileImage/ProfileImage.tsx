@@ -1,10 +1,11 @@
 import "./ProfileImage.css";
+import defaultProfilePhoto from "../../assets/default-profile-photo.png";
 
 interface ProfileImageProps {
     image?: string;
 }
 
-const ProfileImage = ({ image }: ProfileImageProps) => {
+const ProfileImage = ({ image = defaultProfilePhoto }: ProfileImageProps) => {
     return (
         <>
             <div>
@@ -16,10 +17,6 @@ const ProfileImage = ({ image }: ProfileImageProps) => {
             </div>
         </>
     );
-};
-
-ProfileImage.defaultProps = {
-    image: "/user-profile-default.png",
 };
 
 export default ProfileImage;
