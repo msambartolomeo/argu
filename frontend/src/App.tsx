@@ -7,13 +7,6 @@ import "./App.css";
 
 import { useEffect } from "react";
 import M from "materialize-css";
-import SelectDropdown from "./components/SelectDropdown/SelectDropdown";
-
-const suppliersList: { value: string, label: string }[] = [
-    { value: "supplier1", label: "Supplier 1" },
-    { value: "supplier2", label: "Supplier 2" },
-    { value: "supplier3", label: "Supplier 3" },
-];
 
 function App() {
     useEffect(() => {
@@ -27,7 +20,6 @@ function App() {
                 <p>
                     Edit <code>src/App.tsx</code> and save to reload.
                 </p>
-                <SelectDropdown suppliers={suppliersList} />
                 <a
                     className="App-link"
                     href="https://reactjs.org"

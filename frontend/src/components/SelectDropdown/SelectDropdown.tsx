@@ -3,18 +3,17 @@ import Select, { GroupBase, OptionsOrGroups } from "react-select";
 
 import "./SelectDropdown.css";
 
-// const suppliers = [
-//     { value: "supplier1", label: "Supplier 1" },
-//     { value: "supplier2", label: "Supplier 2" },
-//     { value: "supplier3", label: "Supplier 3" },
-// ];
+interface SelectDropdownProps {
+    suppliers: { value: string; label: string }[];
+}
 
-const SelectDropdown = (suppliers: { value: string, label: string }[]) => {
-
+const SelectDropdown = ({ suppliers }: SelectDropdownProps) => {
     const [seledSupplier, setSelectedSupplier] = useState();
 
-    const handleSelectChange = ({ value }: { string }) => {
-        console.log(value);
+    const handleSelectChange = () => {
+        console.log("value");
+        // const value = event.target.value;
+        // setSelectedSupplier(value);
     };
 
     return (
