@@ -15,12 +15,12 @@ function TextArea({ text, value, error, onChange }: Props) {
                 value={value}
                 onChange={onChange}
                 className={cn({
-                    invalid: error !== null,
+                    invalid: error !== undefined,
                     "materialize-textarea": true,
                 })}
             />
             <label className="active">{text}</label>
-            {error && <span className="helper-text error">error</span>}
+            {error && <span className="helper-text error">{error}</span>}
         </div>
     );
 }
