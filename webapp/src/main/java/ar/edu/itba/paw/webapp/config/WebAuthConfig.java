@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -26,9 +28,10 @@ import javax.servlet.http.HttpServletResponse;
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private Environment env;
-    @Autowired
     private PawUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,11 +48,14 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().headers().cacheControl().disable()
             .and().authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .antMatchers(HttpMethod.DELETE,"/users/{url}").authenticated()
+                .antMatchers(HttpMethod.POST, "/user").anonymous()
+                .antMatchers("/users/{url}").permitAll()
             .and().exceptionHandling()
                 .authenticationEntryPoint((request, response, ex) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))
-            .and()/*.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)*/.csrf().disable();
+            .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).csrf().disable();
     }
+
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring() // Ignore static resources
@@ -61,5 +67,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration cors = new CorsConfiguration();
         cors.addAllowedOrigin("http://localhost:9000");
         return cors;
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 }
