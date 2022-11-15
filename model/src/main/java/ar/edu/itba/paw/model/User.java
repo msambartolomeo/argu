@@ -119,8 +119,15 @@ public class User {
         }
     }
 
-    public String getUrl() throws UnsupportedEncodingException {
-        return URLEncoder.encode(this.username, "UTF-8");
+    public final static String ENCODING = "UTF-8";
+
+    public String getUrl() {
+        try {
+            return URLEncoder.encode(this.username, ENCODING);
+        } catch (UnsupportedEncodingException e) {
+            // NOTE: Should not happen
+            throw new IllegalStateException("Unsupported encoding on user url");
+        }
     }
 
     public int getPoints() {
