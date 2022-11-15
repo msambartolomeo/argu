@@ -3,9 +3,7 @@ package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.model.User;
 
 import javax.ws.rs.core.UriInfo;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
 
 public class UserDto {
 
@@ -22,12 +20,7 @@ public class UserDto {
         dto.email = user.getEmail();
         dto.createdDate = user.getFormattedDate();
 
-        try {
-            dto.self = uriInfo.getAbsolutePathBuilder().replacePath("users").path(URLEncoder.encode(user.getUsername(), "UTF-8")).build();
-        } catch (UnsupportedEncodingException e) {
-            // NOTE: Should not happen
-            throw new IllegalStateException("Unsupported encoding");
-        }
+        dto.self = uriInfo.getAbsolutePathBuilder().replacePath("users").path(user.getUrl()).build();
 
         if (user.getImage() != null) {
             dto.image = uriInfo.getAbsolutePathBuilder().replacePath("images").path(String.valueOf(user.getImage().getId())).build();

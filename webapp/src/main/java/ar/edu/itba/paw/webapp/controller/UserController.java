@@ -16,15 +16,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Optional;
 
 @Path("users")
 @Component
 public class UserController {
-
-    private final static String ENCODING = "UTF-8";
-
     @Autowired
     private UserService userService;
 
@@ -35,7 +31,7 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{url}")
     public Response getUser(@PathParam("url") final String url) throws UnsupportedEncodingException {
-        final String username = URLDecoder.decode(url, ENCODING);
+        final String username = URLDecoder.decode(url, User.ENCODING);
 
         final Optional<UserDto> user = userService.getUserByUsername(username).map(u -> UserDto.fromUser(uriInfo, u));
 
@@ -49,16 +45,16 @@ public class UserController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createUser(@Valid final RegisterForm form) throws UnsupportedEncodingException {
+    public Response createUser(@Valid final RegisterForm form) {
         final User user = userService.create(form.getUsername(), form.getPassword(), form.getEmail(), LocaleContextHolder.getLocale());
 
-        return Response.created(uriInfo.getAbsolutePathBuilder().path(URLEncoder.encode(user.getUsername(), ENCODING)).build()).build();
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(user.getUrl()).build()).build();
     }
 
     @DELETE
     @Path("/{url}")
     public Response deleteUser(@PathParam("url") final String url) throws UnsupportedEncodingException {
-        final String username = URLDecoder.decode(url, ENCODING);
+        final String username = URLDecoder.decode(url, User.ENCODING);
 
         userService.deleteUser(username);
 
