@@ -1,0 +1,21 @@
+.pagination li.active {
+    background-color: var(--primary-color);
+    font-size: initial;
+    transition: 0.3s;
+}
+
+.pagination li.selected-button {
+    background-color: var(--selected-button);
+}
+
+.pagination li.active:hover {
+    background-color: var(--selected-button);
+}
+
+.pagination-margin {
+    margin-bottom: 2%;
+}
+
+.selected-button {
+    background-color: var(--selected-button);
+}
