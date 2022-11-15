@@ -65,7 +65,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfiguration corsConfiguration() {
         CorsConfiguration cors = new CorsConfiguration();
-        cors.addAllowedOrigin("http://localhost:9000");
+        cors.addAllowedOrigin("http://localhost:3000");
         return cors;
     }
 
