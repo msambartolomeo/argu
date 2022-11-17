@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target( {ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ImageExistance {
-    String message() default "No image was send";
+    String message() default "No image was sent";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }
