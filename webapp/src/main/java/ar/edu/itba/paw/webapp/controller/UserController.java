@@ -4,9 +4,8 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
+import ar.edu.itba.paw.webapp.utils.ImageUtils;
 import ar.edu.itba.paw.webapp.validators.Image;
-import ar.edu.itba.paw.webapp.validators.ImageExistance;
-import ar.edu.itba.paw.webapp.validators.ImageSize;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +13,13 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -73,10 +74,15 @@ public class UserController {
     @Path("/image")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     public Response addImage(
-            @Valid @ImageSize @ImageExistance @FormDataParam("image") InputStream image,
-            @Valid @Image @FormDataParam("image") FormDataBodyPart imageDetails,
+            @FormDataParam("image") InputStream imageInput,
+            @Valid @NotNull @Image @FormDataParam("image") FormDataBodyPart imageDetails,
             @FormDataParam("pepe") String pepe
-    ) {
+    ) throws IOException {
+        Response.Status status = ImageUtils.checkError(imageDetails);
+        if (status != null) {
+            return Response.status(status).build();
+        }
+        byte[] image = ImageUtils.getImage(imageInput);
 
         return Response.noContent().build();
     }
