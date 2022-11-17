@@ -26,10 +26,6 @@ public class RegisterForm {
     @Size(max = 100)
     private String password;
 
-    @NotEmpty
-    @Size(max = 100)
-    private String passwordConfirmation;
-
     public String getUsername() {
         return username;
     }
@@ -52,14 +48,6 @@ public class RegisterForm {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPasswordConfirmation() {
-        return passwordConfirmation;
-    }
-
-    public void setPasswordConfirmation(String passwordConfirmation) {
-        this.passwordConfirmation = passwordConfirmation;
     }
 }
 
