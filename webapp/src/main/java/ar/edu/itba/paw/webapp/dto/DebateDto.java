@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.User;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -33,14 +35,17 @@ public class DebateDto {
 
         dto.self = uriInfo.getAbsolutePathBuilder().replacePath("debates").path(String.valueOf(debate.getDebateId())).build();
 
-        if (debate.getImage() != null) {
-            dto.image = uriInfo.getAbsolutePathBuilder().replacePath("images").path(String.valueOf(debate.getImage().getId())).build();
+        Image image = debate.getImage();
+        if (image != null) {
+            dto.image = uriInfo.getAbsolutePathBuilder().replacePath("images").path(String.valueOf(image.getId())).build();
         }
-        if (debate.getCreator() != null) {
-            dto.creator = uriInfo.getAbsolutePathBuilder().replacePath("users").path(debate.getCreator().getUrl()).build();
+        User creator = debate.getCreator();
+        if (creator != null && creator.getUsername() != null) {
+            dto.creator = uriInfo.getAbsolutePathBuilder().replacePath("users").path(creator.getUrl()).build();
         }
-        if (debate.getOpponent() != null) {
-            dto.opponent = uriInfo.getAbsolutePathBuilder().replacePath("users").path(debate.getOpponent().getUrl()).build();
+        User opponent = debate.getOpponent();
+        if (opponent != null && opponent.getUsername() != null) {
+            dto.opponent = uriInfo.getAbsolutePathBuilder().replacePath("users").path(opponent.getUrl()).build();
         }
 
         return dto;
