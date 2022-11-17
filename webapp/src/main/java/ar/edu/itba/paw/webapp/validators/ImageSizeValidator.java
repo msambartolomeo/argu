@@ -4,17 +4,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.io.IOException;
+import java.io.InputStream;
 
-public class ImageSizeValidator implements ConstraintValidator<ImageSize, MultipartFile> {
+public class ImageSizeValidator implements ConstraintValidator<ImageSize, InputStream> {
     @Override
     public void initialize(ImageSize constraintAnnotation) {
 
     }
 
     @Override
-    public boolean isValid(MultipartFile value, ConstraintValidatorContext context) {
-        if (value == null) return false;
-        if (value.isEmpty()) return true;
-        return value.getSize() < 1024*1024*10;
+    public boolean isValid(InputStream value, ConstraintValidatorContext context) {
+        if (value == null) return true;
+        try {
+            return value.available() < 1024*1024*10;
+        } catch (IOException e) {
+            return false;
+        }
     }
 }
