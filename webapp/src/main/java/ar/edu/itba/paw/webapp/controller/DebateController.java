@@ -65,12 +65,8 @@ public class DebateController {
         }
         int totalPages = debateService.getPages(search, finalCategory, finalStatus, finalDate);
 
-        ListDto<DebateDto> list = new ListDto<>(debateList, totalPages);
-
-        return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {})
-                .link(uriInfo.getRequestUriBuilder().replaceQueryParam("page", page - 1).build(), "prev")
-                .link(uriInfo.getRequestUriBuilder().replaceQueryParam("page", page + 1).build(), "next")
-                .build();
+        ListDto<DebateDto> list = ListDto.from(debateList, totalPages, page, uriInfo);
+        return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {}).build();
     }
 
     @GET
