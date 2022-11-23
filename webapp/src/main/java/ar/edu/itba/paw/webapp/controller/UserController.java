@@ -52,7 +52,7 @@ public class UserController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createUser(@Valid final RegisterForm form) {
+    public Response createUser(@Valid @NotNull final RegisterForm form) {
         final User user = userService.create(form.getUsername(), form.getPassword(), form.getEmail(), LocaleContextHolder.getLocale());
 
         return Response.created(uriInfo.getAbsolutePathBuilder().path(user.getUrl()).build()).build();
