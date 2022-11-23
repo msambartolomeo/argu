@@ -24,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
@@ -51,8 +52,9 @@ public class DebateController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getDebates(
             @QueryParam("page") @DefaultValue("0") int page,
+            @Valid @Max(value = 10, message = "Page size exceeded") @QueryParam("size") @DefaultValue("5") int size,
             @QueryParam("search") String search,
-            @QueryParam("category") String category,
+            @Valid @ValidCategory @QueryParam("category") String category,
             @QueryParam("order") String order,
             @QueryParam("status") String status,
             @QueryParam("date") String date
@@ -61,9 +63,6 @@ public class DebateController {
         if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(auxOrder)))
             order = null;
         if (status != null && !status.equals("open") && !status.equals("closed")) status = null;
-        if (category != null && Arrays.stream(DebateCategory.values()).noneMatch((c) -> c.getName().equals(category))) {
-            return Response.noContent().build();
-        }
         if (date != null && !date.matches("\\d{2}-\\d{2}-\\d{4}")) date = null;
 
         final DebateCategory finalCategory = category == null ? null : DebateCategory.valueOf(category.toUpperCase());
@@ -71,13 +70,13 @@ public class DebateController {
         final DebateStatus finalStatus = status == null ? null : DebateStatus.valueOf(status.toUpperCase());
         final LocalDate finalDate = date == null ? null : LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-        final List<DebateDto> debateList = debateService.get(page, search, finalCategory, finalOrder, finalStatus, finalDate)
+        final List<DebateDto> debateList = debateService.get(page, size, search, finalCategory, finalOrder, finalStatus, finalDate)
                 .stream().map(d -> DebateDto.fromDebate(uriInfo, d)).collect(Collectors.toList());
 
         if (debateList.isEmpty()) {
             return Response.noContent().build();
         }
-        int totalPages = debateService.getPages(search, finalCategory, finalStatus, finalDate);
+        int totalPages = debateService.getPages(size, search, finalCategory, finalStatus, finalDate);
 
         ListDto<DebateDto> list = ListDto.from(debateList, totalPages, page, uriInfo);
         return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {}).build();

@@ -13,8 +13,8 @@ public interface DebateService {
     Optional<Debate> getDebateById(long debateId);
     Debate create(String name, String description, String creatorUsername, boolean isCreatorFor, String opponentUsername, byte[] image,
                   DebateCategory category);
-    List<Debate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
-    int getPages(String search, DebateCategory category, DebateStatus status, LocalDate date);
+    List<Debate> get(int page, int size, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
+    int getPages(int size, String search, DebateCategory category, DebateStatus status, LocalDate date);
     List<Debate> getMostSubscribed();
     List<Debate> getProfileDebates(String list, long userId, int page);
     List<Debate> getUserDebates(long userId, int page);
