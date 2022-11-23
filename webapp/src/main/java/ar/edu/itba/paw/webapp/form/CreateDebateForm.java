@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.webapp.validators.ExistingUser;
 import ar.edu.itba.paw.webapp.validators.UserNotSelf;
+import ar.edu.itba.paw.webapp.validators.ValidCategory;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -18,8 +19,9 @@ public class CreateDebateForm {
     @NotEmpty
     private String description;
 
+    @ValidCategory
     @NotNull
-    private DebateCategory category;
+    private String category;
 
     @NotNull
     private boolean isCreatorFor;
@@ -46,11 +48,11 @@ public class CreateDebateForm {
         this.description = description;
     }
 
-    public DebateCategory getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(DebateCategory category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
