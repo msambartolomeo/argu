@@ -167,4 +167,32 @@ public class DebateController {
 
         return Response.noContent().build();
     }
+
+    // TODO: Confirm path
+    @GET
+    @Path("/recommended-debates")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response recommendedDebates(@QueryParam("debateId") final Long id) {
+        if (id == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        final List<Debate> debateList;
+        if (auth != null && auth.getPrincipal() != null) {
+            debateList = debateService.getRecommendedDebates(id, auth.getName());
+        } else {
+            debateList = debateService.getRecommendedDebates(id);
+        }
+        final List<DebateDto> debateDtoList = debateList
+                .stream().map(d -> DebateDto.fromDebate(uriInfo, d)).collect(Collectors.toList());
+
+        if (debateList.isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        ListDto<DebateDto> list = ListDto.from(debateDtoList, 1, 0, uriInfo);
+        return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {}).build();
+    }
 }
