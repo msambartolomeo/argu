@@ -3,9 +3,12 @@ package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.Locale;
 
 public class DebateDto {
 
@@ -22,7 +25,7 @@ public class DebateDto {
     private URI creator;
     private URI opponent;
 
-    public static DebateDto fromDebate(final UriInfo uriInfo, final Debate debate) {
+    public static DebateDto fromDebate(final UriInfo uriInfo, final Debate debate, final MessageSource messageSource, final Locale locale) {
         final DebateDto dto = new DebateDto();
 
         dto.id = debate.getDebateId();
@@ -30,8 +33,8 @@ public class DebateDto {
         dto.description = debate.getDescription();
         dto.isCreatorFor = debate.getIsCreatorFor();
         dto.createdDate = debate.getFormattedDate();
-        dto.category = debate.getCategory().getName();
-        dto.status = debate.getStatus().getName();
+        dto.category = messageSource.getMessage("category." + debate.getCategory().getName(), null, locale);
+        dto.status = messageSource.getMessage("status." + debate.getStatus().getName(), null, locale);
 
         dto.self = uriInfo.getAbsolutePathBuilder().replacePath("debates").path(String.valueOf(debate.getDebateId())).build();
 
