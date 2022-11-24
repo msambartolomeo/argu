@@ -10,6 +10,8 @@ import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -68,23 +70,46 @@ public class UserController {
         return Response.noContent().build();
     }
 
-    // NOTE: Test route
-    // TODO: Add real logic
-    @POST
-    @Path("/image")
+    // TODO: Add route in auth config
+    @PUT
+    @Path("/{url}/image")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
-    public Response addImage(
+    public Response updateImage(
+            @PathParam("url") String url,
             @FormDataParam("image") InputStream imageInput,
-            @Valid @NotNull @Image @FormDataParam("image") FormDataBodyPart imageDetails,
-            @FormDataParam("pepe") String pepe
+            @Valid @NotNull @Image @FormDataParam("image") FormDataBodyPart imageDetails
     ) throws IOException {
+        final String username = URLDecoder.decode(url, User.ENCODING);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!username.equals(auth.getName())) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
         Response.Status status = ImageUtils.checkError(imageDetails);
         if (status != null) {
             return Response.status(status).build();
         }
         byte[] image = ImageUtils.getImage(imageInput);
 
-        return Response.noContent().build();
+        User user = userService.updateImage(username, image);
+
+        return Response.created(uriInfo.getAbsolutePathBuilder().replacePath("images")
+                .path(String.valueOf(user.getImage().getId())).build()).build();
     }
 
+    @DELETE
+    @Path("/{url}/image")
+    public Response removeImage(@PathParam("url") String url) throws UnsupportedEncodingException {
+        final String username = URLDecoder.decode(url, User.ENCODING);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!username.equals(auth.getName())) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        userService.deleteImage(username);
+
+        return Response.noContent().build();
+    }
 }

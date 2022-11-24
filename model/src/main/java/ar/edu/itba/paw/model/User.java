@@ -96,6 +96,10 @@ public class User {
         this.image = new Image(data);
     }
 
+    public void deleteImage() {
+        this.image = null;
+    }
+
     public User updateLegacyUser(String username, String password) {
         this.username = username;
         this.password = password;
