@@ -112,12 +112,12 @@ public class ChatServiceImplTest {
 
     @Test(expected = DebateNotFoundException.class)
     public void testGetDebateChatNoDebate() {
-        chatService.getDebateChat(DEBATE_ID, VALID_PAGE);
+        chatService.getDebateChat(DEBATE_ID, VALID_PAGE, 15);
     }
 
     @Test
     public void testGetDebateChatInvalidPage() {
-        List<Chat> c = chatService.getDebateChat(DEBATE_ID, INVALID_PAGE);
+        List<Chat> c = chatService.getDebateChat(DEBATE_ID, INVALID_PAGE, 15);
 
         assertTrue(c.isEmpty());
     }
@@ -127,9 +127,9 @@ public class ChatServiceImplTest {
         List<Chat> chats = new ArrayList<>();
         chats.add(new Chat(user, debate, MESSAGE));
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
-        when(chatDao.getDebateChat(any(Debate.class), anyInt())).thenReturn(chats);
+        when(chatDao.getDebateChat(any(Debate.class), anyInt(), anyInt())).thenReturn(chats);
 
-        List<Chat> c = chatService.getDebateChat(DEBATE_ID, VALID_PAGE);
+        List<Chat> c = chatService.getDebateChat(DEBATE_ID, VALID_PAGE, 15);
 
         assertFalse(c.isEmpty());
 
@@ -142,7 +142,7 @@ public class ChatServiceImplTest {
         int expectedPageCount = 4;
         when(chatDao.getDebateChatsCount(anyLong())).thenReturn(postCount);
 
-        int pc = chatService.getDebateChatPageCount(DEBATE_ID);
+        int pc = chatService.getDebateChatPageCount(DEBATE_ID, 15);
 
         assertEquals(expectedPageCount, pc);
     }
@@ -153,7 +153,7 @@ public class ChatServiceImplTest {
         int expectedPageCount = 0;
         when(chatDao.getDebateChatsCount(anyLong())).thenReturn(postCount);
 
-        int pc = chatService.getDebateChatPageCount(DEBATE_ID);
+        int pc = chatService.getDebateChatPageCount(DEBATE_ID, 15);
 
         assertEquals(expectedPageCount, pc);
     }

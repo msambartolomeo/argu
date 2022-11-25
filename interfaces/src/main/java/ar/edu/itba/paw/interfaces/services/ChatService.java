@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ChatService {
     Chat create(String username, long debateId, String message);
-    List<Chat> getDebateChat(long debateId, int page);
-    int getDebateChatPageCount(long debateId);
+    List<Chat> getDebateChat(long debateId, int page, int size);
+    int getDebateChatPageCount(long debateId, int size);
 }

@@ -68,7 +68,7 @@ public class ChatJpaDaoTest {
 
     @Test
     public void testGetDebateChatDoesntExist() {
-        List<Chat> chats = chatJpaDao.getDebateChat(debate, PAGE);
+        List<Chat> chats = chatJpaDao.getDebateChat(debate, PAGE, 15);
 
         assertTrue(chats.isEmpty());
     }
@@ -78,7 +78,7 @@ public class ChatJpaDaoTest {
         Chat chat = new Chat(user, debate, MESSAGE);
         em.persist(chat);
 
-        List<Chat> chats = chatJpaDao.getDebateChat(debate, PAGE);
+        List<Chat> chats = chatJpaDao.getDebateChat(debate, PAGE, 15);
 
         assertFalse(chats.isEmpty());
         assertEquals(1, chats.size());
