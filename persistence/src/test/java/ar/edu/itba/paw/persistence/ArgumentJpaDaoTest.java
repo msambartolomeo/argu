@@ -123,7 +123,7 @@ public class ArgumentJpaDaoTest {
 
     @Test
     public void getArgumentsByDebateDoesntExist() {
-        List<Argument> arguments = argumentJpaDao.getArgumentsByDebate(debate, PAGE);
+        List<Argument> arguments = argumentJpaDao.getArgumentsByDebate(debate, PAGE, 5);
 
         assertTrue(arguments.isEmpty());
     }
@@ -133,7 +133,7 @@ public class ArgumentJpaDaoTest {
         Argument argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
         em.persist(argument);
 
-        List<Argument> arguments = argumentJpaDao.getArgumentsByDebate(debate, PAGE);
+        List<Argument> arguments = argumentJpaDao.getArgumentsByDebate(debate, PAGE, 5);
 
         assertFalse(arguments.isEmpty());
         assertEquals(1, arguments.size());

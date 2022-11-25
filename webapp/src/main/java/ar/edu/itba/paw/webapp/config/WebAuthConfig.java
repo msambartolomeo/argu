@@ -56,7 +56,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/debates").hasAuthority("MODERATOR")
                 .antMatchers(HttpMethod.PATCH, "/debates/{\\d+}").authenticated()
                 // general
-                .antMatchers("/users/{url}", "/debates/{\\d+}", "/debates", "/debates/recommended-debates").permitAll()
+                .antMatchers(HttpMethod.GET, "/users/{url}", "/debates/**").permitAll()
                 .anyRequest().denyAll()
             .and().exceptionHandling()
                 .accessDeniedHandler((request, response, ex) -> response.setStatus(HttpServletResponse.SC_FORBIDDEN))

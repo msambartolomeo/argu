@@ -105,9 +105,9 @@ public class ArgumentServiceImplTest {
         arguments.add(new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT));
 
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
-        when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt())).thenReturn(arguments);
+        when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt(), anyInt())).thenReturn(arguments);
 
-        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, VALID_PAGE);
+        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, VALID_PAGE, 5);
 
         assertFalse(a.isEmpty());
 
@@ -120,19 +120,19 @@ public class ArgumentServiceImplTest {
     public void testGetArgumentsByDebateNotFound() {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, VALID_PAGE);
+        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, VALID_PAGE, 5);
 
         assertTrue(a.isEmpty());
     }
 
     @Test(expected = DebateNotFoundException.class)
     public void testGetArgumentsByDebateDebateNotFound() {
-        argumentService.getArgumentsByDebate(ID, null, VALID_PAGE);
+        argumentService.getArgumentsByDebate(ID, null, VALID_PAGE, 5);
     }
 
     @Test
     public void testGetArgumentsByDebateNotValidPage() {
-        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, NOT_VALID_PAGE);
+        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, NOT_VALID_PAGE, 5);
 
         assertTrue(a.isEmpty());
     }
@@ -145,9 +145,9 @@ public class ArgumentServiceImplTest {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
         when(likeService.isLiked(any(User.class), any(Argument.class))).thenReturn(true);
-        when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt())).thenReturn(arguments);
+        when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt(), anyInt())).thenReturn(arguments);
 
-        List<Argument> a = argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE);
+        List<Argument> a = argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE, 5);
 
         assertFalse(a.isEmpty());
 
@@ -161,7 +161,7 @@ public class ArgumentServiceImplTest {
     public void testGetArgumentsByDebateWithUserLikeNotValidUser() {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE);
+        argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE, 5);
     }
 
     @Test(expected = DebateNotFoundException.class)
@@ -227,7 +227,7 @@ public class ArgumentServiceImplTest {
         int expectedPageCount = 10;
         when(argumentDao.getArgumentsByDebateCount(anyLong())).thenReturn(argumentCount);
 
-        int pc = argumentService.getArgumentByDebatePageCount(ID);
+        int pc = argumentService.getArgumentByDebatePageCount(ID, 5);
 
         assertEquals(expectedPageCount, pc);
     }
@@ -238,7 +238,7 @@ public class ArgumentServiceImplTest {
         int expectedPageCount = 0;
         when(argumentDao.getArgumentsByDebateCount(anyLong())).thenReturn(argumentCount);
 
-        int pc = argumentService.getArgumentByDebatePageCount(ID);
+        int pc = argumentService.getArgumentByDebatePageCount(ID, 5);
 
         assertEquals(expectedPageCount, pc);
     }
