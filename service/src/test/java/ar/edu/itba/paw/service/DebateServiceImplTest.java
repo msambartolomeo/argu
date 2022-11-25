@@ -152,7 +152,7 @@ public class DebateServiceImplTest {
         when(debateDao.getDebatesDiscovery(anyInt(), anyInt(), any(), any(), any(), any(), any()))
                 .thenReturn(debates);
 
-        List<Debate> dl = debateService.get(VALID_PAGE, null, null, null, null, null);
+        List<Debate> dl = debateService.get(VALID_PAGE, 5, null, null, null, null, null);
 
         assertFalse(dl.isEmpty());
         assertEquals(debate.getName(), dl.get(0).getName());
@@ -172,14 +172,14 @@ public class DebateServiceImplTest {
 
     @Test
     public void testGetDebatesEmpty() {
-        List<Debate> dl = debateService.get(VALID_PAGE, null, null, null, null, null);
+        List<Debate> dl = debateService.get(VALID_PAGE, 5, null, null, null, null, null);
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
     public void testGetDebatesInvalidPage() {
-        List<Debate> dl = debateService.get(INVALID_PAGE, null, null, null, null, null);
+        List<Debate> dl = debateService.get(INVALID_PAGE, 5, null, null, null, null, null);
 
         assertTrue(dl.isEmpty());
     }
@@ -223,7 +223,7 @@ public class DebateServiceImplTest {
         when(debateDao.getDebatesCount(any(), any(), any(), any()))
                 .thenReturn(argumentCount);
 
-        int pc = debateService.getPages(null, null, null, null);
+        int pc = debateService.getPages(5,null, null, null, null);
 
         assertEquals(expectedPageCount, pc);
     }
@@ -234,7 +234,7 @@ public class DebateServiceImplTest {
         int expectedPageCount = 0;
         when(debateDao.getDebatesCount(any(), any(), any(), any())).thenReturn(argumentCount);
 
-        int pc = debateService.getPages(null, null, null, null);
+        int pc = debateService.getPages(5, null, null, null, null);
 
         assertEquals(expectedPageCount, pc);
     }

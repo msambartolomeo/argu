@@ -48,10 +48,18 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().headers().cacheControl().disable()
             .and().authorizeRequests()
+                // users
                 .antMatchers(HttpMethod.DELETE,"/users/{url}").authenticated()
-                .antMatchers(HttpMethod.POST, "/user").anonymous()
-                .antMatchers("/users/{url}").permitAll()
+                .antMatchers(HttpMethod.POST, "/users").anonymous()
+                // debate
+                .antMatchers(HttpMethod.DELETE, "/debates/{\\d+}").hasAuthority("MODERATOR")
+                .antMatchers(HttpMethod.POST, "/debates").hasAuthority("MODERATOR")
+                .antMatchers(HttpMethod.PATCH, "/debates/{\\d+}").authenticated()
+                // general
+                .antMatchers("/users/{url}", "/debates/{\\d+}", "/debates", "/debates/recommended-debates").permitAll()
+                .anyRequest().denyAll()
             .and().exceptionHandling()
+                .accessDeniedHandler((request, response, ex) -> response.setStatus(HttpServletResponse.SC_FORBIDDEN))
                 .authenticationEntryPoint((request, response, ex) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))
             .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).csrf().disable();
     }

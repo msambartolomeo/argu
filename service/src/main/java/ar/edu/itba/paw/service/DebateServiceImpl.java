@@ -71,15 +71,15 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     @Transactional
-    public List<Debate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
-        if (page < 0)
+    public List<Debate> get(int page, int size, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date) {
+        if (page < 0 || size <= 0)
             return Collections.emptyList();
-        return debateDao.getDebatesDiscovery(page, PAGE_SIZE, search, category, order, status, date);
+        return debateDao.getDebatesDiscovery(page, size, search, category, order, status, date);
     }
 
     @Override
-    public int getPages(String search, DebateCategory category, DebateStatus status, LocalDate date) {
-        return (int) Math.ceil(debateDao.getDebatesCount(search, category, status, date) / (double) PAGE_SIZE);
+    public int getPages(int size, String search, DebateCategory category, DebateStatus status, LocalDate date) {
+        return (int) Math.ceil(debateDao.getDebatesCount(search, category, status, date) / (double) size);
     }
 
     @Override
