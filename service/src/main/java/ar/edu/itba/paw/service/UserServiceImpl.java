@@ -86,6 +86,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User deleteImage(String username) {
+        User user = getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot update image for user {} because it does not exist", username);
+            return new UserNotFoundException();
+        });
+
+        Image image = null;
+        if (user.getImage() != null)
+            image = user.getImage();
+
+        user.deleteImage();
+
+        if (image != null) imageService.deleteImage(image);
+
+        return user;
+    }
+
+    @Override
     public void requestModerator(String username, String reason) {
         emailService.sendEmailSelf("New user moderator request for " + username, "reason for request: " + reason);
     }
