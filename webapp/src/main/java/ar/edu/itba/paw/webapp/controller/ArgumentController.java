@@ -67,7 +67,14 @@ public class ArgumentController {
         }
         int totalPages = argumentService.getArgumentByDebatePageCount(debateId, size);
 
-        ListDto<ArgumentDto> list = ListDto.from(argumentList, totalPages, page, uriInfo);
+        final Optional<Argument> lastArgument = argumentService.getLastArgument(debateId);
+
+        final ListDto<ArgumentDto> list;
+        if (lastArgument.isPresent()) {
+            list = ListDto.from(argumentList, totalPages, page, uriInfo, lastArgument.get().getArgumentId());
+        } else {
+            list = ListDto.from(argumentList, totalPages, page, uriInfo);
+        }
         return Response.ok(new GenericEntity<ListDto<ArgumentDto>>(list) {}).build();
     }
 

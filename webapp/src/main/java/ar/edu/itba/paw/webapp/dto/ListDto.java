@@ -10,6 +10,15 @@ public class ListDto<T> {
 
     private URI prev;
     private URI next;
+    private URI last;
+
+    public static <T> ListDto<T> from(List<T> list, int totalPages, int page, UriInfo uriInfo, long lastId) {
+        ListDto<T> dto = from(list, totalPages, page, uriInfo);
+
+        dto.last = uriInfo.getAbsolutePathBuilder().path(String.valueOf(lastId)).build();
+
+        return dto;
+    }
 
     public static <T> ListDto<T> from(List<T> list, int totalPages, int page, UriInfo uriInfo) {
         ListDto<T> dto = new ListDto<>();
@@ -58,5 +67,13 @@ public class ListDto<T> {
 
     public void setNext(URI next) {
         this.next = next;
+    }
+
+    public URI getLast() {
+        return last;
+    }
+
+    public void setLast(URI last) {
+        this.last = last;
     }
 }
