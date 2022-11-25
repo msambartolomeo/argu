@@ -8,7 +8,7 @@ interface ProfileImageProps {
 const ProfileImage = ({ image = defaultProfilePhoto }: ProfileImageProps) => {
     return (
         <>
-            <div>
+            <div className="profile-image">
                 <img
                     src={image}
                     alt="profile photo"
