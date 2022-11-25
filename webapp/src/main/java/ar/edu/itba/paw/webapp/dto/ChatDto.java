@@ -35,4 +35,44 @@ public class ChatDto {
 
         return dto;
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public URI getSelf() {
+        return self;
+    }
+
+    public void setSelf(URI self) {
+        this.self = self;
+    }
+
+    public URI getCreator() {
+        return creator;
+    }
+
+    public void setCreator(URI creator) {
+        this.creator = creator;
+    }
+
+    public URI getDebate() {
+        return debate;
+    }
+
+    public void setDebate(URI debate) {
+        this.debate = debate;
+    }
 }
