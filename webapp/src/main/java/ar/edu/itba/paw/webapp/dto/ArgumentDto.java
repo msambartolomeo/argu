@@ -17,6 +17,7 @@ public class ArgumentDto {
     private String status;
     private int likes;
     private boolean likedByUser;
+    private boolean deleted;
 
     private URI self;
     private URI creator;
@@ -31,6 +32,7 @@ public class ArgumentDto {
         dto.status = messageSource.getMessage("status." + argument.getStatus().getName(), null, locale);
         dto.likes = argument.getLikesCount();
         dto.likedByUser = argument.isLikedByUser();
+        dto.deleted = argument.getDeleted();
 
         dto.self = uriInfo.getAbsolutePathBuilder().replacePath("arguments").path(String.valueOf(argument.getArgumentId())).build();
 
@@ -120,5 +122,13 @@ public class ArgumentDto {
 
     public void setImage(URI image) {
         this.image = image;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
