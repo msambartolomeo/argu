@@ -46,7 +46,7 @@ public class ArgumentDto {
         }
         Debate debate = argument.getDebate();
         if (debate != null) {
-            dto.debate = uriInfo.getAbsolutePathBuilder().replacePath("users").path(String.valueOf(debate.getDebateId())).build();
+            dto.debate = uriInfo.getAbsolutePathBuilder().replacePath("debates").path(String.valueOf(debate.getDebateId())).build();
         }
 
         return dto;
