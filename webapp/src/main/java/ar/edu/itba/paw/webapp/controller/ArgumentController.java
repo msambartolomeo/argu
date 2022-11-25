@@ -1,20 +1,31 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.ArgumentService;
+import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.webapp.dto.ArgumentDto;
 import ar.edu.itba.paw.webapp.dto.ListDto;
+import ar.edu.itba.paw.webapp.utils.ImageUtils;
+import ar.edu.itba.paw.webapp.validators.Image;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("/debates/{debateId}/arguments")
@@ -58,5 +69,65 @@ public class ArgumentController {
 
         ListDto<ArgumentDto> list = ListDto.from(argumentList, totalPages, page, uriInfo);
         return Response.ok(new GenericEntity<ListDto<ArgumentDto>>(list) {}).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getArgument(@PathParam("id") final long id) {
+        final Optional<ArgumentDto> argument = argumentService.getArgumentById(id)
+                .map(a -> ArgumentDto.fromArgument(uriInfo, a, messageSource, request.getLocale()));
+
+        if (argument.isPresent()) {
+            return Response.ok(argument).build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createArgument(@Valid @NotEmpty final String content) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        final Argument argument = argumentService.create(auth.getName(), debateId, content, new byte[0]);
+
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(argument.getArgumentId())).build()).build();
+    }
+
+    @POST
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    public Response createArgumentWithImage(
+            @FormDataParam("image") final InputStream imageInput,
+            @Valid @Image @FormDataParam("image") final FormDataBodyPart imageDetails,
+            @Valid @NotEmpty final String content
+    ) throws IOException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        // TODO: handle status with exceptions for cleaner code
+        final byte[] image;
+        if (imageInput == null) {
+            image = new byte[0];
+        } else {
+            Response.Status status = ImageUtils.checkError(imageDetails);
+            if (status != null) {
+                return Response.status(status).build();
+            }
+            image = ImageUtils.getImage(imageInput);
+        }
+
+        final Argument argument = argumentService.create(auth.getName(), debateId, content, image);
+
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(argument.getArgumentId())).build()).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteArgument(@PathParam("id") final long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        argumentService.deleteArgument(id, auth.getName());
+
+        return Response.noContent().build();
     }
 }
