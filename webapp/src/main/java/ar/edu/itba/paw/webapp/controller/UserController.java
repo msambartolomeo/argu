@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -35,6 +36,8 @@ public class UserController {
 
     @Context
     private UriInfo uriInfo;
+    @Context
+    private HttpServletRequest request;
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -54,8 +57,8 @@ public class UserController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createUser(@Valid final RegisterForm form) {
-        final User user = userService.create(form.getUsername(), form.getPassword(), form.getEmail(), LocaleContextHolder.getLocale());
+    public Response createUser(@Valid @NotNull final RegisterForm form) {
+        final User user = userService.create(form.getUsername(), form.getPassword(), form.getEmail(), request.getLocale());
 
         return Response.created(uriInfo.getAbsolutePathBuilder().path(user.getUrl()).build()).build();
     }

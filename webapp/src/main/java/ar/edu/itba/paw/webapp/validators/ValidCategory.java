@@ -7,11 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = ExistingUserValidator.class)
+@Constraint(validatedBy = ValidCategoryValidator.class)
 @Target( {ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExistingUser {
-    String message() default "The selected user does not exist";
+public @interface ValidCategory {
+    String message() default "The selected category does not exist";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }
