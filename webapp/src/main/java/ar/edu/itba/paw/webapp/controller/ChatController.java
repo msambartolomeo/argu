@@ -1,12 +1,17 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.ChatService;
+import ar.edu.itba.paw.model.Chat;
 import ar.edu.itba.paw.webapp.dto.ChatDto;
 import ar.edu.itba.paw.webapp.dto.ListDto;
+import ar.edu.itba.paw.webapp.form.ChatForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
@@ -41,5 +46,16 @@ public class ChatController {
         final ListDto<ChatDto> list = ListDto.from(chatList, totalPages, page, uriInfo);
 
         return Response.ok(new GenericEntity<ListDto<ChatDto>>(list) {}).build();
+    }
+
+    // TODO: Add to auth config
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createChat(@Valid @NotNull final ChatForm form) {
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        chatService.create(auth.getName(), debateId, form.getMessage());
+
+        return Response.status(Response.Status.CREATED).build();
     }
 }
