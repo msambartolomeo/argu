@@ -53,7 +53,7 @@ public class ArgumentController {
     ) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username;
-        if (auth != null && auth.getPrincipal() != null) {
+        if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
             username = auth.getName();
         } else {
             username = null;
