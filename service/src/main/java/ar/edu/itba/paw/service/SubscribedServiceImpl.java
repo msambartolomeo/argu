@@ -8,6 +8,7 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Subscribed;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
+import ar.edu.itba.paw.model.exceptions.ForbiddenSubscriptionException;
 import ar.edu.itba.paw.model.exceptions.UserAlreadySubscribedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
@@ -36,8 +37,7 @@ public class SubscribedServiceImpl implements SubscribedService {
     public Subscribed subscribeToDebate(String username, long debateId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!username.equals(auth.getName())) {
-            // TODO: create exception
-            throw new RuntimeException();
+            throw new ForbiddenSubscriptionException();
         }
 
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
@@ -66,8 +66,7 @@ public class SubscribedServiceImpl implements SubscribedService {
     public boolean unsubscribeToDebate(String username, long debateId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!username.equals(auth.getName())) {
-            // TODO: create exception
-            throw new RuntimeException();
+            throw new ForbiddenSubscriptionException();
         }
 
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
@@ -95,16 +94,16 @@ public class SubscribedServiceImpl implements SubscribedService {
 
     @Override
     public boolean isUserSubscribed(String username, long debateId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            // TODO: create exception
-            throw new RuntimeException();
-        }
         return getSubscribed(username, debateId).isPresent();
     }
 
     @Override
     public Optional<Subscribed> getSubscribed(String username, long debateId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenSubscriptionException();
+        }
+
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot get subscription to debate {} because user {} does not exist", debateId, username);
             return new UserNotFoundException();
