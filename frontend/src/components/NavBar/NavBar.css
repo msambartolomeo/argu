@@ -1,0 +1,63 @@
+:root {
+    --primary-color: #212D40;
+    --secondary-color: #D66853;
+    --white: white;
+    --badge-color: #364156;
+    --error: red;
+    --champagne-pink: #f1ddcf;
+    --charcoal: #364156;
+    --selected-button: #4076bd;
+    --forColor: #abcbe5;
+    --againstColor: var(--champagne-pink);
+    --text-color: var(--white);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--primary-color);
+    padding: 20px 80px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+}
+
+nav a img {
+    height: 50px;
+    margin-top: 25px;
+}
+
+#navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#navbar li {
+    list-style: none;
+    padding: 0 20px;
+    position: relative;
+}
+
+#navbar li a {
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-color);
+    transition: 0.3s ease-in-out;
+}
+
+#navbar li a:hover,
+#navbar li a.active {
+    color: var(--secondary-color);
+}
+
+#navbar li a:hover::after,
+#navbar li a.active::after {
+    content: "";
+    width: 30%;
+    height: 2px;
+    background: var(--secondary-color);
+    position: absolute;
+    bottom: -4px;
+    left: 20px;
+}
