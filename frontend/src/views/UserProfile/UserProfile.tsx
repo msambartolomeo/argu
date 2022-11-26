@@ -1,10 +1,14 @@
+import { useState } from "react";
 import "./UserProfile.css";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import EditProfileImageDialog from "../../components/EditProfileImageDialog/EditProfileImageDialog";
 
 const UserProfile = () => {
-    const debates: string[] = [];
+    const [debates, setDebates] = useState<string[]>([]);
+
+    // TODO: useEffect to change debates shown
+
     return (
         <div className="profile-container">
             <div className="card profile-data">
