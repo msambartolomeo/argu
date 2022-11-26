@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface VoteService {
     Vote addVote(long debateId, String username, DebateVote vote);
     Optional<Vote> getVote(long debateId, String username);
-    void removeVote(long debateId, String username);
+    boolean removeVote(long debateId, String username);
 }
