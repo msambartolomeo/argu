@@ -15,6 +15,6 @@ public class ValidVoteValidator implements ConstraintValidator<ValidVote, String
 
     @Override
     public boolean isValid(String vote, ConstraintValidatorContext context) {
-        return vote == null || Arrays.stream(DebateVote.values()).anyMatch((v) -> v.getName().equals(vote));
+        return vote == null || Arrays.stream(DebateVote.values()).anyMatch((v) -> v.getName().equals(vote.toLowerCase()));
     }
 }

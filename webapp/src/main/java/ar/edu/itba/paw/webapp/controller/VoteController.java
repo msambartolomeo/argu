@@ -49,9 +49,9 @@ public class VoteController {
 
         if (voteService.removeVote(debateId, username)) {
             return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @GET
