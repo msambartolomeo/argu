@@ -41,9 +41,9 @@ public class LikeController {
 
         if (likeService.unlikeArgument(argumentId, username)) {
             return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @GET
@@ -54,9 +54,8 @@ public class LikeController {
 
         if (likeService.isLiked(argumentId, username)) {
             return Response.ok().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
         }
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
 }

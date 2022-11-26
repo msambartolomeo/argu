@@ -96,9 +96,8 @@ public class LikeServiceImpl implements LikeService {
             }
             likeDao.unlikeArgument(like.get());
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override
