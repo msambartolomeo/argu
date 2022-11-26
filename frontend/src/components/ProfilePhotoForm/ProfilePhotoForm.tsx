@@ -3,6 +3,8 @@ const ProfilePhotoForm = () => {
         console.log("Confirm submition of profile photo");
     }
 
+    // TODO: Add error handling
+
     return (
         <form
             id="photoForm"

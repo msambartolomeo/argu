@@ -3,6 +3,7 @@ import "./UserProfile.css";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import EditProfileImageDialog from "../../components/EditProfileImageDialog/EditProfileImageDialog";
+import DeleteAccountModal from "../../components/DeleteAccountModal/DeleteAccountModal";
 
 const UserProfile = () => {
     const [debates, setDebates] = useState<string[]>([]);
@@ -31,6 +32,7 @@ const UserProfile = () => {
                     <i className="material-icons left">logout</i>
                     Logout
                 </a>
+                <DeleteAccountModal />
             </div>
             <div className="debates-column">
                 <div className="section">
