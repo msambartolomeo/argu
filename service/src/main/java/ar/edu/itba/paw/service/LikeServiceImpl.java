@@ -7,13 +7,12 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.model.Like;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenArgumentException;
-import ar.edu.itba.paw.model.exceptions.UserAlreadyLikedException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,13 +37,18 @@ public class LikeServiceImpl implements LikeService {
     @Override
     @Transactional
     public Like likeArgument(long argumentId, String username) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenLikeException();
+        }
+
         Argument argument = argumentService.getArgumentById(argumentId).orElseThrow(() -> {
             LOGGER.error("Cannot like argument {} because it does not exist", argumentId);
             return new ArgumentNotFoundException();
         });
         if(argument.getDeleted()) {
             LOGGER.error("Cannot like argument {} because it is deleted", argumentId);
-            throw new ForbiddenArgumentException();
+            throw new ArgumentAlreadyDeletedException();
         }
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot like argument {} because user {} does not exist", argumentId, username);
@@ -65,28 +69,55 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     @Transactional
-    public void unlikeArgument(long argumentId, String username) {
+    public boolean unlikeArgument(long argumentId, String username) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenLikeException();
+        }
+
         Argument argument = argumentService.getArgumentById(argumentId).orElseThrow(() -> {
             LOGGER.error("Cannot unlike argument {} because it does not exist", argumentId);
             return new ArgumentNotFoundException();
         });
         if(argument.getDeleted()) {
             LOGGER.error("Cannot unlike argument {} because it is deleted", argumentId);
-            throw new ForbiddenArgumentException();
+            throw new ArgumentAlreadyDeletedException();
         }
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot unlike argument {} because user {} does not exist", argumentId, username);
             return new UserNotFoundException();
         });
 
-
-        likeDao.getLike(user, argument).ifPresent(l -> {
+        final Optional<Like> like = likeDao.getLike(user, argument);
+        if(like.isPresent()) {
             User creator = argument.getUser();
             if(!creator.equals(user)) {
                 creator.removeLikePoints();
             }
-            likeDao.unlikeArgument(l);
+            likeDao.unlikeArgument(like.get());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isLiked(long argumentId, String username) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenLikeException();
+        }
+
+        User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot unlike argument {} because user {} does not exist", argumentId, username);
+            return new UserNotFoundException();
         });
+        Argument argument = argumentService.getArgumentById(argumentId).orElseThrow(() -> {
+            LOGGER.error("Cannot like argument {} because it does not exist", argumentId);
+            return new ArgumentNotFoundException();
+        });
+
+        return isLiked(user, argument);
     }
 
     @Override
