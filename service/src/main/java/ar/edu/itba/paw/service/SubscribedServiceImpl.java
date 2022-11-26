@@ -87,9 +87,8 @@ public class SubscribedServiceImpl implements SubscribedService {
             }
             subscribedDao.unsubscribe(subscribed.get());
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override

@@ -42,9 +42,9 @@ public class SubscriptionController {
 
         if (subscribedService.unsubscribeToDebate(username, debateId)) {
             return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @GET
@@ -55,8 +55,8 @@ public class SubscriptionController {
 
         if (subscribedService.isUserSubscribed(username, debateId)) {
             return Response.ok().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 }
