@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -22,9 +20,6 @@ public class SubscriptionController {
 
     @Autowired
     private SubscribedService subscribedService;
-
-    @Context
-    private UriInfo uriInfo;
 
     // TODO: ask query string for username instead of body or not sending at all
     // FIXME: Add auth guards
