@@ -4,7 +4,6 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -19,6 +18,9 @@ public class DebateDto {
     private String createdDate;
     private String category;
     private String status;
+    private int subscriptions;
+    private int votesFor;
+    private int votesAgainst;
 
     private URI self;
     private URI image;
@@ -35,6 +37,9 @@ public class DebateDto {
         dto.createdDate = debate.getFormattedDate();
         dto.category = messageSource.getMessage("category." + debate.getCategory().getName(), null, locale);
         dto.status = messageSource.getMessage("status." + debate.getStatus().getName(), null, locale);
+        dto.subscriptions = debate.getSubscribedUsersCount();
+        dto.votesFor = debate.getForCount();
+        dto.votesAgainst = debate.getAgainstCount();
 
         dto.self = uriInfo.getAbsolutePathBuilder().replacePath("debates").path(String.valueOf(debate.getDebateId())).build();
 
@@ -140,5 +145,29 @@ public class DebateDto {
 
     public void setOpponent(URI opponent) {
         this.opponent = opponent;
+    }
+
+    public int getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(int subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    public int getVotesFor() {
+        return votesFor;
+    }
+
+    public void setVotesFor(int votesFor) {
+        this.votesFor = votesFor;
+    }
+
+    public int getVotesAgainst() {
+        return votesAgainst;
+    }
+
+    public void setVotesAgainst(int votesAgainst) {
+        this.votesAgainst = votesAgainst;
     }
 }
