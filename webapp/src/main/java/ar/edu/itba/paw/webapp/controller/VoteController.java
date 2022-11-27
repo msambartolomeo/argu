@@ -55,7 +55,7 @@ public class VoteController {
     }
 
     @GET
-    public Response getSubscription(
+    public Response getVote(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
