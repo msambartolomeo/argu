@@ -1,5 +1,8 @@
+import Debate from "../../types/Debate";
+import DebateListItem from "../DebateListItem/DebateListItem";
+
 interface DebatesListProps {
-    debates: string[];
+    debates: Debate[];
 }
 
 const DebatesList = ({ debates }: DebatesListProps) => {
@@ -9,9 +12,9 @@ const DebatesList = ({ debates }: DebatesListProps) => {
     return (
         <>
             {/* TODO: Crear clase debate */}
-            {debates.map((debate: string) => (
-                <div className="list-item" key={debate}>
-                    <div>Item</div>
+            {debates.map((debate: Debate) => (
+                <div className="list-item" key={debate.id}>
+                    <DebateListItem debate={debate} />
                 </div>
             ))}
         </>

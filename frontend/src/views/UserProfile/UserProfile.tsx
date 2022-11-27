@@ -4,9 +4,28 @@ import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import EditProfileImageDialog from "../../components/EditProfileImageDialog/EditProfileImageDialog";
 import DeleteAccountModal from "../../components/DeleteAccountModal/DeleteAccountModal";
+import Debate from "../../types/Debate";
 
 const UserProfile = () => {
-    const [debates, setDebates] = useState<string[]>([]);
+    const aux: Debate = {
+        id: 1,
+        name: "Debate 1",
+        description: "Description 1",
+        isCreatorFor: true,
+        category: "Category 1",
+        createdDate: "2021-01-01",
+        status: "Status 1",
+        subscriptions: 1,
+        votesFor: 0,
+        votesAgainst: 0,
+        creator: {
+            username: "User 1",
+            email: "user1@mail.com",
+            createdDate: "2021-01-01",
+        },
+    };
+    const [debates, setDebates] = useState<Debate[]>([aux]);
+    // setDebates([aux]);
 
     // TODO: useEffect to change debates shown
 
