@@ -92,11 +92,7 @@ public class UserController {
             throw new ForbiddenUserException();
         }
 
-        Response.Status status = ImageUtils.checkError(imageDetails);
-        if (status != null) {
-            return Response.status(status).build();
-        }
-        byte[] image = ImageUtils.getImage(imageInput);
+        byte[] image = ImageUtils.getImage(imageDetails, imageInput);
 
         User user = userService.updateImage(username, image);
 

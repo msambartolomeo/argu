@@ -110,17 +110,7 @@ public class ArgumentController {
     ) throws IOException {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        // TODO: handle status with exceptions for cleaner code
-        final byte[] image;
-        if (imageInput == null) {
-            image = new byte[0];
-        } else {
-            Response.Status status = ImageUtils.checkError(imageDetails);
-            if (status != null) {
-                return Response.status(status).build();
-            }
-            image = ImageUtils.getImage(imageInput);
-        }
+        final byte[] image = ImageUtils.getImage(imageDetails, imageInput);
 
         final Argument argument = argumentService.create(auth.getName(), debateId, content, image);
 

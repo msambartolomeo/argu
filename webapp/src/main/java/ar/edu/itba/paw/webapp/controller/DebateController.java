@@ -131,18 +131,7 @@ public class DebateController {
     ) throws IOException {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        // TODO: Clean with exceptions
-        // NOTE: Parse image
-        final byte[] image;
-        if (imageInput == null) {
-            image = new byte[0];
-        } else {
-            Response.Status status = ImageUtils.checkError(imageDetails);
-            if (status != null) {
-                return Response.status(status).build();
-            }
-            image = ImageUtils.getImage(imageInput);
-        }
+        final byte[] image = ImageUtils.getImage(imageDetails, imageInput);
 
         final Debate debate = debateService.create(title,
                 description,
