@@ -187,7 +187,7 @@ public class DebateController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         final List<Debate> debateList;
-        if (auth != null && auth.getPrincipal() != null) {
+        if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
             debateList = debateService.getRecommendedDebates(id, auth.getName());
         } else {
             debateList = debateService.getRecommendedDebates(id);
