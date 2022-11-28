@@ -32,8 +32,8 @@ public class ChatController {
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getChats(
-            @QueryParam("page") @DefaultValue("0") int page,
-            @Valid @Max(value = 30, message = "Page size exceeded") @QueryParam("size") @DefaultValue("15") int size
+            @QueryParam("page") @DefaultValue("0") final int page,
+            @Valid @Max(value = 30, message = "Page size exceeded") @QueryParam("size") @DefaultValue("15") final int size
     ) {
         final List<ChatDto> chatList = chatService.getDebateChat(debateId, page, size)
                 .stream().map(c -> ChatDto.fromChat(uriInfo, c)).collect(Collectors.toList());
