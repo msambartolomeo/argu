@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface LikeService{
     Optional<Like> getLike(Argument argument, User user);
     Like likeArgument(long argumentId, String username);
-    void unlikeArgument(long argumentId, String username);
+    boolean unlikeArgument(long argumentId, String username);
+    boolean isLiked(long argumentId, String username);
     boolean isLiked(User user, Argument argument);
 }
