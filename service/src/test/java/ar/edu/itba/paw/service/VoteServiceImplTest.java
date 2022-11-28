@@ -12,7 +12,7 @@ import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserAlreadyVotedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
-import ar.edu.itba.paw.model.exceptions.VotingForbiddenException;
+import ar.edu.itba.paw.model.exceptions.DebateAlreadyDeletedException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,7 +79,7 @@ public class VoteServiceImplTest {
         voteService.addVote(DEBATE_ID, USER_USERNAME, DebateVote.FOR);
     }
 
-    @Test(expected = VotingForbiddenException.class)
+    @Test(expected = DebateAlreadyDeletedException.class)
     public void testAddVoteDebateClosed() {
         debate.setStatus(DebateStatus.CLOSED);
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
@@ -170,7 +170,7 @@ public class VoteServiceImplTest {
         voteService.removeVote(DEBATE_ID, USER_USERNAME);
     }
 
-    @Test(expected = VotingForbiddenException.class)
+    @Test(expected = DebateAlreadyDeletedException.class)
     public void testRemoveVoteDebateClosed() {
         debate.setStatus(DebateStatus.CLOSED);
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));

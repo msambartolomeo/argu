@@ -15,6 +15,6 @@ public class ValidCategoryValidator implements ConstraintValidator<ValidCategory
 
     @Override
     public boolean isValid(String category, ConstraintValidatorContext context) {
-        return category == null || Arrays.stream(DebateCategory.values()).anyMatch((c) -> c.getName().equals(category));
+        return category == null || Arrays.stream(DebateCategory.values()).anyMatch((c) -> c.getName().equals(category.toLowerCase()));
     }
 }
