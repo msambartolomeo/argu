@@ -12,52 +12,94 @@
     --text-color: var(--white);
 }
 
-nav {
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background: var(--primary-color);
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+}
+
+.container {
+    z-index: 1;
+    width: 100%;
+    max-width: 1300px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 50px;
+    padding-left: 50px;
+}
+
+.navbar-logo {
+    justify-self: start;
+    cursor: pointer;
+    text-decoration: none;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background: var(--primary-color);
-    padding: 20px 80px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
 }
 
-nav a img {
-    height: 50px;
-    margin-top: 25px;
+.navbar-logo-img {
+    height: 80%;
+    margin-right: 0.5rem;
 }
 
-#navbar {
+.navbar-icon {
+    margin-right: 0.5rem;
+}
+
+.nav-menu {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-#navbar li {
     list-style: none;
-    padding: 0 20px;
-    position: relative;
+    text-align: center;
+    justify-content: flex-end;
 }
 
-#navbar li a {
+.nav-item {
+    height: 80px;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-item:hover {
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.nav-links {
+    color: #fff;
+    display: flex;
+    align-items: center;
     text-decoration: none;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--text-color);
-    transition: 0.3s ease-in-out;
+    padding: 0.5rem 1rem;
+    height: 100%;
 }
 
-#navbar li a:hover,
-#navbar li a.active {
+.activated {
     color: var(--secondary-color);
+    font-weight: 600;
 }
 
-#navbar li a:hover::after,
-#navbar li a.active::after {
-    content: "";
-    width: 30%;
-    height: 2px;
-    background: var(--secondary-color);
-    position: absolute;
-    bottom: -4px;
-    left: 20px;
+.fa-bars {
+    color: #fff;
+}
+
+.menu-icon {
+    display: none;
 }

@@ -12,13 +12,16 @@
     --text-color: var(--white);
 }
 
-.navbar-background {
-    height: 100%;
-}
-
-.explore-container {
+.text-container {
     display: flex;
-    flex-direction: column;
+    color: var(--text-color);
     justify-content: center;
     align-items: center;
+}
+
+.chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
 }
