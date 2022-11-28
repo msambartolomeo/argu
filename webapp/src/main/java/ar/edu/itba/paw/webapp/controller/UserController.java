@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.ForbiddenUserException;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import ar.edu.itba.paw.webapp.utils.ImageUtils;
@@ -9,7 +10,6 @@ import ar.edu.itba.paw.webapp.validators.Image;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -67,6 +67,11 @@ public class UserController {
     public Response deleteUser(@PathParam("url") final String url) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
 
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenUserException();
+        }
+
         userService.deleteUser(username);
 
         return Response.noContent().build();
@@ -81,6 +86,11 @@ public class UserController {
             @Valid @NotNull @Image @FormDataParam("image") FormDataBodyPart imageDetails
     ) throws IOException {
         final String username = URLDecoder.decode(url, User.ENCODING);
+
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenUserException();
+        }
 
         Response.Status status = ImageUtils.checkError(imageDetails);
         if (status != null) {
@@ -98,6 +108,11 @@ public class UserController {
     @Path("/{url}/image")
     public Response removeImage(@PathParam("url") String url) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
+
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenUserException();
+        }
 
         if (userService.deleteImage(username)) {
             return Response.noContent().build();

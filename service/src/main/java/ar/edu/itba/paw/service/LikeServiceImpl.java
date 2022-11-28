@@ -7,12 +7,13 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.model.Like;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.exceptions.*;
+import ar.edu.itba.paw.model.exceptions.ArgumentAlreadyDeletedException;
+import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
+import ar.edu.itba.paw.model.exceptions.UserAlreadyLikedException;
+import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,11 +38,6 @@ public class LikeServiceImpl implements LikeService {
     @Override
     @Transactional
     public Like likeArgument(long argumentId, String username) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenLikeException();
-        }
-
         Argument argument = argumentService.getArgumentById(argumentId).orElseThrow(() -> {
             LOGGER.error("Cannot like argument {} because it does not exist", argumentId);
             return new ArgumentNotFoundException();
@@ -70,11 +66,6 @@ public class LikeServiceImpl implements LikeService {
     @Override
     @Transactional
     public boolean unlikeArgument(long argumentId, String username) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenLikeException();
-        }
-
         Argument argument = argumentService.getArgumentById(argumentId).orElseThrow(() -> {
             LOGGER.error("Cannot unlike argument {} because it does not exist", argumentId);
             return new ArgumentNotFoundException();
@@ -102,11 +93,6 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public boolean isLiked(long argumentId, String username) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenLikeException();
-        }
-
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot unlike argument {} because user {} does not exist", argumentId, username);
             return new UserNotFoundException();

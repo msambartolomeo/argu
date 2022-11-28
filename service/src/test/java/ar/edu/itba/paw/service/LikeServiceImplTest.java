@@ -9,10 +9,7 @@ import ar.edu.itba.paw.model.Like;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
-import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenArgumentException;
-import ar.edu.itba.paw.model.exceptions.UserAlreadyLikedException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -93,7 +90,7 @@ public class LikeServiceImplTest {
         likeService.likeArgument(ID, USER_USERNAME);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = ArgumentAlreadyDeletedException.class)
     public void testLikeArgumentDeleted() {
         argument.deleteArgument();
         when(argumentService.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
@@ -136,7 +133,7 @@ public class LikeServiceImplTest {
         likeService.unlikeArgument(ID, USER_USERNAME);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = ArgumentAlreadyDeletedException.class)
     public void testUnlikeArgumentDeleted() {
         argument.deleteArgument();
         when(argumentService.getArgumentById(anyLong())).thenReturn(Optional.of(argument));

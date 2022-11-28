@@ -6,14 +6,12 @@ import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.exceptions.ForbiddenUserException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -71,11 +69,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User updateImage(String username, byte[] data) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenUserException();
-        }
-
         final User user = getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot update image for user {} because it does not exist", username);
             return new UserNotFoundException();
@@ -92,11 +85,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteImage(String username) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenUserException();
-        }
-
         final User user = getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot update image for user {} because it does not exist", username);
             return new UserNotFoundException();
@@ -121,11 +109,6 @@ public class UserServiceImpl implements UserService {
     @Async
     @Transactional
     public void deleteUser(String username) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenUserException();
-        }
-
         User user = getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot delete User {} because it does not exist", username);
             return new UserNotFoundException();
