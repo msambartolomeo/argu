@@ -61,4 +61,9 @@ public class ChatJpaDao implements ChatDao {
         Optional<?> queryResult = query.getResultList().stream().findFirst();
         return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
     }
+
+    @Override
+    public Optional<Chat> getChatById(long id) {
+        return Optional.ofNullable(em.find(Chat.class, id));
+    }
 }

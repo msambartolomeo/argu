@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -72,5 +73,10 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public int getDebateChatPageCount(long debateId, int size) {
         return (int) Math.ceil(chatDao.getDebateChatsCount(debateId) / (double) size);
+    }
+
+    @Override
+    public Optional<Chat> getChatById(long id) {
+        return chatDao.getChatById(id);
     }
 }
