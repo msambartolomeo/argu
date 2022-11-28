@@ -48,7 +48,6 @@ public class ChatController {
         return Response.ok(new GenericEntity<ListDto<ChatDto>>(list) {}).build();
     }
 
-    // TODO: Add to auth config
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createChat(@Valid @NotNull final ChatForm form) {

@@ -21,7 +21,6 @@ public class LikeController {
     @Autowired
     private LikeService likeService;
 
-    // FIXME: Add auth guards
     @POST
     public Response like(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
@@ -32,7 +31,6 @@ public class LikeController {
         return Response.created(null).build();
     }
 
-    // FIXME: Add auth guards
     @DELETE
     public Response unlike(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url

@@ -27,7 +27,6 @@ public class VoteController {
     @Autowired
     private VoteService voteService;
 
-    // FIXME: Add auth guards
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public Response vote(
@@ -40,7 +39,6 @@ public class VoteController {
         return Response.created(null).build();
     }
 
-    // FIXME: Add auth guards
     @DELETE
     public Response unvote(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url

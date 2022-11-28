@@ -22,7 +22,6 @@ public class SubscriptionController {
     private SubscribedService subscribedService;
 
     // TODO: ask query string for username instead of body or not sending at all
-    // FIXME: Add auth guards
     @POST
     public Response subscribe(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
@@ -33,7 +32,6 @@ public class SubscriptionController {
         return Response.created(null).build();
     }
 
-    // FIXME: Add auth guards
     @DELETE
     public Response unsubscribe(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
