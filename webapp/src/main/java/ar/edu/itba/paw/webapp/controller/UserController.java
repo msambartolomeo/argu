@@ -52,7 +52,6 @@ public class UserController {
         }
 
         return Response.status(Response.Status.NOT_FOUND).build();
-
     }
 
     @POST
@@ -82,11 +81,6 @@ public class UserController {
             @Valid @NotNull @Image @FormDataParam("image") FormDataBodyPart imageDetails
     ) throws IOException {
         final String username = URLDecoder.decode(url, User.ENCODING);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (!username.equals(auth.getName())) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
 
         Response.Status status = ImageUtils.checkError(imageDetails);
         if (status != null) {
@@ -104,14 +98,11 @@ public class UserController {
     @Path("/{url}/image")
     public Response removeImage(@PathParam("url") String url) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (!username.equals(auth.getName())) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+        if (userService.deleteImage(username)) {
+            return Response.noContent().build();
         }
 
-        userService.deleteImage(username);
-
-        return Response.noContent().build();
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 }
