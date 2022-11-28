@@ -181,7 +181,13 @@ public class DebateController {
     @Path("/recommended-debates")
     @Produces({MediaType.APPLICATION_JSON})
     public Response recommendedDebates(@Valid @NotNull(message = "missing debate to recommend from") @QueryParam("debateId") final Long id) {
-        final List<DebateDto> debateDtoList = debateService.getRecommendedDebates(id)
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = null;
+        if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
+            username = auth.getName();
+        }
+
+        final List<DebateDto> debateDtoList = debateService.getRecommendedDebates(id, username)
                 .stream().map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
 
         if (debateDtoList.isEmpty()) {

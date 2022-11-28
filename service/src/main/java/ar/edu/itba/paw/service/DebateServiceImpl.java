@@ -17,8 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -169,18 +167,11 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<Debate> getRecommendedDebates(long debateId) {
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
+    public List<Debate> getRecommendedDebates(long debateId, String username) {
         Debate debate = getDebateById(debateId).orElseThrow(() -> {
             LOGGER.error("Cannot get recommended debates for Debate with id {} because it does not exist", debateId);
             return new DebateNotFoundException();
         });
-
-        final String username;
-        if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
-            username = auth.getName();
-        } else username = null;
 
         if (username != null) {
             User user = userService.getUserByUsername(username).orElseThrow(() -> {
