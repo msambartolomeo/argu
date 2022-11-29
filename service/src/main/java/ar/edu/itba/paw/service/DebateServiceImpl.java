@@ -95,9 +95,9 @@ public class DebateServiceImpl implements DebateService {
         });
 
         if (subscribed) {
-            return debateDao.getSubscribedDebatesByUser(user.getUserId(), page, size);
+            return debateDao.getSubscribedDebatesByUser(user, page, size);
         }
-        return debateDao.getUserDebates(user.getUserId(), page, size);
+        return debateDao.getUserDebates(user, page, size);
     }
 
     @Override
@@ -109,9 +109,9 @@ public class DebateServiceImpl implements DebateService {
         });
 
         if (subscribed) {
-            return (int) Math.ceil(debateDao.getSubscribedDebatesByUserCount(user.getUserId()) / (double) size);
+            return (int) Math.ceil(debateDao.getSubscribedDebatesByUserCount(user) / (double) size);
         }
-        return (int) Math.ceil(debateDao.getUserDebatesCount(user.getUserId()) / (double) size);
+        return (int) Math.ceil(debateDao.getUserDebatesCount(user) / (double) size);
     }
 
     @Transactional

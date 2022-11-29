@@ -16,17 +16,17 @@ public interface DebateDao {
 
     Debate create(String name, String description, User creator, boolean isCreatorFor, User opponent, Image image, DebateCategory category);
 
-    List<Debate> getSubscribedDebatesByUser(long userId, int page, int size);
+    List<Debate> getSubscribedDebatesByUser(User user, int page, int size);
 
-    int getSubscribedDebatesByUserCount(long userid);
+    int getSubscribedDebatesByUserCount(User user);
 
     List<Debate> getDebatesDiscovery(int page, int pageSize, String searchQuery, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
 
     int getDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date);
 
-    List<Debate> getUserDebates(long userId, int page, int size);
+    List<Debate> getUserDebates(User user, int page, int size);
 
-    int getUserDebatesCount(long userid);
+    int getUserDebatesCount(User user);
 
     List<Debate> getDebatesToClose();
 
