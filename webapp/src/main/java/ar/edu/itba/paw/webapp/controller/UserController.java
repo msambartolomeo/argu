@@ -81,9 +81,9 @@ public class UserController {
     @Path("/{url}/image")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     public Response updateImage(
-            @PathParam("url") String url,
-            @FormDataParam("image") InputStream imageInput,
-            @Valid @NotNull @Image @FormDataParam("image") FormDataBodyPart imageDetails
+            @PathParam("url") final String url,
+            @FormDataParam("image") final InputStream imageInput,
+            @Valid @NotNull @Image @FormDataParam("image") final FormDataBodyPart imageDetails
     ) throws IOException {
         final String username = URLDecoder.decode(url, User.ENCODING);
 
@@ -92,9 +92,9 @@ public class UserController {
             throw new ForbiddenUserException();
         }
 
-        byte[] image = ImageUtils.getImage(imageDetails, imageInput);
+        final byte[] image = ImageUtils.getImage(imageDetails, imageInput);
 
-        User user = userService.updateImage(username, image);
+        final User user = userService.updateImage(username, image);
 
         return Response.created(uriInfo.getAbsolutePathBuilder().replacePath("images")
                 .path(String.valueOf(user.getImage().getId())).build()).build();
@@ -102,7 +102,7 @@ public class UserController {
 
     @DELETE
     @Path("/{url}/image")
-    public Response removeImage(@PathParam("url") String url) throws UnsupportedEncodingException {
+    public Response removeImage(@PathParam("url") final String url) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
 
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
