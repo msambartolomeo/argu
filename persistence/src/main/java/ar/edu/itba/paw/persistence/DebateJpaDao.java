@@ -40,7 +40,7 @@ public class DebateJpaDao implements DebateDao {
 
     @Override
     public List<Debate> getSubscribedDebatesByUser(User user, int page, int size) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT :size OFFSET :offset");
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT :limit OFFSET :offset");
         return getDebatesReusable(user.getUserId(), page, size, idQuery);
     }
 
