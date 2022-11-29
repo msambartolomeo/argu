@@ -47,6 +47,7 @@ public class DebateServiceImplTest {
 
     private final static int VALID_PAGE = 0;
     private final static int INVALID_PAGE = -1;
+    private final static int PAGE_SIZE = 5;
 
     private User creator;
     private User opponent;
@@ -211,9 +212,10 @@ public class DebateServiceImplTest {
         Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
         List<Debate> debates = new ArrayList<>();
         debates.add(debate);
-        when(debateDao.getSubscribedDebatesByUser(anyLong(), anyInt())).thenReturn(debates);
+        when(debateDao.getSubscribedDebatesByUser(any(), anyInt(), anyInt())).thenReturn(debates);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
 
-        List<Debate> dl = debateService.getUserSubscribedDebates("subscribed", CREATOR_ID, VALID_PAGE);
+        List<Debate> dl = debateService.getUserDebates(CREATOR_USERNAME, VALID_PAGE, PAGE_SIZE, true);
 
         assertFalse(dl.isEmpty());
         assertEquals(debate.getName(), dl.get(0).getName());
@@ -235,9 +237,10 @@ public class DebateServiceImplTest {
         Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
         List<Debate> debates = new ArrayList<>();
         debates.add(debate);
-        when(debateDao.getUserDebates(anyLong(), anyInt())).thenReturn(debates);
+        when(debateDao.getUserDebates(any(), anyInt(), anyInt())).thenReturn(debates);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
 
-        List<Debate> dl = debateService.getUserSubscribedDebates("mydebates", CREATOR_ID, VALID_PAGE);
+        List<Debate> dl = debateService.getUserDebates(CREATOR_USERNAME, VALID_PAGE, PAGE_SIZE, false);
 
         assertFalse(dl.isEmpty());
         assertEquals(debate.getName(), dl.get(0).getName());
@@ -256,28 +259,36 @@ public class DebateServiceImplTest {
 
     @Test
     public void testGetProfileInvalidPage() {
-        List<Debate> dl = debateService.getUserSubscribedDebates("subscribed", CREATOR_ID, INVALID_PAGE);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
+
+        List<Debate> dl = debateService.getUserDebates(CREATOR_USERNAME, VALID_PAGE, PAGE_SIZE, true);
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
     public void testGetUserDebatesInvalidPage() {
-        List<Debate> dl = debateService.getUserDebates(CREATOR_ID, INVALID_PAGE);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
+
+        List<Debate> dl = debateService.getUserDebates(CREATOR_USERNAME, VALID_PAGE, PAGE_SIZE, false);
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
     public void testGetProfileUserDebatesEmpty() {
-        List<Debate> dl = debateService.getUserSubscribedDebates("mydebates", CREATOR_ID, VALID_PAGE);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
+
+        List<Debate> dl = debateService.getUserDebates(CREATOR_USERNAME, VALID_PAGE, PAGE_SIZE, false);
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
     public void testGetProfileSubscribedEmpty() {
-        List<Debate> dl = debateService.getUserSubscribedDebates("subscribed", CREATOR_ID, VALID_PAGE);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
+
+        List<Debate> dl = debateService.getUserDebates(CREATOR_USERNAME, VALID_PAGE, PAGE_SIZE, true);
 
         assertTrue(dl.isEmpty());
     }
@@ -286,9 +297,10 @@ public class DebateServiceImplTest {
     public void testProfileUserDebatesPageCount() {
         int argumentCount = 47;
         int expectedPageCount = 10;
-        when(debateDao.getUserDebatesCount(anyLong())).thenReturn(argumentCount);
+        when(debateDao.getUserDebatesCount(any())).thenReturn(argumentCount);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
 
-        int pc = debateService.getUserSubscribedDebatesPageCount("mydebates", CREATOR_ID);
+        int pc = debateService.getUserDebatesPageCount(CREATOR_USERNAME, PAGE_SIZE, false);
 
         assertEquals(expectedPageCount, pc);
     }
@@ -297,9 +309,10 @@ public class DebateServiceImplTest {
     public void testProfileSubscribedPageCount() {
         int argumentCount = 47;
         int expectedPageCount = 10;
-        when(debateDao.getSubscribedDebatesByUserCount(anyLong())).thenReturn(argumentCount);
+        when(debateDao.getSubscribedDebatesByUserCount(any())).thenReturn(argumentCount);
+        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(creator));
 
-        int pc = debateService.getUserSubscribedDebatesPageCount("subscribed", CREATOR_ID);
+        int pc = debateService.getUserDebatesPageCount(CREATOR_USERNAME, PAGE_SIZE, true);
 
         assertEquals(expectedPageCount, pc);
     }
