@@ -10,13 +10,17 @@ import "./Navbar.css";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 import arguLogo from "../../assets/argu-logo-2.jpeg";
+import SearchBar from "../SearchBar/SearchBar";
+
+// TODO: Internationalize
+// TODO: Upgrade search bar
 
 interface ArguLogoProps {
     image?: string;
 }
 
 const Navbar = ({ image = arguLogo }: ArguLogoProps) => {
-    const [click, setClick] = useState(false);
+    const [click] = useState(false);
 
     // const handleClick = () => setClick(!click);
     // const closeMobileMenu = () => setClick(false);
@@ -33,9 +37,7 @@ const Navbar = ({ image = arguLogo }: ArguLogoProps) => {
                                 className="navbar-logo-img"
                             />
                         </Link>
-                        {/* <div className="menu-icon" onClick={handleClick}>
-                            {click ? <FaTimes /> : <FaBars />}
-                        </div> */}
+                        <SearchBar placeholder="Search for a debate" />
                         <ul className={click ? "nav-menu active" : "nav-menu"}>
                             <li className="nav-item">
                                 <NavLink

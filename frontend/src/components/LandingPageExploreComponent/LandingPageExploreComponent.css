@@ -19,9 +19,28 @@
     align-items: center;
 }
 
-.chip {
+.chip-class {
+    background-color: transparent;
+    color: var(--text-color) !important;
+    box-shadow: 0 1.5px #999 !important;
+    text-transform: uppercase !important;
+    width: 100%;
+    font-weight: 700;
+}
+
+.chip-class:hover {
+    background-color: var(--primary-color) !important;
+}
+
+.chip-class:active {
+    background-color: var(--primary-color) !important;
+    box-shadow: 0 0.75px #666 !important;
+    transform: translateY(0.75px) !important;
+}
+
+.chip-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }

@@ -1,10 +1,15 @@
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 import React from "react";
 import parallaxBackgroud from "../../assets/speech-bubbles.jpeg";
-import Chip from "../../components/Chip/Chip";
 import LandingPageExploreComponent from "../../components/LandingPageExploreComponent/LandinPageExploreComponent";
 import Navbar from "../../components/Navbar/Navbar";
+import TrendingDebatesComponent from "../../components/TrendingDebatesComponent/TrendingDebatesComponent";
 import DebateCategory from "../../model/enums/DebateCategory";
+import LandingPageAboutComponent from "../../components/LandingPageAboutComponent/LandingPageAboutComponent";
+
+// TODO: Internationalize
+// TODO: Add icons
+// TODO: Align text and images in the about section
 
 interface ParallaxBackgroundProps {
     background?: string;
@@ -22,9 +27,8 @@ const LandingPage = ({
                 <Parallax pages={parallaxPages}>
                     <ParallaxLayer
                         offset={0}
-                        speed={1}
                         style={{
-                            zIndex: 3,
+                            zIndex: 1,
                         }}
                     >
                         <Navbar />
@@ -41,12 +45,43 @@ const LandingPage = ({
                             />
                         </div>
                     </ParallaxLayer>
-                    <ParallaxLayer offset={1}>
-                        <h2>Goodbye</h2>
+                    <ParallaxLayer
+                        offset={0.65}
+                        style={{
+                            zIndex: 3,
+                        }}
+                    >
+                        <div className="trending-debates-container">
+                            <TrendingDebatesComponent />
+                        </div>
+                    </ParallaxLayer>
+                    <ParallaxLayer
+                        offset={0.65}
+                        factor={0.55}
+                        style={{
+                            backgroundColor: "#212D40",
+                            zIndex: 1,
+                        }}
+                    ></ParallaxLayer>
+                    <ParallaxLayer
+                        offset={1.65}
+                        style={{
+                            backgroundColor: "#D66853",
+                            zIndex: 1,
+                        }}
+                    ></ParallaxLayer>
+                    <ParallaxLayer
+                        offset={1.25}
+                        style={{
+                            zIndex: 3,
+                        }}
+                    >
+                        <div className="about-container">
+                            <LandingPageAboutComponent />
+                        </div>
                     </ParallaxLayer>
                     <ParallaxLayer
                         offset={0}
-                        speed={0.4}
                         factor={0.65}
                         style={{
                             backgroundImage: `url(${background})`,
@@ -57,7 +92,6 @@ const LandingPage = ({
                     ></ParallaxLayer>
                     <ParallaxLayer
                         offset={0}
-                        speed={0.4}
                         factor={0.65}
                         style={{
                             backgroundColor: "black",
