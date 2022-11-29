@@ -84,12 +84,6 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     @Transactional
-    public List<Debate> getMostSubscribed() {
-        return debateDao.getDebatesDiscovery(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
-    }
-
-    @Override
-    @Transactional
     public List<Debate> getProfileDebates(String list, long userId, int page) {
         if (list.equals("mydebates"))
             return getUserDebates(userId, page);

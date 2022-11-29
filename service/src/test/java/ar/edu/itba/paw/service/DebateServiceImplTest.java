@@ -185,38 +185,6 @@ public class DebateServiceImplTest {
     }
 
     @Test
-    public void testGetMostSubscribed() {
-        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
-        List<Debate> debates = new ArrayList<>();
-        debates.add(debate);
-        when(debateDao.getDebatesDiscovery(anyInt(), anyInt(), any(), any(), eq(DebateOrder.SUBS_DESC), any(), any())).thenReturn(debates);
-
-        List<Debate> dl = debateService.getMostSubscribed();
-
-        assertFalse(dl.isEmpty());
-        assertEquals(debate.getName(), dl.get(0).getName());
-        assertEquals(debate.getDescription(), dl.get(0).getDescription());
-        assertEquals(debate.getCategory(), dl.get(0).getCategory());
-        assertEquals(debate.getOpponent(), dl.get(0).getOpponent());
-        assertTrue(dl.get(0).getIsCreatorFor());
-        assertEquals(debate.getImage(), dl.get(0).getImage());
-        assertEquals(debate.getCategory(), dl.get(0).getCategory());
-        assertEquals(debate.getStatus(), dl.get(0).getStatus());
-        assertEquals(debate.getCreatedDate(), dl.get(0).getCreatedDate());
-        assertEquals(debate.getSubscribedUsers(), dl.get(0).getSubscribedUsers());
-        assertEquals(debate.getForCount(), dl.get(0).getForCount());
-        assertEquals(debate.getAgainstCount(), dl.get(0).getAgainstCount());
-
-    }
-
-    @Test
-    public void testGetMostSubscribedEmpty() {
-        List<Debate> dl = debateService.getMostSubscribed();
-
-        assertTrue(dl.isEmpty());
-    }
-
-    @Test
     public void testGetDebatePageCount() {
         int argumentCount = 47;
         int expectedPageCount = 10;
