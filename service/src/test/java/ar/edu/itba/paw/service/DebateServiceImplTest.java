@@ -8,7 +8,6 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
-import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenDebateException;
@@ -214,7 +213,7 @@ public class DebateServiceImplTest {
         debates.add(debate);
         when(debateDao.getSubscribedDebatesByUser(anyLong(), anyInt())).thenReturn(debates);
 
-        List<Debate> dl = debateService.getProfileDebates("subscribed", CREATOR_ID, VALID_PAGE);
+        List<Debate> dl = debateService.getUserSubscribedDebates("subscribed", CREATOR_ID, VALID_PAGE);
 
         assertFalse(dl.isEmpty());
         assertEquals(debate.getName(), dl.get(0).getName());
@@ -238,7 +237,7 @@ public class DebateServiceImplTest {
         debates.add(debate);
         when(debateDao.getUserDebates(anyLong(), anyInt())).thenReturn(debates);
 
-        List<Debate> dl = debateService.getProfileDebates("mydebates", CREATOR_ID, VALID_PAGE);
+        List<Debate> dl = debateService.getUserSubscribedDebates("mydebates", CREATOR_ID, VALID_PAGE);
 
         assertFalse(dl.isEmpty());
         assertEquals(debate.getName(), dl.get(0).getName());
@@ -257,7 +256,7 @@ public class DebateServiceImplTest {
 
     @Test
     public void testGetProfileInvalidPage() {
-        List<Debate> dl = debateService.getProfileDebates("subscribed", CREATOR_ID, INVALID_PAGE);
+        List<Debate> dl = debateService.getUserSubscribedDebates("subscribed", CREATOR_ID, INVALID_PAGE);
 
         assertTrue(dl.isEmpty());
     }
@@ -271,14 +270,14 @@ public class DebateServiceImplTest {
 
     @Test
     public void testGetProfileUserDebatesEmpty() {
-        List<Debate> dl = debateService.getProfileDebates("mydebates", CREATOR_ID, VALID_PAGE);
+        List<Debate> dl = debateService.getUserSubscribedDebates("mydebates", CREATOR_ID, VALID_PAGE);
 
         assertTrue(dl.isEmpty());
     }
 
     @Test
     public void testGetProfileSubscribedEmpty() {
-        List<Debate> dl = debateService.getProfileDebates("subscribed", CREATOR_ID, VALID_PAGE);
+        List<Debate> dl = debateService.getUserSubscribedDebates("subscribed", CREATOR_ID, VALID_PAGE);
 
         assertTrue(dl.isEmpty());
     }
@@ -289,7 +288,7 @@ public class DebateServiceImplTest {
         int expectedPageCount = 10;
         when(debateDao.getUserDebatesCount(anyLong())).thenReturn(argumentCount);
 
-        int pc = debateService.getProfileDebatesPageCount("mydebates", CREATOR_ID);
+        int pc = debateService.getUserSubscribedDebatesPageCount("mydebates", CREATOR_ID);
 
         assertEquals(expectedPageCount, pc);
     }
@@ -300,7 +299,7 @@ public class DebateServiceImplTest {
         int expectedPageCount = 10;
         when(debateDao.getSubscribedDebatesByUserCount(anyLong())).thenReturn(argumentCount);
 
-        int pc = debateService.getProfileDebatesPageCount("subscribed", CREATOR_ID);
+        int pc = debateService.getUserSubscribedDebatesPageCount("subscribed", CREATOR_ID);
 
         assertEquals(expectedPageCount, pc);
     }

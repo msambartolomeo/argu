@@ -39,9 +39,9 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    public List<Debate> getSubscribedDebatesByUser(long userId, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
-        return getDebatesReusable(userId, page, idQuery);
+    public List<Debate> getSubscribedDebatesByUser(long userId, int page, int size) {
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT :size OFFSET :offset");
+        return getDebatesReusable(userId, page, size, idQuery);
     }
 
     @Override
@@ -147,9 +147,9 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    public List<Debate> getUserDebates(long userId, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE (creatorid = :userid OR opponentid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
-        return getDebatesReusable(userId, page, idQuery);
+    public List<Debate> getUserDebates(long userId, int page, int size) {
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE (creatorid = :userid OR opponentid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT :limit OFFSET :offset");
+        return getDebatesReusable(userId, page, size, idQuery);
     }
 
     @Override
@@ -232,9 +232,10 @@ public class DebateJpaDao implements DebateDao {
     }
 
     // Extracted code to simplify methods
-    private List<Debate> getDebatesReusable(long userId, int page, Query idQuery) {
+    private List<Debate> getDebatesReusable(long userId, int page, int size, Query idQuery) {
         idQuery.setParameter("userid", userId);
-        idQuery.setParameter("offset", page * 5);
+        idQuery.setParameter("offset", page * size);
+        idQuery.setParameter("limit", size);
         return getDebatesReusable(idQuery);
     }
 

@@ -16,7 +16,7 @@ public interface DebateDao {
 
     Debate create(String name, String description, User creator, boolean isCreatorFor, User opponent, Image image, DebateCategory category);
 
-    List<Debate> getSubscribedDebatesByUser(long userId, int page);
+    List<Debate> getSubscribedDebatesByUser(long userId, int page, int size);
 
     int getSubscribedDebatesByUserCount(long userid);
 
@@ -24,7 +24,7 @@ public interface DebateDao {
 
     int getDebatesCount(String searchQuery, DebateCategory category, DebateStatus status, LocalDate date);
 
-    List<Debate> getUserDebates(long userId, int page);
+    List<Debate> getUserDebates(long userId, int page, int size);
 
     int getUserDebatesCount(long userid);
 

@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.dto.DebateDto;
+import ar.edu.itba.paw.webapp.dto.ListDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import ar.edu.itba.paw.webapp.utils.ImageUtils;
@@ -9,24 +12,24 @@ import ar.edu.itba.paw.webapp.validators.Image;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Path("users")
 @Component
@@ -113,5 +116,33 @@ public class UserController {
         userService.deleteImage(username);
 
         return Response.noContent().build();
+    }
+
+    @Autowired
+    private DebateService debateService;
+    @Autowired
+    private MessageSource messageSource;
+
+    @GET
+    @Path("/{url}/debates")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUserDebates(
+            @PathParam("url") final String url,
+            @QueryParam("subscribed") final boolean subscribed,
+            @QueryParam("page") @DefaultValue("0") final int page,
+            @Valid @Max(value = 10, message = "Page size exceeded") @QueryParam("size") @DefaultValue("5") final int size
+    ) throws UnsupportedEncodingException {
+        final String username = URLDecoder.decode(url, User.ENCODING);
+
+        final List<DebateDto> debateList = debateService.getUserDebates(username, page, size, subscribed).stream()
+                .map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
+
+        if (debateList.isEmpty()) {
+            return Response.noContent().build();
+        }
+        final int totalPages = debateService.getUserDebatesPageCount(username, size, subscribed);
+
+        ListDto<DebateDto> list = ListDto.from(debateList, totalPages, page, uriInfo);
+        return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {}).build();
     }
 }
