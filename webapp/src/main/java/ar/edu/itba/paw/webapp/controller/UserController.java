@@ -128,19 +128,19 @@ public class UserController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getUserDebates(
             @PathParam("url") final String url,
-            @QueryParam("subscribed") final boolean subscribed,
+            @QueryParam("subscribed") final String subscribed,
             @QueryParam("page") @DefaultValue("0") final int page,
             @Valid @Max(value = 10, message = "Page size exceeded") @QueryParam("size") @DefaultValue("5") final int size
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
 
-        final List<DebateDto> debateList = debateService.getUserDebates(username, page, size, subscribed).stream()
+        final List<DebateDto> debateList = debateService.getUserDebates(username, page, size, subscribed != null).stream()
                 .map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
 
         if (debateList.isEmpty()) {
             return Response.noContent().build();
         }
-        final int totalPages = debateService.getUserDebatesPageCount(username, size, subscribed);
+        final int totalPages = debateService.getUserDebatesPageCount(username, size, subscribed != null);
 
         ListDto<DebateDto> list = ListDto.from(debateList, totalPages, page, uriInfo);
         return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {}).build();
