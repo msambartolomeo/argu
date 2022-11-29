@@ -53,6 +53,7 @@ public class ArgumentServiceImpl implements ArgumentService {
             return new UserNotFoundException();
         });
 
+        // TODO: Separate exception forbidden from closed/ deleted
         if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED || debate.getStatus() == DebateStatus.VOTING || (!debate.getCreator().getUsername().equals(username) && !debate.getOpponent().getUsername().equals(username))) {
             LOGGER.error("Cannot create new Argument on Debate {} because it is closed or because the requesting user {} is not the creator or the opponent", debateId, username);
             throw new ForbiddenArgumentException();
@@ -176,6 +177,11 @@ public class ArgumentServiceImpl implements ArgumentService {
             LOGGER.error("Cannot delete argument {} because it does not exist", argumentId);
             return new ArgumentNotFoundException();
         });
+
+        // TODO: Check if this is actually not found or what
+        if (argument.getDeleted()) {
+            throw new ArgumentNotFoundException();
+        }
 
         if(argument.getUser().getUsername() == null || !argument.getUser().getUsername().equals(username)) {
             LOGGER.error("Cannot delete argument {} because user is not the creator", argumentId);

@@ -153,6 +153,7 @@ public class DebateController {
         return Response.noContent().build();
     }
 
+    // TODO: Ask response code
     @PATCH
     @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})

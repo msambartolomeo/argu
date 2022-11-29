@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.webapp.validators.ExistingUser;
 import ar.edu.itba.paw.webapp.validators.UserNotSelf;
 import ar.edu.itba.paw.webapp.validators.ValidCategory;

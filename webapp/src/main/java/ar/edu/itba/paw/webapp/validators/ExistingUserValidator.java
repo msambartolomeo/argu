@@ -18,6 +18,10 @@ public class ExistingUserValidator implements ConstraintValidator<ExistingUser, 
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
+        if (username == null) {
+            return true;
+        }
+
         return userService.getUserByUsername(username).isPresent();
     }
 }

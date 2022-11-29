@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.ChatService;
 import ar.edu.itba.paw.model.Chat;
 import ar.edu.itba.paw.webapp.dto.ChatDto;
-import ar.edu.itba.paw.webapp.dto.DebateDto;
 import ar.edu.itba.paw.webapp.dto.ListDto;
 import ar.edu.itba.paw.webapp.form.ChatForm;
 import org.springframework.beans.factory.annotation.Autowired;
