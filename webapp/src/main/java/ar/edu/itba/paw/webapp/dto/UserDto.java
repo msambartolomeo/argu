@@ -10,6 +10,8 @@ public class UserDto {
     private String username;
     private String email;
     private String createdDate;
+    private int points;
+
     private URI self;
     private URI image;
 
@@ -19,6 +21,7 @@ public class UserDto {
         dto.username = user.getUsername();
         dto.email = user.getEmail();
         dto.createdDate = user.getFormattedDate();
+        dto.points = user.getPoints();
 
         dto.self = uriInfo.getAbsolutePathBuilder().replacePath("users").path(user.getUrl()).build();
 
@@ -51,6 +54,14 @@ public class UserDto {
 
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public URI getSelf() {

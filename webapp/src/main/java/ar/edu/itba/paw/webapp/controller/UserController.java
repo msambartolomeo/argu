@@ -56,7 +56,7 @@ public class UserController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createUser(@Valid @NotNull final RegisterForm form) {
+    public Response createUser(@Valid @NotNull(message = "body required") final RegisterForm form) {
         final User user = userService.create(form.getUsername(), form.getPassword(), form.getEmail(), request.getLocale());
 
         return Response.created(uriInfo.getAbsolutePathBuilder().path(user.getUrl()).build()).build();
