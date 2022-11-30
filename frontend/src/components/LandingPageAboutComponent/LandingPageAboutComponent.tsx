@@ -19,7 +19,7 @@ const LandingPageAboutComponent = ({
     subscribeLikeVoteImg = subscribeLikeVote,
 }: IconsProps) => {
     return (
-        <React.Fragment>
+        <>
             <div className="about-container">
                 <div className="left-text-container">
                     <h2>About Argu</h2>
@@ -75,7 +75,7 @@ const LandingPageAboutComponent = ({
                     <img src={subscribeLikeVoteImg} alt="debate icon" />
                 </div>
             </div>
-        </React.Fragment>
+        </>
     );
 };
 

@@ -22,7 +22,7 @@ const LandingPage = ({
     const categories = Object.values(DebateCategory);
 
     return (
-        <React.Fragment>
+        <>
             <div className="navbar-backgound">
                 <Parallax pages={parallaxPages}>
                     <ParallaxLayer
@@ -102,7 +102,7 @@ const LandingPage = ({
                     ></ParallaxLayer>
                 </Parallax>
             </div>
-        </React.Fragment>
+        </>
     );
 };
 
