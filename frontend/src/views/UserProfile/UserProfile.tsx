@@ -1,13 +1,21 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./UserProfile.css";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import EditProfileImageDialog from "../../components/EditProfileImageDialog/EditProfileImageDialog";
 import DeleteAccountModal from "../../components/DeleteAccountModal/DeleteAccountModal";
 import Debate from "../../types/Debate";
+import User from "../../types/User";
+import "../../root.css";
+import cn from "classnames";
 
 const UserProfile = () => {
-    const aux: Debate = {
+    const user1: User = {
+        username: "User 1",
+        email: "user1@mail.com",
+        createdDate: "2021-01-01",
+    };
+    const debate1: Debate = {
         id: 1,
         name: "Debate 1",
         description: "Description 1",
@@ -18,16 +26,17 @@ const UserProfile = () => {
         subscriptions: 1,
         votesFor: 0,
         votesAgainst: 0,
-        creator: {
-            username: "User 1",
-            email: "user1@mail.com",
-            createdDate: "2021-01-01",
-        },
+        creator: user1,
     };
-    const [debates, setDebates] = useState<Debate[]>([aux]);
-    // setDebates([aux]);
+    const debates: Debate[] = [debate1];
+    // TODO: Fix selected button (find reason why it renderizes when it shouldn't)
+    const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
 
-    // TODO: useEffect to change debates shown
+    const handleClick = (value: boolean) => {
+        setShowMyDebates(value);
+    };
+
+    // TODO: Implement i18n
 
     return (
         <div className="profile-container">
@@ -57,13 +66,20 @@ const UserProfile = () => {
                 <div className="section">
                     <a
                         href="/profile?list=subscribed"
-                        className="waves-effect btn-large"
+                        onClick={() => handleClick(false)}
+                        className={cn("waves-effect btn-large", {
+                            active: !showMyDebates,
+                        })}
                     >
-                        Subscribed
+                        Debates Subscribed
                     </a>
                     <a
                         href="/profile?list=mydebates"
-                        className="waves-effect btn-large"
+                        onClick={() => handleClick(true)}
+                        className={cn("waves-effect btn-large", {
+                            active: showMyDebates,
+                        })}
+                        // onSelect={() => handleClick(true)}
                     >
                         My Debates
                     </a>

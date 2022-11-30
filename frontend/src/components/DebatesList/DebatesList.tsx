@@ -11,11 +11,8 @@ const DebatesList = ({ debates }: DebatesListProps) => {
     }
     return (
         <>
-            {/* TODO: Crear clase debate */}
             {debates.map((debate: Debate) => (
-                <div className="list-item" key={debate.id}>
-                    <DebateListItem debate={debate} />
-                </div>
+                <DebateListItem debate={debate} key={debate.id} />
             ))}
         </>
     );

@@ -22,7 +22,7 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                                 {debate.name}
                             </h5>
                             <h6>
-                                Creator:{" "}
+                                <b>Creator:</b>{" "}
                                 {debate.creator.username !== null
                                     ? debate.creator.username
                                     : "[deleted user]"}
@@ -47,7 +47,7 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                                     : defaultDebatePhoto
                             }
                             alt="Debate photo"
-                            className="limit-img responsive-img"
+                            className="limit-img-sm responsive-img"
                         />
                     </div>
                 </div>

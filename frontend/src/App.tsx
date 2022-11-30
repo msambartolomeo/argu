@@ -10,6 +10,7 @@ import M from "materialize-css";
 
 // import router
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import UserProfile from "./views/UserProfile/UserProfile";
 
 function App() {
     useEffect(() => {
@@ -41,12 +42,7 @@ function App() {
                     />
                     <Route // Profile Page
                         path="/profile/"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Profile</p>
-                            </div>
-                        }
+                        element={<UserProfile />}
                     />
 
                     <Route
