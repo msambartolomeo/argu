@@ -29,12 +29,8 @@ const UserProfile = () => {
         creator: user1,
     };
     const debates: Debate[] = [debate1];
-    // TODO: Fix selected button (find reason why it renderizes when it shouldn't)
-    const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
 
-    const handleClick = (value: boolean) => {
-        setShowMyDebates(value);
-    };
+    const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
 
     // TODO: Implement i18n
 
@@ -65,8 +61,7 @@ const UserProfile = () => {
             <div className="debates-column">
                 <div className="section">
                     <a
-                        href="/profile?list=subscribed"
-                        onClick={() => handleClick(false)}
+                        onClick={() => setShowMyDebates(false)}
                         className={cn("waves-effect btn-large", {
                             active: !showMyDebates,
                         })}
@@ -74,12 +69,10 @@ const UserProfile = () => {
                         Debates Subscribed
                     </a>
                     <a
-                        href="/profile?list=mydebates"
-                        onClick={() => handleClick(true)}
+                        onClick={() => setShowMyDebates(true)}
                         className={cn("waves-effect btn-large", {
                             active: showMyDebates,
                         })}
-                        // onSelect={() => handleClick(true)}
                     >
                         My Debates
                     </a>
