@@ -26,14 +26,6 @@ const LandingPage = ({
             <div className="navbar-backgound">
                 <Parallax pages={parallaxPages}>
                     <ParallaxLayer
-                        offset={0}
-                        style={{
-                            zIndex: 1,
-                        }}
-                    >
-                        <Navbar />
-                    </ParallaxLayer>
-                    <ParallaxLayer
                         offset={0.2}
                         style={{
                             zIndex: 3,

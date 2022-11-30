@@ -10,6 +10,8 @@ import M from "materialize-css";
 
 // import router
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./views/LandingPage/LandingPage";
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
     useEffect(() => {
@@ -19,16 +21,9 @@ function App() {
     return (
         <Router>
             <div className="App">
+                <Navbar />
                 <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Home</p>
-                            </div>
-                        }
-                    />
+                    <Route path="/" element={<LandingPage />} />
 
                     <Route // If :url == user.url, then show profile page
                         path="/user/:url"
