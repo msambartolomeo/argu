@@ -1,6 +1,6 @@
 const DeleteConfirmationForm = () => {
     function handleSubmit(): void {
-        console.log("Confirm submition of profile photo");
+        // console.log("Confirm submition of profile photo");
     }
 
     // TODO: Add error handling
