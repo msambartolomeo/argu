@@ -1,5 +1,5 @@
 import Debate from "../../types/Debate";
-import Chip from "../Chip/Chip";
+import NonClickableChip from "../NonClickableChip/NonClickableChip";
 import "./DebateListItem.css";
 import defaultDebatePhoto from "../../assets/debate_stock.png";
 
@@ -29,10 +29,14 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                             </h6>
                         </div>
                         <div className="debate-footer">
-                            <Chip name={debate.category} />
-                            <Chip name={"Created: " + debate.createdDate} />
-                            <Chip name={"Status: " + debate.status} />
-                            <Chip
+                            <NonClickableChip name={debate.category} />
+                            <NonClickableChip
+                                name={"Created: " + debate.createdDate}
+                            />
+                            <NonClickableChip
+                                name={"Status: " + debate.status}
+                            />
+                            <NonClickableChip
                                 name={
                                     "Subscribed users: " + debate.subscriptions
                                 }
