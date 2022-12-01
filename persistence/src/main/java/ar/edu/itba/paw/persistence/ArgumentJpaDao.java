@@ -42,10 +42,10 @@ public class ArgumentJpaDao implements ArgumentDao {
     }
 
     @Override
-    public List<Argument> getArgumentsByDebate(Debate debate, int page) {
+    public List<Argument> getArgumentsByDebate(Debate debate, int page, int size) {
         final Query idQuery = em.createNativeQuery("SELECT postid FROM posts WHERE debateid = :debateid ORDER BY created_date LIMIT 5 OFFSET :offset");
         idQuery.setParameter("debateid", debate.getDebateId());
-        idQuery.setParameter("offset", page * PAGE_SIZE);
+        idQuery.setParameter("offset", page * size);
 
         @SuppressWarnings("unchecked")
         List<Long> ids = (List<Long>) idQuery.getResultList().stream().map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());

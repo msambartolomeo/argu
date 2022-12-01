@@ -56,7 +56,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     @Transactional
-    public List<Chat> getDebateChat(long debateId, int page) {
+    public List<Chat> getDebateChat(long debateId, int page, int size) {
         if (page < 0) {
             return Collections.emptyList();
         }
@@ -65,11 +65,11 @@ public class ChatServiceImpl implements ChatService {
             return new DebateNotFoundException();
         });
 
-        return chatDao.getDebateChat(debate, page);
+        return chatDao.getDebateChat(debate, page, size);
     }
 
     @Override
-    public int getDebateChatPageCount(long debateId) {
-        return (int) Math.ceil(chatDao.getDebateChatsCount(debateId) / (double) PAGE_SIZE);
+    public int getDebateChatPageCount(long debateId, int size) {
+        return (int) Math.ceil(chatDao.getDebateChatsCount(debateId) / (double) size);
     }
 }

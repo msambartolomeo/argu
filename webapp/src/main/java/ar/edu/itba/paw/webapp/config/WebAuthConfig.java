@@ -49,15 +49,20 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
             .and().headers().cacheControl().disable()
             .and().authorizeRequests()
                 // users
-                .antMatchers(HttpMethod.DELETE,"/users/{url}").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/users/{url}", "/users/{url}/image").authenticated()
+                .antMatchers(HttpMethod.PUT, "/users/{url}/image").authenticated()
                 .antMatchers(HttpMethod.POST, "/users").anonymous()
                 // debate
                 .antMatchers(HttpMethod.DELETE, "/debates/{\\d+}").hasAuthority("MODERATOR")
                 .antMatchers(HttpMethod.POST, "/debates").hasAuthority("MODERATOR")
                 .antMatchers(HttpMethod.PATCH, "/debates/{\\d+}").authenticated()
+                // argument and chat
+                .antMatchers(HttpMethod.DELETE, "/debates/{\\d+}/arguments/{\\d+}").authenticated()
+                .antMatchers(HttpMethod.POST, "/debates/{\\d+}/arguments", "/debates/{\\d+}/chats").authenticated()
+                // likes, subs and votes
+                .antMatchers("/debates/{debateId}/arguments/{argumentId}/likes", "/debates/{debateId}/subscriptions", "/debates/{debateId}/votes").authenticated()
                 // general
-                .antMatchers("/users/{url}", "/debates/{\\d+}", "/debates", "/debates/recommended-debates").permitAll()
-                .anyRequest().denyAll()
+                .antMatchers(HttpMethod.GET, "/users/{url}", "/debates/**").permitAll()
             .and().exceptionHandling()
                 .accessDeniedHandler((request, response, ex) -> response.setStatus(HttpServletResponse.SC_FORBIDDEN))
                 .authenticationEntryPoint((request, response, ex) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))

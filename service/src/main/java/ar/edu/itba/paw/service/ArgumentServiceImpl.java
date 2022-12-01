@@ -131,20 +131,20 @@ public class ArgumentServiceImpl implements ArgumentService {
     }
 
     @Override
-    public int getArgumentByDebatePageCount(long debateId) {
-        return (int) Math.ceil(argumentDao.getArgumentsByDebateCount(debateId) / (double) PAGE_SIZE);
+    public int getArgumentByDebatePageCount(long debateId, int size) {
+        return (int) Math.ceil(argumentDao.getArgumentsByDebateCount(debateId) / (double) size);
     }
 
     @Override
     @Transactional
-    public List<Argument> getArgumentsByDebate(long debateId, String username, int page) {
+    public List<Argument> getArgumentsByDebate(long debateId, String username, int page, int size) {
         if (page < 0)
             return Collections.emptyList();
         Debate debate = debateService.getDebateById(debateId).orElseThrow(() -> {
             LOGGER.error("Cannot get Arguments for Debate {} because it does not exist", debateId);
             return new DebateNotFoundException();
         });
-        List<Argument> arguments = argumentDao.getArgumentsByDebate(debate, page);
+        List<Argument> arguments = argumentDao.getArgumentsByDebate(debate, page, size);
 
         if (username != null) {
             User user = userService.getUserByUsername(username).orElseThrow(() -> {

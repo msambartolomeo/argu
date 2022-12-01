@@ -73,7 +73,6 @@ public class UserController {
         return Response.noContent().build();
     }
 
-    // TODO: Add route in auth config
     @PUT
     @Path("/{url}/image")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
