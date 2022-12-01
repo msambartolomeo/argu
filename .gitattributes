@@ -1,0 +1,23 @@
+* text=auto
+
+*.tsx   text
+*.ts    text
+*.js    text
+*.css   text
+*.json  text
+*.xml   text
+*.jsp   text
+*.html  text
+*.md    text
+*.sh    text
+*.java  text
+*.txt   text
+*.properties    text
+.eslintignore   text
+.gitignore      text
+.prettierignore text
+.prettierrc     text
+
+*.png   binary
+*.jpeg  binary
+*.ico   binary
