@@ -4,11 +4,11 @@ import M from "materialize-css";
 
 interface DeleteDialogProps {
     id: string;
-    path: string;
+    handleDelete: () => void;
     title: string;
 }
 
-const DeleteDialog = ({ id, path, title }: DeleteDialogProps) => {
+const DeleteDialog = ({ id, handleDelete, title }: DeleteDialogProps) => {
     useEffect(() => {
         M.Modal.init(document.querySelectorAll(".modal"));
     }, []);
@@ -22,15 +22,12 @@ const DeleteDialog = ({ id, path, title }: DeleteDialogProps) => {
                 <i className="material-icons">delete</i>
             </a>
             <div id={id} className="modal">
-                <form method="delete" action={path}>
+                <form method="delete" onSubmit={handleDelete}>
                     <div className="modal-content">
                         <h4>{title}</h4>
                     </div>
                     <div className="modal-footer">
-                        <a
-                            href=""
-                            className="modal-close waves-effect btn-flat"
-                        >
+                        <a className="modal-close waves-effect btn-flat">
                             Cancel
                         </a>
                         <button
