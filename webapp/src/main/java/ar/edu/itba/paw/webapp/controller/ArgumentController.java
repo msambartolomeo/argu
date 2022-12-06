@@ -3,9 +3,9 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.ArgumentService;
 import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.webapp.dto.ArgumentDto;
-import ar.edu.itba.paw.webapp.dto.ListDto;
 import ar.edu.itba.paw.webapp.form.ArgumentForm;
 import ar.edu.itba.paw.webapp.utils.ImageUtils;
+import ar.edu.itba.paw.webapp.utils.ListResponseBuilder;
 import ar.edu.itba.paw.webapp.validators.Image;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -21,7 +21,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -68,13 +71,10 @@ public class ArgumentController {
 
         final Optional<Argument> lastArgument = argumentService.getLastArgument(debateId);
 
-        final ListDto<ArgumentDto> list;
         if (lastArgument.isPresent()) {
-            list = ListDto.from(argumentList, totalPages, page, uriInfo, lastArgument.get().getArgumentId());
-        } else {
-            list = ListDto.from(argumentList, totalPages, page, uriInfo);
+            return ListResponseBuilder.buildResponse(argumentList, totalPages, page, uriInfo, lastArgument.get().getArgumentId());
         }
-        return Response.ok(new GenericEntity<ListDto<ArgumentDto>>(list) {}).build();
+        return ListResponseBuilder.buildResponse(argumentList, totalPages, page, uriInfo);
     }
 
     @GET

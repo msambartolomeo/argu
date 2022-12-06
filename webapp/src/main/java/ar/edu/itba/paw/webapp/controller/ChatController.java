@@ -3,8 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.ChatService;
 import ar.edu.itba.paw.model.Chat;
 import ar.edu.itba.paw.webapp.dto.ChatDto;
-import ar.edu.itba.paw.webapp.dto.ListDto;
 import ar.edu.itba.paw.webapp.form.ChatForm;
+import ar.edu.itba.paw.webapp.utils.ListResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +13,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,9 +47,7 @@ public class ChatController {
         }
         final int totalPages = chatService.getDebateChatPageCount(debateId, size);
 
-        final ListDto<ChatDto> list = ListDto.from(chatList, totalPages, page, uriInfo);
-
-        return Response.ok(new GenericEntity<ListDto<ChatDto>>(list) {}).build();
+        return ListResponseBuilder.buildResponse(chatList, totalPages, page, uriInfo);
     }
 
     @POST

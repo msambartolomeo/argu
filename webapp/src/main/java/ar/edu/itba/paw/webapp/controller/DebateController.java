@@ -7,11 +7,11 @@ import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.webapp.dto.DebateDto;
-import ar.edu.itba.paw.webapp.dto.ListDto;
 import ar.edu.itba.paw.webapp.form.CreateDebateForm;
 import ar.edu.itba.paw.webapp.patches.DebatePatch;
 import ar.edu.itba.paw.webapp.patches.PATCH;
 import ar.edu.itba.paw.webapp.utils.ImageUtils;
+import ar.edu.itba.paw.webapp.utils.ListResponseBuilder;
 import ar.edu.itba.paw.webapp.validators.ExistingUser;
 import ar.edu.itba.paw.webapp.validators.Image;
 import ar.edu.itba.paw.webapp.validators.UserNotSelf;
@@ -104,8 +104,7 @@ public class DebateController {
             totalPages = debateService.getPages(size, search, finalCategory, finalStatus, finalDate);
         }
 
-        final ListDto<DebateDto> list = ListDto.from(debateList, totalPages, page, uriInfo);
-        return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {}).build();
+        return ListResponseBuilder.buildResponse(debateList, totalPages, page, uriInfo);
     }
 
     @GET
