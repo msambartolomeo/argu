@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.DebateService;
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
@@ -33,6 +34,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -63,8 +66,10 @@ public class DebateController {
             @Valid @ValidCategory @QueryParam("category") String category,
             @QueryParam("order") String order,
             @QueryParam("status") String status,
-            @QueryParam("date") String date
-    ) {
+            @QueryParam("date") String date,
+            @QueryParam("userUrl") final String userUrl,
+            @QueryParam("subscribed") final String subscribed
+    ) throws UnsupportedEncodingException {
         final String auxOrder = order;
         if (order != null && Arrays.stream(DebateOrder.values()).noneMatch((o) -> o.getName().equals(auxOrder)))
             order = null;
@@ -76,13 +81,28 @@ public class DebateController {
         final DebateStatus finalStatus = status == null ? null : DebateStatus.valueOf(status.toUpperCase());
         final LocalDate finalDate = date == null ? null : LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-        final List<DebateDto> debateList = debateService.get(page, size, search, finalCategory, finalOrder, finalStatus, finalDate)
-                .stream().map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
+        final List<DebateDto> debateList;
+        final int totalPages;
+        if (userUrl != null) {
+            final String username = URLDecoder.decode(userUrl, User.ENCODING);
+            debateList = debateService.getUserDebates(username, page, size, subscribed != null).stream()
+                    .map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
 
-        if (debateList.isEmpty()) {
-            return Response.noContent().build();
+            if (debateList.isEmpty()) {
+                return Response.noContent().build();
+            }
+
+            totalPages = debateService.getUserDebatesPageCount(username, size, subscribed != null);
+        } else {
+            debateList = debateService.get(page, size, search, finalCategory, finalOrder, finalStatus, finalDate)
+                    .stream().map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
+
+            if (debateList.isEmpty()) {
+                return Response.noContent().build();
+            }
+
+            totalPages = debateService.getPages(size, search, finalCategory, finalStatus, finalDate);
         }
-        int totalPages = debateService.getPages(size, search, finalCategory, finalStatus, finalDate);
 
         ListDto<DebateDto> list = ListDto.from(debateList, totalPages, page, uriInfo);
         return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {}).build();
