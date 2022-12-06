@@ -60,13 +60,14 @@ public class DebateController {
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getDebates(
-            @QueryParam("page") @DefaultValue("0") final int page,
+            @QueryParam("page") @DefaultValue("0") int page,
             @Valid @Max(value = 10, message = "Page size exceeded") @QueryParam("size") @DefaultValue("5") final int size,
             @QueryParam("search") final String search,
             @Valid @ValidCategory @QueryParam("category") final String category,
             @QueryParam("order") String order,
             @QueryParam("status") String status,
             @QueryParam("date") String date,
+            @QueryParam("recommendToDebate") final Long recommendToDebate,
             @QueryParam("userUrl") final String userUrl,
             @QueryParam("subscribed") final String subscribed
     ) throws UnsupportedEncodingException {
@@ -83,7 +84,23 @@ public class DebateController {
 
         final List<DebateDto> debateList;
         final int totalPages;
-        if (userUrl != null) {
+        if (recommendToDebate != null) {
+            final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String username = null;
+            if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
+                username = auth.getName();
+            }
+
+            debateList = debateService.getRecommendedDebates(recommendToDebate, username)
+                    .stream().map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
+
+            if (debateList.isEmpty()) {
+                return Response.noContent().build();
+            }
+
+            totalPages = 1;
+            page = 0;
+        } else if (userUrl != null) {
             final String username = URLDecoder.decode(userUrl, User.ENCODING);
             debateList = debateService.getUserDebates(username, page, size, subscribed != null).stream()
                     .map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
@@ -183,27 +200,5 @@ public class DebateController {
         }
 
         return Response.noContent().build();
-    }
-
-    // TODO: Confirm path
-    @GET
-    @Path("/recommended-debates")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response recommendedDebates(@Valid @NotNull(message = "missing debate to recommend from") @QueryParam("debateId") final Long id) {
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = null;
-        if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
-            username = auth.getName();
-        }
-
-        final List<DebateDto> debateDtoList = debateService.getRecommendedDebates(id, username)
-                .stream().map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
-
-        if (debateDtoList.isEmpty()) {
-            return Response.noContent().build();
-        }
-
-        final ListDto<DebateDto> list = ListDto.from(debateDtoList, 1, 0, uriInfo);
-        return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {}).build();
     }
 }
