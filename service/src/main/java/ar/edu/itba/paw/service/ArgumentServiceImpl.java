@@ -8,10 +8,7 @@ import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateStatus;
-import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
-import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenArgumentException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +24,6 @@ import java.util.Optional;
 public class ArgumentServiceImpl implements ArgumentService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArgumentServiceImpl.class);
-    private static final int PAGE_SIZE = 5;
     @Autowired
     private ArgumentDao argumentDao;
     @Autowired
@@ -54,9 +50,13 @@ public class ArgumentServiceImpl implements ArgumentService {
         });
 
         // TODO: Separate exception forbidden from closed/ deleted
-        if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED || debate.getStatus() == DebateStatus.VOTING || (!debate.getCreator().getUsername().equals(username) && !debate.getOpponent().getUsername().equals(username))) {
-            LOGGER.error("Cannot create new Argument on Debate {} because it is closed or because the requesting user {} is not the creator or the opponent", debateId, username);
+        if (!debate.getCreator().getUsername().equals(username) && !debate.getOpponent().getUsername().equals(username)) {
+            LOGGER.error("Cannot create new Argument on Debate {} because the requesting user {} is not the creator or the opponent", debateId, username);
             throw new ForbiddenArgumentException();
+        }
+        if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED || debate.getStatus() == DebateStatus.VOTING) {
+            LOGGER.error("Cannot create new Argument on Debate {} because it is closed", debateId);
+            throw new DebateClosedException();
         }
 
         ArgumentStatus status = getArgumentStatus(debate, user);
@@ -83,13 +83,13 @@ public class ArgumentServiceImpl implements ArgumentService {
         if (!lastArgument.isPresent()) {
             if (!creatorUsername.equals(username)) {
                 LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getName(), username);
-                throw new ForbiddenArgumentException();
+                throw new ArgumentTurnException();
             }
             return ArgumentStatus.INTRODUCTION;
         } else {
             if (username.equals(lastArgument.get().getUser().getUsername())) {
                 LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getName(), username);
-                throw new ForbiddenArgumentException();
+                throw new ArgumentTurnException();
             }
 
             switch (lastArgument.get().getStatus()) {
@@ -108,7 +108,7 @@ public class ArgumentServiceImpl implements ArgumentService {
                     return ArgumentStatus.CONCLUSION;
                 default:
                     LOGGER.error("Cannot create new Argument on Debate {} because it is not the turn of the requesting user {}", debate.getName(), username);
-                    throw new ForbiddenArgumentException();
+                    throw new ArgumentTurnException();
             }
         }
     }
@@ -178,13 +178,13 @@ public class ArgumentServiceImpl implements ArgumentService {
             return new ArgumentNotFoundException();
         });
 
-        // TODO: Check if this is actually not found or what
         if (argument.getDeleted()) {
-            throw new ArgumentNotFoundException();
+            LOGGER.error("Cannot delete argument {} because it is already deleted", argumentId);
+            throw new ArgumentDeletedException();
         }
 
         if(argument.getUser().getUsername() == null || !argument.getUser().getUsername().equals(username)) {
-            LOGGER.error("Cannot delete argument {} because user is not the creator", argumentId);
+            LOGGER.error("Cannot delete argument {} because user is not the creator or the opponent", argumentId);
             throw new ForbiddenArgumentException();
         }
 
