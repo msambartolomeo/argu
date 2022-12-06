@@ -84,43 +84,34 @@ public class DebateServiceImpl implements DebateService {
 
     @Override
     @Transactional
-    public List<Debate> getMostSubscribed() {
-        return debateDao.getDebatesDiscovery(0, 3, null, null, DebateOrder.SUBS_DESC, null, null);
-    }
-
-    @Override
-    @Transactional
-    public List<Debate> getProfileDebates(String list, long userId, int page) {
-        if (list.equals("mydebates"))
-            return getUserDebates(userId, page);
-
+    public List<Debate> getUserDebates(String username, int page, int size, boolean subscribed) {
         if (page < 0) {
             return Collections.emptyList();
         }
-        return debateDao.getSubscribedDebatesByUser(userId, page);
-    }
 
-    @Override
-    @Transactional
-    public List<Debate> getUserDebates(long userId, int page) {
-        if (page < 0) {
-            return Collections.emptyList();
+        final User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot get user debates for User {} because it does not exist", username);
+            return new UserNotFoundException();
+        });
+
+        if (subscribed) {
+            return debateDao.getSubscribedDebatesByUser(user, page, size);
         }
-        return debateDao.getUserDebates(userId, page);
-    }
-
-    @Override
-    public int getProfileDebatesPageCount(String list, long userId) {
-        if (list.equals("mydebates"))
-            return getUserDebatesPageCount(userId);
-
-        return (int) Math.ceil(debateDao.getSubscribedDebatesByUserCount(userId) / (double) PAGE_SIZE);
+        return debateDao.getUserDebates(user, page, size);
     }
 
     @Override
     @Transactional
-    public int getUserDebatesPageCount(long userId) {
-        return (int) Math.ceil(debateDao.getUserDebatesCount(userId) / (double) PAGE_SIZE);
+    public int getUserDebatesPageCount(String username, int size, boolean subscribed) {
+        final User user = userService.getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot get user debates for User {} because it does not exist", username);
+            return new UserNotFoundException();
+        });
+
+        if (subscribed) {
+            return (int) Math.ceil(debateDao.getSubscribedDebatesByUserCount(user) / (double) size);
+        }
+        return (int) Math.ceil(debateDao.getUserDebatesCount(user) / (double) size);
     }
 
     @Transactional

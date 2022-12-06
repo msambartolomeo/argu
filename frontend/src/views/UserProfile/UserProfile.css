@@ -1,0 +1,71 @@
+.card {
+    border-radius: 10px;
+}
+
+.btn,
+.btn-large {
+    display: flex;
+    justify-content: center;
+    background: #212d40;
+}
+
+.btn:hover,
+.btn-large:hover {
+    background-color: var(--selected-button);
+}
+
+.active {
+    background-color: var(--selected-button) !important;
+}
+
+.profile-container {
+    width: 80%;
+    height: 100%;
+    margin: 1% auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 30%;
+    height: fit-content;
+    margin-right: 10%;
+}
+
+.profile-data > h4 {
+    margin-top: 10%;
+    font-weight: bold;
+}
+
+.debates-column {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+.user-debates {
+    height: fit-content;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+}
+
+.email-format {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logout-btn {
+    margin: 5%;
+}
+
+.section {
+    display: flex;
+    flex-display: row;
+    justify-content: center;
+}

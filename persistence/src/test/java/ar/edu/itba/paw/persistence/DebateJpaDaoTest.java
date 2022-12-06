@@ -46,6 +46,7 @@ public class DebateJpaDaoTest {
     private final static byte[] IMAGE_DATA = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
     private final static int PAGE = 0;
+    private final static int SIZE = 5;
 
     private User creator;
     private User opponent;
@@ -123,7 +124,7 @@ public class DebateJpaDaoTest {
 
     @Test
     public void testGetSubscribedDebatesEmpty() {
-        List<Debate> debates = debateJpaDao.getSubscribedDebatesByUser(creator.getUserId(), PAGE);
+        List<Debate> debates = debateJpaDao.getSubscribedDebatesByUser(creator, PAGE, SIZE);
 
         assertTrue(debates.isEmpty());
     }
@@ -137,7 +138,7 @@ public class DebateJpaDaoTest {
         Subscribed subscribed = new Subscribed(creator, debate);
         em.persist(subscribed);
 
-        List<Debate> debates = debateJpaDao.getSubscribedDebatesByUser(creator.getUserId(), PAGE);
+        List<Debate> debates = debateJpaDao.getSubscribedDebatesByUser(creator, PAGE, SIZE);
 
         assertFalse(debates.isEmpty());
         assertEquals(DEBATE_NAME, debates.get(0).getName());
@@ -150,7 +151,7 @@ public class DebateJpaDaoTest {
 
     @Test
     public void testGetSubscribedDebatesByUserIdCountEmpty() {
-        int count = debateJpaDao.getSubscribedDebatesByUserCount(creator.getUserId());
+        int count = debateJpaDao.getSubscribedDebatesByUserCount(creator);
 
         assertEquals(0, count);
     }
@@ -164,14 +165,14 @@ public class DebateJpaDaoTest {
         Subscribed subscribed = new Subscribed(creator, debate);
         em.persist(subscribed);
 
-        int count = debateJpaDao.getSubscribedDebatesByUserCount(creator.getUserId());
+        int count = debateJpaDao.getSubscribedDebatesByUserCount(creator);
 
         assertEquals(1, count);
     }
 
     @Test
     public void testGetUserDebatesEmpty() {
-        List<Debate> userDebates = debateJpaDao.getUserDebates(creator.getUserId(), PAGE);
+        List<Debate> userDebates = debateJpaDao.getUserDebates(creator, PAGE, SIZE);
 
         assertTrue(userDebates.isEmpty());
     }
@@ -182,7 +183,7 @@ public class DebateJpaDaoTest {
                 opponent, null, DEBATE_CATEGORY);
         em.persist(debate);
 
-        List<Debate> creatorDebates = debateJpaDao.getUserDebates(creator.getUserId(), PAGE);
+        List<Debate> creatorDebates = debateJpaDao.getUserDebates(creator, PAGE, SIZE);
 
         assertEquals(1, creatorDebates.size());
         assertEquals(DEBATE_NAME, creatorDebates.get(0).getName());
@@ -199,7 +200,7 @@ public class DebateJpaDaoTest {
                 opponent, null, DEBATE_CATEGORY);
         em.persist(debate);
 
-        List<Debate> opponentDebates = debateJpaDao.getUserDebates(opponent.getUserId(), PAGE);
+        List<Debate> opponentDebates = debateJpaDao.getUserDebates(opponent, PAGE, SIZE);
 
         assertEquals(1, opponentDebates.size());
         assertEquals(DEBATE_NAME, opponentDebates.get(0).getName());
@@ -212,7 +213,7 @@ public class DebateJpaDaoTest {
 
     @Test
     public void testGetUserDebatesCountEmpty() {
-        int count = debateJpaDao.getUserDebatesCount(creator.getUserId());
+        int count = debateJpaDao.getUserDebatesCount(creator);
 
         assertEquals(0, count);
     }
@@ -223,7 +224,7 @@ public class DebateJpaDaoTest {
                 opponent, null, DEBATE_CATEGORY);
         em.persist(debate);
 
-        int count = debateJpaDao.getUserDebatesCount(creator.getUserId());
+        int count = debateJpaDao.getUserDebatesCount(creator);
 
         assertEquals(1, count);
     }
