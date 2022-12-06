@@ -8,8 +8,8 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.exceptions.DebateClosedException;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenChatException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -79,21 +79,13 @@ public class ChatServiceImplTest {
         chatService.create(CHAT_USERNAME, DEBATE_ID, MESSAGE);
     }
 
-    @Test(expected = ForbiddenChatException.class)
+    @Test(expected = DebateClosedException.class)
     public void testCreateChatClosedDebate() {
         debate.setStatus(DebateStatus.CLOSED);
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
         chatService.create(CHAT_USERNAME, DEBATE_ID, MESSAGE);
-    }
-
-    @Test(expected = ForbiddenChatException.class)
-    public void testCreateChatUserIsParticipant() {
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user2));
-
-        chatService.create(USER_USERNAME, DEBATE_ID, MESSAGE);
     }
 
     @Test

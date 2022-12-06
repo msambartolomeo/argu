@@ -8,8 +8,8 @@ import ar.edu.itba.paw.model.Chat;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.exceptions.DebateClosedException;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenChatException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,6 @@ import java.util.Optional;
 public class ChatServiceImpl implements ChatService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChatServiceImpl.class);
-    private static final int PAGE_SIZE = 15;
 
     @Autowired
     private ChatDao chatDao;
@@ -45,12 +44,9 @@ public class ChatServiceImpl implements ChatService {
             LOGGER.error("Cannot create new Chat on Debate {} because User {} does not exist", debateId, username);
             return new UserNotFoundException();
         });
-
-        // TODO: Change exception, forbidden makes no sense
-        if (debate.getStatus() != DebateStatus.VOTING && (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED
-                || debate.getCreator().getUsername().equals(username) || debate.getOpponent().getUsername().equals(username))) {
-            LOGGER.error("Cannot create new Chat on Debate {} because it is closed or because the requesting user {} is the creator or the opponent", debateId, username);
-            throw new ForbiddenChatException();
+        if (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED) {
+            LOGGER.error("Cannot create new Chat on Debate {} because it is closed", debateId);
+            throw new DebateClosedException();
         }
 
         return chatDao.create(user, debate, message);
