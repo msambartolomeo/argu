@@ -7,7 +7,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.model.Like;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.exceptions.ArgumentAlreadyDeletedException;
+import ar.edu.itba.paw.model.exceptions.ArgumentDeletedException;
 import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserAlreadyLikedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
@@ -44,7 +44,7 @@ public class LikeServiceImpl implements LikeService {
         });
         if(argument.getDeleted()) {
             LOGGER.error("Cannot like argument {} because it is deleted", argumentId);
-            throw new ArgumentAlreadyDeletedException();
+            throw new ArgumentDeletedException();
         }
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot like argument {} because user {} does not exist", argumentId, username);
@@ -72,7 +72,7 @@ public class LikeServiceImpl implements LikeService {
         });
         if(argument.getDeleted()) {
             LOGGER.error("Cannot unlike argument {} because it is deleted", argumentId);
-            throw new ArgumentAlreadyDeletedException();
+            throw new ArgumentDeletedException();
         }
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot unlike argument {} because user {} does not exist", argumentId, username);
