@@ -1,0 +1,43 @@
+.about-component {
+    display: flex;
+    flex-display: row;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* padding: 0 20px;
+  margin: 0 auto;
+  max-width: 1200px; */
+}
+
+.left-text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 10%;
+    width: 50%;
+}
+
+.right-text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 10%;
+    align-items: flex-end;
+    width: 50%;
+}
+
+.right-img-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    margin-right: 10%;
+}
+
+.left-img-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 10%;
+}
