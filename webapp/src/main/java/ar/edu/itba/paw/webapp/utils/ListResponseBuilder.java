@@ -1,24 +1,23 @@
 package ar.edu.itba.paw.webapp.utils;
 
 import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response;
-import java.util.List;
+import javax.ws.rs.core.UriInfo;
 
 public class ListResponseBuilder {
 
-    public static <T> Response buildResponse(List<T> list, int totalPages, int page, UriInfo uriInfo, long lastId) {
+    public static Response buildResponse(GenericEntity<?> list, int totalPages, int page, UriInfo uriInfo, long lastId) {
         return createResponse(list, totalPages, page, uriInfo)
                 .link(uriInfo.getAbsolutePathBuilder().path(String.valueOf(lastId)).build(), "last_element")
                 .build();
     }
 
-    public static <T> Response buildResponse(List<T> list, int totalPages, int page, UriInfo uriInfo) {
+    public static Response buildResponse(GenericEntity<?> list, int totalPages, int page, UriInfo uriInfo) {
         return createResponse(list, totalPages, page, uriInfo).build();
     }
 
-    private static <T> Response.ResponseBuilder createResponse(List<T> list, int totalPages, int page, UriInfo uriInfo) {
-        Response.ResponseBuilder builder = Response.ok(new GenericEntity<List<T>>(list) {})
+    private static Response.ResponseBuilder createResponse(GenericEntity<?> list, int totalPages, int page, UriInfo uriInfo) {
+        Response.ResponseBuilder builder = Response.ok(list)
                 .link(uriInfo.getRequestUriBuilder().replaceQueryParam("page", 0).build(), "first")
                 .link(uriInfo.getRequestUriBuilder().replaceQueryParam("page", totalPages - 1).build(), "last");
 

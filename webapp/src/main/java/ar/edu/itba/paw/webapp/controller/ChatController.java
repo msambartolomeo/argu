@@ -13,10 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -47,7 +44,7 @@ public class ChatController {
         }
         final int totalPages = chatService.getDebateChatPageCount(debateId, size);
 
-        return ListResponseBuilder.buildResponse(chatList, totalPages, page, uriInfo);
+        return ListResponseBuilder.buildResponse(new GenericEntity<List<ChatDto>>(chatList) {}, totalPages, page, uriInfo);
     }
 
     @POST

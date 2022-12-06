@@ -21,10 +21,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -71,10 +68,11 @@ public class ArgumentController {
 
         final Optional<Argument> lastArgument = argumentService.getLastArgument(debateId);
 
+        final GenericEntity<List<ArgumentDto>> genericEntity = new GenericEntity<List<ArgumentDto>>(argumentList) {};
         if (lastArgument.isPresent()) {
-            return ListResponseBuilder.buildResponse(argumentList, totalPages, page, uriInfo, lastArgument.get().getArgumentId());
+            return ListResponseBuilder.buildResponse(genericEntity, totalPages, page, uriInfo, lastArgument.get().getArgumentId());
         }
-        return ListResponseBuilder.buildResponse(argumentList, totalPages, page, uriInfo);
+        return ListResponseBuilder.buildResponse(genericEntity, totalPages, page, uriInfo);
     }
 
     @GET

@@ -121,7 +121,7 @@ public class DebateController {
             totalPages = debateService.getPages(size, search, finalCategory, finalStatus, finalDate);
         }
 
-        return ListResponseBuilder.buildResponse(debateList, totalPages, page, uriInfo);
+        return ListResponseBuilder.buildResponse(new GenericEntity<List<DebateDto>>(debateList) {}, totalPages, page, uriInfo);
     }
 
     @GET
