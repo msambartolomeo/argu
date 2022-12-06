@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.ForbiddenUserException;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import ar.edu.itba.paw.webapp.utils.ImageUtils;
@@ -51,12 +52,11 @@ public class UserController {
         }
 
         return Response.status(Response.Status.NOT_FOUND).build();
-
     }
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createUser(@Valid @NotNull final RegisterForm form) {
+    public Response createUser(@Valid @NotNull(message = "body required") final RegisterForm form) {
         final User user = userService.create(form.getUsername(), form.getPassword(), form.getEmail(), request.getLocale());
 
         return Response.created(uriInfo.getAbsolutePathBuilder().path(user.getUrl()).build()).build();
@@ -67,6 +67,11 @@ public class UserController {
     public Response deleteUser(@PathParam("url") final String url) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
 
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenUserException();
+        }
+
         userService.deleteUser(username);
 
         return Response.noContent().build();
@@ -76,24 +81,20 @@ public class UserController {
     @Path("/{url}/image")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     public Response updateImage(
-            @PathParam("url") String url,
-            @FormDataParam("image") InputStream imageInput,
-            @Valid @NotNull @Image @FormDataParam("image") FormDataBodyPart imageDetails
+            @PathParam("url") final String url,
+            @FormDataParam("image") final InputStream imageInput,
+            @Valid @NotNull @Image @FormDataParam("image") final FormDataBodyPart imageDetails
     ) throws IOException {
         final String username = URLDecoder.decode(url, User.ENCODING);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!username.equals(auth.getName())) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            throw new ForbiddenUserException();
         }
 
-        Response.Status status = ImageUtils.checkError(imageDetails);
-        if (status != null) {
-            return Response.status(status).build();
-        }
-        byte[] image = ImageUtils.getImage(imageInput);
+        final byte[] image = ImageUtils.getImage(imageDetails, imageInput);
 
-        User user = userService.updateImage(username, image);
+        final User user = userService.updateImage(username, image);
 
         return Response.created(uriInfo.getAbsolutePathBuilder().replacePath("images")
                 .path(String.valueOf(user.getImage().getId())).build()).build();
@@ -101,16 +102,18 @@ public class UserController {
 
     @DELETE
     @Path("/{url}/image")
-    public Response removeImage(@PathParam("url") String url) throws UnsupportedEncodingException {
+    public Response removeImage(@PathParam("url") final String url) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!username.equals(auth.getName())) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            throw new ForbiddenUserException();
         }
 
-        userService.deleteImage(username);
+        if (userService.deleteImage(username)) {
+            return Response.noContent().build();
+        }
 
-        return Response.noContent().build();
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 }

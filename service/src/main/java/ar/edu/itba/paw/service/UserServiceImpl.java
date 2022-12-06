@@ -69,14 +69,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User updateImage(String username, byte[] data) {
-        User user = getUserByUsername(username).orElseThrow(() -> {
+        final User user = getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot update image for user {} because it does not exist", username);
             return new UserNotFoundException();
         });
 
-        Image image = null;
-        if (user.getImage() != null)
-            image = user.getImage();
+        final Image image = user.getImage();
 
         user.updateImage(data);
 
@@ -86,21 +84,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deleteImage(String username) {
-        User user = getUserByUsername(username).orElseThrow(() -> {
+    public boolean deleteImage(String username) {
+        final User user = getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot update image for user {} because it does not exist", username);
             return new UserNotFoundException();
         });
 
-        Image image = null;
-        if (user.getImage() != null)
-            image = user.getImage();
+        final Image image = user.getImage();
 
-        user.deleteImage();
-
-        if (image != null) imageService.deleteImage(image);
-
-        return user;
+        if (image != null) {
+            user.deleteImage();
+            imageService.deleteImage(image);
+            return true;
+        }
+        return false;
     }
 
     @Override

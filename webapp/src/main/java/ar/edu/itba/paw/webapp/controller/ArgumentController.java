@@ -48,15 +48,14 @@ public class ArgumentController {
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getArguments(
-            @QueryParam("page") @DefaultValue("0") int page,
-            @Valid @Max(value = 10, message = "Page size exceeded") @QueryParam("size") @DefaultValue("5") int size
+            @QueryParam("page") @DefaultValue("0") final int page,
+            @Valid @Max(value = 10, message = "Page size exceeded") @QueryParam("size") @DefaultValue("5") final int size
     ) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username;
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = null;
         if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
             username = auth.getName();
-        } else {
-            username = null;
         }
 
         final List<ArgumentDto> argumentList = argumentService.getArgumentsByDebate(debateId, username, page, size)
@@ -65,7 +64,7 @@ public class ArgumentController {
         if (argumentList.isEmpty()) {
             return Response.noContent().build();
         }
-        int totalPages = argumentService.getArgumentByDebatePageCount(debateId, size);
+        final int totalPages = argumentService.getArgumentByDebatePageCount(debateId, size);
 
         final Optional<Argument> lastArgument = argumentService.getLastArgument(debateId);
 
@@ -94,8 +93,8 @@ public class ArgumentController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createArgument(@Valid @NotNull final ArgumentForm form) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    public Response createArgument(@Valid @NotNull(message = "body required") final ArgumentForm form) {
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         final Argument argument = argumentService.create(auth.getName(), debateId, form.getContent(), new byte[0]);
 
@@ -109,19 +108,9 @@ public class ArgumentController {
             @Valid @Image @FormDataParam("image") final FormDataBodyPart imageDetails,
             @Valid @NotEmpty @FormDataParam("content") final String content
     ) throws IOException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        // TODO: handle status with exceptions for cleaner code
-        final byte[] image;
-        if (imageInput == null) {
-            image = new byte[0];
-        } else {
-            Response.Status status = ImageUtils.checkError(imageDetails);
-            if (status != null) {
-                return Response.status(status).build();
-            }
-            image = ImageUtils.getImage(imageInput);
-        }
+        final byte[] image = ImageUtils.getImage(imageDetails, imageInput);
 
         final Argument argument = argumentService.create(auth.getName(), debateId, content, image);
 
@@ -131,7 +120,7 @@ public class ArgumentController {
     @DELETE
     @Path("/{id}")
     public Response deleteArgument(@PathParam("id") final long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         argumentService.deleteArgument(id, auth.getName());
 

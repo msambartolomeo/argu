@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -85,14 +86,19 @@ public class JwtFilter extends OncePerRequestFilter {
         }
     }
 
-    private void bearerAuthentication(String header, HttpServletRequest request) throws IOException {
+    private void bearerAuthentication(String header, HttpServletRequest request) {
         final String token = header.split(" ")[1].trim();
 
         if (!jwtUtils.validate(token)) {
             return;
         }
 
-        UserDetails user = userDetailsService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails user;
+        try {
+            user = userDetailsService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        } catch (UsernameNotFoundException e) {
+            user = null;
+        }
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 user, null, user == null ? Collections.emptyList() : user.getAuthorities()

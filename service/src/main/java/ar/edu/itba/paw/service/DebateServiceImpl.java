@@ -43,7 +43,7 @@ public class DebateServiceImpl implements DebateService {
     @Transactional
     public Optional<Debate> getDebateById(long debateId) {
         Optional<Debate> debate = debateDao.getDebateById(debateId);
-        if(debate.isPresent() && debate.get().getStatus() == DebateStatus.DELETED) return Optional.empty();
+        if (debate.isPresent() && debate.get().getStatus() == DebateStatus.DELETED) return Optional.empty();
         return debate;
     }
 
@@ -122,6 +122,7 @@ public class DebateServiceImpl implements DebateService {
             return new DebateNotFoundException();
         });
 
+        // TODO: Change exception Forbidden makes no sense
         if (debate.getStatus() != DebateStatus.OPEN || debate.getCreator().getUsername() == null || debate.getOpponent().getUsername() == null
                 || !(username.equals(debate.getCreator().getUsername()) || username.equals(debate.getOpponent().getUsername()))) {
             LOGGER.error("Cannot start conclusion of Debate with id {} because it is not open or the user {} is not the creator or the opponent", id, username);
@@ -139,6 +140,7 @@ public class DebateServiceImpl implements DebateService {
             return new DebateNotFoundException();
         });
 
+        // TODO: Change exception, forbidden makes no sense
         if (debate.getStatus() == DebateStatus.DELETED || debate.getCreator().getUsername() == null || !username.equals(debate.getCreator().getUsername())) {
             LOGGER.error("Cannot delete Debate {} because it is already deleted or the user {} is not the creator", id, username);
             throw new ForbiddenDebateException();
@@ -157,24 +159,20 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<Debate> getRecommendedDebates(long debateid) {
-        Debate debate = getDebateById(debateid).orElseThrow(() -> {
-            LOGGER.error("Cannot get recommended debates for Debate with id {} because it does not exist", debateid);
+    public List<Debate> getRecommendedDebates(long debateId, String username) {
+        Debate debate = getDebateById(debateId).orElseThrow(() -> {
+            LOGGER.error("Cannot get recommended debates for Debate with id {} because it does not exist", debateId);
             return new DebateNotFoundException();
         });
-        return debateDao.getRecommendedDebates(debate);
-    }
 
-    @Override
-    public List<Debate> getRecommendedDebates(long debateid, String username) {
-        Debate debate = getDebateById(debateid).orElseThrow(() -> {
-            LOGGER.error("Cannot get recommended debates for Debate with id {} because it does not exist", debateid);
-            return new DebateNotFoundException();
-        });
-        User user = userService.getUserByUsername(username).orElseThrow(() -> {
-            LOGGER.error("Cannot get recommended debates for Debate with id {} because user with username {} does not exist", debateid, username);
-            return new UserNotFoundException();
-        });
-        return debateDao.getRecommendedDebates(debate, user);
+        if (username != null) {
+            User user = userService.getUserByUsername(username).orElseThrow(() -> {
+                LOGGER.error("Cannot get recommended debates for Debate with id {} because user with username {} does not exist", debateId, username);
+                return new UserNotFoundException();
+            });
+            return debateDao.getRecommendedDebates(debate, user);
+        }
+
+        return debateDao.getRecommendedDebates(debate);
     }
 }

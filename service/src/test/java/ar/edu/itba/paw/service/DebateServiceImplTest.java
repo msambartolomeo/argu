@@ -414,7 +414,7 @@ public class DebateServiceImplTest {
 
     @Test(expected = DebateNotFoundException.class)
     public void testGetRecommendedDebatesDebateNotFound() {
-        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID);
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID, null);
 
         assertTrue(dl.isEmpty());
     }
@@ -425,7 +425,7 @@ public class DebateServiceImplTest {
         when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(debateDao.getRecommendedDebates(any(Debate.class))).thenReturn(Collections.singletonList(debate));
 
-        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID);
+        List<Debate> dl = debateService.getRecommendedDebates(DEBATE_ID, null);
 
         assertFalse(dl.isEmpty());
         assertEquals(debate, dl.get(0));

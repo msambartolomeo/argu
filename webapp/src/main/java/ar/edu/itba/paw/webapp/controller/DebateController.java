@@ -60,10 +60,10 @@ public class DebateController {
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getDebates(
-            @QueryParam("page") @DefaultValue("0") int page,
-            @Valid @Max(value = 10, message = "Page size exceeded") @QueryParam("size") @DefaultValue("5") int size,
-            @QueryParam("search") String search,
-            @Valid @ValidCategory @QueryParam("category") String category,
+            @QueryParam("page") @DefaultValue("0") final int page,
+            @Valid @Max(value = 10, message = "Page size exceeded") @QueryParam("size") @DefaultValue("5") final int size,
+            @QueryParam("search") final String search,
+            @Valid @ValidCategory @QueryParam("category") final String category,
             @QueryParam("order") String order,
             @QueryParam("status") String status,
             @QueryParam("date") String date,
@@ -104,7 +104,7 @@ public class DebateController {
             totalPages = debateService.getPages(size, search, finalCategory, finalStatus, finalDate);
         }
 
-        ListDto<DebateDto> list = ListDto.from(debateList, totalPages, page, uriInfo);
+        final ListDto<DebateDto> list = ListDto.from(debateList, totalPages, page, uriInfo);
         return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {}).build();
     }
 
@@ -125,7 +125,7 @@ public class DebateController {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createDebate(@Valid @NotNull CreateDebateForm form) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         final Debate debate = debateService.create(form.getTitle(),
                 form.getDescription(),
@@ -141,27 +141,17 @@ public class DebateController {
     @POST
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     public Response createDebateWithImage(
-            @FormDataParam("image") InputStream imageInput,
-            @Valid @Image @FormDataParam("image") FormDataBodyPart imageDetails,
-            @Valid @Size(max = 100) @NotEmpty @FormDataParam("title") String title,
-            @Valid @Size(max = 280) @NotEmpty @FormDataParam("description") String description,
-            @Valid @NotNull @ValidCategory @FormDataParam("category") String category,
-            @Valid @NotNull @FormDataParam("isCreatorFor") Boolean isCreatorFor,
-            @Valid @Size(max = 64) @NotEmpty @ExistingUser @UserNotSelf @FormDataParam("opponentUsername") String opponentUsername
+            @FormDataParam("image") final InputStream imageInput,
+            @Valid @Image @FormDataParam("image") final FormDataBodyPart imageDetails,
+            @Valid @Size(max = 100) @NotEmpty @FormDataParam("title") final String title,
+            @Valid @Size(max = 280) @NotEmpty @FormDataParam("description") final String description,
+            @Valid @NotNull @ValidCategory @FormDataParam("category") final String category,
+            @Valid @NotNull @FormDataParam("isCreatorFor") final Boolean isCreatorFor,
+            @Valid @Size(max = 64) @NotEmpty @ExistingUser @UserNotSelf @FormDataParam("opponentUsername") final String opponentUsername
     ) throws IOException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        // NOTE: Parse image
-        byte[] image;
-        if (imageInput == null) {
-            image = new byte[0];
-        } else {
-            Response.Status status = ImageUtils.checkError(imageDetails);
-            if (status != null) {
-                return Response.status(status).build();
-            }
-            image = ImageUtils.getImage(imageInput);
-        }
+        final byte[] image = ImageUtils.getImage(imageDetails, imageInput);
 
         final Debate debate = debateService.create(title,
                 description,
@@ -177,17 +167,18 @@ public class DebateController {
     @DELETE
     @Path("/{id}")
     public Response deleteDebate(@PathParam("id") final long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         debateService.deleteDebate(id, auth.getName());
 
         return Response.noContent().build();
     }
 
+    // TODO: Ask response code
     @PATCH
     @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response patchDebate(@PathParam("id") final long id, @Valid @NotNull final DebatePatch patch) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (patch.isConclusion()) {
             debateService.startConclusion(id, auth.getName());
         }
@@ -199,27 +190,21 @@ public class DebateController {
     @GET
     @Path("/recommended-debates")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response recommendedDebates(@QueryParam("debateId") final Long id) {
-        if (id == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        final List<Debate> debateList;
+    public Response recommendedDebates(@Valid @NotNull(message = "missing debate to recommend from") @QueryParam("debateId") final Long id) {
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = null;
         if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
-            debateList = debateService.getRecommendedDebates(id, auth.getName());
-        } else {
-            debateList = debateService.getRecommendedDebates(id);
+            username = auth.getName();
         }
-        final List<DebateDto> debateDtoList = debateList
+
+        final List<DebateDto> debateDtoList = debateService.getRecommendedDebates(id, username)
                 .stream().map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
 
-        if (debateList.isEmpty()) {
+        if (debateDtoList.isEmpty()) {
             return Response.noContent().build();
         }
 
-        ListDto<DebateDto> list = ListDto.from(debateDtoList, 1, 0, uriInfo);
+        final ListDto<DebateDto> list = ListDto.from(debateDtoList, 1, 0, uriInfo);
         return Response.ok(new GenericEntity<ListDto<DebateDto>>(list) {}).build();
     }
 }

@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -45,6 +46,7 @@ public class ChatServiceImpl implements ChatService {
             return new UserNotFoundException();
         });
 
+        // TODO: Change exception, forbidden makes no sense
         if (debate.getStatus() != DebateStatus.VOTING && (debate.getStatus() == DebateStatus.CLOSED || debate.getStatus() == DebateStatus.DELETED
                 || debate.getCreator().getUsername().equals(username) || debate.getOpponent().getUsername().equals(username))) {
             LOGGER.error("Cannot create new Chat on Debate {} because it is closed or because the requesting user {} is the creator or the opponent", debateId, username);
@@ -71,5 +73,10 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public int getDebateChatPageCount(long debateId, int size) {
         return (int) Math.ceil(chatDao.getDebateChatsCount(debateId) / (double) size);
+    }
+
+    @Override
+    public Optional<Chat> getChatById(long id) {
+        return chatDao.getChatById(id);
     }
 }

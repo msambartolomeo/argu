@@ -2,7 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.SubscribedService;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.ForbiddenSubscriptionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -27,6 +30,12 @@ public class SubscriptionController {
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
+
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenSubscriptionException();
+        }
+
         subscribedService.subscribeToDebate(username, debateId);
 
         return Response.created(null).build();
@@ -37,6 +46,11 @@ public class SubscriptionController {
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
+
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenSubscriptionException();
+        }
 
         if (subscribedService.unsubscribeToDebate(username, debateId)) {
             return Response.noContent().build();
@@ -50,6 +64,11 @@ public class SubscriptionController {
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
+
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenSubscriptionException();
+        }
 
         if (subscribedService.isUserSubscribed(username, debateId)) {
             return Response.ok().build();

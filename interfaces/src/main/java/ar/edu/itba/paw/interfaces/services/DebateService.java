@@ -20,7 +20,5 @@ public interface DebateService {
     void startConclusion(long id, String username);
     void deleteDebate(long id, String username);
     void closeVotes();
-    List<Debate> getRecommendedDebates(long debateid);
-
-    List<Debate> getRecommendedDebates(long debateid, String username);
+    List<Debate> getRecommendedDebates(long debateId, String username);
 }

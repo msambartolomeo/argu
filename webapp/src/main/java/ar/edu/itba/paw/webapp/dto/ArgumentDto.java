@@ -15,9 +15,9 @@ public class ArgumentDto {
     private String content;
     private String createdDate;
     private String status;
-    private int likes;
-    private boolean likedByUser;
-    private boolean deleted;
+    private Integer likes;
+    private Boolean likedByUser;
+    private Boolean deleted;
 
     private URI self;
     private URI creator;
@@ -27,12 +27,15 @@ public class ArgumentDto {
     public static ArgumentDto fromArgument(final UriInfo uriInfo, final Argument argument, final MessageSource messageSource, final Locale locale) {
         ArgumentDto dto = new ArgumentDto();
 
-        dto.content = argument.getContent();
+        if (!argument.getDeleted()) {
+            dto.content = argument.getContent();
+            dto.likes = argument.getLikesCount();
+            dto.likedByUser = argument.isLikedByUser();
+        } else {
+            dto.deleted = true;
+        }
         dto.createdDate = argument.getFormattedDate();
         dto.status = messageSource.getMessage("status." + argument.getStatus().getName(), null, locale);
-        dto.likes = argument.getLikesCount();
-        dto.likedByUser = argument.isLikedByUser();
-        dto.deleted = argument.getDeleted();
 
         dto.self = uriInfo.getAbsolutePathBuilder().replacePath("arguments").path(String.valueOf(argument.getArgumentId())).build();
 
@@ -76,19 +79,19 @@ public class ArgumentDto {
         this.status = status;
     }
 
-    public int getLikes() {
+    public Integer getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(Integer likes) {
         this.likes = likes;
     }
 
-    public boolean isLikedByUser() {
+    public Boolean isLikedByUser() {
         return likedByUser;
     }
 
-    public void setLikedByUser(boolean likedByUser) {
+    public void setLikedByUser(Boolean likedByUser) {
         this.likedByUser = likedByUser;
     }
 
@@ -124,11 +127,11 @@ public class ArgumentDto {
         this.image = image;
     }
 
-    public boolean isDeleted() {
+    public Boolean isDeleted() {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
 }

@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.mappers;
 
-import ar.edu.itba.paw.model.exceptions.Exception400;
 import ar.edu.itba.paw.model.exceptions.StatusCodeException;
 import ar.edu.itba.paw.webapp.dto.ExceptionErrorDto;
 

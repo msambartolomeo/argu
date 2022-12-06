@@ -10,10 +10,7 @@ public interface UserService {
     User create(String username, String password, String email, Locale locale);
     Optional<User> getUserByEmail(String email);
     User updateImage(String username, byte[] image);
-
-    User deleteImage(String username);
-
+    boolean deleteImage(String username);
     void requestModerator(String username, String reason);
-
     void deleteUser(String username);
 }

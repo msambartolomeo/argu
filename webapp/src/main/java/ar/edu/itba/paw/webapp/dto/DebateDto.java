@@ -27,6 +27,7 @@ public class DebateDto {
     private URI creator;
     private URI opponent;
     private URI arguments;
+    private URI chats;
 
     public static DebateDto fromDebate(final UriInfo uriInfo, final Debate debate, final MessageSource messageSource, final Locale locale) {
         final DebateDto dto = new DebateDto();
@@ -59,6 +60,9 @@ public class DebateDto {
 
         dto.arguments = uriInfo.getAbsolutePathBuilder().replacePath("debates")
                 .path(String.valueOf(debate.getDebateId())).path("arguments").build();
+
+        dto.chats = uriInfo.getAbsolutePathBuilder().replacePath("debates")
+                .path(String.valueOf(debate.getDebateId())).path("chats").build();
 
         return dto;
     }
@@ -181,5 +185,13 @@ public class DebateDto {
 
     public void setVotesAgainst(int votesAgainst) {
         this.votesAgainst = votesAgainst;
+    }
+
+    public URI getChats() {
+        return chats;
+    }
+
+    public void setChats(URI chats) {
+        this.chats = chats;
     }
 }
