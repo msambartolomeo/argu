@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.UserConflictException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,20 +46,19 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User create(String username, String password, String email, Locale locale) {
+        boolean isUsername = getUserByUsername(username).isPresent();
         Optional<User> optionalUser = getUserByEmail(email);
+        boolean isEmail = optionalUser.isPresent() && optionalUser.get().getUsername() != null;
+
+        if (isUsername || isEmail) {
+            LOGGER.error("Conflicting username {} or email {}", username, email);
+            throw new UserConflictException(isUsername, isEmail);
+        }
+
         if (optionalUser.isPresent())
             return optionalUser.get().updateLegacyUser(username, passwordEncoder.encode(password));
 
-        User user = userDao.create(username, passwordEncoder.encode(password), email, locale);
-
-        final Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("USER"));
-
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
-        return user;
+        return userDao.create(username, passwordEncoder.encode(password), email, locale);
     }
 
     @Override
