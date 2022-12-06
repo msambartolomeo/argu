@@ -173,7 +173,6 @@ public class DebateController {
         return Response.noContent().build();
     }
 
-    // TODO: Ask response code
     @PATCH
     @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -181,9 +180,10 @@ public class DebateController {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (patch.isConclusion()) {
             debateService.startConclusion(id, auth.getName());
+            return Response.noContent().build();
         }
 
-        return Response.noContent().build();
+        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 
     // TODO: Confirm path

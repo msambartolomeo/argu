@@ -24,7 +24,6 @@ public class SubscriptionController {
     @Autowired
     private SubscribedService subscribedService;
 
-    // TODO: ask query string for username instead of body or not sending at all
     @POST
     public Response subscribe(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
