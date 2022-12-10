@@ -1,0 +1,8 @@
+.category-filter-container {
+  display: flex;
+  flex-direction: column;
+  /* margin: 0 0 1rem 0; */
+  justify-content: baseline;
+  /* background-color: white; */
+  /* width: 30%; */
+}

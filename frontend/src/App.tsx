@@ -17,6 +17,7 @@ import Login from "./views/Login/Login";
 import UserProfile from "./views/UserProfile/UserProfile";
 import Register from "./views/Register/Register";
 import CreateDebate from "./views/CreateDebate/CreateDebate";
+import Discovery from "./views/Discovery/Discovery";
 
 function App() {
     useEffect(() => {
@@ -44,15 +45,7 @@ function App() {
                         element={<UserProfile />}
                     />
 
-                    <Route
-                        path="/debates"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Debates</p>
-                            </div>
-                        }
-                    />
+                    <Route path="/debates" element={<Discovery />} />
                     <Route
                         path="/debates/:id"
                         element={
