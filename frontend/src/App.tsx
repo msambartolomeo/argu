@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./views/LandingPage/LandingPage";
 import Navbar from "./components/Navbar/Navbar";
 import UserProfile from "./views/UserProfile/UserProfile";
+import Discovery from "./views/Discovery/Discovery";
 
 function App() {
     useEffect(() => {
@@ -40,15 +41,7 @@ function App() {
                         element={<UserProfile />}
                     />
 
-                    <Route
-                        path="/debates"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Debates</p>
-                            </div>
-                        }
-                    />
+                    <Route path="/debates" element={<Discovery />} />
                     <Route
                         path="/debates/:id"
                         element={

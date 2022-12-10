@@ -41,7 +41,7 @@ const Navbar = ({ image = arguLogo }: ArguLogoProps) => {
                         <ul className={click ? "nav-menu active" : "nav-menu"}>
                             <li className="nav-item">
                                 <NavLink
-                                    to="/"
+                                    to="/debates"
                                     className={({ isActive }) =>
                                         "nav-links" +
                                         (isActive ? " activated" : "")
