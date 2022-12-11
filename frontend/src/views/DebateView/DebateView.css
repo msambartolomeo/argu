@@ -1,0 +1,124 @@
+.card {
+    border-radius: 10px;
+}
+
+.normalized-margins {
+    width: 85%;
+    margin: 1% auto;
+}
+
+.debate-info-holder {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1%;
+}
+
+.debate-text-holder {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: fit-content;
+    padding-bottom: 4%;
+}
+
+.debate-holder-separator {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.debate-title {
+    padding-bottom: 1%;
+    margin: 0;
+}
+
+.debate-buttons-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.debate-footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-top: 1%;
+}
+
+.debate-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.argument-list {
+    background: var(--white);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 51%;
+    margin-right: 1%;
+}
+
+.post-arguments {
+    width: 32%;
+    margin-left: 1%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title-margins {
+    padding: 5%;
+}
+
+/* Buttons */
+
+.btn,
+.btn-large {
+    display: flex;
+    justify-content: center;
+    background: #212d40;
+}
+
+.btn:hover,
+.btn-large:hover {
+    background-color: var(--selected-button);
+}
+
+.chip {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Debater Display */
+.username-container {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* Post Argument */
+.image-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Vote Section */
+.vote-section {
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
+}
+
+.no-top-margin {
+    margin-top: 0;
+}
