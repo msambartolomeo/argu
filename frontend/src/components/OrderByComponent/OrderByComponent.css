@@ -1,0 +1,23 @@
+.order-by-container-with-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    color: white;
+    width: 100%;
+}
+
+.order-by-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+  align-items: flex-end;
+}
+
+.select-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2%;
+}

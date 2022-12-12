@@ -36,27 +36,6 @@ const CategoryFilters = () => {
                 ))}
             </Stack>
         </div>
-        // <div class="category-list z-depth-3">
-        //     <ul class="collection with-header">
-        //         <li class="collection-header"><h5><spring:message code="pages.debates-list.categories"/></h5></li>
-        //         <li>
-        //             <a href="<c:url value="/debates" />" class="collection-item waves-effect badge-margin category-button ${ empty
-        //             param.category ? "active" : ""}">
-        //                 <spring:message code="category.all"/>
-        //             </a>
-        //         </li>
-
-        //         <c:forEach items="${categories}" var="category">
-        //             <li>
-        //                 <a href="<c:url value="?category=${category.name}" />"
-        //                 class="collection-item waves-effect badge-margin category-button ${category.name == param.       category ?
-        //                 "active" : ""}">
-        //                     <spring:message code="category.${category.name}"/>
-        //                 </a>
-        //             </li>
-        //         </c:forEach>
-        //     </ul>
-        // </div>
     );
 };
 
