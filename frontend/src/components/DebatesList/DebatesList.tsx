@@ -1,4 +1,4 @@
-import Debate from "../../types/Debate";
+import Debate from "../../model/types/Debate";
 import DebateListItem from "../DebateListItem/DebateListItem";
 
 interface DebatesListProps {

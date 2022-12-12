@@ -1,4 +1,4 @@
-import Debate from "../../types/Debate";
+import Debate from "../../model/types/Debate";
 import NonClickableChip from "../NonClickableChip/NonClickableChip";
 import "./DebateListItem.css";
 import defaultDebatePhoto from "../../assets/debate_stock.png";
