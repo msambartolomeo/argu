@@ -1,10 +1,9 @@
-import { SelectContainer } from "react-select/dist/declarations/src/components/containers";
+import { SelectChangeEvent } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import CategoryFilters from "../../components/CategoryFilters/CategoryFilters";
-import DatePicker from "../../components/DatePicker/DatePicker";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import OrderByComponent from "../../components/OrderByComponent/OrderByComponent";
-import Pagination from "../../components/Pagination/Pagination";
-import SelectDropdown from "../../components/SelectDropdown/SelectDropdown";
 import DebateCategory from "../../model/enums/DebateCategory";
 import Debate from "../../model/types/Debate";
 import "./Discovery.css";
@@ -51,14 +50,57 @@ const Discovery = () => {
         },
     ];
 
+    const search = useLocation().search;
+    const selectedCategory = new URLSearchParams(search).get("category");
+
+    const [queryOrder, setQueryOrder] = useState("");
+    const [queryStatus, setQueryStatus] = useState("");
+    const navigate = useNavigate();
+
+    const handleSelectOrderChange = (event: SelectChangeEvent) => {
+        setQueryOrder(event.target.value);
+    };
+
+    const handleSelectStatusChange = (event: SelectChangeEvent) => {
+        setQueryStatus(event.target.value);
+    };
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams();
+        if (selectedCategory) {
+            queryParams.append("category", selectedCategory);
+            if (queryOrder) {
+                queryParams.append("order", queryOrder);
+            }
+            if (queryStatus) {
+                queryParams.append("status", queryStatus);
+            }
+        } else {
+            if (queryOrder) {
+                queryParams.append("order", queryOrder);
+            }
+            if (queryStatus) {
+                queryParams.append("status", queryStatus);
+            }
+        }
+        navigate("/debates?" + queryParams.toString());
+    }, [queryOrder, queryStatus, navigate]);
+
+    const orderByProps = {
+        queryOrder: queryOrder,
+        handleSelectOrderChange: handleSelectOrderChange,
+        queryStatus: queryStatus,
+        handleSelectStatusChange: handleSelectStatusChange,
+    };
+
     return (
         <div className="discovery-container">
             <div className="filters-container">
-                <CategoryFilters />
+                <CategoryFilters selectedCategory={selectedCategory} />
             </div>
             <div className="debates-container">
                 <div className="discovery-order-container">
-                    <OrderByComponent />
+                    <OrderByComponent {...orderByProps} />
                 </div>
                 <div className="debates-list-container">
                     <DebatesList debates={debatesList} />

@@ -1,13 +1,13 @@
 import { Button, Stack } from "@mui/material";
 import DebateCategory from "../../model/enums/DebateCategory";
 import "./CategoryFilters.css";
-import { useLocation } from "react-router-dom";
 
-const CategoryFilters = () => {
+interface CategoryFiltersProps {
+    selectedCategory: string | null;
+}
+
+const CategoryFilters = ({ selectedCategory }: CategoryFiltersProps) => {
     const categories = Object.values(DebateCategory);
-
-    const search = useLocation().search;
-    const selectedCategory = new URLSearchParams(search).get("category");
 
     return (
         <div className="category-filters-container">
