@@ -91,6 +91,7 @@ const Discovery = () => {
         handleSelectOrderChange: handleSelectOrderChange,
         queryStatus: queryStatus,
         handleSelectStatusChange: handleSelectStatusChange,
+        selectedCategory: selectedCategory,
     };
 
     return (
