@@ -9,6 +9,7 @@ interface OrderByComponentProps {
     handleSelectOrderChange: (event: SelectChangeEvent) => void;
     queryStatus: string;
     handleSelectStatusChange: (event: SelectChangeEvent) => void;
+    selectedCategory: string | null;
 }
 
 const OrderByComponent = ({
@@ -16,9 +17,10 @@ const OrderByComponent = ({
     handleSelectOrderChange,
     queryStatus,
     handleSelectStatusChange,
+    selectedCategory,
 }: OrderByComponentProps) => {
-    const search = useLocation().search;
-    const selectedCategory = new URLSearchParams(search).get("category");
+    // const search = useLocation().search;
+    // const selectedCategory = new URLSearchParams(search).get("category");
 
     const orderBySuppliers = [
         { value: "date_desc", label: "Newest" },
