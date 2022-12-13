@@ -1,20 +1,32 @@
+import { SelectChangeEvent } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import DatePicker from "../DatePicker/DatePicker";
-import SelectDropdown from "../SelectDropdown/SelectDropdown";
 import "./OrderByComponent.css";
 import SortSelectComponent from "./SortSelectComponent/SortSelectComponent";
 
-const OrderByComponent = () => {
+interface OrderByComponentProps {
+    queryOrder: string;
+    handleSelectOrderChange: (event: SelectChangeEvent) => void;
+    queryStatus: string;
+    handleSelectStatusChange: (event: SelectChangeEvent) => void;
+}
+
+const OrderByComponent = ({
+    queryOrder,
+    handleSelectOrderChange,
+    queryStatus,
+    handleSelectStatusChange,
+}: OrderByComponentProps) => {
     const search = useLocation().search;
     const selectedCategory = new URLSearchParams(search).get("category");
 
     const orderBySuppliers = [
-        { value: "newest", label: "Newest" },
-        { value: "oldest", label: "Oldest" },
-        { value: "A - Z", label: "A - Z" },
-        { value: "Z - A", label: "Z - A" },
-        { value: "least-subscribed", label: "Least subscribed" },
-        { value: "most-subscribed", label: "Most subscribed" },
+        { value: "date_desc", label: "Newest" },
+        { value: "date_asc", label: "Oldest" },
+        { value: "alpha_asc", label: "A - Z" },
+        { value: "alpha_desc", label: "Z - A" },
+        { value: "subs_asc", label: "Least subscribed" },
+        { value: "subs_desc", label: "Most subscribed" },
     ];
 
     const statusSuppliers = [
@@ -29,6 +41,8 @@ const OrderByComponent = () => {
         id: "order-by",
         labelId: "order-by-label",
         suppliers: orderBySuppliers,
+        query: queryOrder,
+        handleSelectChange: handleSelectOrderChange,
     };
 
     const statusProps = {
@@ -37,6 +51,8 @@ const OrderByComponent = () => {
         id: "status",
         labelId: "status-label",
         suppliers: statusSuppliers,
+        query: queryStatus,
+        handleSelectChange: handleSelectStatusChange,
     };
 
     return (

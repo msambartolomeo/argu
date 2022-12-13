@@ -5,7 +5,6 @@ import {
     Select,
     SelectChangeEvent,
 } from "@mui/material";
-import React from "react";
 import "./SortSelectComponent.css";
 
 interface SortSelectComponentProps {
@@ -14,6 +13,8 @@ interface SortSelectComponentProps {
     id: string;
     labelId: string;
     suppliers: { value: any; label: string }[];
+    query: string;
+    handleSelectChange: (event: SelectChangeEvent) => void;
 }
 
 const SortSelectComponent = ({
@@ -22,13 +23,9 @@ const SortSelectComponent = ({
     id,
     labelId,
     suppliers,
+    query,
+    handleSelectChange,
 }: SortSelectComponentProps) => {
-    const [value, setValue] = React.useState("");
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setValue(event.target.value);
-    };
-
     return (
         <div className="select-container">
             <FormControl
@@ -43,9 +40,9 @@ const SortSelectComponent = ({
                     className="white-text"
                     labelId={labelId}
                     id={id}
-                    // defaultValue={defaultValue}
-                    value={value}
-                    onChange={handleChange}
+                    defaultValue={defaultValue}
+                    value={query}
+                    onChange={handleSelectChange}
                     label={header}
                 >
                     {suppliers.map((supplier) => (
