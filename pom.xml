@@ -10,7 +10,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
-    <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
+    <org.springframework.version>4.3.22.RELEASE</org.springframework.version>
     <servlet-api.version>2.5</servlet-api.version>
     <jstl.version>1.2</jstl.version>
     <org.postgresql.version>42.2.5</org.postgresql.version>
@@ -22,10 +22,10 @@
     <org.slf4j.version>1.7.5</org.slf4j.version>
     <logback.version>1.1.2</logback.version>
     <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
-    <spring-security.version>4.0.4.RELEASE</spring-security.version>
+    <spring-security.version>4.2.11.RELEASE</spring-security.version>
     <commons-fileupload.version>1.4</commons-fileupload.version>
     <maven-war-plugin.version>2.6</maven-war-plugin.version>
-    <junit.version>4.11</junit.version>
+    <junit.version>4.13.2</junit.version>
     <org.hibernate.version>5.1.0.Final</org.hibernate.version>
     <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
     <org.thymeleaf.version>3.0.11.RELEASE</org.thymeleaf.version>
