@@ -23,7 +23,7 @@ public class CreateDebateForm {
     private String category;
 
     @NotNull
-    private boolean isCreatorFor;
+    private Boolean isCreatorFor;
 
     @Size(max = 64)
     @NotEmpty
