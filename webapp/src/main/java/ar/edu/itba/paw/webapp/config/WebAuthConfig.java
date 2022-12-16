@@ -71,7 +71,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring() // Ignore static resources
-                .antMatchers("/resources/**", "/images/**", "/logs/**");
+                .antMatchers("/resources/**", "/images/**", "/logs/**")
+                .antMatchers("/")
+                .antMatchers("/*.js")
+                .antMatchers("/*.css")
+                .antMatchers("/favicon.ico")
+                .antMatchers("/manifest.json");;
     }
 
     @Bean
