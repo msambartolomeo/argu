@@ -40,8 +40,15 @@ public class JwtUtils {
     }
 
     public String generateToken(User user) {
-        return Jwts.builder().setSubject(user.getUsername() + ',' + user.getEmail())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+        final Claims claims = Jwts.claims();
+        claims.setSubject(user.getUrl());
+        claims.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME));
+        claims.put("username", user.getUsername());
+        claims.put("email", user.getEmail());
+        claims.put("role", user.getRole().name());
+        claims.put("points", user.getPoints());
+
+        return Jwts.builder().setClaims(claims)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
