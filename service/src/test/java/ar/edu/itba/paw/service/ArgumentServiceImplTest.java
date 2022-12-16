@@ -9,10 +9,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
-import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
-import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenArgumentException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -277,12 +274,12 @@ public class ArgumentServiceImplTest {
         assertEquals(ArgumentStatus.INTRODUCTION, status);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = ArgumentTurnException.class)
     public void testGetArgumentStatusFirstIntroductionUserIsNotCreator() {
         argumentService.getArgumentStatus(debate, user2);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = ArgumentTurnException.class)
     public void testGetArgumentStatusLastArgumentFromSameUser() {
         Argument argument = new Argument(user, debate, CONTENT, image, ArgumentStatus.ARGUMENT);
         when(argumentDao.getLastArgument(any(Debate.class))).thenReturn(Optional.of(argument));
@@ -353,7 +350,7 @@ public class ArgumentServiceImplTest {
         argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = DebateClosedException.class)
     public void testCreateArgumentClosedDebate() {
         debate.setStatus(DebateStatus.CLOSED);
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
@@ -362,7 +359,7 @@ public class ArgumentServiceImplTest {
         argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = DebateClosedException.class)
     public void testCreateArgumentDeletedDebate() {
         debate.setStatus(DebateStatus.DELETED);
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
@@ -371,7 +368,7 @@ public class ArgumentServiceImplTest {
         argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = DebateClosedException.class)
     public void testCreateArgumentVotingDebate() {
         debate.setStatus(DebateStatus.VOTING);
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
@@ -380,7 +377,7 @@ public class ArgumentServiceImplTest {
         argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = ArgumentTurnException.class)
     public void testCreateArgumentUnauthorizedUser() {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user3));

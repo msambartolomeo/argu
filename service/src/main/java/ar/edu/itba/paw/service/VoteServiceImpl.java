@@ -9,7 +9,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Vote;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.enums.DebateVote;
-import ar.edu.itba.paw.model.exceptions.DebateAlreadyDeletedException;
+import ar.edu.itba.paw.model.exceptions.DebateClosedException;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserAlreadyVotedException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
@@ -47,7 +47,7 @@ public class VoteServiceImpl implements VoteService {
         DebateStatus status = debate.getStatus();
         if (status == DebateStatus.DELETED || status == DebateStatus.CLOSED) {
             LOGGER.error("Cannot vote winner in debate {} because it is closed or deleted", debateId);
-            throw new DebateAlreadyDeletedException();
+            throw new DebateClosedException();
         }
         Optional<Vote> voteOptional = voteDao.getVote(user, debate);
         if (voteOptional.isPresent()) {
@@ -85,7 +85,7 @@ public class VoteServiceImpl implements VoteService {
         DebateStatus status = debate.getStatus();
         if (status == DebateStatus.DELETED || status == DebateStatus.CLOSED) {
             LOGGER.error("Cannot remove vote in debate {} because it is closed or deleted", debateId);
-            throw new DebateAlreadyDeletedException();
+            throw new DebateClosedException();
         }
         Optional<Vote> vote = voteDao.getVote(user, debate);
         if (vote.isPresent()) {

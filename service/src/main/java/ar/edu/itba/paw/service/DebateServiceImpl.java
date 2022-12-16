@@ -10,6 +10,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.exceptions.DebateClosedException;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenDebateException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
@@ -29,7 +30,7 @@ import java.util.Optional;
 public class DebateServiceImpl implements DebateService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DebateServiceImpl.class);
-    private static final int PAGE_SIZE = 5;
+
     @Autowired
     private DebateDao debateDao;
     @Autowired
@@ -122,10 +123,12 @@ public class DebateServiceImpl implements DebateService {
             return new DebateNotFoundException();
         });
 
-        // TODO: Change exception Forbidden makes no sense
-        if (debate.getStatus() != DebateStatus.OPEN || debate.getCreator().getUsername() == null || debate.getOpponent().getUsername() == null
-                || !(username.equals(debate.getCreator().getUsername()) || username.equals(debate.getOpponent().getUsername()))) {
-            LOGGER.error("Cannot start conclusion of Debate with id {} because it is not open or the user {} is not the creator or the opponent", id, username);
+        if (debate.getStatus() != DebateStatus.OPEN) {
+            LOGGER.error("Cannot start conclusion of Debate with id {} because it is not open", id);
+            throw new DebateClosedException();
+        }
+        if (!username.equals(debate.getCreator().getUsername()) && !username.equals(debate.getOpponent().getUsername())) {
+            LOGGER.error("Cannot start conclusion of Debate with id {} because the user {} is not the creator or the opponent", id, username);
             throw new ForbiddenDebateException();
         }
 
@@ -140,8 +143,11 @@ public class DebateServiceImpl implements DebateService {
             return new DebateNotFoundException();
         });
 
-        // TODO: Change exception, forbidden makes no sense
-        if (debate.getStatus() == DebateStatus.DELETED || debate.getCreator().getUsername() == null || !username.equals(debate.getCreator().getUsername())) {
+        if (debate.getStatus() == DebateStatus.DELETED) {
+            LOGGER.error("Cannot delete Debate {} because it is already deleted or the user {} is not the creator", id, username);
+            throw new DebateClosedException();
+        }
+        if (debate.getCreator().getUsername() == null || !username.equals(debate.getCreator().getUsername())) {
             LOGGER.error("Cannot delete Debate {} because it is already deleted or the user {} is not the creator", id, username);
             throw new ForbiddenDebateException();
         }

@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.exceptions.DebateClosedException;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenDebateException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
@@ -330,7 +331,7 @@ public class DebateServiceImplTest {
         debateService.startConclusion(DEBATE_ID, INVALID_USERNAME);
     }
 
-    @Test(expected = ForbiddenDebateException.class)
+    @Test(expected = DebateClosedException.class)
     public void testStartConclusionAlreadyStarted() {
         Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
         debate.setStatus(DebateStatus.CLOSING);
@@ -348,7 +349,7 @@ public class DebateServiceImplTest {
         debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
     }
 
-    @Test(expected = ForbiddenDebateException.class)
+    @Test(expected = DebateClosedException.class)
     public void testStartConclusionClosed() {
         Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
         debate.setStatus(DebateStatus.CLOSED);

@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.UserConflictException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,6 +62,22 @@ public class UserServiceImplTest {
         assertEquals(user.getPassword(), u.getPassword());
         assertEquals(user.getEmail(), u.getEmail());
         assertEquals(user.getRole(), u.getRole());
+    }
+
+    @Test(expected = UserConflictException.class)
+    public void testCreateUserConflictingUsername() {
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
+        when(userDao.getUserByEmail(anyString())).thenReturn(Optional.of(user));
+
+        userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL, Locale.ENGLISH);
+    }
+
+    @Test(expected = UserConflictException.class)
+    public void testCreateUserConflictingEmail() {
+        User user = new User(USER_EMAIL, USER_USERNAME, USER_PASSWORD, Locale.ENGLISH);
+        when(userDao.getUserByUsername(anyString())).thenReturn(Optional.of(user));
+
+        userService.create(USER_USERNAME, USER_PASSWORD, USER_EMAIL, Locale.ENGLISH);
     }
 
     @Test

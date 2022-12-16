@@ -4,6 +4,8 @@ import ar.edu.itba.paw.interfaces.services.ArgumentService;
 import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.webapp.dto.ArgumentDto;
 import ar.edu.itba.paw.webapp.form.ArgumentForm;
+import ar.edu.itba.paw.webapp.patches.ArgumentPatch;
+import ar.edu.itba.paw.webapp.patches.PATCH;
 import ar.edu.itba.paw.webapp.utils.ImageUtils;
 import ar.edu.itba.paw.webapp.utils.ListResponseBuilder;
 import ar.edu.itba.paw.webapp.validators.Image;
@@ -115,13 +117,15 @@ public class ArgumentController {
         return Response.created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(argument.getArgumentId())).build()).build();
     }
 
-    @DELETE
+    @PATCH
     @Path("/{id}")
-    public Response deleteArgument(@PathParam("id") final long id) {
+    public Response deleteArgument(@PathParam("id") final long id, @Valid @NotNull final ArgumentPatch patch) {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (patch.isDelete()) {
+            argumentService.deleteArgument(id, auth.getName());
+            return Response.noContent().build();
+        }
 
-        argumentService.deleteArgument(id, auth.getName());
-
-        return Response.noContent().build();
+        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 }
