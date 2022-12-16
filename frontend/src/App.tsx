@@ -20,7 +20,7 @@ function App() {
     }, []);
 
     return (
-        <Router>
+        <Router basename="/paw-2022a-06">
             <div className="App">
                 <Navbar />
                 <Routes>
