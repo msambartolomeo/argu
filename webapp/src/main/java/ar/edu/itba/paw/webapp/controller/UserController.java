@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Optional;
 
-@Path("users")
+@Path("/api/users")
 @Component
 public class UserController {
     @Autowired

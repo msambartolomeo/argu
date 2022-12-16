@@ -26,7 +26,7 @@
 
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
   <filter>
@@ -36,7 +36,7 @@
 
   <filter-mapping>
     <filter-name>openEntityManagerInView</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
   <!-- this is for utf-8 (?) -->
@@ -86,7 +86,7 @@
   </filter>
   <filter-mapping>
     <filter-name>jersey</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
   <servlet-mapping>
