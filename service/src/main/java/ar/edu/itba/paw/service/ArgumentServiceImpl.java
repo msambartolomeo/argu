@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.ArgumentDao;
+import ar.edu.itba.paw.interfaces.dao.LikeDao;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.model.Debate;
@@ -35,7 +36,7 @@ public class ArgumentServiceImpl implements ArgumentService {
     @Autowired
     private DebateService debateService;
     @Autowired
-    private LikeService likeService;
+    private LikeDao likeDao;
 
     @Transactional
     @Override
@@ -152,7 +153,7 @@ public class ArgumentServiceImpl implements ArgumentService {
                 return new UserNotFoundException();
             });
             for (Argument argument : arguments) {
-                argument.setLikedByUser(likeService.isLiked(user, argument));
+                argument.setLikedByUser(likeDao.getLike(user, argument).isPresent());
             }
         }
 

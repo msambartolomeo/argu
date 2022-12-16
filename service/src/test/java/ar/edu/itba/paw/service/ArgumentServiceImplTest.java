@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.ArgumentDao;
+import ar.edu.itba.paw.interfaces.dao.LikeDao;
 import ar.edu.itba.paw.interfaces.services.*;
-import ar.edu.itba.paw.model.Argument;
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
@@ -67,7 +65,7 @@ public class ArgumentServiceImplTest {
     @Mock
     private DebateService debateService;
     @Mock
-    private LikeService likeService;
+    private LikeDao likeDao;
 
     @Before
     public void setUp() {
@@ -137,11 +135,12 @@ public class ArgumentServiceImplTest {
     @Test
     public void testGetArgumentsByDebateWithUserLike() {
         List<Argument> arguments = new ArrayList<>();
-        arguments.add(new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT));
+        Argument argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
+        arguments.add(argument);
 
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        when(likeService.isLiked(any(User.class), any(Argument.class))).thenReturn(true);
+        when(likeDao.getLike(any(User.class), any(Argument.class))).thenReturn(Optional.of(new Like(user, argument)));
         when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt(), anyInt())).thenReturn(arguments);
 
         List<Argument> a = argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE, 5);
