@@ -43,25 +43,25 @@ public class DebateDto {
         dto.votesFor = debate.getForCount();
         dto.votesAgainst = debate.getAgainstCount();
 
-        dto.self = uriInfo.getAbsolutePathBuilder().replacePath("debates").path(String.valueOf(debate.getDebateId())).build();
+        dto.self = uriInfo.getBaseUriBuilder().path("api").path("debates").path(String.valueOf(debate.getDebateId())).build();
 
         Image image = debate.getImage();
         if (image != null) {
-            dto.image = uriInfo.getAbsolutePathBuilder().replacePath("images").path(String.valueOf(image.getId())).build();
+            dto.image = uriInfo.getBaseUriBuilder().path("api").path("images").path(String.valueOf(image.getId())).build();
         }
         User creator = debate.getCreator();
         if (creator != null && creator.getUsername() != null) {
-            dto.creator = uriInfo.getAbsolutePathBuilder().replacePath("users").path(creator.getUrl()).build();
+            dto.creator = uriInfo.getBaseUriBuilder().path("api").path("users").path(creator.getUrl()).build();
         }
         User opponent = debate.getOpponent();
         if (opponent != null && opponent.getUsername() != null) {
-            dto.opponent = uriInfo.getAbsolutePathBuilder().replacePath("users").path(opponent.getUrl()).build();
+            dto.opponent = uriInfo.getBaseUriBuilder().path("api").path("users").path(opponent.getUrl()).build();
         }
 
-        dto.arguments = uriInfo.getAbsolutePathBuilder().replacePath("debates")
+        dto.arguments = uriInfo.getBaseUriBuilder().path("api").path("debates")
                 .path(String.valueOf(debate.getDebateId())).path("arguments").build();
 
-        dto.chats = uriInfo.getAbsolutePathBuilder().replacePath("debates")
+        dto.chats = uriInfo.getBaseUriBuilder().path("api").path("debates")
                 .path(String.valueOf(debate.getDebateId())).path("chats").build();
 
         return dto;
