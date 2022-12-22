@@ -53,7 +53,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>run build</arguments>
+                            <arguments>run build-java</arguments>
                         </configuration>
                     </execution>
                 </executions>
