@@ -98,6 +98,10 @@
     <filter-name>unconditionalCacheFilter</filter-name>
     <url-pattern>/static/*</url-pattern>
   </filter-mapping>
+  <filter-mapping>
+    <filter-name>unconditionalCacheFilter</filter-name>
+    <servlet-name>index</servlet-name>
+  </filter-mapping>
 
   <servlet-mapping>
     <servlet-name>default</servlet-name>
