@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Optional;
 
-@Path("users")
+@Path("/api/users")
 @Component
 public class UserController {
     @Autowired
@@ -96,7 +96,7 @@ public class UserController {
 
         final User user = userService.updateImage(username, image);
 
-        return Response.created(uriInfo.getAbsolutePathBuilder().replacePath("images")
+        return Response.created(uriInfo.getBaseUriBuilder().path("api").path("images")
                 .path(String.valueOf(user.getImage().getId())).build()).build();
     }
 

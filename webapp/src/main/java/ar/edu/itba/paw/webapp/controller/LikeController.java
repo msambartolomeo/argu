@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-@Path("/debates/{debateId}/arguments/{argumentId}/likes")
+@Path("/api/debates/{debateId}/arguments/{argumentId}/likes")
 @Component
 public class LikeController {
     @PathParam("argumentId")

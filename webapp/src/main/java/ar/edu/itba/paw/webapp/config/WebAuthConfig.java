@@ -48,20 +48,20 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
             .and().headers().cacheControl().disable()
             .and().authorizeRequests()
                 // users
-                .antMatchers(HttpMethod.DELETE,"/users/{url}", "/users/{url}/image").authenticated()
-                .antMatchers(HttpMethod.PUT, "/users/{url}/image").authenticated()
-                .antMatchers(HttpMethod.POST, "/users").anonymous()
+                .antMatchers(HttpMethod.DELETE,"/api/users/{url}", "/api/users/{url}/image").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/users/{url}/image").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/users").anonymous()
                 // debate
-                .antMatchers(HttpMethod.DELETE, "/debates/{\\d+}").hasAuthority("MODERATOR")
-                .antMatchers(HttpMethod.POST, "/debates").hasAuthority("MODERATOR")
-                .antMatchers(HttpMethod.PATCH, "/debates/{\\d+}").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/debates/{\\d+}").hasAuthority("MODERATOR")
+                .antMatchers(HttpMethod.POST, "/api/debates").hasAuthority("MODERATOR")
+                .antMatchers(HttpMethod.PATCH, "/api/debates/{\\d+}").authenticated()
                 // argument and chat
-                .antMatchers(HttpMethod.DELETE, "/debates/{\\d+}/arguments/{\\d+}").authenticated()
-                .antMatchers(HttpMethod.POST, "/debates/{\\d+}/arguments", "/debates/{\\d+}/chats").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/debates/{\\d+}/arguments/{\\d+}").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/debates/{\\d+}/arguments", "/api/debates/{\\d+}/chats").authenticated()
                 // likes, subs and votes
-                .antMatchers("/debates/{debateId}/arguments/{argumentId}/likes", "/debates/{debateId}/subscriptions", "/debates/{debateId}/votes").authenticated()
+                .antMatchers("/api/debates/{debateId}/arguments/{argumentId}/likes", "/api/debates/{debateId}/subscriptions", "/api/debates/{debateId}/votes").authenticated()
                 // general
-                .antMatchers(HttpMethod.GET, "/users/{url}", "/debates/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/users/{url}", "/api/debates/**").permitAll()
             .and().exceptionHandling()
                 .accessDeniedHandler((request, response, ex) -> response.setStatus(HttpServletResponse.SC_FORBIDDEN))
                 .authenticationEntryPoint((request, response, ex) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))
@@ -71,7 +71,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring() // Ignore static resources
-                .antMatchers("/resources/**", "/images/**", "/logs/**");
+                .antMatchers("/")
+                .antMatchers("/*.js")
+                .antMatchers("/*.css")
+                .antMatchers("/favicon.ico")
+                .antMatchers("/manifest.json");;
     }
 
     @Bean

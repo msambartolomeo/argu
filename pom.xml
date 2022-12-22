@@ -50,6 +50,7 @@
     <module>interfaces</module>
     <module>model</module>
     <module>persistence</module>
+    <module>frontend</module>
   </modules>
 
   <dependencyManagement>
@@ -330,6 +331,7 @@
           <version>3.0.2</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
         </plugin>
@@ -358,6 +360,13 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+        <plugin>
+          <groupId>com.github.eirslett</groupId>
+          <artifactId>frontend-maven-plugin</artifactId>
+          <!-- Use the latest released version:
+          https://repo1.maven.org/maven2/com/github/eirslett/frontend-maven-plugin/ -->
+          <version>1.9.1</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -376,6 +385,11 @@
         <version>${maven-war-plugin.version}</version>
         <configuration>
           <packagingExcludes>**/logback-test.xml</packagingExcludes>
+          <webResources>
+            <resource>
+              <directory>../frontend/build</directory>
+            </resource>
+          </webResources>
         </configuration>
       </plugin>
     </plugins>
