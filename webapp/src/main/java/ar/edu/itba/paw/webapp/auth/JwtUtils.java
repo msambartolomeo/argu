@@ -39,7 +39,7 @@ public class JwtUtils {
     }
 
     public boolean isTokenRefresh(String token) {
-        return getClaimFromToken(token, c -> c.get("refresh", boolean.class) != null);
+        return getClaimFromToken(token, c -> c.get("refresh", Boolean.class) != null);
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
