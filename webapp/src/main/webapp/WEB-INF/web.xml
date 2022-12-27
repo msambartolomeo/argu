@@ -89,6 +89,20 @@
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
+  <!-- Unconditional Cache Filter -->
+  <filter>
+    <filter-name>unconditionalCacheFilter</filter-name>
+    <filter-class>ar.edu.itba.paw.webapp.config.UnconditionalCacheFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>unconditionalCacheFilter</filter-name>
+    <url-pattern>/static/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>unconditionalCacheFilter</filter-name>
+    <servlet-name>index</servlet-name>
+  </filter-mapping>
+
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>/static/*</url-pattern>
