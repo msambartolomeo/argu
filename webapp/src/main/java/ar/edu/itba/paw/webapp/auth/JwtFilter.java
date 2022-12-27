@@ -48,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (header.startsWith("Basic ")) {
                 basicAuthentication(header, request, response);
             } else if (header.startsWith("Bearer ")) {
-                bearerAuthentication(header, request);
+                bearerAuthentication(header, request, response);
             }
         }
 
@@ -75,7 +75,9 @@ public class JwtFilter extends OncePerRequestFilter {
             if (fullUser == null)
                 return;
 
+            // TODO: Ask about headers
             response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUtils.generateToken(fullUser));
+            response.setHeader("X-Refresh", "Bearer " + jwtUtils.generateRefreshToken(fullUser));
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -86,7 +88,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
     }
 
-    private void bearerAuthentication(String header, HttpServletRequest request) {
+    private void bearerAuthentication(String header, HttpServletRequest request, HttpServletResponse response) {
         final String token = header.split(" ")[1].trim();
 
         if (!jwtUtils.validate(token)) {
@@ -98,6 +100,15 @@ public class JwtFilter extends OncePerRequestFilter {
             user = userDetailsService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
         } catch (UsernameNotFoundException e) {
             user = null;
+        }
+
+        if (jwtUtils.isTokenRefresh(token) && user != null) {
+
+            User fullUser = userService.getUserByUsername(user.getUsername()).orElse(null);
+            if (fullUser == null)
+                return;
+
+            response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUtils.generateToken(fullUser));
         }
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
