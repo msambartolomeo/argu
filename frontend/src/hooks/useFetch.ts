@@ -5,12 +5,10 @@ export const useFetch = () => {
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState(false);
 
-    async function fetchData(endpoint: string) {
+    async function fetchData(url: string) {
         setLoading(true);
         try {
-            const response = await fetch(
-                "http://localhost:8080/paw-2022a-06/api/" + endpoint
-            );
+            const response = await fetch(url);
             const json = await response.json();
             setData(json);
         } catch (error) {
