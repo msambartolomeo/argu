@@ -25,7 +25,7 @@ const debate1: Debate = {
     isCreatorFor: true,
     category: "Category 1",
     createdDate: "2021-01-01",
-    status: "Status 1",
+    status: "open",
     subscriptions: 1,
     votesFor: 80,
     votesAgainst: 20,
@@ -145,18 +145,109 @@ interface VotesSectionProps {
 }
 
 const VoteSection = ({ debate, userData }: VotesSectionProps) => {
+    // TODO: View user vote logic
+    const [vote, setVote] = useState(undefined);
+
+    const handleUserVoted = (vote: string) => {
+        if (vote === "for") {
+            if (debate.isCreatorFor) return debate.creator.username;
+            return debate.opponent?.username;
+        }
+        if (debate.isCreatorFor) return debate.opponent?.username;
+        return debate.creator.username;
+    };
+
+    const handleVoteButton = () => {
+        // TODO: Implement vote call
+    };
+
+    const handleVoteResult = () => {
+        const result = debate.votesFor - debate.votesAgainst;
+        if (result === 0) return "This debate resulted in a draw!";
+
+        let winner: string | undefined;
+        if (result > 0) {
+            winner = debate.isCreatorFor
+                ? debate.creator.username
+                : debate.opponent?.username;
+        } else {
+            winner = debate.isCreatorFor
+                ? debate.opponent?.username
+                : debate.creator.username;
+        }
+        winner = winner ? winner : "[deleted]";
+        return `The winner of this debate is ${winner}!`;
+    };
+
     return (
         <div className="card vote-section no-top-margin">
-            <div
-                className="progress red"
-                style={{ width: debate.votesFor + "%" }}
-            >
-                <span>
-                    {debate.isCreatorFor
-                        ? debate.creator.username
-                        : debate.opponent?.username}
-                </span>
+            <h5>Votes</h5>
+            {!vote &&
+                (debate.status === "open" ||
+                    debate.status === "voting" ||
+                    debate.status === "closing") && (
+                    <>
+                        <h5>Who is the winner of the debate?</h5>
+                        <div className="vote-buttons">
+                            <button
+                                onClick={handleVoteButton}
+                                className="btn waves-effect"
+                            >
+                                {debate.creator.username}
+                            </button>
+                            <button
+                                onClick={handleVoteButton}
+                                className="btn waves-effect"
+                            >
+                                {debate.opponent?.username}
+                            </button>
+                        </div>
+                    </>
+                )}
+            {vote && <h6>Voted: {handleUserVoted(vote)}</h6>}
+            <div className="progress red">
+                {debate.votesFor > 0 && (
+                    <div
+                        className="votes-format blue"
+                        style={{ width: debate.votesFor + "%" }}
+                    >
+                        <span>
+                            {debate.isCreatorFor
+                                ? debate.creator.username
+                                : debate.opponent?.username}
+                        </span>
+                        <span>{debate.votesFor}%</span>
+                    </div>
+                )}
+                {debate.votesAgainst > 0 && (
+                    <div
+                        className="votes-format"
+                        style={{ width: debate.votesAgainst + "%" }}
+                    >
+                        <span>
+                            {debate.isCreatorFor
+                                ? debate.opponent?.username
+                                : debate.creator.username}
+                        </span>
+                        <span>{debate.votesAgainst}%</span>
+                    </div>
+                )}
             </div>
+            {debate.status === "closed" && <h6>{handleVoteResult()}</h6>}
+            {!userData &&
+                vote &&
+                (debate.status === "open" || debate.status === "voting") && (
+                    <>
+                        <h6>Changed your mind?</h6>
+                        <button className="btn waves-effect">Unvote</button>
+                    </>
+                )}
+            {debate.votesFor + debate.votesAgainst === 0 && (
+                <h5 className="center">No votes yet</h5>
+            )}
+            {debate.status === "voting" && (
+                <h6 className="center">Voting will end on 17/02/2023</h6>
+            )}
         </div>
     );
 };

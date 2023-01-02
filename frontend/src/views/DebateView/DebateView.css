@@ -123,10 +123,28 @@
     margin-top: 0;
 }
 
+.vote-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
 .progress {
     min-height: 36px;
     overflow: hidden;
     position: relative;
     display: flex;
     flex-direction: row;
+}
+
+.votes-format {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
+}
+
+.votes-format > span {
+    color: white;
 }
