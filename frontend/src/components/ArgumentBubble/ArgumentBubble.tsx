@@ -115,7 +115,7 @@ const ArgumentBubble = ({ argument = arg }: ArgumentBubbleProps) => {
                             )
                         ) : (
                             <LikeButton
-                                icon="favorite"
+                                icon="favorite_border"
                                 handleSubmit={handleGoToLogin}
                             />
                         )}

@@ -27,8 +27,8 @@ const debate1: Debate = {
     createdDate: "2021-01-01",
     status: "Status 1",
     subscriptions: 1,
-    votesFor: 0,
-    votesAgainst: 0,
+    votesFor: 80,
+    votesAgainst: 20,
     creator: user1,
 };
 
@@ -138,16 +138,37 @@ const PostArgumentCard = ({
     );
 };
 
+// VOTES SECTION
+interface VotesSectionProps {
+    debate: Debate;
+    userData?: User;
+}
+
+const VoteSection = ({ debate, userData }: VotesSectionProps) => {
+    return (
+        <div className="card vote-section no-top-margin">
+            <div
+                className="progress red"
+                style={{ width: debate.votesFor + "%" }}
+            >
+                <span>
+                    {debate.isCreatorFor
+                        ? debate.creator.username
+                        : debate.opponent?.username}
+                </span>
+            </div>
+        </div>
+    );
+};
+
 // DEBATE VIEW
 interface DebateViewProps {
     debate?: Debate;
 }
 
 const DebateView = ({ debate = debate1 }: DebateViewProps) => {
-    // TODO: Change to real values
-    const [authorized, setAuthorized] = useState(true);
-    const [canCloseDebate, setCanCloseDebate] = useState(false);
-    const [canDeleteDebate, setCanDeleteDebate] = useState(false);
+    // TODO: Change to real values and hooks
+    const [userData, setuserData] = useState<User | undefined>(undefined);
     const [subscribed, setSubscribed] = useState(false);
     const argumentsList: Argument[] = [argument1];
 
@@ -183,29 +204,38 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                 <h4 className="debate-title word-wrap">
                                     {debate.name}
                                 </h4>
-                                {authorized && (
+                                {userData && (
                                     <div className="right debate-buttons-display">
                                         <div className="col">
-                                            {canCloseDebate && (
-                                                <button
-                                                    className="btn waves-effect chip"
-                                                    onClick={handleCloseDebate}
-                                                >
-                                                    Close Debate
-                                                    <i className="material-icons right">
-                                                        close
-                                                    </i>
-                                                </button>
-                                            )}
-                                            {canDeleteDebate && (
-                                                <DeleteDialog
-                                                    id="delete-debate"
-                                                    handleDelete={
-                                                        handleDeleteDebate
-                                                    }
-                                                    title="Are you sure you want to delete this debate?"
-                                                />
-                                            )}
+                                            {debate.status === "open" &&
+                                                (userData?.username ===
+                                                    debate.creator.username ||
+                                                    userData?.username ===
+                                                        debate.opponent
+                                                            ?.username) && (
+                                                    <button
+                                                        className="btn waves-effect chip"
+                                                        onClick={
+                                                            handleCloseDebate
+                                                        }
+                                                    >
+                                                        Close Debate
+                                                        <i className="material-icons right">
+                                                            close
+                                                        </i>
+                                                    </button>
+                                                )}
+                                            {debate.status !== "deleted" &&
+                                                userData?.username ===
+                                                    debate.creator.username && (
+                                                    <DeleteDialog
+                                                        id="delete-debate"
+                                                        handleDelete={
+                                                            handleDeleteDebate
+                                                        }
+                                                        title="Are you sure you want to delete this debate?"
+                                                    />
+                                                )}
                                         </div>
                                     </div>
                                 )}
@@ -239,7 +269,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                             )}
                         </div>
                         <div className="debate-footer">
-                            {authorized && (
+                            {userData && (
                                 <>
                                     {subscribed ? (
                                         <button
@@ -305,7 +335,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                 <div className="post-arguments">
                     <div className="card no-top-margin">
                         <div className="card-content">
-                            {authorized &&
+                            {userData &&
                                 debate.status !== "closed" &&
                                 debate.status !== "voting" &&
                                 (argumentsList[argumentsList.length - 1].creator
@@ -325,7 +355,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                         your argument.
                                     </div>
                                 ))}
-                            {!authorized && (
+                            {!userData && (
                                 <div className="card-title card-title-margins">
                                     Hey! Would you like to participate in the
                                     discussion, vote for the winner, argument,
@@ -339,7 +369,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                             )}
                         </div>
                     </div>
-                    <div>VOTE SECTION</div>
+                    <VoteSection debate={debate} userData={userData} />
                 </div>
             </div>
         </>

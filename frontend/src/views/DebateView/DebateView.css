@@ -122,3 +122,11 @@
 .no-top-margin {
     margin-top: 0;
 }
+
+.progress {
+    min-height: 36px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
