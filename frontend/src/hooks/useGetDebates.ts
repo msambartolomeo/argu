@@ -1,6 +1,9 @@
-import DebateCategory from "../model/enums/DebateCategory";
-import DebateOrder from "../model/enums/DebateOrder";
+import DebateDto from "../types/dto/DebateDto";
+import DebateCategory from "../types/enums/DebateCategory";
+import DebateOrder from "../types/enums/DebateOrder";
 import { useFetch } from "./useFetch";
+
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 export interface GetDebatesIn {
     search?: string;
@@ -16,26 +19,6 @@ export interface GetDebatesIn {
     size?: number;
 }
 
-export interface GetDebatesOut {
-    id: number;
-    name: string;
-    description: string;
-    isCreatorFor: boolean;
-    createdDate: Date;
-    category: DebateCategory;
-    status: string;
-    subscriptions: number;
-    votesFor: number;
-    votesAgainst: number;
-
-    self: string;
-    image: string;
-    creator: string;
-    opponent: string;
-    arguments: string;
-    chats: string;
-}
-
 const DEBATES_ENDPOINT = "debates";
 
 export const useGetDebates = () => {
@@ -43,8 +26,8 @@ export const useGetDebates = () => {
 
     async function getDebates(
         inData: GetDebatesIn
-    ): Promise<Array<GetDebatesOut> | null> {
-        let endpoint = DEBATES_ENDPOINT;
+    ): Promise<Array<DebateDto> | null> {
+        let endpoint = API_URL + DEBATES_ENDPOINT;
 
         if (inData) {
             endpoint += "?";
@@ -61,7 +44,7 @@ export const useGetDebates = () => {
             return null;
         }
 
-        return data as Array<GetDebatesOut>;
+        return data as Array<DebateDto>;
     }
 
     return { data, error, loading, getDebates };
