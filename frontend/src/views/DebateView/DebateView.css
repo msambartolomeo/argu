@@ -148,3 +148,40 @@
 .votes-format > span {
     color: white;
 }
+
+/* CHAT SECTION */
+.chat-box {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.message-container {
+    width: 100%;
+    margin: 1% auto;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    overflow: auto;
+    max-height: 300px;
+}
+
+.message {
+    border-bottom: solid 1px #ccc;
+    padding: 5px;
+    text-align: left;
+}
+
+.datetime {
+    float: right;
+    color: #999;
+}
+
+.send-chat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.flex-grow {
+    flex-grow: 2;
+}

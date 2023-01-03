@@ -2,7 +2,7 @@ import "./DebateView.css";
 import User from "../../types/User";
 import Debate from "../../types/Debate";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
 import Chip from "../../components/Chip/Chip";
 import NonClickableChip from "../../components/NonClickableChip/NonClickableChip";
@@ -11,6 +11,7 @@ import Argument from "../../model/Argument";
 import ArgumentBubble from "../../components/ArgumentBubble/ArgumentBubble";
 import Pagination from "../../components/Pagination/Pagination";
 import TextArea from "../../components/TextArea/TextArea";
+import Chat from "../../types/Chat";
 
 const user1: User = {
     username: "User 1",
@@ -25,7 +26,7 @@ const debate1: Debate = {
     isCreatorFor: true,
     category: "Category 1",
     createdDate: "2021-01-01",
-    status: "open",
+    status: "voting",
     subscriptions: 1,
     votesFor: 80,
     votesAgainst: 20,
@@ -42,6 +43,16 @@ const argument1: Argument = {
     creator: user1,
     debate: debate1,
 };
+
+const chat1: Chat = {
+    message: "Message 1",
+    createdDate: "2021-01-01",
+    selfURL: "",
+    creatorURL: "",
+    debateURL: "",
+};
+
+const chats1: Chat[] = [chat1, chat1, chat1, chat1, chat1, chat1, chat1, chat1];
 
 interface DebaterDisplayProps {
     debater?: string;
@@ -182,7 +193,8 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
     return (
         <div className="card vote-section no-top-margin">
             <h5>Votes</h5>
-            {!vote &&
+            {userData &&
+                !vote &&
                 (debate.status === "open" ||
                     debate.status === "voting" ||
                     debate.status === "closing") && (
@@ -252,6 +264,74 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
     );
 };
 
+// CHAT SECTION
+interface ChatSectionProps {
+    debate: Debate;
+    userData: User | undefined;
+}
+const ChatSection = ({ debate, userData }: ChatSectionProps) => {
+    const chat: Chat[] = chats1;
+    useEffect(() => {
+        const chatElem = document.getElementById("chat");
+        chatElem?.scrollTo(0, chatElem.scrollHeight);
+    }, []);
+
+    return (
+        <div className="card">
+            {((debate.status !== "open" && debate.status !== "closing") ||
+                !userData ||
+                (userData.username !== debate.creator.username &&
+                    userData.username !== debate.opponent?.username)) && (
+                <div className="chat-box card-content">
+                    <h5>Discussion</h5>
+                    <div className="message-container" id="chat">
+                        {chat.length > 0 ? (
+                            chat.map((c: Chat) => (
+                                <div key={c.selfURL} className="message">
+                                    <p className="datetime">{c.createdDate}</p>
+                                    <p>user</p>
+                                    <p>{c.message}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="message">
+                                <h6>There are no messages in this debate</h6>
+                            </div>
+                        )}
+                    </div>
+                    {userData &&
+                        debate.status !== "closed" &&
+                        debate.status !== "deleted" && (
+                            <>
+                                <form
+                                    method="post"
+                                    acceptCharset="utf-8"
+                                    id="chatForm"
+                                >
+                                    <div className="send-chat">
+                                        <div className="input-field flex-grow">
+                                            <label>Message</label>
+                                            <input className="materialize-textarea" />
+                                        </div>
+                                        <button
+                                            className="btn waves-effect center-block submitBtn"
+                                            type="submit"
+                                            name="chat"
+                                            form="chatForm"
+                                        >
+                                            Send
+                                        </button>
+                                    </div>
+                                </form>
+                            </>
+                        )}
+                    {userData && <Pagination param="todo" totalPages={1} />}
+                </div>
+            )}
+        </div>
+    );
+};
+
 // DEBATE VIEW
 interface DebateViewProps {
     debate?: Debate;
@@ -259,7 +339,7 @@ interface DebateViewProps {
 
 const DebateView = ({ debate = debate1 }: DebateViewProps) => {
     // TODO: Change to real values and hooks
-    const [userData, setuserData] = useState<User | undefined>(undefined);
+    const [userData, setuserData] = useState<User | undefined>(user1);
     const [subscribed, setSubscribed] = useState(false);
     const argumentsList: Argument[] = [argument1];
 
@@ -461,6 +541,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                         </div>
                     </div>
                     <VoteSection debate={debate} userData={userData} />
+                    <ChatSection debate={debate} userData={userData} />
                 </div>
             </div>
         </>
