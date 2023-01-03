@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Path("/api/debates/{debateId}/arguments")
+@Path("/debates/{debateId}/arguments")
 @Component
 public class ArgumentController {
 

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Path("/api/debates/{debateId}/chats")
+@Path("/debates/{debateId}/chats")
 public class ChatController {
 
     @PathParam("debateId")

@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-@Path("/api/debates/{debateId}/subscriptions")
+@Path("/debates/{debateId}/subscriptions")
 @Component
 public class SubscriptionController {
     @PathParam("debateId")

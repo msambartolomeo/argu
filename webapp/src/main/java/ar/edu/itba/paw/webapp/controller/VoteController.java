@@ -21,7 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Optional;
 
-@Path("/api/debates/{debateId}/votes")
+@Path("/debates/{debateId}/votes")
 @Component
 public class VoteController {
     @PathParam("debateId")

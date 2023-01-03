@@ -22,15 +22,15 @@ public class ChatDto {
         dto.message = chat.getMessage();
         dto.createdDate = chat.getFormattedDate();
 
-        dto.self = uriInfo.getBaseUriBuilder().path("api").path("chats").path(String.valueOf(chat.getChatId())).build();
+        dto.self = uriInfo.getBaseUriBuilder().path("chats").path(String.valueOf(chat.getChatId())).build();
 
         User creator = chat.getUser();
         if (creator != null && creator.getUsername() != null) {
-            dto.creator = uriInfo.getBaseUriBuilder().path("api").path("users").path(creator.getUrl()).build();
+            dto.creator = uriInfo.getBaseUriBuilder().path("users").path(creator.getUrl()).build();
         }
         Debate debate = chat.getDebate();
         if (debate != null) {
-            dto.debate = uriInfo.getBaseUriBuilder().path("api").path("debates").path(String.valueOf(debate.getDebateId())).build();
+            dto.debate = uriInfo.getBaseUriBuilder().path("debates").path(String.valueOf(debate.getDebateId())).build();
         }
 
         return dto;

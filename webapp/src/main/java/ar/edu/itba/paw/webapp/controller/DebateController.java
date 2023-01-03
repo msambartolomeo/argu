@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Path("/api/debates")
+@Path("/debates")
 @Component
 public class DebateController {
 
