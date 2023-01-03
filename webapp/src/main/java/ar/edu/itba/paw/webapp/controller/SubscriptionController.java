@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.SubscribedService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.ForbiddenSubscriptionException;
+import ar.edu.itba.paw.model.exceptions.SubscriptionNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,7 +56,7 @@ public class SubscriptionController {
             return Response.noContent().build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new SubscriptionNotFoundException();
     }
 
     @GET
@@ -73,6 +74,6 @@ public class SubscriptionController {
             return Response.ok().build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new SubscriptionNotFoundException();
     }
 }

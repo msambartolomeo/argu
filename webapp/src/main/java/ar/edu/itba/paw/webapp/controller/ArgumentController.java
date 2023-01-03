@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.ArgumentService;
 import ar.edu.itba.paw.model.Argument;
+import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
 import ar.edu.itba.paw.webapp.dto.ArgumentDto;
 import ar.edu.itba.paw.webapp.form.ArgumentForm;
 import ar.edu.itba.paw.webapp.patches.ArgumentPatch;
@@ -88,7 +89,7 @@ public class ArgumentController {
             return Response.ok(argument.get()).build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new ArgumentNotFoundException();
     }
 
     @POST

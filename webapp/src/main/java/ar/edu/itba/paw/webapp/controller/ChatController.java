@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.ChatService;
 import ar.edu.itba.paw.model.Chat;
+import ar.edu.itba.paw.model.exceptions.ChatNotFoundException;
 import ar.edu.itba.paw.webapp.dto.ChatDto;
 import ar.edu.itba.paw.webapp.form.ChatForm;
 import ar.edu.itba.paw.webapp.utils.ListResponseBuilder;
@@ -68,6 +69,6 @@ public class ChatController {
             return Response.ok(chat.get()).build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new ChatNotFoundException();
     }
 }

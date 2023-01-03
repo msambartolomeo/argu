@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.webapp.dto.DebateDto;
 import ar.edu.itba.paw.webapp.form.CreateDebateForm;
 import ar.edu.itba.paw.webapp.patches.DebatePatch;
@@ -135,7 +136,7 @@ public class DebateController {
             return Response.ok(debate.get()).build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new DebateNotFoundException();
     }
 
     @POST

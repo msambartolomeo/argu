@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.exceptions.ImageNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,6 @@ public class ImageController {
             return Response.ok(image.get().getData()).build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new ImageNotFoundException();
     }
 }

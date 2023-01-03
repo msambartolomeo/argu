@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.LikeService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.ForbiddenLikeException;
+import ar.edu.itba.paw.model.exceptions.LikeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,7 +56,7 @@ public class LikeController {
             return Response.noContent().build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new LikeNotFoundException();
     }
 
     @GET
@@ -72,7 +73,7 @@ public class LikeController {
         if (likeService.isLiked(argumentId, username)) {
             return Response.ok().build();
         }
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new LikeNotFoundException();
     }
 
 }
