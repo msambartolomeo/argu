@@ -1,8 +1,8 @@
 .chip-delete {
-    background: red;
+    background: red !important;
     color: white;
 }
 
 .chip-delete:hover {
-    background: darkred;
+    background: darkred !important;
 }
