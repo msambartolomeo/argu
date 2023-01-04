@@ -12,6 +12,7 @@ import ArgumentBubble from "../../components/ArgumentBubble/ArgumentBubble";
 import Pagination from "../../components/Pagination/Pagination";
 import TextArea from "../../components/TextArea/TextArea";
 import Chat from "../../types/Chat";
+import DebateListItem from "../../components/DebateListItem/DebateListItem";
 
 const user1: User = {
     username: "User 1",
@@ -332,6 +333,71 @@ const ChatSection = ({ debate, userData }: ChatSectionProps) => {
     );
 };
 
+// RECOMMENDED DEBATES SECTION
+const RecommendedDebatesSection = () => {
+    const recommendedDebates: Debate[] = [debate1, debate1, debate1];
+    const [slideIndex, setSlideIndex] = useState(0);
+
+    return (
+        <>
+            {recommendedDebates.length > 0 && (
+                <div className="card vote-section">
+                    <h5>Recommended debates</h5>
+                    <div className="row">
+                        <div className="slideshow-container">
+                            {recommendedDebates.map((d: Debate, index) => (
+                                <div
+                                    key={d.id}
+                                    className="fade"
+                                    style={{
+                                        display:
+                                            slideIndex === index
+                                                ? "block"
+                                                : "none",
+                                    }}
+                                >
+                                    <DebateListItem debate={d} />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="image-selector">
+                        {recommendedDebates.length > 1 && (
+                            <a
+                                className="prev btn image-selector"
+                                onClick={() =>
+                                    setSlideIndex(
+                                        slideIndex === 0
+                                            ? recommendedDebates.length - 1
+                                            : slideIndex - 1
+                                    )
+                                }
+                            >
+                                ❮
+                            </a>
+                        )}
+                        {recommendedDebates.length > 1 && (
+                            <a
+                                className="next btn image-selector"
+                                onClick={() =>
+                                    setSlideIndex(
+                                        slideIndex ===
+                                            recommendedDebates.length - 1
+                                            ? 0
+                                            : slideIndex + 1
+                                    )
+                                }
+                            >
+                                ❯
+                            </a>
+                        )}
+                    </div>
+                </div>
+            )}
+        </>
+    );
+};
+
 // DEBATE VIEW
 interface DebateViewProps {
     debate?: Debate;
@@ -542,6 +608,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                     </div>
                     <VoteSection debate={debate} userData={userData} />
                     <ChatSection debate={debate} userData={userData} />
+                    <RecommendedDebatesSection />
                 </div>
             </div>
         </>
