@@ -158,7 +158,7 @@ interface VotesSectionProps {
 
 const VoteSection = ({ debate, userData }: VotesSectionProps) => {
     // TODO: View user vote logic
-    const [vote, setVote] = useState(undefined);
+    const [vote, setVote] = useState("for");
 
     const handleUserVoted = (vote: string) => {
         if (vote === "for") {
@@ -218,36 +218,38 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
                     </>
                 )}
             {vote && <h6>Voted: {handleUserVoted(vote)}</h6>}
-            <div className="progress red">
-                {debate.votesFor > 0 && (
-                    <div
-                        className="votes-format blue"
-                        style={{ width: debate.votesFor + "%" }}
-                    >
-                        <span>
-                            {debate.isCreatorFor
-                                ? debate.creator.username
-                                : debate.opponent?.username}
-                        </span>
-                        <span>{debate.votesFor}%</span>
-                    </div>
-                )}
-                {debate.votesAgainst > 0 && (
-                    <div
-                        className="votes-format"
-                        style={{ width: debate.votesAgainst + "%" }}
-                    >
-                        <span>
-                            {debate.isCreatorFor
-                                ? debate.opponent?.username
-                                : debate.creator.username}
-                        </span>
-                        <span>{debate.votesAgainst}%</span>
-                    </div>
-                )}
-            </div>
+            {((userData && vote) || !userData) && (
+                <div className="progress red">
+                    {debate.votesFor > 0 && (
+                        <div
+                            className="votes-format blue"
+                            style={{ width: debate.votesFor + "%" }}
+                        >
+                            <span>
+                                {debate.isCreatorFor
+                                    ? debate.creator.username
+                                    : debate.opponent?.username}
+                            </span>
+                            <span>{debate.votesFor}%</span>
+                        </div>
+                    )}
+                    {debate.votesAgainst > 0 && (
+                        <div
+                            className="votes-format"
+                            style={{ width: debate.votesAgainst + "%" }}
+                        >
+                            <span>
+                                {debate.isCreatorFor
+                                    ? debate.opponent?.username
+                                    : debate.creator.username}
+                            </span>
+                            <span>{debate.votesAgainst}%</span>
+                        </div>
+                    )}
+                </div>
+            )}
             {debate.status === "closed" && <h6>{handleVoteResult()}</h6>}
-            {!userData &&
+            {userData &&
                 vote &&
                 (debate.status === "open" || debate.status === "voting") && (
                     <>
