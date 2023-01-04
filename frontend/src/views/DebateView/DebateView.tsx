@@ -572,42 +572,44 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                     <Pagination param="" totalPages={1} />
                 </div>
                 <div className="post-arguments">
-                    <div className="card no-top-margin">
-                        <div className="card-content">
-                            {userData &&
-                                debate.status !== "closed" &&
-                                debate.status !== "voting" &&
-                                (argumentsList[argumentsList.length - 1].creator
-                                    .username === user1.username ? (
-                                    <PostArgumentCard
-                                        handleSubmit={handlePostArgument}
-                                        lastArgument={
-                                            argumentsList[
-                                                argumentsList.length - 1
-                                            ]
-                                        }
-                                        debateCreator={debate.creator.username}
-                                    />
-                                ) : (
+                    {debate.status !== "closed" && debate.status !== "voting" && (
+                        <div className="card no-top-margin">
+                            <div className="card-content">
+                                {userData &&
+                                    (argumentsList[argumentsList.length - 1]
+                                        .creator.username === user1.username ? (
+                                        <PostArgumentCard
+                                            handleSubmit={handlePostArgument}
+                                            lastArgument={
+                                                argumentsList[
+                                                    argumentsList.length - 1
+                                                ]
+                                            }
+                                            debateCreator={
+                                                debate.creator.username
+                                            }
+                                        />
+                                    ) : (
+                                        <div className="card-title card-title-margins">
+                                            You need to wait for your turn to
+                                            post your argument.
+                                        </div>
+                                    ))}
+                                {!userData && (
                                     <div className="card-title card-title-margins">
-                                        You need to wait for your turn to post
-                                        your argument.
+                                        Hey! Would you like to participate in
+                                        the discussion, vote for the winner,
+                                        argument, like other people&apos;s
+                                        arguments, and subscribe to debates?{" "}
+                                        <a onClick={handleGoToLogin}>
+                                            You need to be logged-in in order to
+                                            do that!
+                                        </a>
                                     </div>
-                                ))}
-                            {!userData && (
-                                <div className="card-title card-title-margins">
-                                    Hey! Would you like to participate in the
-                                    discussion, vote for the winner, argument,
-                                    like other people&apos;s arguments, and
-                                    subscribe to debates?{" "}
-                                    <a onClick={handleGoToLogin}>
-                                        You need to be logged-in in order to do
-                                        that!
-                                    </a>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
                     <VoteSection debate={debate} userData={userData} />
                     <ChatSection debate={debate} userData={userData} />
                     <RecommendedDebatesSection />
