@@ -11,6 +11,7 @@
     display: flex;
     justify-content: space-between;
     padding-top: 1%;
+    align-items: center;
 }
 
 .debate-text-holder {

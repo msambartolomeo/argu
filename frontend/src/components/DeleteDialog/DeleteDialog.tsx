@@ -6,9 +6,10 @@ interface DeleteDialogProps {
     id: string;
     handleDelete: () => void;
     title: string;
+    name?: string;
 }
 
-const DeleteDialog = ({ id, handleDelete, title }: DeleteDialogProps) => {
+const DeleteDialog = ({ id, handleDelete, title, name }: DeleteDialogProps) => {
     useEffect(() => {
         M.Modal.init(document.querySelectorAll(".modal"));
     }, []);
@@ -19,6 +20,7 @@ const DeleteDialog = ({ id, handleDelete, title }: DeleteDialogProps) => {
                 className="btn waves-effect chip chip-delete modal-trigger"
                 href={`#${id}`}
             >
+                {name}
                 <i className="material-icons">delete</i>
             </a>
             <div id={id} className="modal">

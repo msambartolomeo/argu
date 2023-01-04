@@ -27,7 +27,7 @@ const debate1: Debate = {
     isCreatorFor: true,
     category: "Category 1",
     createdDate: "2021-01-01",
-    status: "voting",
+    status: "open",
     subscriptions: 1,
     votesFor: 80,
     votesAgainst: 20,
@@ -473,6 +473,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                                             handleDeleteDebate
                                                         }
                                                         title="Are you sure you want to delete this debate?"
+                                                        name="Delete Debate"
                                                     />
                                                 )}
                                         </div>
