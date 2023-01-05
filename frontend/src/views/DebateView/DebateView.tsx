@@ -7,7 +7,7 @@ import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
 import Chip from "../../components/Chip/Chip";
 import NonClickableChip from "../../components/NonClickableChip/NonClickableChip";
 import DebatePhoto from "../../components/DebatePhoto/DebatePhoto";
-import Argument from "../../model/Argument";
+import Argument from "../../types/Argument";
 import ArgumentBubble from "../../components/ArgumentBubble/ArgumentBubble";
 import Pagination from "../../components/Pagination/Pagination";
 import TextArea from "../../components/TextArea/TextArea";

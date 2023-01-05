@@ -4,7 +4,7 @@ import cn from "classnames";
 import { useState } from "react";
 
 import User from "../../types/User";
-import Argument from "../../model/Argument";
+import Argument from "../../types/Argument";
 
 import Debate from "../../types/Debate";
 import NonClickableChip from "../NonClickableChip/NonClickableChip";
