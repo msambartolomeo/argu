@@ -1,19 +1,19 @@
 import DebateDto from "../types/dto/DebateDto";
-import { useFetch } from "./useFetch";
+import { useRequestApi } from "./useRequestApi";
 
-export interface GetDebateByIdIn {
+export interface GetDebateByIdInput {
     id: number;
 }
 
 const DEBATES_ENDPOINT = "debates/";
 
 export const useGetDebateById = () => {
-    const { data, error, loading, fetchData } = useFetch();
+    const { data, error, loading, requestApi } = useRequestApi();
 
     async function getDebate(
-        inData: GetDebateByIdIn
+        inData: GetDebateByIdInput
     ): Promise<DebateDto | null> {
-        await fetchData(DEBATES_ENDPOINT + inData.id);
+        await requestApi(DEBATES_ENDPOINT + inData.id);
 
         if (!error && data) {
             return data as DebateDto;

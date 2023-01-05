@@ -1,12 +1,14 @@
 import DebateDto from "../types/dto/DebateDto";
 import DebateCategory from "../types/enums/DebateCategory";
 import DebateOrder from "../types/enums/DebateOrder";
-import { useFetch } from "./useFetch";
+import { useRequestApi } from "./useRequestApi";
 
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
-export interface GetDebatesIn {
+export interface GetDebatesInput {
     search?: string;
+
+    // TODO: Should we verify that the category is valid?
     category?: DebateCategory;
     order?: DebateOrder;
     status?: string;
@@ -16,16 +18,18 @@ export interface GetDebatesIn {
     subscribed?: boolean;
 
     page?: number;
+
+    // TODO: Size < 10, should we verify this or just catch the error?
     size?: number;
 }
 
 const DEBATES_ENDPOINT = "debates";
 
 export const useGetDebates = () => {
-    const { data, error, loading, fetchData } = useFetch();
+    const { data, error, loading, requestApi } = useRequestApi();
 
     async function getDebates(
-        inData: GetDebatesIn
+        inData: GetDebatesInput
     ): Promise<Array<DebateDto> | null> {
         let endpoint = API_URL + DEBATES_ENDPOINT;
 
@@ -38,7 +42,7 @@ export const useGetDebates = () => {
             }
         }
 
-        await fetchData(endpoint);
+        await requestApi(endpoint);
 
         if (error || !data) {
             return null;
