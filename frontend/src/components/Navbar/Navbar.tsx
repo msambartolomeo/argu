@@ -11,8 +11,9 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 import arguLogo from "../../assets/argu-logo-2.jpeg";
 import SearchBar from "../SearchBar/SearchBar";
+import { useTranslation } from "react-i18next";
+import "../../locales/index";
 
-// TODO: Internationalize
 // TODO: Upgrade search bar
 
 interface ArguLogoProps {
@@ -21,6 +22,7 @@ interface ArguLogoProps {
 
 const Navbar = ({ image = arguLogo }: ArguLogoProps) => {
     const [click] = useState(false);
+    const { t } = useTranslation();
 
     // const handleClick = () => setClick(!click);
     // const closeMobileMenu = () => setClick(false);
@@ -47,7 +49,7 @@ const Navbar = ({ image = arguLogo }: ArguLogoProps) => {
                                         (isActive ? " activated" : "")
                                     }
                                 >
-                                    Explore
+                                    {t("navbar.explore")}
                                 </NavLink>
                             </li>
                             <li className="nav-item">
@@ -58,7 +60,7 @@ const Navbar = ({ image = arguLogo }: ArguLogoProps) => {
                                         (isActive ? " activated" : "")
                                     }
                                 >
-                                    Login
+                                    {t("navbar.login")}
                                 </NavLink>
                             </li>
                             <li className="nav-item">
@@ -69,7 +71,7 @@ const Navbar = ({ image = arguLogo }: ArguLogoProps) => {
                                         (isActive ? " activated" : "")
                                     }
                                 >
-                                    Register
+                                    {t("navbar.register")}
                                 </NavLink>
                             </li>
                         </ul>
