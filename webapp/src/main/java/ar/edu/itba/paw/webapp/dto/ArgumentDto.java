@@ -37,19 +37,19 @@ public class ArgumentDto {
         dto.createdDate = argument.getFormattedDate();
         dto.status = messageSource.getMessage("status." + argument.getStatus().getName(), null, locale);
 
-        dto.self = uriInfo.getBaseUriBuilder().path("api").path("arguments").path(String.valueOf(argument.getArgumentId())).build();
+        dto.self = uriInfo.getBaseUriBuilder().path("arguments").path(String.valueOf(argument.getArgumentId())).build();
 
         Image image = argument.getImage();
         if (image != null) {
-            dto.image = uriInfo.getBaseUriBuilder().path("api").path("images").path(String.valueOf(image.getId())).build();
+            dto.image = uriInfo.getBaseUriBuilder().path("images").path(String.valueOf(image.getId())).build();
         }
         User creator = argument.getUser();
         if (creator != null && creator.getUsername() != null) {
-            dto.creator = uriInfo.getBaseUriBuilder().path("api").path("users").path(creator.getUrl()).build();
+            dto.creator = uriInfo.getBaseUriBuilder().path("users").path(creator.getUrl()).build();
         }
         Debate debate = argument.getDebate();
         if (debate != null) {
-            dto.debate = uriInfo.getBaseUriBuilder().path("api").path("debates").path(String.valueOf(debate.getDebateId())).build();
+            dto.debate = uriInfo.getBaseUriBuilder().path("debates").path(String.valueOf(debate.getDebateId())).build();
         }
 
         return dto;

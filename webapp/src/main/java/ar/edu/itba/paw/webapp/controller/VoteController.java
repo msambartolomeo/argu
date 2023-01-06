@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Vote;
 import ar.edu.itba.paw.model.enums.DebateVote;
 import ar.edu.itba.paw.model.exceptions.ForbiddenVoteException;
+import ar.edu.itba.paw.model.exceptions.VoteNotFoundException;
 import ar.edu.itba.paw.webapp.dto.VoteDto;
 import ar.edu.itba.paw.webapp.form.VoteForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Optional;
 
-@Path("/api/debates/{debateId}/votes")
+@Path("/debates/{debateId}/votes")
 @Component
 public class VoteController {
     @PathParam("debateId")
@@ -63,7 +64,7 @@ public class VoteController {
             return Response.noContent().build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new VoteNotFoundException();
     }
 
     @GET
@@ -82,6 +83,6 @@ public class VoteController {
             return Response.ok(VoteDto.fromVote(vote.get())).build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new VoteNotFoundException();
     }
 }

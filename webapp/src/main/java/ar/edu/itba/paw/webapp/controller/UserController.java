@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.ForbiddenUserException;
+import ar.edu.itba.paw.model.exceptions.ImageNotFoundException;
+import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import ar.edu.itba.paw.webapp.utils.ImageUtils;
@@ -28,7 +30,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Optional;
 
-@Path("/api/users")
+@Path("/users")
 @Component
 public class UserController {
     @Autowired
@@ -51,7 +53,7 @@ public class UserController {
             return Response.ok(user.get()).build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new UserNotFoundException();
     }
 
     @POST
@@ -96,7 +98,7 @@ public class UserController {
 
         final User user = userService.updateImage(username, image);
 
-        return Response.created(uriInfo.getBaseUriBuilder().path("api").path("images")
+        return Response.created(uriInfo.getBaseUriBuilder().path("images")
                 .path(String.valueOf(user.getImage().getId())).build()).build();
     }
 
@@ -114,6 +116,6 @@ public class UserController {
             return Response.noContent().build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        throw new ImageNotFoundException();
     }
 }
