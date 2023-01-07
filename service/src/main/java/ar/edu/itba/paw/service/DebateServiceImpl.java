@@ -117,8 +117,8 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
-    public void startConclusion(long id, String username) {
-        Debate debate = getDebateById(id).orElseThrow(() -> {
+    public void startConclusion(long id) {
+        Debate debate = debateDao.getDebateById(id).orElseThrow(() -> {
             LOGGER.error("Cannot start conclusion of Debate with id {} because it does not exist", id);
             return new DebateNotFoundException();
         });
@@ -127,29 +127,21 @@ public class DebateServiceImpl implements DebateService {
             LOGGER.error("Cannot start conclusion of Debate with id {} because it is not open", id);
             throw new DebateClosedException();
         }
-        if (!username.equals(debate.getCreator().getUsername()) && !username.equals(debate.getOpponent().getUsername())) {
-            LOGGER.error("Cannot start conclusion of Debate with id {} because the user {} is not the creator or the opponent", id, username);
-            throw new ForbiddenDebateException();
-        }
 
         debate.setStatus(DebateStatus.CLOSING);
     }
 
     @Transactional
     @Override
-    public void deleteDebate(long id, String username) {
-        Debate debate = getDebateById(id).orElseThrow(() -> {
+    public void deleteDebate(long id) {
+        Debate debate = debateDao.getDebateById(id).orElseThrow(() -> {
             LOGGER.error("Cannot delete Debate {} because it does not exist", id);
             return new DebateNotFoundException();
         });
 
         if (debate.getStatus() == DebateStatus.DELETED) {
-            LOGGER.error("Cannot delete Debate {} because it is already deleted or the user {} is not the creator", id, username);
+            LOGGER.error("Cannot delete Debate {} because it is already deleted", id);
             throw new DebateClosedException();
-        }
-        if (debate.getCreator().getUsername() == null || !username.equals(debate.getCreator().getUsername())) {
-            LOGGER.error("Cannot delete Debate {} because it is already deleted or the user {} is not the creator", id, username);
-            throw new ForbiddenDebateException();
         }
 
         debate.setStatus(DebateStatus.DELETED);
