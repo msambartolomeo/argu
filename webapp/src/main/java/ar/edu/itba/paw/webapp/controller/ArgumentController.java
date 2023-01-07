@@ -95,7 +95,11 @@ public class ArgumentController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createArgument(@Valid @NotNull(message = "body required") final ArgumentForm form) {
+    @PreAuthorize("@securityManager.checkDebateParticipant(authentication, #debateId)")
+    public Response createArgument(
+            @Valid @NotNull(message = "body required") final ArgumentForm form,
+            @PathParam("debateId") final long debateId
+    ) {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         final Argument argument = argumentService.create(auth.getName(), debateId, form.getContent(), new byte[0]);
@@ -105,7 +109,9 @@ public class ArgumentController {
 
     @POST
     @Consumes({MediaType.MULTIPART_FORM_DATA})
+    @PreAuthorize("@securityManager.checkDebateParticipant(authentication, #debateId)")
     public Response createArgumentWithImage(
+            @PathParam("debateId") final long debateId,
             @FormDataParam("image") final InputStream imageInput,
             @Valid @Image @FormDataParam("image") final FormDataBodyPart imageDetails,
             @Valid @NotEmpty @FormDataParam("content") final String content

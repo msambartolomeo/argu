@@ -54,10 +54,6 @@ public class ArgumentServiceImpl implements ArgumentService {
             LOGGER.error("Cannot create new Argument on Debate {} because it is closed", debateId);
             throw new DebateClosedException();
         }
-        if (!debate.getCreator().getUsername().equals(username) && !debate.getOpponent().getUsername().equals(username)) {
-            LOGGER.error("Cannot create new Argument on Debate {} because the requesting user {} is not the creator or the opponent", debateId, username);
-            throw new ForbiddenArgumentException();
-        }
 
         ArgumentStatus status = getArgumentStatus(debate, user);
 
