@@ -23,10 +23,10 @@ public class UserDto {
         dto.createdDate = user.getFormattedDate();
         dto.points = user.getPoints();
 
-        dto.self = uriInfo.getBaseUriBuilder().path("api").path("users").path(user.getUrl()).build();
+        dto.self = uriInfo.getBaseUriBuilder().path("users").path(user.getUrl()).build();
 
         if (user.getImage() != null) {
-            dto.image = uriInfo.getBaseUriBuilder().path("api").path("images").path(String.valueOf(user.getImage().getId())).build();
+            dto.image = uriInfo.getBaseUriBuilder().path("images").path(String.valueOf(user.getImage().getId())).build();
         }
 
         return dto;
