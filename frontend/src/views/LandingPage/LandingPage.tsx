@@ -4,7 +4,7 @@ import parallaxBackgroud from "../../assets/speech-bubbles.jpeg";
 import LandingPageExploreComponent from "../../components/LandingPageExploreComponent/LandinPageExploreComponent";
 import Navbar from "../../components/Navbar/Navbar";
 import TrendingDebatesComponent from "../../components/TrendingDebatesComponent/TrendingDebatesComponent";
-import DebateCategory from "../../model/enums/DebateCategory";
+import DebateCategory from "../../types/enums/DebateCategory";
 import LandingPageAboutComponent from "../../components/LandingPageAboutComponent/LandingPageAboutComponent";
 
 // TODO: Internationalize
