@@ -20,19 +20,9 @@ export const useCreateDebate = () => {
     async function createDebate(
         inData: CreateDebateInput
     ): Promise<Array<DebateDto> | null> {
-        // TODO: Properly throw errors
-        if (inData.title.length > 100) {
-            throw new Error("Title is too long");
-        }
-        if (inData.description.length > 280) {
-            throw new Error("Description is too long");
-        }
-        if (inData.opponentUsername.length > 64) {
-            throw new Error("Opponent URL is too long");
-        }
-
         await requestApi(API_URL + DEBATES_ENDPOINT, "POST", inData, {
             "Content-Type": "application/json",
+            // TODO: Replace with actual user credentials. For now, this represents "pepe:pepe"
             Authorization: "Basic cGVwZTpwZXBl",
         });
 
