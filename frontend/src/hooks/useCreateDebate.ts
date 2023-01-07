@@ -22,8 +22,6 @@ export const useCreateDebate = () => {
     ): Promise<Array<DebateDto> | null> {
         await requestApi(API_URL + DEBATES_ENDPOINT, "POST", inData, {
             "Content-Type": "application/json",
-            // TODO: Replace with actual user credentials. For now, this represents "pepe:pepe"
-            Authorization: "Basic cGVwZTpwZXBl",
         });
 
         return null;
