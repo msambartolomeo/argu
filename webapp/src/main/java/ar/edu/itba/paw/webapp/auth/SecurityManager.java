@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import ar.edu.itba.paw.interfaces.services.ArgumentService;
 import ar.edu.itba.paw.interfaces.services.DebateService;
+import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ import java.util.Optional;
 public class SecurityManager {
     @Autowired
     private DebateService debateService;
+
+    @Autowired
+    private ArgumentService argumentService;
 
     public boolean checkSameUser(Authentication auth, String userURL) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(userURL, User.ENCODING);
@@ -33,5 +38,11 @@ public class SecurityManager {
 
         return debate.filter(d -> d.getCreator().getUsername().equals(auth.getName())
                 || d.getOpponent().getUsername().equals(auth.getName())).isPresent();
+    }
+
+    public boolean checkArgumentCreator(Authentication auth, long argumentId) {
+        Optional<Argument> argument = argumentService.getArgumentById(argumentId);
+
+        return argument.filter(a -> a.getUser().getUsername().equals(auth.getName())).isPresent();
     }
 }

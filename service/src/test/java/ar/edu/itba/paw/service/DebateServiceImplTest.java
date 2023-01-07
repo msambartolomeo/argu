@@ -366,7 +366,7 @@ public class DebateServiceImplTest {
         debateService.deleteDebate(DEBATE_ID);
     }
 
-    @Test(expected = DebateClosedException.class)
+    @Test(expected = DebateNotFoundException.class)
     public void testDeleteAlreadyDeletedDebate() {
         Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
         debate.setStatus(DebateStatus.DELETED);

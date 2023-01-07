@@ -188,7 +188,7 @@ public class ArgumentServiceImplTest {
 
     @Test(expected = ArgumentNotFoundException.class)
     public void testDeleteArgumentNoValidArgument() {
-        argumentService.deleteArgument(ID, USER_USERNAME);
+        argumentService.deleteArgument(ID);
     }
 
     @Test
@@ -196,15 +196,7 @@ public class ArgumentServiceImplTest {
         Argument argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
         when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
 
-        argumentService.deleteArgument(ID, USER_USERNAME);
-    }
-
-    @Test(expected = ForbiddenArgumentException.class)
-    public void testDeleteArgumentOtherUser() {
-        Argument argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
-        when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
-
-        argumentService.deleteArgument(ID, USER_USERNAME_2);
+        argumentService.deleteArgument(ID);
     }
 
     @Test // image must be deleted
@@ -212,7 +204,7 @@ public class ArgumentServiceImplTest {
         Argument argument = new Argument(user, debate, CONTENT, image, ArgumentStatus.ARGUMENT);
         when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
 
-        argumentService.deleteArgument(ID, USER_USERNAME);
+        argumentService.deleteArgument(ID);
 
         verify(imageService).deleteImage(any(Image.class));
     }

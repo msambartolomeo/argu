@@ -134,15 +134,10 @@ public class DebateServiceImpl implements DebateService {
     @Transactional
     @Override
     public void deleteDebate(long id) {
-        Debate debate = debateDao.getDebateById(id).orElseThrow(() -> {
+        Debate debate = getDebateById(id).orElseThrow(() -> {
             LOGGER.error("Cannot delete Debate {} because it does not exist", id);
             return new DebateNotFoundException();
         });
-
-        if (debate.getStatus() == DebateStatus.DELETED) {
-            LOGGER.error("Cannot delete Debate {} because it is already deleted", id);
-            throw new DebateClosedException();
-        }
 
         debate.setStatus(DebateStatus.DELETED);
     }

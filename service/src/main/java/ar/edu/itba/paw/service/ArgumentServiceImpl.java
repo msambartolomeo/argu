@@ -172,7 +172,7 @@ public class ArgumentServiceImpl implements ArgumentService {
 
     @Override
     @Transactional
-    public void deleteArgument(long argumentId, String username) {
+    public void deleteArgument(long argumentId) {
         Argument argument = argumentDao.getArgumentById(argumentId).orElseThrow(() -> {
             LOGGER.error("Cannot delete argument {} because it does not exist", argumentId);
             return new ArgumentNotFoundException();
@@ -181,11 +181,6 @@ public class ArgumentServiceImpl implements ArgumentService {
         if (argument.getDeleted()) {
             LOGGER.error("Cannot delete argument {} because it is already deleted", argumentId);
             throw new ArgumentDeletedException();
-        }
-
-        if(argument.getUser().getUsername() == null || !argument.getUser().getUsername().equals(username)) {
-            LOGGER.error("Cannot delete argument {} because user is not the creator or the opponent", argumentId);
-            throw new ForbiddenArgumentException();
         }
 
         if(argument.getImage() != null)

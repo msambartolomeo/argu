@@ -4,14 +4,11 @@ import ar.edu.itba.paw.interfaces.services.VoteService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Vote;
 import ar.edu.itba.paw.model.enums.DebateVote;
-import ar.edu.itba.paw.model.exceptions.ForbiddenVoteException;
 import ar.edu.itba.paw.model.exceptions.VoteNotFoundException;
 import ar.edu.itba.paw.webapp.dto.VoteDto;
 import ar.edu.itba.paw.webapp.form.VoteForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;

@@ -15,6 +15,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -120,10 +121,10 @@ public class ArgumentController {
 
     @PATCH
     @Path("/{id}")
+    @PreAuthorize("@securityManager.checkArgumentCreator(authentication, #id)")
     public Response deleteArgument(@PathParam("id") final long id, @Valid @NotNull final ArgumentPatch patch) {
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (patch.isDelete()) {
-            argumentService.deleteArgument(id, auth.getName());
+            argumentService.deleteArgument(id);
             return Response.noContent().build();
         }
 
