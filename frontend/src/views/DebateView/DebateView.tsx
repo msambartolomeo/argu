@@ -280,58 +280,64 @@ const ChatSection = ({ debate, userData }: ChatSectionProps) => {
     }, []);
 
     return (
-        <div className="card">
+        <>
             {((debate.status !== "open" && debate.status !== "closing") ||
                 !userData ||
                 (userData.username !== debate.creator.username &&
                     userData.username !== debate.opponent?.username)) && (
-                <div className="chat-box card-content">
-                    <h5>Discussion</h5>
-                    <div className="message-container" id="chat">
-                        {chat.length > 0 ? (
-                            chat.map((c: Chat) => (
-                                <div key={c.selfURL} className="message">
-                                    <p className="datetime">{c.createdDate}</p>
-                                    <p>user</p>
-                                    <p>{c.message}</p>
-                                </div>
-                            ))
-                        ) : (
-                            <div className="message">
-                                <h6>There are no messages in this debate</h6>
-                            </div>
-                        )}
-                    </div>
-                    {userData &&
-                        debate.status !== "closed" &&
-                        debate.status !== "deleted" && (
-                            <>
-                                <form
-                                    method="post"
-                                    acceptCharset="utf-8"
-                                    id="chatForm"
-                                >
-                                    <div className="send-chat">
-                                        <div className="input-field flex-grow">
-                                            <label>Message</label>
-                                            <input className="materialize-textarea" />
-                                        </div>
-                                        <button
-                                            className="btn waves-effect center-block submitBtn"
-                                            type="submit"
-                                            name="chat"
-                                            form="chatForm"
-                                        >
-                                            Send
-                                        </button>
+                <div className="card">
+                    <div className="chat-box card-content">
+                        <h5>Discussion</h5>
+                        <div className="message-container" id="chat">
+                            {chat.length > 0 ? (
+                                chat.map((c: Chat) => (
+                                    <div key={c.selfURL} className="message">
+                                        <p className="datetime">
+                                            {c.createdDate}
+                                        </p>
+                                        <p>user</p>
+                                        <p>{c.message}</p>
                                     </div>
-                                </form>
-                            </>
-                        )}
-                    {userData && <Pagination param="todo" totalPages={1} />}
+                                ))
+                            ) : (
+                                <div className="message">
+                                    <h6>
+                                        There are no messages in this debate
+                                    </h6>
+                                </div>
+                            )}
+                        </div>
+                        {userData &&
+                            debate.status !== "closed" &&
+                            debate.status !== "deleted" && (
+                                <>
+                                    <form
+                                        method="post"
+                                        acceptCharset="utf-8"
+                                        id="chatForm"
+                                    >
+                                        <div className="send-chat">
+                                            <div className="input-field flex-grow">
+                                                <label>Message</label>
+                                                <input className="materialize-textarea" />
+                                            </div>
+                                            <button
+                                                className="btn waves-effect center-block submitBtn"
+                                                type="submit"
+                                                name="chat"
+                                                form="chatForm"
+                                            >
+                                                Send
+                                            </button>
+                                        </div>
+                                    </form>
+                                </>
+                            )}
+                        {userData && <Pagination param="todo" totalPages={1} />}
+                    </div>
                 </div>
             )}
-        </div>
+        </>
     );
 };
 
