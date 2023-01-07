@@ -1,0 +1,41 @@
+.card {
+    border-radius: 10px;
+}
+
+.debate-form-container {
+    width: 40%;
+    margin: 1% auto;
+    padding-bottom: 1%;
+}
+
+.no-borders {
+    border-collapse: separate !important;
+}
+
+table.radio-button-class tbody tr td input {
+    opacity: 100% !important;
+    position: relative !important;
+    margin-top: 1%;
+}
+
+table.radio-button-class tbody tr td label {
+    font-size: 1rem;
+    color: black !important;
+}
+
+table.radio-button-class tbody tr td.radio-button-label label {
+    padding-left: 5% !important;
+    margin-left: -5% !important;
+}
+
+.btn,
+.btn-large {
+    display: flex;
+    justify-content: center;
+    background: #212d40;
+}
+
+.btn:hover,
+.btn-large:hover {
+    background-color: var(--selected-button);
+}
