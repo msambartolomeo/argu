@@ -8,19 +8,19 @@ export const useAuth = () => {
         localStorage.getItem("refreshToken")
     );
 
-    const replaceAuthToken = (authToken: string | null) => {
-        setAuthToken(authToken);
-        if (authToken) {
-            localStorage.setItem("authToken", authToken);
+    const replaceAuthToken = (token: string | null) => {
+        setAuthToken(token);
+        if (token) {
+            localStorage.setItem("authToken", token);
         } else {
             localStorage.removeItem("authToken");
         }
     };
 
-    const replaceRefreshToken = (refreshToken: string | null) => {
-        setRefreshToken(refreshToken);
-        if (refreshToken) {
-            localStorage.setItem("refreshToken", refreshToken);
+    const replaceRefreshToken = (token: string | null) => {
+        setRefreshToken(token);
+        if (token) {
+            localStorage.setItem("refreshToken", token);
         } else {
             localStorage.removeItem("refreshToken");
         }
