@@ -62,6 +62,11 @@ public class Debate {
         this.status = status;
     }
 
+    public void deleteDebate() {
+        this.status = DebateStatus.DELETED;
+        this.image = null;
+    }
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "subscribed",
             joinColumns = @JoinColumn(name = "debateid", referencedColumnName = "debateid"),

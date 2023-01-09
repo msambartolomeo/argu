@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Debate;
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateOrder;
@@ -152,7 +153,11 @@ public class DebateServiceImpl implements DebateService {
             throw new ForbiddenDebateException();
         }
 
-        debate.setStatus(DebateStatus.DELETED);
+        final Image image = debate.getImage();
+        debate.deleteDebate();
+        if (image != null) {
+            imageService.deleteImage(image);
+        }
     }
 
     @Override
