@@ -1,6 +1,16 @@
 import { useState } from "react";
 import { useAuth } from "./useAuth";
 import axios, { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import { Buffer } from "buffer";
+
+export interface BasicCredentials {
+    username: string;
+    password: string;
+}
+
+const AUTHORIZATION_HEADER = "authorization";
+const REFRESH_HEADER = "x-refresh";
 
 export const useRequestApi = () => {
     const [data, setData] = useState(null);
@@ -14,22 +24,34 @@ export const useRequestApi = () => {
         url: string,
         method?: string,
         body?: object,
-        headers?: object,
-        requiresAuth?: boolean
+        headers?: Record<string, string>,
+        requiresAuth?: boolean,
+        // TODO: Validate how to get credentials, maybe also stored in useAuth
+        BasicCredentials?: BasicCredentials
     ) {
         if (requiresAuth) {
             if (authToken) {
+                console.log("authToken", authToken);
                 headers = {
-                    Authentication: `Bearer ${authToken}`,
+                    Authorization: `${authToken}`,
                     ...headers,
                 };
             } else if (refreshToken) {
+                console.log("refreshToken", refreshToken);
                 headers = {
-                    Authentication: `Bearer ${refreshToken}`,
+                    Authorization: `${refreshToken}`,
                     ...headers,
                 };
             } else {
-                // TODO: Force login & use Basic
+                console.log("BasicCredentials", BasicCredentials);
+                // Encode to base64
+                const encodedBasic = Buffer.from(
+                    `${BasicCredentials?.username}:${BasicCredentials?.password}`
+                ).toString("base64");
+                headers = {
+                    Authorization: `Basic ${encodedBasic}`,
+                    ...headers,
+                };
             }
         }
 
@@ -44,13 +66,13 @@ export const useRequestApi = () => {
                     ...headers,
                 },
             });
-            setData(response.data);
             if (requiresAuth) {
-                if (response.headers["Autherization"]) {
-                    replaceAuthToken(response.headers["Autherization"]);
+                // NOTE: axios forces all headers into lower case
+                if (response.headers[AUTHORIZATION_HEADER]) {
+                    replaceAuthToken(response.headers[AUTHORIZATION_HEADER]);
                 }
-                if (response.headers["X-Refresh"]) {
-                    replaceRefreshToken(response.headers["X-Refresh"]);
+                if (response.headers[REFRESH_HEADER]) {
+                    replaceRefreshToken(response.headers[REFRESH_HEADER]);
                 }
             }
         } catch (err) {
