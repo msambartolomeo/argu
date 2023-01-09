@@ -188,9 +188,10 @@ public class ArgumentServiceImpl implements ArgumentService {
             throw new ForbiddenArgumentException();
         }
 
-        if(argument.getImage() != null)
-            imageService.deleteImage(argument.getImage());
-
+        final Image image = argument.getImage();
         argument.deleteArgument();
+        if(image != null) {
+            imageService.deleteImage(image);
+        }
     }
 }

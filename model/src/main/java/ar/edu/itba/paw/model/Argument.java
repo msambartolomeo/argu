@@ -110,6 +110,7 @@ public class Argument {
 
     public void deleteArgument() {
         this.deleted = true;
+        this.image = null;
     }
 
     public Boolean getDeleted() {
