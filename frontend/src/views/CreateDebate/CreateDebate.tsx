@@ -1,5 +1,7 @@
 import "./CreateDebate.css";
 
+import { useRef } from "react";
+
 import TextArea from "../../components/TextArea/TextArea";
 import InputField from "../../components/InputField/InputField";
 import SelectDropdown from "../../components/SelectDropdown/SelectDropdown";
@@ -11,6 +13,17 @@ const CreateDebate = () => {
         value: category,
         label: category,
     }));
+
+    const imageRef = useRef<HTMLInputElement>(null);
+    const imageNameRef = useRef<HTMLInputElement>(null);
+
+    const clearImage = () => {
+        if (imageRef.current && imageNameRef.current) {
+            imageRef.current.value = "";
+            imageNameRef.current.value = "";
+        }
+    };
+
     // TODO: Validations and submit action
 
     return (
@@ -72,9 +85,12 @@ const CreateDebate = () => {
                         <tr>
                             <td>
                                 Debate image (optional):
-                                {/* <a id="x" className="material-icons">
+                                <a
+                                    className="material-icons"
+                                    onClick={clearImage}
+                                >
                                     close
-                                </a> */}
+                                </a>
                             </td>
                             <td>
                                 <div className="file-field input-field">
@@ -82,11 +98,16 @@ const CreateDebate = () => {
                                         <label className="white-text">
                                             Upload Image
                                         </label>
-                                        <input id="image" type="file" />
+                                        <input
+                                            ref={imageRef}
+                                            id="image"
+                                            type="file"
+                                        />
                                     </div>
                                     <div className="file-path-wrapper">
                                         <input
                                             className="file-path"
+                                            ref={imageNameRef}
                                             type="text"
                                         />
                                     </div>
