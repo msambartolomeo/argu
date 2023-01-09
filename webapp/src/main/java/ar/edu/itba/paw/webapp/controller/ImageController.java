@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
@@ -23,7 +24,7 @@ public class ImageController {
     private ImageService imageService;
 
     @Path("/{id}")
-    @Produces("image/*")
+    @Produces({"image/*", MediaType.APPLICATION_JSON})
     @GET
     public Response getImage(@PathParam("id") final long id, @Context Request request) {
         final Image image = imageService.getImage(id).orElseThrow(ImageNotFoundException::new);
