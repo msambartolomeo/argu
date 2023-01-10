@@ -45,4 +45,12 @@ public class SecurityManager {
 
         return argument.filter(a -> a.getUser().getUsername().equals(auth.getName())).isPresent();
     }
+
+    public boolean checkUserDebateAccess(Authentication auth, String userUrl, String subscribed) throws UnsupportedEncodingException {
+        if (userUrl == null || subscribed == null) {
+            // NOTE: not asking for user debates or not asking for subscribed debates, can continue
+            return true;
+        }
+        return checkSameUser(auth, userUrl);
+    }
 }

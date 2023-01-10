@@ -61,6 +61,7 @@ public class DebateController {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.checkUserDebateAccess(authentication, #userUrl, #subscribed)")
     public Response getDebates(
             @QueryParam("page") @DefaultValue("0") int page,
             @Valid @Max(value = 10, message = "Page size exceeded") @QueryParam("size") @DefaultValue("5") final int size,
