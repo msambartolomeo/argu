@@ -1,15 +1,13 @@
-import { useState } from "react";
-
 export const useAuth = () => {
-    const [authToken, setAuthToken] = useState<string | null>(
-        localStorage.getItem("authToken")
-    );
-    const [refreshToken, setRefreshToken] = useState<string | null>(
-        localStorage.getItem("refreshToken")
-    );
+    const getAuthToken = () => {
+        return localStorage.getItem("authToken");
+    };
 
-    const replaceAuthToken = (token: string | null) => {
-        setAuthToken(token);
+    const getRefreshToken = () => {
+        return localStorage.getItem("refreshToken");
+    };
+
+    const setAuthToken = (token: string | null) => {
         if (token) {
             localStorage.setItem("authToken", token);
         } else {
@@ -17,8 +15,7 @@ export const useAuth = () => {
         }
     };
 
-    const replaceRefreshToken = (token: string | null) => {
-        setRefreshToken(token);
+    const setRefreshToken = (token: string | null) => {
         if (token) {
             localStorage.setItem("refreshToken", token);
         } else {
@@ -26,5 +23,5 @@ export const useAuth = () => {
         }
     };
 
-    return { authToken, refreshToken, replaceAuthToken, replaceRefreshToken };
+    return { getAuthToken, getRefreshToken, setAuthToken, setRefreshToken };
 };
