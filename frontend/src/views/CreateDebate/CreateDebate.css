@@ -17,6 +17,11 @@ table.radio-button-class tbody tr td label {
     color: black !important;
 }
 
+[type="radio"]:checked + span::after {
+    background-color: var(--selected-button);
+    border: var(--selected-button);
+}
+
 .btn,
 .btn-large {
     display: flex;
