@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./views/LandingPage/LandingPage";
 import Navbar from "./components/Navbar/Navbar";
 import UserProfile from "./views/UserProfile/UserProfile";
+import CreateDebate from "./views/CreateDebate/CreateDebate";
 
 function App() {
     useEffect(() => {
@@ -69,15 +70,7 @@ function App() {
                         }
                     />
 
-                    <Route
-                        path="/create_debate"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Create Debate</p>
-                            </div>
-                        }
-                    />
+                    <Route path="/create_debate" element={<CreateDebate />} />
 
                     <Route
                         path="/login"
