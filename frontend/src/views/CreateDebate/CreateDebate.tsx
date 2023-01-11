@@ -38,82 +38,88 @@ const CreateDebate = () => {
                     <TextArea text={"Debate title:"} />
                     <TextArea text={"Debate description:"} />
                     <table className="no-borders radio-button-class">
-                        <tr>
-                            <td>
-                                <label>
-                                    What is your position in this debate?
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="radio-button-label">
-                                <label>
-                                    <input
-                                        name="position"
-                                        type="radio"
-                                        value="true"
-                                        id="for"
-                                    />
-                                    <span>For</span>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="radio-button-label">
-                                <label>
-                                    <input
-                                        name="position"
-                                        type="radio"
-                                        value="false"
-                                        id="against"
-                                    />
-                                    <span>Against</span>
-                                </label>
-                            </td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label>
+                                        What is your position in this debate?
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="radio-button-label">
+                                    <label>
+                                        <input
+                                            name="position"
+                                            type="radio"
+                                            value="true"
+                                            id="for"
+                                        />
+                                        <span>For</span>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="radio-button-label">
+                                    <label>
+                                        <input
+                                            name="position"
+                                            type="radio"
+                                            value="false"
+                                            id="against"
+                                        />
+                                        <span>Against</span>
+                                    </label>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                     <InputField text="Your opponent's username:" />
                     <table className="no-borders">
-                        <tr>
-                            <td>Debate category:</td>
-                            <td>
-                                <SelectDropdown suppliers={suppliers} />
-                            </td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <td>Debate category:</td>
+                                <td>
+                                    <SelectDropdown suppliers={suppliers} />
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                     <table className="no-borders">
-                        <tr>
-                            <td>
-                                Debate image (optional):
-                                <a
-                                    className="material-icons"
-                                    onClick={clearImage}
-                                >
-                                    close
-                                </a>
-                            </td>
-                            <td>
-                                <div className="file-field input-field">
-                                    <div className="btn">
-                                        <label className="white-text">
-                                            Upload Image
-                                        </label>
-                                        <input
-                                            ref={imageRef}
-                                            id="image"
-                                            type="file"
-                                        />
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Debate image (optional):
+                                    <a
+                                        className="material-icons"
+                                        onClick={clearImage}
+                                    >
+                                        close
+                                    </a>
+                                </td>
+                                <td>
+                                    <div className="file-field input-field">
+                                        <div className="btn">
+                                            <label className="white-text">
+                                                Upload Image
+                                            </label>
+                                            <input
+                                                ref={imageRef}
+                                                id="image"
+                                                type="file"
+                                            />
+                                        </div>
+                                        <div className="file-path-wrapper">
+                                            <input
+                                                className="file-path"
+                                                ref={imageNameRef}
+                                                type="text"
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="file-path-wrapper">
-                                        <input
-                                            className="file-path"
-                                            ref={imageNameRef}
-                                            type="text"
-                                        />
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                     <SubmitButton text="Create debate" />
                 </div>
