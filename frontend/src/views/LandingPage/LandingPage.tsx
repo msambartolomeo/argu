@@ -7,7 +7,6 @@ import TrendingDebatesComponent from "../../components/TrendingDebatesComponent/
 import DebateCategory from "../../model/enums/DebateCategory";
 import LandingPageAboutComponent from "../../components/LandingPageAboutComponent/LandingPageAboutComponent";
 
-// TODO: Internationalize
 // TODO: Add icons
 // TODO: Align text and images in the about section
 

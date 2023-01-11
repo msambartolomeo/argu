@@ -24,6 +24,8 @@ const Navbar = ({ image = arguLogo }: ArguLogoProps) => {
     const [click] = useState(false);
     const { t } = useTranslation();
 
+    const searchBarPlaceholder: string = t("navbar.searchBar");
+
     // const handleClick = () => setClick(!click);
     // const closeMobileMenu = () => setClick(false);
 
@@ -39,7 +41,7 @@ const Navbar = ({ image = arguLogo }: ArguLogoProps) => {
                                 className="navbar-logo-img"
                             />
                         </Link>
-                        <SearchBar placeholder="Search for a debate" />
+                        <SearchBar placeholder={searchBarPlaceholder} />
                         <ul className={click ? "nav-menu active" : "nav-menu"}>
                             <li className="nav-item">
                                 <NavLink

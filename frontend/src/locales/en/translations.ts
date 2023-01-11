@@ -3,6 +3,7 @@ export const TRANSLATIONS_EN = {
         explore: "Explore",
         login: "Login",
         register: "Register",
+        searchBar: "Search",
     },
     landingPage: {
         about: {
@@ -42,5 +43,20 @@ export const TRANSLATIONS_EN = {
                 other: "Other",
             },
         },
+        trending: {
+            title: "Trending",
+        },
+    },
+    profile: {
+        profilePhotoAlt: "Profile photo",
+        editProfileImg: "Edit profile image",
+        upload: "Upload",
+        close: "Close",
+        confirm: "Confirm",
+        createdIn: "Created on",
+        logout: "Logout",
+        deleteAccount: "Delete account",
+        areYouSure:
+            "¿Estás seguro de que quieres borrar la cuenta? Esta acción no se puede deshacer."
     },
 };
