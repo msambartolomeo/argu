@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./views/LandingPage/LandingPage";
 import Navbar from "./components/Navbar/Navbar";
 import UserProfile from "./views/UserProfile/UserProfile";
+import Register from "./views/Register/Register";
 
 function App() {
     useEffect(() => {
@@ -88,15 +89,7 @@ function App() {
                             </div>
                         }
                     />
-                    <Route
-                        path="/register"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Register</p>
-                            </div>
-                        }
-                    />
+                    <Route path="/register" element={<Register />} />
                 </Routes>
             </div>
         </Router>
