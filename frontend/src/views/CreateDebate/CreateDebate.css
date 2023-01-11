@@ -12,20 +12,9 @@
     border-collapse: separate !important;
 }
 
-table.radio-button-class tbody tr td input {
-    opacity: 100% !important;
-    position: relative !important;
-    margin-top: 1%;
-}
-
 table.radio-button-class tbody tr td label {
     font-size: 1rem;
     color: black !important;
-}
-
-table.radio-button-class tbody tr td.radio-button-label label {
-    padding-left: 5% !important;
-    margin-left: -5% !important;
 }
 
 .btn,
