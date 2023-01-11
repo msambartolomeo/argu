@@ -6,10 +6,10 @@ import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-    const navigateToLogin = useNavigate();
+    const navigate = useNavigate();
 
     const handleRedirect = () => {
-        navigateToLogin("/login");
+        navigate("/login");
     };
 
     // TODO: Error handling and api call
