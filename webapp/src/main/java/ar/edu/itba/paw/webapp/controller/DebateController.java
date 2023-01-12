@@ -22,6 +22,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -60,6 +61,7 @@ public class DebateController {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.checkUserDebateAccess(authentication, #userUrl, #subscribed)")
     public Response getDebates(
             @QueryParam("page") @DefaultValue("0") int page,
             @Valid @Max(value = 10, message = "Page size exceeded") @QueryParam("size") @DefaultValue("5") final int size,
@@ -183,9 +185,9 @@ public class DebateController {
 
     @DELETE
     @Path("/{id}")
+    @PreAuthorize("@securityManager.checkDebateCreator(authentication, #id)")
     public Response deleteDebate(@PathParam("id") final long id) {
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        debateService.deleteDebate(id, auth.getName());
+        debateService.deleteDebate(id);
 
         return Response.noContent().build();
     }
@@ -193,10 +195,10 @@ public class DebateController {
     @PATCH
     @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.checkDebateParticipant(authentication, #id)")
     public Response patchDebate(@PathParam("id") final long id, @Valid @NotNull final DebatePatch patch) {
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (patch.isConclusion()) {
-            debateService.startConclusion(id, auth.getName());
+            debateService.startConclusion(id);
             return Response.noContent().build();
         }
 

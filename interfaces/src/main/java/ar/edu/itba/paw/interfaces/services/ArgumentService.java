@@ -11,5 +11,5 @@ public interface ArgumentService {
     Optional<Argument> getArgumentById(long argumentId);
     List<Argument> getArgumentsByDebate(long debateId, String username, int page, int size);
     Optional<Argument> getLastArgument(long debateId);
-    void deleteArgument(long argumentId, String username);
+    void deleteArgument(long argumentId);
 }

@@ -17,8 +17,8 @@ public interface DebateService {
     int getPages(int size, String search, DebateCategory category, DebateStatus status, LocalDate date);
     List<Debate> getUserDebates(String username, int page, int size, boolean subscribed);
     int getUserDebatesPageCount(String username, int size, boolean subscribed);
-    void startConclusion(long id, String username);
-    void deleteDebate(long id, String username);
+    void startConclusion(long id);
+    void deleteDebate(long id);
     void closeVotes();
     List<Debate> getRecommendedDebates(long debateId, String username);
 }

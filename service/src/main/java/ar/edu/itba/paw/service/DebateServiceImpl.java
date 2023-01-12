@@ -13,7 +13,6 @@ import ar.edu.itba.paw.model.enums.DebateOrder;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.DebateClosedException;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenDebateException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,8 +117,8 @@ public class DebateServiceImpl implements DebateService {
 
     @Transactional
     @Override
-    public void startConclusion(long id, String username) {
-        Debate debate = getDebateById(id).orElseThrow(() -> {
+    public void startConclusion(long id) {
+        Debate debate = debateDao.getDebateById(id).orElseThrow(() -> {
             LOGGER.error("Cannot start conclusion of Debate with id {} because it does not exist", id);
             return new DebateNotFoundException();
         });
@@ -128,30 +127,17 @@ public class DebateServiceImpl implements DebateService {
             LOGGER.error("Cannot start conclusion of Debate with id {} because it is not open", id);
             throw new DebateClosedException();
         }
-        if (!username.equals(debate.getCreator().getUsername()) && !username.equals(debate.getOpponent().getUsername())) {
-            LOGGER.error("Cannot start conclusion of Debate with id {} because the user {} is not the creator or the opponent", id, username);
-            throw new ForbiddenDebateException();
-        }
 
         debate.setStatus(DebateStatus.CLOSING);
     }
 
     @Transactional
     @Override
-    public void deleteDebate(long id, String username) {
+    public void deleteDebate(long id) {
         Debate debate = getDebateById(id).orElseThrow(() -> {
             LOGGER.error("Cannot delete Debate {} because it does not exist", id);
             return new DebateNotFoundException();
         });
-
-        if (debate.getStatus() == DebateStatus.DELETED) {
-            LOGGER.error("Cannot delete Debate {} because it is already deleted or the user {} is not the creator", id, username);
-            throw new DebateClosedException();
-        }
-        if (debate.getCreator().getUsername() == null || !username.equals(debate.getCreator().getUsername())) {
-            LOGGER.error("Cannot delete Debate {} because it is already deleted or the user {} is not the creator", id, username);
-            throw new ForbiddenDebateException();
-        }
 
         final Image image = debate.getImage();
         debate.deleteDebate();

@@ -11,7 +11,6 @@ import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.DebateClosedException;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenDebateException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -320,15 +319,7 @@ public class DebateServiceImplTest {
 
     @Test(expected = DebateNotFoundException.class)
     public void testStartConclusionNotValidDebate() {
-        debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
-    }
-
-    @Test(expected = ForbiddenDebateException.class)
-    public void testStartConclusionInvalidUser() {
-        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
-        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
-
-        debateService.startConclusion(DEBATE_ID, INVALID_USERNAME);
+        debateService.startConclusion(DEBATE_ID);
     }
 
     @Test(expected = DebateClosedException.class)
@@ -337,16 +328,16 @@ public class DebateServiceImplTest {
         debate.setStatus(DebateStatus.CLOSING);
         when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
+        debateService.startConclusion(DEBATE_ID);
     }
 
-    @Test(expected = DebateNotFoundException.class)
+    @Test(expected = DebateClosedException.class)
     public void testStartConclusionDebateDeleted() {
         Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
         debate.setStatus(DebateStatus.DELETED);
         when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
+        debateService.startConclusion(DEBATE_ID);
     }
 
     @Test(expected = DebateClosedException.class)
@@ -355,7 +346,7 @@ public class DebateServiceImplTest {
         debate.setStatus(DebateStatus.CLOSED);
         when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
+        debateService.startConclusion(DEBATE_ID);
     }
 
     @Test
@@ -364,34 +355,31 @@ public class DebateServiceImplTest {
         when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        debateService.startConclusion(DEBATE_ID, CREATOR_USERNAME);
+        debateService.startConclusion(DEBATE_ID);
 
         assertEquals(DebateStatus.CLOSING, debateService.getDebateById(DEBATE_ID).get().getStatus());
     }
 
-    @Test(expected = ForbiddenDebateException.class)
-    public void testDeleteDebateInvalidUser() {
-        Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
-
-        debateService.deleteDebate(DEBATE_ID, INVALID_USERNAME);
+    @Test(expected = DebateNotFoundException.class)
+    public void testDeleteDebateNotFound() {
+        debateService.deleteDebate(DEBATE_ID);
     }
 
     @Test(expected = DebateNotFoundException.class)
     public void testDeleteAlreadyDeletedDebate() {
         Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
         debate.setStatus(DebateStatus.DELETED);
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        debateService.deleteDebate(DEBATE_ID, INVALID_USERNAME);
+        debateService.deleteDebate(DEBATE_ID);
     }
 
     @Test
     public void testDeleteDebate() {
         Debate debate = new Debate(DEBATE_NAME, DEBATE_DESCRIPTION, creator, IS_CREATOR_FOR, opponent, image, DEBATE_CATEGORY);
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
+        when(debateDao.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        debateService.deleteDebate(DEBATE_ID, CREATOR_USERNAME);
+        debateService.deleteDebate(DEBATE_ID);
 
         assertFalse(debateService.getDebateById(DEBATE_ID).isPresent());
     }

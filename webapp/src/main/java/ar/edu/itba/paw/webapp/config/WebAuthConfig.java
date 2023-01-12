@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,6 +28,7 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
@@ -53,8 +55,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
             .and().headers().cacheControl().disable()
             .and().authorizeRequests()
                 // users
-                .antMatchers(HttpMethod.DELETE,"/users/{url}", "/users/{url}/image").authenticated()
-                .antMatchers(HttpMethod.PUT, "/users/{url}/image").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/users/{url}", "/users/{url}/image").access("@securityManager.checkSameUser(authentication, #url)")
+                .antMatchers(HttpMethod.PUT, "/users/{url}/image").access("@securityManager.checkSameUser(authentication, #url)")
                 .antMatchers(HttpMethod.POST, "/users").anonymous()
                 // debate
                 .antMatchers(HttpMethod.DELETE, "/debates/{\\d+}").hasAuthority("MODERATOR")

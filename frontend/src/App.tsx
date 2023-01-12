@@ -11,6 +11,7 @@ import M from "materialize-css";
 // import router
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./views/LandingPage/LandingPage";
+import RequestModerator from "./views/RequestModerator/RequestModerator";
 import Navbar from "./components/Navbar/Navbar";
 import UserProfile from "./views/UserProfile/UserProfile";
 
@@ -61,12 +62,7 @@ function App() {
 
                     <Route // Maybe this could be a modal, and avoid the extra page
                         path="/moderator"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Moderator</p>
-                            </div>
-                        }
+                        element={<RequestModerator />}
                     />
 
                     <Route

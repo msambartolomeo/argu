@@ -4,13 +4,11 @@ import ar.edu.itba.paw.interfaces.services.VoteService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Vote;
 import ar.edu.itba.paw.model.enums.DebateVote;
-import ar.edu.itba.paw.model.exceptions.ForbiddenVoteException;
 import ar.edu.itba.paw.model.exceptions.VoteNotFoundException;
 import ar.edu.itba.paw.webapp.dto.VoteDto;
 import ar.edu.itba.paw.webapp.form.VoteForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -33,16 +31,12 @@ public class VoteController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.checkSameUser(authentication, #url)")
     public Response vote(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url,
             @Valid @NotNull(message = "missing body") final VoteForm form
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
-
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenVoteException();
-        }
 
         voteService.addVote(debateId, username, DebateVote.valueOf(form.getVote().toUpperCase()));
 
@@ -50,15 +44,11 @@ public class VoteController {
     }
 
     @DELETE
+    @PreAuthorize("@securityManager.checkSameUser(authentication, #url)")
     public Response unvote(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
-
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenVoteException();
-        }
 
         if (voteService.removeVote(debateId, username)) {
             return Response.noContent().build();
@@ -68,15 +58,11 @@ public class VoteController {
     }
 
     @GET
+    @PreAuthorize("@securityManager.checkSameUser(authentication, #url)")
     public Response getVote(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
-
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenVoteException();
-        }
 
         Optional<Vote> vote = voteService.getVote(debateId, username);
         if (vote.isPresent()) {

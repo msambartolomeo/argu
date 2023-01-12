@@ -2,11 +2,9 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.SubscribedService;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.exceptions.ForbiddenSubscriptionException;
 import ar.edu.itba.paw.model.exceptions.SubscriptionNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -26,15 +24,11 @@ public class SubscriptionController {
     private SubscribedService subscribedService;
 
     @POST
+    @PreAuthorize("@securityManager.checkSameUser(authentication, #url)")
     public Response subscribe(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
-
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenSubscriptionException();
-        }
 
         subscribedService.subscribeToDebate(username, debateId);
 
@@ -42,15 +36,11 @@ public class SubscriptionController {
     }
 
     @DELETE
+    @PreAuthorize("@securityManager.checkSameUser(authentication, #url)")
     public Response unsubscribe(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
-
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenSubscriptionException();
-        }
 
         if (subscribedService.unsubscribeToDebate(username, debateId)) {
             return Response.noContent().build();
@@ -60,15 +50,11 @@ public class SubscriptionController {
     }
 
     @GET
+    @PreAuthorize("@securityManager.checkSameUser(authentication, #url)")
     public Response getSubscription(
             @Valid @NotNull(message = "user param must be included") @QueryParam("user") final String url
     ) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
-
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!username.equals(auth.getName())) {
-            throw new ForbiddenSubscriptionException();
-        }
 
         if (subscribedService.isUserSubscribed(username, debateId)) {
             return Response.ok().build();
