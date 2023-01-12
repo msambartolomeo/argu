@@ -1,0 +1,29 @@
+.card {
+    border-radius: 10px;
+}
+
+.login-container {
+    width: 40%;
+    margin: 1% auto;
+    padding-bottom: 1%;
+}
+
+@media screen and (max-width: 900px) {
+    .login-container {
+        width: 95%;
+    }
+}
+
+.container-with-space {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+div form div .left {
+    align-self: flex-start;
+}
+
+[type="checkbox"].filled-in:checked + span:not(.lever):after {
+    background-color: var(--selected-button);
+}

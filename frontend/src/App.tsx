@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./views/LandingPage/LandingPage";
 import RequestModerator from "./views/RequestModerator/RequestModerator";
 import Navbar from "./components/Navbar/Navbar";
+import Login from "./views/Login/Login";
 import UserProfile from "./views/UserProfile/UserProfile";
 import CreateDebate from "./views/CreateDebate/CreateDebate";
 
@@ -68,15 +69,7 @@ function App() {
 
                     <Route path="/create_debate" element={<CreateDebate />} />
 
-                    <Route
-                        path="/login"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Login</p>
-                            </div>
-                        }
-                    />
+                    <Route path="/login" element={<Login />} />
                     <Route
                         path="/register"
                         element={
