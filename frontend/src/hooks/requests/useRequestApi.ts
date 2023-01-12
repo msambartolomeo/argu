@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useAuth } from "./useAuth";
-import axios, { AxiosError } from "axios";
+import { useAuth } from "../useAuth";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import { Buffer } from "buffer";
 
@@ -9,48 +9,56 @@ export interface BasicCredentials {
     password: string;
 }
 
+export interface RequestApiInput {
+    url: string;
+    method?: string;
+    body?: object;
+    headers?: Record<string, string>;
+    requiresAuth?: boolean;
+    credentials?: BasicCredentials;
+}
+
 const AUTHORIZATION_HEADER = "authorization";
 const REFRESH_HEADER = "x-refresh";
 
 export const useRequestApi = () => {
-    const [data, setData] = useState(null);
-    const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState(false);
 
     const { getAuthToken, getRefreshToken, setAuthToken, setRefreshToken } =
         useAuth();
 
-    async function requestApi(
-        url: string,
-        method?: string,
-        body?: object,
-        headers?: Record<string, string>,
-        requiresAuth?: boolean,
-        // TODO: Validate how to get credentials, maybe also stored in useAuth
-        BasicCredentials?: BasicCredentials
-    ) {
+    const navigate = useNavigate();
+
+    async function requestApi(input: RequestApiInput): Promise<AxiosResponse> {
         const authToken = getAuthToken();
         const refreshToken = getRefreshToken();
+
+        const { url, method, body, requiresAuth, credentials } = input;
+        let { headers } = input;
+
         if (requiresAuth) {
-            if (authToken) {
-                headers = {
-                    Authorization: `${authToken}`,
-                    ...headers,
-                };
-            } else if (refreshToken) {
-                headers = {
-                    Authorization: `${refreshToken}`,
-                    ...headers,
-                };
-            } else {
-                const encodedBasic = Buffer.from(
-                    `${BasicCredentials?.username}:${BasicCredentials?.password}`
-                ).toString("base64");
-                headers = {
-                    Authorization: `Basic ${encodedBasic}`,
-                    ...headers,
-                };
+            if (!authToken && !refreshToken && !credentials) {
+                navigate("/login");
             }
+        }
+        if (authToken) {
+            headers = {
+                Authorization: `${authToken}`,
+                ...headers,
+            };
+        } else if (refreshToken) {
+            headers = {
+                Authorization: `${refreshToken}`,
+                ...headers,
+            };
+        } else {
+            const encodedBasic = Buffer.from(
+                `${credentials?.username}:${credentials?.password}`
+            ).toString("base64");
+            headers = {
+                Authorization: `Basic ${encodedBasic}`,
+                ...headers,
+            };
         }
 
         setLoading(true);
@@ -70,11 +78,12 @@ export const useRequestApi = () => {
                     setRefreshToken(response.headers[REFRESH_HEADER]);
                 }
             }
+            return response;
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 const axiosError = err as AxiosError;
-                setError(axiosError);
-                // NOTE: Server errors
+
+                // TODO: Preguntar si deberíamos también incluir 403 acá.
                 if (requiresAuth && axiosError.response?.status === 401) {
                     if (authToken) {
                         // NOTE: authToken expired or invalid, trying again with refreshToken
@@ -83,12 +92,20 @@ export const useRequestApi = () => {
                         // NOTE: refreshToken expired or invalid, forcing login with Basic
                         setRefreshToken(null);
                     }
-                    await requestApi(url, method, body, headers, requiresAuth);
+                    await requestApi({
+                        url,
+                        method,
+                        body,
+                        headers,
+                        requiresAuth,
+                    });
                 }
+                return axiosError.response as AxiosResponse;
             }
+            throw err;
         } finally {
             setLoading(false);
         }
     }
-    return { data, error, loading, setData, setError, requestApi };
+    return { loading, requestApi };
 };
