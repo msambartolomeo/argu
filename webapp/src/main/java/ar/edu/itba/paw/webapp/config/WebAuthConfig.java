@@ -68,7 +68,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 // likes, subs and votes
                 .antMatchers("/debates/{debateId}/arguments/{argumentId}/likes", "/debates/{debateId}/subscriptions", "/debates/{debateId}/votes").authenticated()
                 // general
-                .antMatchers(HttpMethod.GET, "/users/{url}", "/debates/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/users/{url}/**", "/debates/**").permitAll()
             .and().exceptionHandling()
                 .accessDeniedHandler((request, response, ex) -> response.setStatus(HttpServletResponse.SC_FORBIDDEN))
                 .authenticationEntryPoint((request, response, ex) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))

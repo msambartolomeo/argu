@@ -109,4 +109,14 @@ public class UserServiceImpl implements UserService {
         });
         user.removeUser();
     }
+
+    @Override
+    public Optional<Image> getUserImage(String username) {
+        final User user = getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("User {} not found", username);
+            return new UserNotFoundException();
+        });
+
+        return Optional.ofNullable(user.getImage());
+    }
 }

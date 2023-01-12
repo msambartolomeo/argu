@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
+import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 
 import java.util.Locale;
@@ -13,4 +14,6 @@ public interface UserService {
     boolean deleteImage(String username);
     void requestModerator(String username, String reason);
     void deleteUser(String username);
+
+    Optional<Image> getUserImage(String username);
 }

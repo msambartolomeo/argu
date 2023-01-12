@@ -100,4 +100,18 @@ public class UserController {
 
         throw new ImageNotFoundException();
     }
+
+    @GET
+    @Path("/{url}/image")
+    public Response getImage(@PathParam("url") final String url) throws UnsupportedEncodingException {
+        final String username = URLDecoder.decode(url, User.ENCODING);
+
+        final Optional<ar.edu.itba.paw.model.Image> image = userService.getUserImage(username);
+
+        if (image.isPresent()) {
+            return Response.seeOther(uriInfo.getBaseUriBuilder().path("images").path(String.valueOf(image.get().getId())).build()).build();
+        }
+
+        throw new ImageNotFoundException();
+    }
 }
