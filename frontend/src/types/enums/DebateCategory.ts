@@ -1,16 +1,16 @@
 enum DebateCategory {
-    Culture = "culture",
-    Economics = "economics",
-    Education = "education",
-    Entertainment = "entertainment",
-    History = "history",
-    Literature = "literature",
-    Politics = "politics",
-    Religion = "religion",
-    Science = "science",
-    Technology = "technology",
-    World = "world",
-    Other = "other",
+    CULTURE = "culture",
+    ECONOMICS = "economics",
+    EDUCATION = "education",
+    ENTERTAINMENT = "entertainment",
+    HISTORY = "history",
+    LITERATURE = "literature",
+    POLITICS = "politics",
+    RELIGION = "religion",
+    SCIENCE = "science",
+    TECHNOLOGY = "technology",
+    WORLD = "world",
+    OTHER = "other",
 }
 
 export default DebateCategory;
