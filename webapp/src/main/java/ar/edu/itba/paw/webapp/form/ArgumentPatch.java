@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.patches;
+package ar.edu.itba.paw.webapp.form;
 
 public class ArgumentPatch {
 

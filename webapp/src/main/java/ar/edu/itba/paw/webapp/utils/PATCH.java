@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.patches;
+package ar.edu.itba.paw.webapp.utils;
 
 import javax.ws.rs.HttpMethod;
 import java.lang.annotation.ElementType;
