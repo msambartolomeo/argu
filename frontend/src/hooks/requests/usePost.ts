@@ -19,6 +19,8 @@ export const usePost = () => {
                 ...headers,
             },
             requiresAuth: requiresAuth,
+            // TODO: Remove when login is implemented
+            credentials: { username: "pepe", password: "pepe" },
         });
     }
 

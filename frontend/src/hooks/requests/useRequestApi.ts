@@ -39,6 +39,7 @@ export const useRequestApi = () => {
         if (requiresAuth) {
             if (!authToken && !refreshToken && !credentials) {
                 navigate("/login");
+                throw new Error("No credentials provided");
             }
         }
         if (authToken) {
@@ -84,7 +85,7 @@ export const useRequestApi = () => {
                 const axiosError = err as AxiosError;
 
                 // TODO: Preguntar si deberíamos también incluir 403 acá.
-                if (requiresAuth && axiosError.response?.status === 401) {
+                if (axiosError.response?.status === 401) {
                     if (authToken) {
                         // NOTE: authToken expired or invalid, trying again with refreshToken
                         setAuthToken(null);
