@@ -18,7 +18,12 @@ const SelectDropdown = ({ suppliers }: SelectDropdownProps) => {
 
     return (
         <div className="select-container">
-            <Select options={suppliers} onChange={handleSelectChange} />
+            <Select
+                menuPortalTarget={document.body}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                options={suppliers}
+                onChange={handleSelectChange}
+            />
         </div>
     );
 };
