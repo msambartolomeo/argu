@@ -5,7 +5,7 @@ import { useRef } from "react";
 import TextArea from "../../components/TextArea/TextArea";
 import InputField from "../../components/InputField/InputField";
 import SelectDropdown from "../../components/SelectDropdown/SelectDropdown";
-import DebateCategory from "../../model/enums/DebateCategory";
+import DebateCategory from "../../types/enums/DebateCategory";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 
 const CreateDebate = () => {
