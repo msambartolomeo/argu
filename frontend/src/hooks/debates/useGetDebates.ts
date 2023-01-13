@@ -1,9 +1,9 @@
-import DebateDto from "../types/dto/DebateDto";
-import DebateCategory from "../types/enums/DebateCategory";
-import DebateOrder from "../types/enums/DebateOrder";
-import { useRequestApi } from "./useRequestApi";
-
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
+import { useState } from "react";
+import DebateDto from "../../types/dto/DebateDto";
+import DebateCategory from "../../types/enums/DebateCategory";
+import DebateOrder from "../../types/enums/DebateOrder";
+import { useGet } from "../requests/useGet";
+import { DEBATES_ENDPOINT } from "./constants";
 
 export interface GetDebatesInput {
     search?: string;
@@ -23,15 +23,12 @@ export interface GetDebatesInput {
     size?: number;
 }
 
-const DEBATES_ENDPOINT = "debates";
-
 export const useGetDebates = () => {
-    const { data, error, loading, requestApi } = useRequestApi();
+    const [data, setData] = useState<DebateDto[]>([]);
+    const { loading, callGet } = useGet();
 
-    async function getDebates(
-        inData: GetDebatesInput
-    ): Promise<Array<DebateDto> | null> {
-        let endpoint = API_URL + DEBATES_ENDPOINT;
+    async function getDebates(inData: GetDebatesInput) {
+        let endpoint = DEBATES_ENDPOINT;
 
         if (inData) {
             endpoint += "?";
@@ -42,14 +39,11 @@ export const useGetDebates = () => {
             }
         }
 
-        await requestApi(endpoint);
+        const response = await callGet(endpoint, {}, true);
 
-        if (error || !data) {
-            return null;
+        if (response.status === 200) {
+            setData(response.data as DebateDto[]);
         }
-
-        return data as Array<DebateDto>;
     }
-
-    return { data, error, loading, getDebates };
+    return { data, loading, getDebates };
 };
