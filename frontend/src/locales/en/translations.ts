@@ -57,6 +57,6 @@ export const TRANSLATIONS_EN = {
         logout: "Logout",
         deleteAccount: "Delete account",
         areYouSure:
-            "¿Estás seguro de que quieres borrar la cuenta? Esta acción no se puede deshacer."
+            "¿Estás seguro de que quieres borrar la cuenta? Esta acción no se puede deshacer.",
     },
 };
