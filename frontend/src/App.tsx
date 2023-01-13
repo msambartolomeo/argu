@@ -14,6 +14,7 @@ import LandingPage from "./views/LandingPage/LandingPage";
 import RequestModerator from "./views/RequestModerator/RequestModerator";
 import Navbar from "./components/Navbar/Navbar";
 import UserProfile from "./views/UserProfile/UserProfile";
+import Register from "./views/Register/Register";
 import CreateDebate from "./views/CreateDebate/CreateDebate";
 
 function App() {
@@ -77,15 +78,7 @@ function App() {
                             </div>
                         }
                     />
-                    <Route
-                        path="/register"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Register</p>
-                            </div>
-                        }
-                    />
+                    <Route path="/register" element={<Register />} />
                 </Routes>
             </div>
         </Router>
