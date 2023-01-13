@@ -2,6 +2,8 @@ import Debate from "../../types/Debate";
 import NonClickableChip from "../NonClickableChip/NonClickableChip";
 import "./DebateListItem.css";
 import defaultDebatePhoto from "../../assets/debate_stock.png";
+import { useTranslation } from "react-i18next";
+import "../../locales/index";
 
 interface DebateListItemProps {
     debate: Debate;
@@ -9,6 +11,8 @@ interface DebateListItemProps {
 
 // TODO: Check if creator is received like a string or an URI
 const DebateListItem = ({ debate }: DebateListItemProps) => {
+    const { t } = useTranslation();
+
     return (
         <div className="list-item">
             <a
@@ -22,7 +26,7 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                                 {debate.name}
                             </h5>
                             <h6>
-                                <b>Creator:</b>{" "}
+                                <b>{t("debate.creator")}:</b>{" "}
                                 {debate.creator.username
                                     ? debate.creator.username
                                     : "[deleted user]"}
@@ -31,14 +35,20 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                         <div className="debate-footer">
                             <NonClickableChip name={debate.category} />
                             <NonClickableChip
-                                name={"Created: " + debate.createdDate}
+                                name={
+                                    t("debate.created") +
+                                    " " +
+                                    debate.createdDate
+                                }
                             />
                             <NonClickableChip
-                                name={"Status: " + debate.status}
+                                name={t("debate.status") + ": " + debate.status}
                             />
                             <NonClickableChip
                                 name={
-                                    "Subscribed users: " + debate.subscriptions
+                                    t("debate.subscribedUsers") +
+                                    ": " +
+                                    debate.subscriptions
                                 }
                             />
                         </div>

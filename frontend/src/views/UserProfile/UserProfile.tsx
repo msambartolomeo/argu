@@ -70,7 +70,7 @@ const UserProfile = () => {
                             active: !showMyDebates,
                         })}
                     >
-                        Debates Subscribed
+                        {t("profile.debatesSubscribed")}
                     </a>
                     <a
                         onClick={() => setShowMyDebates(true)}
@@ -78,11 +78,13 @@ const UserProfile = () => {
                             active: showMyDebates,
                         })}
                     >
-                        My Debates
+                        {t("profile.myDebates")}
                     </a>
                 </div>
                 <div className="card user-debates">
-                    <h3 className="center">Username&apos;s debates</h3>
+                    <h3 className="center">
+                        {t("profile.userDebates", { username: "username" })}
+                    </h3>
                     <DebatesList debates={debates} />
                 </div>
             </div>

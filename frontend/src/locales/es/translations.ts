@@ -48,6 +48,7 @@ export const TRANSLATIONS_ES = {
         },
     },
     profile: {
+        userDebates: "Debates de {{username}}",
         profilePhotoAlt: "Foto de perfil",
         editProfileImg: "Editar foto de perfil",
         upload: "Subir",
@@ -57,6 +58,17 @@ export const TRANSLATIONS_ES = {
         logout: "Cerrar sesión",
         deleteAccount: "Eliminar cuenta",
         areYouSure:
-            "Are you sure you want to delete your account? This action cannot be undone.",
+            "¿Estás seguro de que quieres borrar la cuenta? Esta acción no se puede deshacer.",
+        introducePswd: "Introduce tu contraseña",
+        debatesSubscribed: "Debates suscriptos",
+        myDebates: "Mis debates",
+    },
+    debate: {
+        creator: "Creador",
+        subscribedUsers: "Usuarios suscriptos",
+        created: "Creado",
+        status: "Estado",
+        statusOpen: "Abierto",
+        statusClosed: "Cerrado",
     },
 };

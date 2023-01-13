@@ -20,17 +20,15 @@ const DeleteConfirmationForm = () => {
             onSubmit={handleSubmit}
         >
             <div className="modal-content">
-                <h4>
-                    {t("profile.areYouSure")}
-                </h4>
+                <h4>{t("profile.areYouSure")}</h4>
                 <div className="input-field">
-                    <label>Introduce password</label>
+                    <label>{t("profile.introducePswd")}</label>
                     <input type="password" className="validate" />
                 </div>
             </div>
             <div className="modal-footer">
                 <a href="" className="modal-close waves-effect btn-flat">
-                    Close
+                    {t("profile.close")}
                 </a>
                 <button
                     className="modal-close waves-effect btn-flat"
@@ -39,7 +37,7 @@ const DeleteConfirmationForm = () => {
                     id="confirmationForm"
                     name="deleteAccount"
                 >
-                    Confirm
+                    {t("profile.confirm")}
                 </button>
             </div>
         </form>
