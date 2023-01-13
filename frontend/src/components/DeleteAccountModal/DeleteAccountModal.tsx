@@ -1,6 +1,10 @@
 import "./DeleteAccountModal.css";
+import { useTranslation } from "react-i18next";
+import "../../locales/index";
 
 const DeleteConfirmationForm = () => {
+    const { t } = useTranslation();
+
     function handleSubmit(): void {
         // console.log("Confirm submition of profile photo");
     }
@@ -16,18 +20,15 @@ const DeleteConfirmationForm = () => {
             onSubmit={handleSubmit}
         >
             <div className="modal-content">
-                <h4>
-                    Are you sure you want to delete your account? This action
-                    cannot be undone.
-                </h4>
+                <h4>{t("profile.areYouSure")}</h4>
                 <div className="input-field">
-                    <label>Introduce password</label>
+                    <label>{t("profile.introducePswd")}</label>
                     <input type="password" className="validate" />
                 </div>
             </div>
             <div className="modal-footer">
                 <a href="" className="modal-close waves-effect btn-flat">
-                    Close
+                    {t("profile.close")}
                 </a>
                 <button
                     className="modal-close waves-effect btn-flat"
@@ -36,7 +37,7 @@ const DeleteConfirmationForm = () => {
                     id="confirmationForm"
                     name="deleteAccount"
                 >
-                    Confirm
+                    {t("profile.confirm")}
                 </button>
             </div>
         </form>
@@ -44,13 +45,15 @@ const DeleteConfirmationForm = () => {
 };
 
 const DeleteAccountModal = () => {
+    const { t } = useTranslation();
+
     return (
         <>
             <a
                 className="waves-effect waves-light btn modal-trigger delete-account-btn"
                 href="#delete-account"
             >
-                Delete Account
+                {t("profile.deleteAccount")}
             </a>
             <div id="delete-account" className="modal">
                 <DeleteConfirmationForm />

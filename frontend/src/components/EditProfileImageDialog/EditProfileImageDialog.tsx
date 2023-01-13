@@ -1,6 +1,10 @@
 import "./EditProfileImageDialog.css";
+import { useTranslation } from "react-i18next";
+import "../../locales/index";
 
 const ProfilePhotoForm = () => {
+    const { t } = useTranslation();
+
     function handleSubmit(): void {
         // console.log("Confirm submition of profile photo");
     }
@@ -16,10 +20,12 @@ const ProfilePhotoForm = () => {
             acceptCharset="utf-8"
         >
             <div className="modal-content">
-                <h4>Edit Profile Image</h4>
+                <h4>{t("profile.editProfileImg")}</h4>
                 <div className="file-field input-field">
                     <div className="btn">
-                        <label className="white-text">Upload</label>
+                        <label className="white-text">
+                            {t("profile.upload")}
+                        </label>
                         <input type="file" />
                     </div>
                     <div className="file-path-wrapper">
@@ -29,7 +35,7 @@ const ProfilePhotoForm = () => {
             </div>
             <div className="modal-footer">
                 <a href="" className="modal-close waves-effect btn-flat">
-                    Close
+                    {t("profile.close")}
                 </a>
                 <button
                     className="modal-close waves-effect btn-flat"
@@ -39,7 +45,7 @@ const ProfilePhotoForm = () => {
                     name="editImage"
                     onSubmit={handleSubmit}
                 >
-                    Confirm
+                    {t("profile.confirm")}
                 </button>
             </div>
         </form>
@@ -47,6 +53,8 @@ const ProfilePhotoForm = () => {
 };
 
 const EditImageDialog = () => {
+    const { t } = useTranslation();
+
     return (
         <>
             {/* Modal Trigger */}
@@ -54,7 +62,7 @@ const EditImageDialog = () => {
                 className="waves-effect waves-light btn modal-trigger"
                 href="#edit-profile-image"
             >
-                Edit Profile Image
+                {t("profile.editProfileImg")}
             </a>
             {/* Modal Structure */}
             <div id="edit-profile-image" className="modal">

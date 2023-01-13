@@ -8,6 +8,8 @@ import Debate from "../../types/Debate";
 import User from "../../types/User";
 import "../../root.css";
 import cn from "classnames";
+import { useTranslation } from "react-i18next";
+import "../../locales/index";
 
 const UserProfile = () => {
     const user1: User = {
@@ -32,6 +34,8 @@ const UserProfile = () => {
 
     const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
 
+    const { t } = useTranslation();
+
     // TODO: Implement i18n
 
     return (
@@ -48,13 +52,13 @@ const UserProfile = () => {
                     <i className="material-icons">email</i>
                     <h6>example@email.com</h6>
                 </div>
-                <h6>Created in: 01/12/22</h6>
+                <h6>{t("profile.createdIn")}: 01/12/22</h6>
                 <a
                     className="waves-effect waves-light btn logout-btn"
                     href="/logout"
                 >
                     <i className="material-icons left">logout</i>
-                    Logout
+                    {t("profile.logout")}
                 </a>
                 <DeleteAccountModal />
             </div>
@@ -66,7 +70,7 @@ const UserProfile = () => {
                             active: !showMyDebates,
                         })}
                     >
-                        Debates Subscribed
+                        {t("profile.debatesSubscribed")}
                     </a>
                     <a
                         onClick={() => setShowMyDebates(true)}
@@ -74,11 +78,13 @@ const UserProfile = () => {
                             active: showMyDebates,
                         })}
                     >
-                        My Debates
+                        {t("profile.myDebates")}
                     </a>
                 </div>
                 <div className="card user-debates">
-                    <h3 className="center">Username&apos;s debates</h3>
+                    <h3 className="center">
+                        {t("profile.userDebates", { username: "username" })}
+                    </h3>
                     <DebatesList debates={debates} />
                 </div>
             </div>
