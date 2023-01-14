@@ -58,7 +58,6 @@ interface ArgumentBubbleProps {
     argument?: Argument;
 }
 
-// TODO: Apply i18n
 const ArgumentBubble = ({ argument = arg }: ArgumentBubbleProps) => {
     const [authorized, setAuthorized] = useState(false);
 
