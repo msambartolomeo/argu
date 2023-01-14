@@ -1,6 +1,8 @@
 import "./CreateDebate.css";
+import "../../locales/index";
 
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 import TextArea from "../../components/TextArea/TextArea";
 import InputField from "../../components/InputField/InputField";
@@ -9,6 +11,8 @@ import DebateCategory from "../../types/enums/DebateCategory";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 
 const CreateDebate = () => {
+    const { t } = useTranslation();
+
     const suppliers = Object.values(DebateCategory).map((category) => ({
         value: category,
         label: category,
@@ -34,16 +38,16 @@ const CreateDebate = () => {
                 encType="multipart/form-data"
             >
                 <div className="card-content">
-                    <span className="card-title center">Create debate</span>
-                    <TextArea text={"Debate title:"} />
-                    <TextArea text={"Debate description:"} />
+                    <span className="card-title center">
+                        {t("createDebate.createDebate")}
+                    </span>
+                    <TextArea text={t("createDebate.title")} />
+                    <TextArea text={t("createDebate.description")} />
                     <table className="no-borders radio-button-class">
                         <tbody>
                             <tr>
                                 <td>
-                                    <label>
-                                        What is your position in this debate?
-                                    </label>
+                                    <label>{t("createDebate.position")}</label>
                                 </td>
                             </tr>
                             <tr>
@@ -55,7 +59,7 @@ const CreateDebate = () => {
                                             value="true"
                                             id="for"
                                         />
-                                        <span>For</span>
+                                        <span>{t("createDebate.for")}</span>
                                     </label>
                                 </td>
                             </tr>
@@ -68,7 +72,7 @@ const CreateDebate = () => {
                                             value="false"
                                             id="against"
                                         />
-                                        <span>Against</span>
+                                        <span>{t("createDebate.against")}</span>
                                     </label>
                                 </td>
                             </tr>
@@ -78,7 +82,7 @@ const CreateDebate = () => {
                     <table className="no-borders">
                         <tbody>
                             <tr>
-                                <td>Debate category:</td>
+                                <td>{t("createDebate.category")}</td>
                                 <td>
                                     <SelectDropdown suppliers={suppliers} />
                                 </td>
@@ -89,7 +93,7 @@ const CreateDebate = () => {
                         <tbody>
                             <tr>
                                 <td>
-                                    Debate image (optional):
+                                    {t("createDebate.image")}
                                     <a
                                         className="material-icons"
                                         onClick={clearImage}
@@ -101,7 +105,7 @@ const CreateDebate = () => {
                                     <div className="file-field input-field">
                                         <div className="btn">
                                             <label className="white-text">
-                                                Upload Image
+                                                {t("createDebate.uploadImage")}
                                             </label>
                                             <input
                                                 ref={imageRef}
@@ -121,7 +125,7 @@ const CreateDebate = () => {
                             </tr>
                         </tbody>
                     </table>
-                    <SubmitButton text="Create debate" />
+                    <SubmitButton text={t("createDebate.createDebate")} />
                 </div>
             </form>
         </div>

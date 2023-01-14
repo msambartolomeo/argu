@@ -4,9 +4,11 @@ import InputField from "../../components/InputField/InputField";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const handleRedirect = () => {
         navigate("/login");
@@ -19,18 +21,21 @@ const Register = () => {
             <form method="post" acceptCharset="utf-8">
                 <div className="card-content">
                     <span className="card-title center">
-                        First time? Welcome!
+                        {t("register.firstTime")}
                     </span>
-                    <InputField text="Email" type="email" />
-                    <InputField text="Username" />
-                    <InputField text="Password" type="password" />
-                    <InputField text="Confirm Password" type="password" />
-                    <SubmitButton text="Register" />
+                    <InputField text={t("register.email")} type="email" />
+                    <InputField text={t("register.username")} />
+                    <InputField text={t("register.password")} type="password" />
+                    <InputField
+                        text={t("register.confirmPassword")}
+                        type="password"
+                    />
+                    <SubmitButton text={t("register.register")} />
                 </div>
             </form>
             <h6 className="center">
-                Already have an account?&nbsp;
-                <a onClick={handleRedirect}>Login here!</a>
+                {t("register.alreadyHaveAccount")}
+                <a onClick={handleRedirect}>{t("register.login")}</a>
             </h6>
         </div>
     );
