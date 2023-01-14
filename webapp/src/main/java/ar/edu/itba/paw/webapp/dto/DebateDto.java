@@ -4,9 +4,15 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.ws.rs.core.UriInfo;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class DebateDto {
@@ -18,9 +24,11 @@ public class DebateDto {
     private String createdDate;
     private String category;
     private String status;
-    private int subscriptions;
+    private int subscriptionsCount;
     private int votesFor;
     private int votesAgainst;
+    private String creatorName;
+    private String opponentName;
 
     private URI self;
     private URI image;
@@ -28,6 +36,12 @@ public class DebateDto {
     private URI opponent;
     private URI arguments;
     private URI chats;
+    private URI recommendations;
+    private URI sameCategory;
+    private URI sameStatus;
+    private URI afterSameDate;
+    private URI vote;
+    private URI subscription;
 
     public static DebateDto fromDebate(final UriInfo uriInfo, final Debate debate, final MessageSource messageSource, final Locale locale) {
         final DebateDto dto = new DebateDto();
@@ -39,30 +53,49 @@ public class DebateDto {
         dto.createdDate = debate.getFormattedDate();
         dto.category = messageSource.getMessage("category." + debate.getCategory().getName(), null, locale);
         dto.status = messageSource.getMessage("status." + debate.getStatus().getName(), null, locale);
-        dto.subscriptions = debate.getSubscribedUsersCount();
+        dto.subscriptionsCount = debate.getSubscribedUsersCount();
         dto.votesFor = debate.getForCount();
         dto.votesAgainst = debate.getAgainstCount();
 
-        dto.self = uriInfo.getBaseUriBuilder().path("debates").path(String.valueOf(debate.getDebateId())).build();
+        final String id = String.valueOf(debate.getDebateId());
+
+        dto.self = uriInfo.getBaseUriBuilder().path("debates").path(id).build();
 
         Image image = debate.getImage();
         if (image != null) {
-            dto.image = uriInfo.getBaseUriBuilder().path("images").path(String.valueOf(image.getId())).build();
+            dto.image = uriInfo.getBaseUriBuilder().path("images").path(id).build();
         }
         User creator = debate.getCreator();
         if (creator != null && creator.getUsername() != null) {
+            dto.creatorName = creator.getUsername();
             dto.creator = uriInfo.getBaseUriBuilder().path("users").path(creator.getUrl()).build();
         }
         User opponent = debate.getOpponent();
         if (opponent != null && opponent.getUsername() != null) {
+            dto.opponentName = opponent.getUsername();
             dto.opponent = uriInfo.getBaseUriBuilder().path("users").path(opponent.getUrl()).build();
         }
 
-        dto.arguments = uriInfo.getBaseUriBuilder().path("debates")
-                .path(String.valueOf(debate.getDebateId())).path("arguments").build();
+        dto.arguments = uriInfo.getBaseUriBuilder().path("debates").path(id).path("arguments").build();
+        dto.chats = uriInfo.getBaseUriBuilder().path("debates").path(id).path("chats").build();
 
-        dto.chats = uriInfo.getBaseUriBuilder().path("debates")
-                .path(String.valueOf(debate.getDebateId())).path("chats").build();
+        dto.recommendations = uriInfo.getBaseUriBuilder().path("debates").queryParam("recommendToDebate", String.valueOf(debate.getDebateId())).build();
+        dto.sameCategory = uriInfo.getBaseUriBuilder().path("debates").queryParam("category", debate.getCategory().getName()).build();
+        dto.sameStatus = uriInfo.getBaseUriBuilder().path("debates").queryParam("status", debate.getStatus().getName()).build();
+        dto.afterSameDate = uriInfo.getBaseUriBuilder().path("debates").queryParam("date", debate.getCreatedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))).build();
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
+            try {
+                dto.vote = uriInfo.getBaseUriBuilder().path("debates").path(id).path("votes")
+                        .queryParam("user", URLEncoder.encode(auth.getName(), User.ENCODING)).build();
+                dto.subscription = uriInfo.getBaseUriBuilder().path("debates").path(id).path("subscriptions")
+                        .queryParam("user", URLEncoder.encode(auth.getName(), User.ENCODING)).build();
+            } catch (UnsupportedEncodingException e) {
+                // NOTE: Encoding is valid, should not happen
+                throw new IllegalStateException("Invalid encoding", e);
+            }
+        }
 
         return dto;
     }
@@ -163,12 +196,12 @@ public class DebateDto {
         this.arguments = arguments;
     }
 
-    public int getSubscriptions() {
-        return subscriptions;
+    public int getSubscriptionsCount() {
+        return subscriptionsCount;
     }
 
-    public void setSubscriptions(int subscriptions) {
-        this.subscriptions = subscriptions;
+    public void setSubscriptionsCount(int subscriptionsCount) {
+        this.subscriptionsCount = subscriptionsCount;
     }
 
     public int getVotesFor() {
@@ -193,5 +226,69 @@ public class DebateDto {
 
     public void setChats(URI chats) {
         this.chats = chats;
+    }
+
+    public URI getRecommendations() {
+        return recommendations;
+    }
+
+    public void setRecommendations(URI recommendations) {
+        this.recommendations = recommendations;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public String getOpponentName() {
+        return opponentName;
+    }
+
+    public void setOpponentName(String opponentName) {
+        this.opponentName = opponentName;
+    }
+
+    public URI getSameCategory() {
+        return sameCategory;
+    }
+
+    public void setSameCategory(URI sameCategory) {
+        this.sameCategory = sameCategory;
+    }
+
+    public URI getSameStatus() {
+        return sameStatus;
+    }
+
+    public void setSameStatus(URI sameStatus) {
+        this.sameStatus = sameStatus;
+    }
+
+    public URI getAfterSameDate() {
+        return afterSameDate;
+    }
+
+    public void setAfterSameDate(URI afterSameDate) {
+        this.afterSameDate = afterSameDate;
+    }
+
+    public URI getVote() {
+        return vote;
+    }
+
+    public void setVote(URI vote) {
+        this.vote = vote;
+    }
+
+    public URI getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(URI subscription) {
+        this.subscription = subscription;
     }
 }

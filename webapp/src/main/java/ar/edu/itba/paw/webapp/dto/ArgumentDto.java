@@ -1,13 +1,17 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.model.Argument;
-import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.ws.rs.core.UriInfo;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.Locale;
 
 public class ArgumentDto {
@@ -15,29 +19,36 @@ public class ArgumentDto {
     private String content;
     private String createdDate;
     private String status;
-    private Integer likes;
-    private Boolean likedByUser;
-    private Boolean deleted;
+    private int likes;
+    private boolean likedByUser;
+    private boolean deleted;
+    private String creatorName;
 
     private URI self;
     private URI creator;
     private URI debate;
     private URI image;
+    private URI like;
 
     public static ArgumentDto fromArgument(final UriInfo uriInfo, final Argument argument, final MessageSource messageSource, final Locale locale) {
         ArgumentDto dto = new ArgumentDto();
 
-        if (!argument.getDeleted()) {
-            dto.content = argument.getContent();
-            dto.likes = argument.getLikesCount();
-            dto.likedByUser = argument.isLikedByUser();
+        dto.deleted = argument.getDeleted();
+        if (dto.deleted) {
+            dto.content = "";
+            dto.likedByUser = false;
         } else {
-            dto.deleted = true;
+            dto.content = argument.getContent();
+            dto.likedByUser = argument.isLikedByUser();
         }
+        dto.likes = argument.getLikesCount();
         dto.createdDate = argument.getFormattedDate();
         dto.status = messageSource.getMessage("status." + argument.getStatus().getName(), null, locale);
 
-        dto.self = uriInfo.getBaseUriBuilder().path("arguments").path(String.valueOf(argument.getArgumentId())).build();
+        final String id = String.valueOf(argument.getArgumentId());
+        final String debateId = String.valueOf(argument.getDebate().getDebateId());
+        dto.debate = uriInfo.getBaseUriBuilder().path("debates").path(debateId).build();
+        dto.self = uriInfo.getBaseUriBuilder().path("debates").path(debateId).path("arguments").path(id).build();
 
         Image image = argument.getImage();
         if (image != null) {
@@ -46,10 +57,18 @@ public class ArgumentDto {
         User creator = argument.getUser();
         if (creator != null && creator.getUsername() != null) {
             dto.creator = uriInfo.getBaseUriBuilder().path("users").path(creator.getUrl()).build();
+            dto.creatorName = creator.getUsername();
         }
-        Debate debate = argument.getDebate();
-        if (debate != null) {
-            dto.debate = uriInfo.getBaseUriBuilder().path("debates").path(String.valueOf(debate.getDebateId())).build();
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
+            try {
+                dto.like = uriInfo.getBaseUriBuilder().path("debates").path(debateId).path("arguments").path(id)
+                        .queryParam("user", URLEncoder.encode(auth.getName(), User.ENCODING)).build();
+            } catch (UnsupportedEncodingException e) {
+                // NOTE: Encoding is valid, should not happen
+                throw new IllegalStateException("Invalid encoding", e);
+            }
         }
 
         return dto;
@@ -79,20 +98,36 @@ public class ArgumentDto {
         this.status = status;
     }
 
-    public Integer getLikes() {
+    public int getLikes() {
         return likes;
     }
 
-    public void setLikes(Integer likes) {
+    public void setLikes(int likes) {
         this.likes = likes;
     }
 
-    public Boolean isLikedByUser() {
+    public boolean isLikedByUser() {
         return likedByUser;
     }
 
-    public void setLikedByUser(Boolean likedByUser) {
+    public void setLikedByUser(boolean likedByUser) {
         this.likedByUser = likedByUser;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public URI getSelf() {
@@ -127,11 +162,11 @@ public class ArgumentDto {
         this.image = image;
     }
 
-    public Boolean isDeleted() {
-        return deleted;
+    public URI getLike() {
+        return like;
     }
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
+    public void setLike(URI like) {
+        this.like = like;
     }
 }

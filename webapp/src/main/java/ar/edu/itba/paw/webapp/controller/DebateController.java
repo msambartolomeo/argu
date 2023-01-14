@@ -9,8 +9,8 @@ import ar.edu.itba.paw.model.enums.DebateStatus;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
 import ar.edu.itba.paw.webapp.dto.DebateDto;
 import ar.edu.itba.paw.webapp.form.CreateDebateForm;
-import ar.edu.itba.paw.webapp.patches.DebatePatch;
-import ar.edu.itba.paw.webapp.patches.PATCH;
+import ar.edu.itba.paw.webapp.form.DebatePatch;
+import ar.edu.itba.paw.webapp.utils.PATCH;
 import ar.edu.itba.paw.webapp.utils.ImageUtils;
 import ar.edu.itba.paw.webapp.utils.ListResponseBuilder;
 import ar.edu.itba.paw.webapp.validators.ExistingUser;
@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -90,7 +91,7 @@ public class DebateController {
         if (recommendToDebate != null) {
             final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String username = null;
-            if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
+            if (auth != null && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
                 username = auth.getName();
             }
 
