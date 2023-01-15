@@ -1,4 +1,5 @@
 import { Button, Stack } from "@mui/material";
+import { Link } from "react-router-dom";
 import DebateCategory from "../../types/enums/DebateCategory";
 import "./CategoryFilters.css";
 
@@ -13,7 +14,7 @@ const CategoryFilters = ({ selectedCategory }: CategoryFiltersProps) => {
         <div className="category-filters-container">
             <h5 className="categories-header">Categories</h5>
             <Stack direction="column" spacing={1} className="categories-stack">
-                <Button
+                {/* <Button
                     variant="text"
                     href="/debates"
                     className={`category-button ${
@@ -21,18 +22,35 @@ const CategoryFilters = ({ selectedCategory }: CategoryFiltersProps) => {
                     }`}
                 >
                     All
-                </Button>
+                </Button> */}
+                <Link
+                    to="/debates"
+                    className={`category-button ${
+                        selectedCategory === null ? "active" : ""
+                    }`}
+                >
+                    All
+                </Link>
                 {categories.map((category) => (
-                    <Button
+                    // <Button
+                    //     key={category}
+                    //     variant="text"
+                    //     href={`/debates?category=${category}`}
+                    //     className={`category-button ${
+                    //         category === selectedCategory ? "active" : ""
+                    //     }`}
+                    // >
+                    //     {category}
+                    // </Button>
+                    <Link
                         key={category}
-                        variant="text"
-                        href={`/debates?category=${category}`}
+                        to={`/debates?category=${category}`}
                         className={`category-button ${
                             category === selectedCategory ? "active" : ""
                         }`}
                     >
                         {category}
-                    </Button>
+                    </Link>
                 ))}
             </Stack>
         </div>

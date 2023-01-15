@@ -19,9 +19,6 @@ const OrderByComponent = ({
     handleSelectStatusChange,
     selectedCategory,
 }: OrderByComponentProps) => {
-    // const search = useLocation().search;
-    // const selectedCategory = new URLSearchParams(search).get("category");
-
     const orderBySuppliers = [
         { value: "date_desc", label: "Newest" },
         { value: "date_asc", label: "Oldest" },
