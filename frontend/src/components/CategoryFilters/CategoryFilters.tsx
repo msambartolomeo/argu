@@ -1,5 +1,5 @@
 import { Button, Stack } from "@mui/material";
-import DebateCategory from "../../model/enums/DebateCategory";
+import DebateCategory from "../../types/enums/DebateCategory";
 import "./CategoryFilters.css";
 
 interface CategoryFiltersProps {

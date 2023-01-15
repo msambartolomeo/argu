@@ -1,6 +1,6 @@
 import "./DebateView.css";
-import User from "../../types/User";
-import Debate from "../../types/Debate";
+import User from "../../model/types/User";
+import Debate from "../../model/types/Debate";
 
 import { useState, useEffect } from "react";
 import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";

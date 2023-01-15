@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CategoryFilters from "../../components/CategoryFilters/CategoryFilters";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import OrderByComponent from "../../components/OrderByComponent/OrderByComponent";
-import DebateCategory from "../../model/enums/DebateCategory";
+import DebateCategory from "../../types/enums/DebateCategory";
 import Debate from "../../model/types/Debate";
 import "./Discovery.css";
 
@@ -18,7 +18,7 @@ const Discovery = () => {
             description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
             isCreatorFor: true,
-            category: DebateCategory.Science,
+            category: DebateCategory.SCIENCE,
             status: "open",
             createdDate: "2021-05-01",
             subscriptions: 3,
@@ -36,7 +36,7 @@ const Discovery = () => {
             description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
             isCreatorFor: false,
-            category: DebateCategory.Technology,
+            category: DebateCategory.TECHNOLOGY,
             status: "open",
             createdDate: "2022-05-01",
             subscriptions: 5,
