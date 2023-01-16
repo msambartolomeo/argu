@@ -66,7 +66,9 @@ const OrderByComponent = ({
                     <SortSelectComponent {...orderByProps} />
                     <SortSelectComponent {...statusProps} />
                 </div>
-                <DatePicker label="Date" placeholder="Select a date" />
+                <div className="date-picker-container">
+                    <DatePicker label="Date" placeholder="Select a date" />
+                </div>
             </div>
         </div>
     );
