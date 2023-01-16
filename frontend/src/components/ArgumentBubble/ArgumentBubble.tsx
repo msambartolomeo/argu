@@ -1,7 +1,9 @@
 import "./ArgumentBubble.css";
+import "../../locales/index";
 
 import cn from "classnames";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import User from "../../types/User";
 import Argument from "../../types/Argument";
@@ -60,6 +62,7 @@ interface ArgumentBubbleProps {
 
 const ArgumentBubble = ({ argument = arg }: ArgumentBubbleProps) => {
     const [authorized, setAuthorized] = useState(false);
+    const { t } = useTranslation();
 
     const handleLikeSubmit = () => {
         // TODO: Implement like
@@ -90,7 +93,9 @@ const ArgumentBubble = ({ argument = arg }: ArgumentBubbleProps) => {
         >
             <div className="comment-info">
                 <h6 className="comment-owner">
-                    {argument.creator.username} said
+                    {t("components.argumentBubble.userSaid", {
+                        username: argument.creator.username,
+                    })}
                 </h6>
                 <div className="comment-extra">
                     <div className="comment-header-section">
@@ -130,14 +135,18 @@ const ArgumentBubble = ({ argument = arg }: ArgumentBubbleProps) => {
                         <DeleteDialog
                             id="delete-argument"
                             handleDelete={handleDelete}
-                            title="Are you sure you want to delete this argument?"
+                            title={t(
+                                "components.argumentBubble.deleteConfirmation"
+                            )}
                         />
                     )}
                 </div>
             </div>
             <div>
                 {argument.deleted ? (
-                    <p className="comment-owner">Argument deleted</p>
+                    <p className="comment-owner">
+                        {t("components.argumentBubble.deleted")}
+                    </p>
                 ) : (
                     <p>{argument.content}</p>
                 )}

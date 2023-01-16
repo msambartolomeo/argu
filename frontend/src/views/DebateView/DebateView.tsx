@@ -1,8 +1,11 @@
 import "./DebateView.css";
+import "../../locales/index";
 import User from "../../types/User";
 import Debate from "../../types/Debate";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+
 import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
 import Chip from "../../components/Chip/Chip";
 import NonClickableChip from "../../components/NonClickableChip/NonClickableChip";
@@ -97,19 +100,20 @@ const PostArgumentCard = ({
     debateCreator,
 }: PostArgumentCardProps) => {
     // TODO: Error handling
+    const { t } = useTranslation();
 
-    let message = "Leave an argument here.";
-    let submitMessage = "Post Argument!";
+    let message = t("debate.argument.argumentMessage");
+    let submitMessage = t("debate.argument.postArgument");
     if (
         lastArgument === null ||
         (lastArgument.status === "introduction" &&
             lastArgument.creator.username === debateCreator)
     ) {
-        message = "Please introduce your stance in this debate.";
-        submitMessage = "Post Introduction!";
+        message = t("debate.argument.introMessage");
+        submitMessage = t("debate.argument.postIntro");
     } else if (lastArgument.status === "closing") {
-        message = "Please conclude your argument in this debate.";
-        submitMessage = "Post Conclusion!";
+        message = t("debate.argument.conclusionMessage");
+        submitMessage = t("debate.argument.postConclusion");
     }
     return (
         <form
@@ -121,11 +125,13 @@ const PostArgumentCard = ({
         >
             <div className="card-content">
                 <span className="card-title">{message}</span>
-                <TextArea text="Add your argument here:" />
+                <TextArea text={t("debate.argument.content")} />
                 <div className="image-selector">
                     <div className="file-field input-field">
                         <div className="btn">
-                            <label className="white-text">Upload Image</label>
+                            <label className="white-text">
+                                {t("debate.argument.image")}
+                            </label>
                             <input type="file" />
                         </div>
                         <div className="file-path-wrapper">
@@ -158,6 +164,7 @@ interface VotesSectionProps {
 
 const VoteSection = ({ debate, userData }: VotesSectionProps) => {
     // TODO: View user vote logic
+    const { t } = useTranslation();
     const [vote, setVote] = useState("for");
 
     const handleUserVoted = (vote: string) => {
@@ -175,7 +182,7 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
 
     const handleVoteResult = () => {
         const result = debate.votesFor - debate.votesAgainst;
-        if (result === 0) return "This debate resulted in a draw!";
+        if (result === 0) return t("debate.votes.draw");
 
         let winner: string | undefined;
         if (result > 0) {
@@ -187,20 +194,20 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
                 ? debate.opponent?.username
                 : debate.creator.username;
         }
-        winner = winner ? winner : "[deleted]";
-        return `The winner of this debate is ${winner}!`;
+        winner = winner ? winner : t("debate.userDeleted").toString();
+        return t("debate.votes.winner") + winner;
     };
 
     return (
         <div className="card vote-section no-top-margin">
-            <h5>Votes</h5>
+            <h5>{t("debate.votes.votes")}</h5>
             {userData &&
                 !vote &&
                 (debate.status === "open" ||
                     debate.status === "voting" ||
                     debate.status === "closing") && (
                     <>
-                        <h5>Who is the winner of the debate?</h5>
+                        <h5>{t("debate.votes.whoWins")}</h5>
                         <div className="vote-buttons">
                             <button
                                 onClick={handleVoteButton}
@@ -217,7 +224,11 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
                         </div>
                     </>
                 )}
-            {vote && <h6>Voted: {handleUserVoted(vote)}</h6>}
+            {vote && (
+                <h6>
+                    {t("debate.votes.voted")} {handleUserVoted(vote)}
+                </h6>
+            )}
             {((userData && vote) || !userData) && (
                 <div className="progress red">
                     {debate.votesFor > 0 && (
@@ -253,15 +264,19 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
                 vote &&
                 (debate.status === "open" || debate.status === "voting") && (
                     <>
-                        <h6>Changed your mind?</h6>
-                        <button className="btn waves-effect">Unvote</button>
+                        <h6>{t("debate.votes.changeVote")}</h6>
+                        <button className="btn waves-effect">
+                            {t("debate.votes.unvote")}
+                        </button>
                     </>
                 )}
             {debate.votesFor + debate.votesAgainst === 0 && (
-                <h5 className="center">No votes yet</h5>
+                <h5 className="center">{t("debate.votes.noVotes")}</h5>
             )}
             {debate.status === "voting" && (
-                <h6 className="center">Voting will end on 17/02/2023</h6>
+                <h6 className="center">
+                    {t("debate.votes.votingEnds")} 17/02/2023
+                </h6>
             )}
         </div>
     );
@@ -274,6 +289,7 @@ interface ChatSectionProps {
 }
 const ChatSection = ({ debate, userData }: ChatSectionProps) => {
     const chat: Chat[] = chats1;
+    const { t } = useTranslation();
     useEffect(() => {
         const chatElem = document.getElementById("chat");
         chatElem?.scrollTo(0, chatElem.scrollHeight);
@@ -287,7 +303,7 @@ const ChatSection = ({ debate, userData }: ChatSectionProps) => {
                     userData.username !== debate.opponent?.username)) && (
                 <div className="card">
                     <div className="chat-box card-content">
-                        <h5>Discussion</h5>
+                        <h5>{t("debate.chat.title")}</h5>
                         <div className="message-container" id="chat">
                             {chat.length > 0 ? (
                                 chat.map((c: Chat) => (
@@ -301,9 +317,7 @@ const ChatSection = ({ debate, userData }: ChatSectionProps) => {
                                 ))
                             ) : (
                                 <div className="message">
-                                    <h6>
-                                        There are no messages in this debate
-                                    </h6>
+                                    <h6>{t("debate.chat.noMessages")}</h6>
                                 </div>
                             )}
                         </div>
@@ -318,7 +332,9 @@ const ChatSection = ({ debate, userData }: ChatSectionProps) => {
                                     >
                                         <div className="send-chat">
                                             <div className="input-field flex-grow">
-                                                <label>Message</label>
+                                                <label>
+                                                    {t("debate.chat.message")}
+                                                </label>
                                                 <input className="materialize-textarea" />
                                             </div>
                                             <button
@@ -327,7 +343,7 @@ const ChatSection = ({ debate, userData }: ChatSectionProps) => {
                                                 name="chat"
                                                 form="chatForm"
                                             >
-                                                Send
+                                                {t("debate.chat.send")}
                                             </button>
                                         </div>
                                     </form>
@@ -344,13 +360,14 @@ const ChatSection = ({ debate, userData }: ChatSectionProps) => {
 // RECOMMENDED DEBATES SECTION
 const RecommendedDebatesSection = () => {
     const recommendedDebates: Debate[] = [debate1, debate1, debate1];
+    const { t } = useTranslation();
     const [slideIndex, setSlideIndex] = useState(0);
 
     return (
         <>
             {recommendedDebates.length > 0 && (
                 <div className="card vote-section">
-                    <h5>Recommended debates</h5>
+                    <h5>{t("debate.recommendedDebates")}</h5>
                     <div className="row">
                         <div className="slideshow-container">
                             {recommendedDebates.map((d: Debate, index) => (
@@ -416,6 +433,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
     const [userData, setuserData] = useState<User | undefined>(user1);
     const [subscribed, setSubscribed] = useState(false);
     const argumentsList: Argument[] = [argument1];
+    const { t } = useTranslation();
 
     const handleCloseDebate = () => {
         // TODO: Implement close debate call
@@ -478,8 +496,12 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                                         handleDelete={
                                                             handleDeleteDebate
                                                         }
-                                                        title="Are you sure you want to delete this debate?"
-                                                        name="Delete Debate"
+                                                        title={t(
+                                                            "debate.deleteConfirmation"
+                                                        )}
+                                                        name={t(
+                                                            "debate.delete"
+                                                        )}
                                                     />
                                                 )}
                                         </div>
@@ -494,22 +516,22 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                 <>
                                     <DebaterDisplay
                                         debater={debate.creator.username}
-                                        position="For: "
+                                        position={t("debate.for")}
                                     />
                                     <DebaterDisplay
                                         debater="oponent"
-                                        position="Against: "
+                                        position={t("debate.against")}
                                     />
                                 </>
                             ) : (
                                 <>
                                     <DebaterDisplay
                                         debater="oponent"
-                                        position="For: "
+                                        position={t("debate.for")}
                                     />
                                     <DebaterDisplay
                                         debater={debate.creator.username}
-                                        position="Against: "
+                                        position={t("debate.against")}
                                     />
                                 </>
                             )}
@@ -522,7 +544,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                             className="btn waves-effect chip"
                                             onClick={handleSubscribe}
                                         >
-                                            Unsubscribe
+                                            {t("debate.unsubscribe")}
                                             <i className="material-icons right">
                                                 notifications_off
                                             </i>
@@ -532,7 +554,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                             className="btn waves-effect chip"
                                             onClick={handleSubscribe}
                                         >
-                                            Subscribe
+                                            {t("debate.subscribe")}
                                             <i className="material-icons right">
                                                 notifications_active
                                             </i>
@@ -544,7 +566,10 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                             <Chip name={debate.createdDate} />
                             <Chip name={debate.status} />
                             <NonClickableChip
-                                name={"Subscribed: " + debate.subscriptions}
+                                name={
+                                    t("debate.subscribed") +
+                                    debate.subscriptions
+                                }
                             />
                         </div>
                     </div>
@@ -557,13 +582,13 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                         let header;
                         switch (argument.status) {
                             case "introduction":
-                                header = "Introduction";
+                                header = t("debate.argument.introduction");
                                 break;
                             case "closing":
-                                header = "Conclusion";
+                                header = t("debate.argument.conclusion");
                                 break;
                             case "argument":
-                                header = "Argument";
+                                header = t("debate.argument.argument");
                                 break;
                         }
                         return (
@@ -574,7 +599,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                         );
                     })}
                     {argumentsList.length === 0 && (
-                        <h5 className="center">No arguments yet</h5>
+                        <h5 className="center">{t("debate.noArguments")}</h5>
                     )}
                     <Pagination param="" totalPages={1} />
                 </div>
@@ -598,19 +623,14 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                         />
                                     ) : (
                                         <div className="card-title card-title-margins">
-                                            You need to wait for your turn to
-                                            post your argument.
+                                            {t("debate.waitTurn")}
                                         </div>
                                     ))}
                                 {!userData && (
                                     <div className="card-title card-title-margins">
-                                        Hey! Would you like to participate in
-                                        the discussion, vote for the winner,
-                                        argument, like other people&apos;s
-                                        arguments, and subscribe to debates?{" "}
+                                        {t("debate.needToLogin")}
                                         <a onClick={handleGoToLogin}>
-                                            You need to be logged-in in order to
-                                            do that!
+                                            {t("debate.firstLogin")}
                                         </a>
                                     </div>
                                 )}
