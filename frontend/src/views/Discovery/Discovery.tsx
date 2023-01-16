@@ -7,6 +7,7 @@ import OrderByComponent from "../../components/OrderByComponent/OrderByComponent
 import DebateCategory from "../../types/enums/DebateCategory";
 import Debate from "../../model/types/Debate";
 import "./Discovery.css";
+import CategorySelector from "../../components/CategoryButton/CategorySelector";
 
 const Discovery = () => {
     document.title = "Argu | Debates";
@@ -83,7 +84,7 @@ const Discovery = () => {
                 queryParams.append("status", queryStatus);
             }
         }
-        navigate("/debates?" + queryParams.toString());
+        navigate("/discover?" + queryParams.toString());
     }, [queryOrder, queryStatus, navigate]);
 
     const orderByProps = {
@@ -93,6 +94,8 @@ const Discovery = () => {
         handleSelectStatusChange: handleSelectStatusChange,
         selectedCategory: selectedCategory,
     };
+
+    const categories = Object.values(DebateCategory);
 
     return (
         <div className="discovery-container">

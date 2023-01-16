@@ -45,7 +45,7 @@ function App() {
                         element={<UserProfile />}
                     />
 
-                    <Route path="/debates" element={<Discovery />} />
+                    <Route path="/discover" element={<Discovery />} />
                     <Route
                         path="/debates/:id"
                         element={

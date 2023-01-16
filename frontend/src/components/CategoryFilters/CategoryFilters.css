@@ -5,7 +5,6 @@
     align-items: center;
     background-color: white;
     border-radius: 10px;
-    padding: 5px 0 5px 11px;
 }
 
 .categories-header {
@@ -29,7 +28,7 @@
     position: relative;
 }
 
-.category-button {
+.category-filters-container .categories-stack .category-button {
     text-transform: capitalize !important;
     font-size: 1.2rem !important;
     font-weight: 400 !important;
@@ -39,12 +38,12 @@
     border-radius: 10px !important;
 }
 
-.active {
+.category-filters-container .categories-stack .selected-category-button {
     background-color: var(--primary-color) !important;
     color: white !important;
 }
 
-.category-button:hover {
+.category-filters-container .categories-stack .category-button:hover {
     background-color: black !important;
     opacity: 30% !important;
     color: white !important;

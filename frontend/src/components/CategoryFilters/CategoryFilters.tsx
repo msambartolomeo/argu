@@ -15,9 +15,11 @@ const CategoryFilters = ({ selectedCategory }: CategoryFiltersProps) => {
             <h5 className="categories-header">Categories</h5>
             <Stack direction="column" spacing={1} className="categories-stack">
                 <Link
-                    to="/debates"
+                    to="/discover"
                     className={`category-button ${
-                        selectedCategory === null ? "active" : ""
+                        selectedCategory === null
+                            ? "selected-category-button"
+                            : ""
                     }`}
                 >
                     All
@@ -25,9 +27,11 @@ const CategoryFilters = ({ selectedCategory }: CategoryFiltersProps) => {
                 {categories.map((category) => (
                     <Link
                         key={category}
-                        to={`/debates?category=${category}`}
+                        to={`/discover?category=${category}`}
                         className={`category-button ${
-                            category === selectedCategory ? "active" : ""
+                            category === selectedCategory
+                                ? "selected-category-button"
+                                : ""
                         }`}
                     >
                         {category}
