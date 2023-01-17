@@ -63,12 +63,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/debates").hasAuthority("MODERATOR")
                 .antMatchers(HttpMethod.PATCH, "/debates/{\\d+}").authenticated()
                 // argument and chat
-                .antMatchers(HttpMethod.DELETE, "/debates/{\\d+}/arguments/{\\d+}").authenticated()
+                .antMatchers(HttpMethod.PATCH, "/debates/{\\d+}/arguments/{\\d+}").authenticated()
                 .antMatchers(HttpMethod.POST, "/debates/{\\d+}/arguments", "/debates/{\\d+}/chats").authenticated()
                 // likes, subs and votes
-                .antMatchers("/debates/{debateId}/arguments/{argumentId}/likes", "/debates/{debateId}/subscriptions", "/debates/{debateId}/votes").authenticated()
+                .antMatchers("/debates/\\d+}/arguments/{\\d+}/likes", "/debates/{\\d+}/subscriptions", "/debates/{\\d+}/votes").authenticated()
                 // general
-                .antMatchers(HttpMethod.GET, "/users/{url}/**", "/debates/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/users/{url}", "/users/{url}/image", "/debates", "/debates/{\\d+}", "/debates/{\\d+}/arguments", "/debates/{\\d+}/arguments/{\\d+}", "/debates/{\\d+}/chats", "/debates/{\\d+}/chats/{\\d+}", "/images").permitAll()
             .and().exceptionHandling()
                 .accessDeniedHandler((request, response, ex) -> response.setStatus(HttpServletResponse.SC_FORBIDDEN))
                 .authenticationEntryPoint((request, response, ex) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))
