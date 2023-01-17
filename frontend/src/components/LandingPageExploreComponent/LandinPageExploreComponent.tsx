@@ -25,7 +25,7 @@ const LandingPageExploreComponent = ({ categories }: CategoriesProps) => {
                             key={category}
                             label={t(`landingPage.explore.buttons.${category}`)}
                             component="a"
-                            href={`/debates?category=${category}`}
+                            href={`/paw-2022a-06/debates?category=${category}`}
                             clickable
                         />
                     ))}

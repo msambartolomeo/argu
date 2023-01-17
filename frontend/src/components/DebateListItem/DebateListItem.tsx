@@ -13,6 +13,12 @@ interface DebateListItemProps {
 const DebateListItem = ({ debate }: DebateListItemProps) => {
     const { t } = useTranslation();
 
+    const debateCategory = t("discovery.categories." + debate.category);
+    const debateStatus =
+        debate.status === "open"
+            ? t("debate.statusOpen")
+            : t("debate.statusClosed");
+
     return (
         <div className="list-item">
             <a
@@ -33,7 +39,7 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                             </h6>
                         </div>
                         <div className="debate-footer">
-                            <NonClickableChip name={debate.category} />
+                            <NonClickableChip name={debateCategory} />
                             <NonClickableChip
                                 name={
                                     t("debate.created") +
@@ -42,7 +48,7 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                                 }
                             />
                             <NonClickableChip
-                                name={t("debate.status") + ": " + debate.status}
+                                name={t("debate.status") + ": " + debateStatus}
                             />
                             <NonClickableChip
                                 name={
