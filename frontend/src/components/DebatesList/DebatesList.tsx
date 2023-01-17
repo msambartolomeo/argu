@@ -1,6 +1,6 @@
-import { useLocation } from "react-router-dom";
 import Debate from "../../types/Debate";
 import DebateListItem from "../DebateListItem/DebateListItem";
+import { useLocation } from "react-router-dom";
 
 interface DebatesListProps {
     debates: Debate[];
