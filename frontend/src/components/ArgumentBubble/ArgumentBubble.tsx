@@ -3,10 +3,10 @@ import "./ArgumentBubble.css";
 import cn from "classnames";
 import { useState } from "react";
 
-import User from "../../model/types/User";
+import User from "../../types/User";
 import Argument from "../../types/Argument";
 
-import Debate from "../../model/types/Debate";
+import Debate from "../../types/Debate";
 import NonClickableChip from "../NonClickableChip/NonClickableChip";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
 

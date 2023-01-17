@@ -1,5 +1,5 @@
-import Debate from "../model/types/Debate";
-import User from "../model/types/User";
+import Debate from "./Debate";
+import User from "./User";
 
 // TODO: Check for URIs (creator, debate, image)
 export default interface Argument {

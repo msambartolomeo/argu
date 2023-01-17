@@ -5,7 +5,7 @@ import CategoryFilters from "../../components/CategoryFilters/CategoryFilters";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import OrderByComponent from "../../components/OrderByComponent/OrderByComponent";
 import DebateCategory from "../../types/enums/DebateCategory";
-import Debate from "../../model/types/Debate";
+import Debate from "../../types/Debate";
 import "./Discovery.css";
 import CategorySelector from "../../components/CategoryButton/CategorySelector";
 

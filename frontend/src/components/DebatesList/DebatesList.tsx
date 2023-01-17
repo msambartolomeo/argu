@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import Debate from "../../model/types/Debate";
+import Debate from "../../types/Debate";
 import DebateListItem from "../DebateListItem/DebateListItem";
 
 interface DebatesListProps {
