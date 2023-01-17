@@ -6,9 +6,12 @@ import {
     SelectChangeEvent,
 } from "@mui/material";
 import "./SortSelectComponent.css";
+import { useTranslation } from "react-i18next";
+import "../../../locales/index";
 
 interface SortSelectComponentProps {
     header: string;
+    name: string;
     defaultValue?: any;
     id: string;
     labelId: string;
@@ -19,6 +22,7 @@ interface SortSelectComponentProps {
 
 const SortSelectComponent = ({
     header,
+    name,
     defaultValue,
     id,
     labelId,
@@ -26,6 +30,8 @@ const SortSelectComponent = ({
     query,
     handleSelectChange,
 }: SortSelectComponentProps) => {
+    const { t } = useTranslation();
+
     return (
         <div className="select-container">
             <FormControl
@@ -34,7 +40,7 @@ const SortSelectComponent = ({
                 className="white-text"
             >
                 <InputLabel id={labelId} className="white-text">
-                    {header}
+                    {t(`discovery.orderBy.${name}.title`)}
                 </InputLabel>
                 <Select
                     className="white-text"
@@ -47,7 +53,7 @@ const SortSelectComponent = ({
                 >
                     {suppliers.map((supplier) => (
                         <MenuItem key={supplier.label} value={supplier.value}>
-                            {supplier.label}
+                            {t(`discovery.orderBy.${name}.${supplier.label}`)}
                         </MenuItem>
                     ))}
                 </Select>

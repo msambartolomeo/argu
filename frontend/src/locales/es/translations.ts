@@ -71,4 +71,42 @@ export const TRANSLATIONS_ES = {
         statusOpen: "Abierto",
         statusClosed: "Cerrado",
     },
+    discovery: {
+        categories: {
+            title: "Categorías",
+            all: "Todos",
+            culture: "Cultura",
+            economics: "Economía",
+            education: "Educación",
+            entertainment: "Entretenimiento",
+            history: "Historia",
+            literature: "Literatura",
+            politics: "Política",
+            religion: "Religión",
+            science: "Ciencia",
+            technology: "Tecnología",
+            world: "Mundo",
+            other: "Otros",
+        },
+        orderBy: {
+            orderBy: {
+                title: "Ordenar por",
+                dateDesc: "Más reciente",
+                dateAsc: "Más antiguo",
+                alphaAsc: "A - Z",
+                alphaDesc: "Z - A",
+                subsAsc: "Menos suscriptos",
+                subsDesc: "Más suscriptos",
+            },
+            status: {
+                title: "Estado",
+                open: "Abierto",
+                closed: "Cerrado",
+                all: "Todos",
+            },
+            showingAllDebates: "Mostrando todos los debates",
+            showingDebatesInCategory:
+                "Mostrando debates en la categoría: {{category}}",
+        },
+    },
 };
