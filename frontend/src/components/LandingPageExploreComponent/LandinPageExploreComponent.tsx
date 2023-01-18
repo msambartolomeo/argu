@@ -15,7 +15,7 @@ const LandingPageExploreComponent = ({ categories }: CategoriesProps) => {
     const { t } = useTranslation();
 
     return (
-        <React.Fragment>
+        <div className="explore-component-container">
             <h2 className="text-container">{t("landingPage.explore.title")}</h2>
             <div className="chip-container">
                 <Stack direction="row" spacing={1}>
@@ -25,13 +25,13 @@ const LandingPageExploreComponent = ({ categories }: CategoriesProps) => {
                             key={category}
                             label={t(`landingPage.explore.buttons.${category}`)}
                             component="a"
-                            href={`/paw-2022a-06/debates?category=${category}`}
+                            href={`/paw-2022a-06/discover?category=${category}`}
                             clickable
                         />
                     ))}
                 </Stack>
             </div>
-        </React.Fragment>
+        </div>
     );
 };
 
