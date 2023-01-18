@@ -18,6 +18,7 @@ import UserProfile from "./views/UserProfile/UserProfile";
 import Register from "./views/Register/Register";
 import CreateDebate from "./views/CreateDebate/CreateDebate";
 import Discovery from "./views/Discovery/Discovery";
+import { DebaterProfile } from "./views/DebaterProfile/DebaterProfile";
 
 function App() {
     useEffect(() => {
@@ -33,12 +34,7 @@ function App() {
 
                     <Route // If :url == user.url, then show profile page
                         path="/user/:url"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>User</p>
-                            </div>
-                        }
+                        element={<DebaterProfile />}
                     />
                     <Route // Profile Page
                         path="/profile/"
