@@ -1,17 +1,17 @@
 .landing-container {
     display: flex;
     justify-content: center;
-    /* flex-direction: column; */
+    flex-direction: column;
+    align-items: center;
     height: 100%;
 }
 
 .landing-container .explore-container {
     display: flex;
     justify-content: center;
-    border-radius: 10px;
-    margin-top: 15px;
+    margin-top: 30px;
     width: 90%;
-    box-shadow: 0 8px 17px 2px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%), 0 5px 5px -3px rgb(0 0 0 / 20%) !important;
+    margin-bottom: 30px;
 }
 
 .trending-debates-container {
@@ -19,4 +19,5 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 90%;
 }

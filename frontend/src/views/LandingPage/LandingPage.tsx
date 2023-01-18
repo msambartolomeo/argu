@@ -19,63 +19,6 @@ interface ParallaxBackgroundProps {
 const LandingPage = ({
     background = parallaxBackgroud,
 }: ParallaxBackgroundProps) => {
-    const debatesList: Debate[] = [
-        {
-            id: 1,
-            name: "Is the earth flat?",
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
-            isCreatorFor: true,
-            category: DebateCategory.SCIENCE,
-            status: "open",
-            createdDate: "2021-05-01",
-            subscriptions: 3,
-            votesFor: 2,
-            votesAgainst: 1,
-            creator: {
-                username: "user1",
-                email: "user1@gmail.com",
-                createdDate: "2021-05-01",
-            },
-        },
-        {
-            id: 2,
-            name: "The best programming language is Java",
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
-            isCreatorFor: false,
-            category: DebateCategory.TECHNOLOGY,
-            status: "open",
-            createdDate: "2022-05-01",
-            subscriptions: 5,
-            votesFor: 2,
-            votesAgainst: 3,
-            creator: {
-                username: "user2",
-                email: "user2@gmail.com",
-                createdDate: "2022-05-01",
-            },
-        },
-        {
-            id: 10,
-            name: "The best programming language is ASM",
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
-            isCreatorFor: true,
-            category: DebateCategory.TECHNOLOGY,
-            status: "closed",
-            createdDate: "2022-05-01",
-            subscriptions: 50,
-            votesFor: 1,
-            votesAgainst: 20,
-            creator: {
-                username: "user3",
-                email: "user3@gmail.com",
-                createdDate: "2022-05-01",
-            },
-        },
-    ];
-
     const parallaxPages = 5;
     const categories = Object.values(DebateCategory);
 
@@ -84,9 +27,9 @@ const LandingPage = ({
             <div className="explore-container">
                 <LandingPageExploreComponent categories={categories} />
             </div>
-            {/* <div className="trending-debates-container">
+            <div className="trending-debates-container">
                 <TrendingDebatesComponent />
-            </div> */}
+            </div>
             {/* <div className="explore-container">
                 <LandingPageExploreComponent categories={categories} />
             </div> */}
