@@ -74,9 +74,6 @@ const TrendingDebatesComponent = () => {
             <h2 className="title-container">
                 {t("landingPage.trending.title")}
             </h2>
-            {/* <h4 className="debate-container">debate-list-item</h4>
-            <h4 className="debate-container">debate-list-item</h4>
-            <h4 className="debate-container">debate-list-item</h4> */}
             <div className="debate-list-container">
                 <DebatesList debates={debatesList} />
             </div>

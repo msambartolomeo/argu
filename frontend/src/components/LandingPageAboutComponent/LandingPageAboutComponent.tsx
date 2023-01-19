@@ -22,20 +22,20 @@ const LandingPageAboutComponent = ({
     const { t } = useTranslation();
 
     return (
-        <>
-            <div className="about-container">
+        <div className="about-component-container">
+            <div className="about-container bottom-margin">
                 <div className="left-text-container">
                     <h2>{t("landingPage.about.about")}</h2>
                     <h6>{t("landingPage.about.aboutText1")}</h6>
                     <h6>{t("landingPage.about.aboutText2")}</h6>
                     <h6>{t("landingPage.about.aboutText3")}</h6>
                 </div>
-                <div className="right-img-container">
+                <div className="right-img-container white-img resize-img">
                     <img src={debateIconImg} alt="debate icon" />
                 </div>
             </div>
-            <div className="about-container">
-                <div className="left-img-container">
+            <div className="about-container bottom-margin">
+                <div className="left-img-container resize-img">
                     <img src={createParticipateDebateImg} alt="debate icon" />
                 </div>
                 <div className="right-text-container">
@@ -52,11 +52,11 @@ const LandingPageAboutComponent = ({
                     <h6>{t("landingPage.about.engageText2")}</h6>
                     <h6>{t("landingPage.about.engageText3")}</h6>
                 </div>
-                <div className="right-img-container">
+                <div className="right-img-container resize-img">
                     <img src={subscribeLikeVoteImg} alt="debate icon" />
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

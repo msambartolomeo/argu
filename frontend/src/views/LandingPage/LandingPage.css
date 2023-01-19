@@ -14,10 +14,17 @@
     margin-bottom: 30px;
 }
 
-.trending-debates-container {
+.landing-container .trending-debates-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 90%;
+}
+
+.landing-container .about-container {
+    display: flex;
+    margin-top: 30px;
+    width: 90%;
+    margin-bottom: 30px;
 }
