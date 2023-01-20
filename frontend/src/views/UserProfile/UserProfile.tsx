@@ -85,7 +85,7 @@ const UserProfile = () => {
                     <h3 className="center">
                         {t("profile.userDebates", { username: "username" })}
                     </h3>
-                    <DebatesList debates={debates} />
+                    {/* <DebatesList debates={debates} /> */}
                 </div>
             </div>
         </div>

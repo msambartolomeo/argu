@@ -10,7 +10,6 @@ import Debate from "../../types/Debate";
 import "./LandingPage.css";
 
 // TODO: Add icons
-// TODO: Align text and images in the about section
 
 interface ParallaxBackgroundProps {
     background?: string;

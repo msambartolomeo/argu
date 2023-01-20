@@ -107,7 +107,7 @@ const Discovery = () => {
                     <OrderByComponent {...orderByProps} />
                 </div>
                 <div className="debates-list-container">
-                    <DebatesList debates={debatesList} />
+                    {/* <DebatesList debates={debatesList} /> */}
                 </div>
             </div>
         </div>

@@ -4,9 +4,10 @@ import "./DebateListItem.css";
 import defaultDebatePhoto from "../../assets/debate_stock.png";
 import { useTranslation } from "react-i18next";
 import "../../locales/index";
+import DebateDto from "../../types/dto/DebateDto";
 
 interface DebateListItemProps {
-    debate: Debate;
+    debate: DebateDto;
 }
 
 // TODO: Check if creator is received like a string or an URI
@@ -14,10 +15,7 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
     const { t } = useTranslation();
 
     const debateCategory = t("discovery.categories." + debate.category);
-    const debateStatus =
-        debate.status === "open"
-            ? t("debate.statusOpen")
-            : t("debate.statusClosed");
+    const debateStatus = t("debate.statuses." + debate.status);
 
     return (
         <div className="list-item">
@@ -33,8 +31,8 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                             </h5>
                             <h6>
                                 <b>{t("debate.creator")}:</b>{" "}
-                                {debate.creator.username
-                                    ? debate.creator.username
+                                {debate.creator
+                                    ? "usuario hardcodeado"
                                     : "[deleted user]"}
                             </h6>
                         </div>
@@ -54,7 +52,7 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                                 name={
                                     t("debate.subscribedUsers") +
                                     ": " +
-                                    debate.subscriptions
+                                    debate.subscriptionsCount
                                 }
                             />
                         </div>

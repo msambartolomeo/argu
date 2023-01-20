@@ -1,4 +1,5 @@
 import DebateCategory from "../enums/DebateCategory";
+import DebateStatus from "../enums/DebateStatus";
 
 export default interface DebateDto {
     id: number;
@@ -7,8 +8,8 @@ export default interface DebateDto {
     isCreatorFor: boolean;
     createdDate: Date;
     category: DebateCategory;
-    status: string;
-    subscriptions: number;
+    status: DebateStatus;
+    subscriptionsCount: number;
     votesFor: number;
     votesAgainst: number;
 

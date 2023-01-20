@@ -3,9 +3,10 @@ import DebateListItem from "../DebateListItem/DebateListItem";
 import { useLocation } from "react-router-dom";
 import "../../locales/index";
 import { useTranslation } from "react-i18next";
+import DebateDto from "../../types/dto/DebateDto";
 
 interface DebatesListProps {
-    debates: Debate[];
+    debates: DebateDto[];
 }
 
 const DebatesList = ({ debates }: DebatesListProps) => {
@@ -49,16 +50,16 @@ const DebatesList = ({ debates }: DebatesListProps) => {
             } else if (selectedOrder === "alpha_desc") {
                 return b.name.localeCompare(a.name);
             } else if (selectedOrder === "subs_asc") {
-                return a.subscriptions - b.subscriptions;
+                return a.subscriptionsCount - b.subscriptionsCount;
             } else {
-                return b.subscriptions - a.subscriptions;
+                return b.subscriptionsCount - a.subscriptionsCount;
             }
         });
     }
 
     return (
         <>
-            {debatesToShow.map((debate: Debate) => (
+            {debatesToShow.map((debate: DebateDto) => (
                 <DebateListItem debate={debate} key={debate.id} />
             ))}
         </>

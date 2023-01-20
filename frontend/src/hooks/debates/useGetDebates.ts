@@ -39,7 +39,7 @@ export const useGetDebates = () => {
             }
         }
 
-        const response = await callGet(endpoint, {}, true);
+        const response = await callGet(endpoint, {}, false);
 
         if (response.status === 200) {
             setData(response.data as DebateDto[]);
