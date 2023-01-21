@@ -10,27 +10,32 @@ import "../../root.css";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
 import "../../locales/index";
+import DebateDto from "../../types/dto/DebateDto";
+import DebateCategory from "../../types/enums/DebateCategory";
+import DebateStatus from "../../types/enums/DebateStatus";
 
 const UserProfile = () => {
-    const user1: User = {
-        username: "User 1",
-        email: "user1@mail.com",
-        createdDate: "2021-01-01",
-    };
-    const debate1: Debate = {
-        id: 1,
-        name: "Debate 1",
-        description: "Description 1",
-        isCreatorFor: true,
-        category: "Category 1",
-        createdDate: "2021-01-01",
-        status: "Status 1",
-        subscriptions: 1,
-        votesFor: 0,
-        votesAgainst: 0,
-        creator: user1,
-    };
-    const debates: Debate[] = [debate1];
+    const debates: DebateDto[] = [
+        {
+            id: 1,
+            name: "Is the earth flat?",
+            description:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
+            isCreatorFor: true,
+            category: DebateCategory.SCIENCE,
+            status: DebateStatus.OPEN,
+            createdDate: new Date("2021-05-01"),
+            subscriptionsCount: 3,
+            votesFor: 2,
+            votesAgainst: 1,
+            creator: "user1",
+            self: "",
+            image: "",
+            opponent: "",
+            arguments: "",
+            chats: "",
+        },
+    ];
 
     const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
 
@@ -85,7 +90,7 @@ const UserProfile = () => {
                     <h3 className="center">
                         {t("profile.userDebates", { username: "username" })}
                     </h3>
-                    {/* <DebatesList debates={debates} /> */}
+                    <DebatesList debates={debates} />
                 </div>
             </div>
         </div>

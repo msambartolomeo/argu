@@ -8,12 +8,13 @@ import DebatesList from "../DebatesList/DebatesList";
 import DebateDto from "../../types/dto/DebateDto";
 import { useGetDebates } from "../../hooks/debates/useGetDebates";
 import DebateOrder from "../../types/enums/DebateOrder";
+import DebateStatus from "../../types/enums/DebateStatus";
 
 // TODO: Add icons
 // TODO: Add debate list item component with API calls
 
 const TrendingDebatesComponent = () => {
-    // const debatesList: Debate[] = [
+    // const debatesList: DebateDto[] = [
     //     {
     //         id: 1,
     //         name: "Is the earth flat?",
@@ -21,16 +22,17 @@ const TrendingDebatesComponent = () => {
     //             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
     //         isCreatorFor: true,
     //         category: DebateCategory.SCIENCE,
-    //         status: "open",
-    //         createdDate: "2021-05-01",
-    //         subscriptions: 3,
+    //         status: DebateStatus.OPEN,
+    //         createdDate: new Date("2021-05-01"),
+    //         subscriptionsCount: 3,
     //         votesFor: 2,
     //         votesAgainst: 1,
-    //         creator: {
-    //             username: "user1",
-    //             email: "user1@gmail.com",
-    //             createdDate: "2021-05-01",
-    //         },
+    //         creator: "user1",
+    //         self: "",
+    //         image: "",
+    //         opponent: "",
+    //         arguments: "",
+    //         chats: "",
     //     },
     //     {
     //         id: 2,
@@ -39,16 +41,17 @@ const TrendingDebatesComponent = () => {
     //             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
     //         isCreatorFor: false,
     //         category: DebateCategory.TECHNOLOGY,
-    //         status: "open",
-    //         createdDate: "2022-05-01",
-    //         subscriptions: 5,
+    //         status: DebateStatus.OPEN,
+    //         createdDate: new Date("2021-05-01"),
+    //         subscriptionsCount: 5,
     //         votesFor: 2,
     //         votesAgainst: 3,
-    //         creator: {
-    //             username: "user2",
-    //             email: "user2@gmail.com",
-    //             createdDate: "2022-05-01",
-    //         },
+    //         creator: "user2",
+    //         self: "",
+    //         image: "",
+    //         opponent: "",
+    //         arguments: "",
+    //         chats: "",
     //     },
     //     {
     //         id: 10,
@@ -57,16 +60,17 @@ const TrendingDebatesComponent = () => {
     //             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
     //         isCreatorFor: true,
     //         category: DebateCategory.TECHNOLOGY,
-    //         status: "closed",
-    //         createdDate: "2022-05-01",
-    //         subscriptions: 50,
+    //         status: DebateStatus.CLOSED,
+    //         createdDate: new Date("2021-05-01"),
+    //         subscriptionsCount: 50,
     //         votesFor: 1,
     //         votesAgainst: 20,
-    //         creator: {
-    //             username: "user3",
-    //             email: "user3@gmail.com",
-    //             createdDate: "2022-05-01",
-    //         },
+    //         creator: "user3",
+    //         self: "",
+    //         image: "",
+    //         opponent: "",
+    //         arguments: "",
+    //         chats: "",
     //     },
     // ];
 
