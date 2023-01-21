@@ -50,9 +50,8 @@ const DebatesList = ({ debates }: DebatesListProps) => {
                 return b.name.localeCompare(a.name);
             } else if (selectedOrder === "subs_asc") {
                 return a.subscriptions - b.subscriptions;
-            } else {
-                return b.subscriptions - a.subscriptions;
             }
+            return b.subscriptions - a.subscriptions;
         });
     }
 
