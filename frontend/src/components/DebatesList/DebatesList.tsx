@@ -51,9 +51,8 @@ const DebatesList = ({ debates }: DebatesListProps) => {
                 return b.name.localeCompare(a.name);
             } else if (selectedOrder === "subs_asc") {
                 return a.subscriptionsCount - b.subscriptionsCount;
-            } else {
-                return b.subscriptionsCount - a.subscriptionsCount;
             }
+            return b.subscriptionsCount - a.subscriptionsCount;
         });
     }
 
