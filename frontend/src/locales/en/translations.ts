@@ -206,4 +206,8 @@ export const TRANSLATIONS_EN = {
                 "Showing debates in category: {{category}}",
         },
     },
+    error: {
+        title: "Oops!",
+        goBack: "Go back to the homepage",
+    },
 };

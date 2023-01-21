@@ -1,0 +1,18 @@
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5%;
+}
+
+.error-div {
+    padding: 4%;
+    background: white;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.link-underlined {
+    text-decoration: underline;
+}
