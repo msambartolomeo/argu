@@ -1,7 +1,7 @@
-// TODO: Complete with missing fields
+import UserRole from "./enums/UserRole";
 
 export default interface User {
-    username?: string;
-    email: string;
+    username: string;
+    role: UserRole;
     createdDate: string;
 }

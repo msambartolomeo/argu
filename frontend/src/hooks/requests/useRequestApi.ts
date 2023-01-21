@@ -3,6 +3,7 @@ import { useAuth } from "../useAuth";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import { Buffer } from "buffer";
+import { AUTHORIZATION_HEADER, REFRESH_HEADER } from "./constants";
 
 export interface BasicCredentials {
     username: string;
@@ -17,9 +18,6 @@ export interface RequestApiInput {
     requiresAuth?: boolean;
     credentials?: BasicCredentials;
 }
-
-const AUTHORIZATION_HEADER = "authorization";
-const REFRESH_HEADER = "x-refresh";
 
 export const useRequestApi = () => {
     const [loading, setLoading] = useState(false);
