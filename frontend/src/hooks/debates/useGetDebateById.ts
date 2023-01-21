@@ -16,13 +16,13 @@ export const useGetDebateById = () => {
 
         switch (response.status) {
             case 200:
-                setData(response.data[0] as DebateDto);
+                setData(response.data as DebateDto);
                 break;
             case 404:
-                setData(response.data[0]?.message);
+                setData(response.data?.message);
                 break;
         }
     }
 
-    return { loading, getDebate };
+    return { data, loading, getDebate };
 };

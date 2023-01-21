@@ -37,7 +37,6 @@ export const useRequestApi = () => {
         if (requiresAuth) {
             if (!authToken && !refreshToken && !credentials) {
                 navigate("/login");
-                throw new Error("No credentials provided");
             }
         }
         if (authToken) {
@@ -50,7 +49,7 @@ export const useRequestApi = () => {
                 Authorization: `${refreshToken}`,
                 ...headers,
             };
-        } else {
+        } else if (credentials) {
             const encodedBasic = Buffer.from(
                 `${credentials?.username}:${credentials?.password}`
             ).toString("base64");
