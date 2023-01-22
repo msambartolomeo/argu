@@ -11,11 +11,13 @@ import Argument from "../../types/Argument";
 import Debate from "../../types/Debate";
 import NonClickableChip from "../NonClickableChip/NonClickableChip";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
+import UserRole from "../../types/enums/UserRole";
 
+// TODO: Connect to API and remove
 const user1: User = {
     username: "User 1",
-    email: "user1@mail.com",
     createdDate: "2021-01-01",
+    role: UserRole.MODERATOR,
 };
 
 const debate1: Debate = {

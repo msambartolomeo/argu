@@ -10,12 +10,14 @@ import "../../root.css";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
 import "../../locales/index";
+import UserRole from "../../types/enums/UserRole";
 
 const UserProfile = () => {
+    // TODO: Connect to API and remove
     const user1: User = {
         username: "User 1",
-        email: "user1@mail.com",
         createdDate: "2021-01-01",
+        role: UserRole.MODERATOR,
     };
     const debate1: Debate = {
         id: 1,

@@ -8,10 +8,12 @@ import DebateCategory from "../../types/enums/DebateCategory";
 import Debate from "../../types/Debate";
 import "./Discovery.css";
 import CategorySelector from "../../components/CategoryButton/CategorySelector";
+import UserRole from "../../types/enums/UserRole";
 
 const Discovery = () => {
     document.title = "Argu | Debates";
 
+    // TODO: Connect to API and remove
     const debatesList: Debate[] = [
         {
             id: 1,
@@ -27,8 +29,8 @@ const Discovery = () => {
             votesAgainst: 1,
             creator: {
                 username: "user1",
-                email: "user1@gmail.com",
                 createdDate: "2021-05-01",
+                role: UserRole.MODERATOR,
             },
         },
         {
@@ -45,8 +47,8 @@ const Discovery = () => {
             votesAgainst: 3,
             creator: {
                 username: "user2",
-                email: "user2@gmail.com",
                 createdDate: "2022-05-01",
+                role: UserRole.MODERATOR,
             },
         },
     ];
