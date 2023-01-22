@@ -2,6 +2,7 @@ import { useState } from "react";
 import DebateDto from "../../types/dto/DebateDto";
 import { useGet } from "../requests/useGet";
 import { DEBATES_ENDPOINT } from "./constants";
+import { HttpStatusCode } from "axios";
 
 export interface GetDebateByIdInput {
     id: number;
@@ -15,10 +16,10 @@ export const useGetDebateById = () => {
         const response = await callGet(DEBATES_ENDPOINT + inData.id);
 
         switch (response.status) {
-            case 200:
+            case HttpStatusCode.Ok:
                 setData(response.data as DebateDto);
                 break;
-            case 404:
+            case HttpStatusCode.NotFound:
                 setData(response.data?.message);
                 break;
         }

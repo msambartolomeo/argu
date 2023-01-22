@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../useAuth";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse, HttpStatusCode } from "axios";
 import { useNavigate } from "react-router-dom";
 import { Buffer } from "buffer";
 import { AUTHORIZATION_HEADER, REFRESH_HEADER } from "./constants";
@@ -82,7 +82,9 @@ export const useRequestApi = () => {
                 const axiosError = err as AxiosError;
 
                 // TODO: Preguntar si deberíamos también incluir 403 acá.
-                if (axiosError.response?.status === 401) {
+                if (
+                    axiosError.response?.status === HttpStatusCode.Unauthorized
+                ) {
                     if (authToken) {
                         // NOTE: authToken expired or invalid, trying again with refreshToken
                         setAuthToken(null);
