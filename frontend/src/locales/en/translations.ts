@@ -54,7 +54,7 @@ export const TRANSLATIONS_EN = {
         upload: "Upload",
         close: "Close",
         confirm: "Confirm",
-        createdIn: "Created in",
+        createdIn: "Created on",
         logout: "Logout",
         deleteAccount: "Delete account",
         areYouSure:
