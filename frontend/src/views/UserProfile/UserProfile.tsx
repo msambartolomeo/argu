@@ -67,7 +67,7 @@ const UserProfile = () => {
                     <a
                         onClick={() => setShowMyDebates(false)}
                         className={cn("waves-effect btn-large", {
-                            active: !showMyDebates,
+                            "btn-active": !showMyDebates,
                         })}
                     >
                         {t("profile.debatesSubscribed")}
@@ -75,7 +75,7 @@ const UserProfile = () => {
                     <a
                         onClick={() => setShowMyDebates(true)}
                         className={cn("waves-effect btn-large", {
-                            active: showMyDebates,
+                            "btn-active": showMyDebates,
                         })}
                     >
                         {t("profile.myDebates")}

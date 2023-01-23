@@ -14,8 +14,8 @@
     background-color: var(--selected-button);
 }
 
-.active {
-    background-color: var(--selected-button);
+.btn-active {
+    background-color: var(--selected-button) !important;
 }
 
 .profile-container {

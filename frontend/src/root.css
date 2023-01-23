@@ -19,3 +19,7 @@ body {
     color: var(--error) !important;
     font-size: 12px;
 }
+
+label.input-label.active {
+    background: var(--white);
+}
