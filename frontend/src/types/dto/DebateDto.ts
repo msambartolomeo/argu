@@ -15,7 +15,7 @@ export default interface DebateDto {
 
     self: string;
     image: string;
-    creator: string;
+    creatorName: string;
     opponent: string;
     arguments: string;
     chats: string;

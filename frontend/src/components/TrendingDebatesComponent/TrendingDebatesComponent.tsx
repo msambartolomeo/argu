@@ -11,72 +11,9 @@ import DebateOrder from "../../types/enums/DebateOrder";
 import DebateStatus from "../../types/enums/DebateStatus";
 
 // TODO: Add icons
-// TODO: Add debate list item component with API calls
 
 const TrendingDebatesComponent = () => {
-    // const debatesList: DebateDto[] = [
-    //     {
-    //         id: 1,
-    //         name: "Is the earth flat?",
-    //         description:
-    //             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
-    //         isCreatorFor: true,
-    //         category: DebateCategory.SCIENCE,
-    //         status: DebateStatus.OPEN,
-    //         createdDate: new Date("2021-05-01"),
-    //         subscriptionsCount: 3,
-    //         votesFor: 2,
-    //         votesAgainst: 1,
-    //         creator: "user1",
-    //         self: "",
-    //         image: "",
-    //         opponent: "",
-    //         arguments: "",
-    //         chats: "",
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "The best programming language is Java",
-    //         description:
-    //             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
-    //         isCreatorFor: false,
-    //         category: DebateCategory.TECHNOLOGY,
-    //         status: DebateStatus.OPEN,
-    //         createdDate: new Date("2021-05-01"),
-    //         subscriptionsCount: 5,
-    //         votesFor: 2,
-    //         votesAgainst: 3,
-    //         creator: "user2",
-    //         self: "",
-    //         image: "",
-    //         opponent: "",
-    //         arguments: "",
-    //         chats: "",
-    //     },
-    //     {
-    //         id: 10,
-    //         name: "The best programming language is ASM",
-    //         description:
-    //             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
-    //         isCreatorFor: true,
-    //         category: DebateCategory.TECHNOLOGY,
-    //         status: DebateStatus.CLOSED,
-    //         createdDate: new Date("2021-05-01"),
-    //         subscriptionsCount: 50,
-    //         votesFor: 1,
-    //         votesAgainst: 20,
-    //         creator: "user3",
-    //         self: "",
-    //         image: "",
-    //         opponent: "",
-    //         arguments: "",
-    //         chats: "",
-    //     },
-    // ];
-
     const { t } = useTranslation();
-
-    // const [debatesList, setDebatesList] = useState<DebateDto[]>([]);
 
     const {
         data: debatesList,

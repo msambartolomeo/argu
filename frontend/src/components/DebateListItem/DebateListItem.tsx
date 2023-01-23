@@ -31,8 +31,8 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                             </h5>
                             <h6>
                                 <b>{t("debate.creator")}:</b>{" "}
-                                {debate.creator
-                                    ? "usuario hardcodeado"
+                                {debate.creatorName
+                                    ? debate.creatorName
                                     : "[deleted user]"}
                             </h6>
                         </div>

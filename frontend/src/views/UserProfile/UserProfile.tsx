@@ -28,7 +28,7 @@ const UserProfile = () => {
             subscriptionsCount: 3,
             votesFor: 2,
             votesAgainst: 1,
-            creator: "user1",
+            creatorName: "user1",
             self: "",
             image: "",
             opponent: "",
