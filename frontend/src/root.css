@@ -36,3 +36,9 @@ body {
 .btn-large:hover {
     background-color: var(--selected-button);
 }
+
+.chip {
+    background: var(--primary-color);
+    color: white;
+    text-transform: capitalize !important;
+}

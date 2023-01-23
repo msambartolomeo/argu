@@ -74,13 +74,6 @@
     padding: 5%;
 }
 
-/* Buttons */
-
-.chip {
-    background: var(--primary-color);
-    color: white;
-}
-
 /* Debater Display */
 .username-container {
     display: flex;

@@ -1,5 +1,3 @@
-import "./Chip.css";
-
 interface ChipProps {
     name: string;
     path?: string;
