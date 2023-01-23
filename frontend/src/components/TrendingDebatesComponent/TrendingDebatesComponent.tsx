@@ -27,13 +27,9 @@ const TrendingDebatesComponent = () => {
             status: "open",
             page: 0,
             size: 3,
-        })
-            .then(() => {
-                console.log("Debates list loaded: ", debatesList);
-            })
-            .catch((error) => {
-                console.log("Error loading debates list: ", error);
-            });
+        }).catch((error) => {
+            console.log("Error loading debates list: ", error);
+        });
     }, []);
 
     return (
