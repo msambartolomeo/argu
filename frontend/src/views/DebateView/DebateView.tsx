@@ -462,7 +462,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
             <div className="card normalized-margins">
                 <div className="card-content debate-info-holder">
                     <div className="debate-holder-separator">
-                        <div className="debate-text-holder">
+                        <div className="debate-text-organizer">
                             <div className="debate-info-holder">
                                 <h4 className="debate-title word-wrap">
                                     {debate.name}
