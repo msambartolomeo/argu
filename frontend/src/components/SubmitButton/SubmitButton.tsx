@@ -1,5 +1,3 @@
-import "./SubmitButton.css";
-
 interface ButtonProps {
     text: string;
 }
