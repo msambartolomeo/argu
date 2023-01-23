@@ -24,7 +24,7 @@ const TrendingDebatesComponent = () => {
     useEffect(() => {
         getDebates({
             order: DebateOrder.SUBS_DESC,
-            status: "open",
+            status: DebateStatus.OPEN,
             page: 0,
             size: 3,
         }).catch((error) => {
