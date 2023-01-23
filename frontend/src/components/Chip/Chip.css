@@ -2,14 +2,3 @@
     background: var(--primary-color);
     color: white;
 }
-.btn,
-.btn-large {
-    display: flex;
-    justify-content: center;
-    background: #212d40;
-}
-
-.btn:hover,
-.btn-large:hover {
-    background-color: var(--selected-button);
-}
