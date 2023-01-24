@@ -19,6 +19,7 @@ import Register from "./views/Register/Register";
 import CreateDebate from "./views/CreateDebate/CreateDebate";
 import Discovery from "./views/Discovery/Discovery";
 import { DebaterProfile } from "./views/DebaterProfile/DebaterProfile";
+import DebateView from "./views/DebateView/DebateView";
 
 function App() {
     useEffect(() => {
@@ -42,15 +43,7 @@ function App() {
                     />
 
                     <Route path="/discover" element={<Discovery />} />
-                    <Route
-                        path="/debates/:id"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Debate with ID equal to :id</p>
-                            </div>
-                        }
-                    />
+                    <Route path="/debates/:id" element={<DebateView />} />
 
                     <Route // Maybe this could be a modal, and avoid the extra page
                         path="/moderator"
