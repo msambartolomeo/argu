@@ -3,30 +3,11 @@
     margin: 1% auto;
 }
 
-.debate-info-holder {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 1%;
-    align-items: center;
-}
-
 .debate-text-organizer {
     display: flex;
     flex-direction: column;
     height: fit-content;
     padding-bottom: 4%;
-}
-
-.debate-holder-separator {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.debate-title {
-    padding-bottom: 1%;
-    margin: 0;
 }
 
 .debate-description {
@@ -38,13 +19,6 @@
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-}
-
-.debate-footer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding-top: 1%;
 }
 
 .debate-content {
@@ -212,11 +186,4 @@
     to {
         opacity: 1;
     }
-}
-
-.image-selector {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
 }

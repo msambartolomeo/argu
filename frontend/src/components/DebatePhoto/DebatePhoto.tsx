@@ -1,4 +1,3 @@
-import "./DebatePhoto.css";
 import defaultDebatePhoto from "../../assets/debate_stock.png";
 
 interface DebatePhotoProps {
