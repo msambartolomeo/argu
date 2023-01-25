@@ -8,9 +8,9 @@ export interface GetUserByUsernameInput {
 export const useGetUserByUsername = () => {
     const { data, loading, getUserByUrl } = useGetUserByUrl();
 
-    async function getUserByUsername(inData: GetUserByUsernameInput) {
+    async function getUserByUsername({ username }: GetUserByUsernameInput) {
         return await getUserByUrl({
-            url: `${USERS_ENDPOINT}/${inData.username}`,
+            url: `${USERS_ENDPOINT}/${encodeURI(username)}`,
         });
     }
     return { data, loading, getUserByUsername };
