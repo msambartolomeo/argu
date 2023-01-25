@@ -1,4 +1,4 @@
-export default interface DebateDto {
+export default interface UserDto {
     username: string;
     createdDate: string;
     points: number;

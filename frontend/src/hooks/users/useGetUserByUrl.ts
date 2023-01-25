@@ -11,8 +11,8 @@ export const useGetUserByUrl = () => {
     const { loading, callGet } = useGet();
     const [data, setData] = useState<UserDto | null>();
 
-    async function getUserByUrl(inData: GetUserByUrlInput) {
-        const response = await callGet(inData.url, {}, false);
+    async function getUserByUrl({ url }: GetUserByUrlInput) {
+        const response = await callGet(url, {}, false);
 
         if (response.status === HttpStatusCode.Ok) {
             setData(response.data as UserDto);
