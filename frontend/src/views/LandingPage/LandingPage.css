@@ -1,23 +1,30 @@
-:root {
-    --text-color: var(--white);
-}
-
-.navbar-background {
+.landing-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     height: 100%;
 }
 
-.explore-container {
+.landing-container .explore-container {
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    margin-top: 30px;
+    width: 90%;
+    margin-bottom: 30px;
 }
 
-.trending-debates-container {
+.landing-container .trending-debates-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* margin-top: 2rem;
-    margin-bottom: 2rem; */
+    width: 90%;
+}
+
+.landing-container .about-container {
+    display: flex;
+    margin-top: 30px;
+    width: 90%;
+    margin-bottom: 30px;
 }

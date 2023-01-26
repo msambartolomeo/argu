@@ -19,6 +19,7 @@ import Register from "./views/Register/Register";
 import CreateDebate from "./views/CreateDebate/CreateDebate";
 import Discovery from "./views/Discovery/Discovery";
 import { DebaterProfile } from "./views/DebaterProfile/DebaterProfile";
+import Footer from "./components/Footer/Footer";
 
 function App() {
     useEffect(() => {
@@ -26,11 +27,13 @@ function App() {
     }, []);
 
     return (
-        <Router basename="/paw-2022a-06">
-            <div className="App">
-                <Navbar />
-                <Routes>
-                    <Route path="/" element={<LandingPage />} />
+        <div className="page-container">
+            <div className="content-wrap">
+                <Router basename="/paw-2022a-06">
+                    <div className="App">
+                        <Navbar />
+                        <Routes>
+                            <Route path="/" element={<LandingPage />} />
 
                     <Route // If :url == user.url, then show profile page
                         path="/user/:url"
@@ -41,29 +44,35 @@ function App() {
                         element={<UserProfile />}
                     />
 
-                    <Route path="/discover" element={<Discovery />} />
-                    <Route
-                        path="/debates/:id"
-                        element={
-                            <div>
-                                {/* TODO */}
-                                <p>Debate with ID equal to :id</p>
-                            </div>
-                        }
-                    />
+                            <Route path="/discover" element={<Discovery />} />
+                            <Route
+                                path="/debates/:id"
+                                element={
+                                    <div>
+                                        {/* TODO */}
+                                        <p>Debate with ID equal to :id</p>
+                                    </div>
+                                }
+                            />
 
-                    <Route // Maybe this could be a modal, and avoid the extra page
-                        path="/moderator"
-                        element={<RequestModerator />}
-                    />
+                            <Route // Maybe this could be a modal, and avoid the extra page
+                                path="/moderator"
+                                element={<RequestModerator />}
+                            />
 
-                    <Route path="/create_debate" element={<CreateDebate />} />
+                            <Route
+                                path="/create_debate"
+                                element={<CreateDebate />}
+                            />
 
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                </Routes>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                        </Routes>
+                    </div>
+                </Router>
             </div>
-        </Router>
+            <Footer />
+        </div>
     );
 }
 

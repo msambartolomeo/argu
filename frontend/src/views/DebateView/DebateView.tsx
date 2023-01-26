@@ -381,7 +381,7 @@ const RecommendedDebatesSection = () => {
                                                 : "none",
                                     }}
                                 >
-                                    <DebateListItem debate={d} />
+                                    {/* <DebateListItem debate={d} /> */}
                                 </div>
                             ))}
                         </div>
