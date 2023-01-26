@@ -43,7 +43,7 @@ function App() {
                     />
 
                     <Route path="/discover" element={<Discovery />} />
-                    <Route path="/debates/:id" element={<DebateView />} />
+                    <Route path="/debate/:id" element={<DebateView />} />
 
                     <Route // Maybe this could be a modal, and avoid the extra page
                         path="/moderator"
