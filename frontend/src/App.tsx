@@ -35,14 +35,14 @@ function App() {
                         <Routes>
                             <Route path="/" element={<LandingPage />} />
 
-                    <Route // If :url == user.url, then show profile page
-                        path="/user/:url"
-                        element={<DebaterProfile />}
-                    />
-                    <Route // Profile Page
-                        path="/profile/"
-                        element={<UserProfile />}
-                    />
+                            <Route // If :url == user.url, then show profile page
+                                path="/user/:url"
+                                element={<DebaterProfile />}
+                            />
+                            <Route // Profile Page
+                                path="/profile/"
+                                element={<UserProfile />}
+                            />
 
                             <Route path="/discover" element={<Discovery />} />
                             <Route
