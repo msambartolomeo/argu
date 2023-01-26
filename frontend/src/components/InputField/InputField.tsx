@@ -1,4 +1,3 @@
-import "./InputField.css";
 import { ChangeEventHandler } from "react";
 import cn from "classnames";
 
@@ -23,7 +22,7 @@ function InputField({ type, text, value, error, onChange }: Props) {
                 onChange={onChange}
                 className={cn({ invalid: error !== undefined })}
             />
-            <label className="active">{text}</label>
+            <label className="input-label active">{text}</label>
             {error && <span className="helper-text error">{error}</span>}
         </div>
     );

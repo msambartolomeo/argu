@@ -15,7 +15,7 @@ function SearchBar({ placeholder }: Props) {
 
     return (
         <form onSubmit={search}>
-            <div className="input-field search">
+            <div className="input-field search hide-on-med-and-down">
                 <input
                     className="search-input"
                     placeholder={placeholder}
@@ -27,7 +27,9 @@ function SearchBar({ placeholder }: Props) {
                 <label className="label-icon active" htmlFor="search">
                     <i className="material-icons">search</i>
                 </label>
-                <i className="material-icons">close</i>
+                <i className="material-icons" onClick={() => setQuery("")}>
+                    close
+                </i>
             </div>
         </form>
     );
