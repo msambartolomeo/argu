@@ -19,6 +19,7 @@ import Register from "./views/Register/Register";
 import CreateDebate from "./views/CreateDebate/CreateDebate";
 import Discovery from "./views/Discovery/Discovery";
 import { DebaterProfile } from "./views/DebaterProfile/DebaterProfile";
+import DebateView from "./views/DebateView/DebateView";
 import Footer from "./components/Footer/Footer";
 
 function App() {
@@ -46,13 +47,8 @@ function App() {
 
                             <Route path="/discover" element={<Discovery />} />
                             <Route
-                                path="/debates/:id"
-                                element={
-                                    <div>
-                                        {/* TODO */}
-                                        <p>Debate with ID equal to :id</p>
-                                    </div>
-                                }
+                                path="/debate/:id"
+                                element={<DebateView />}
                             />
 
                             <Route // Maybe this could be a modal, and avoid the extra page

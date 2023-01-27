@@ -20,6 +20,78 @@ body {
     font-size: 12px;
 }
 
+.card {
+    border-radius: 10px;
+}
+
+/* Buttons */
+.btn,
+.btn-large {
+    display: flex;
+    justify-content: center;
+    background: #212d40;
+}
+
+.btn:hover,
+.btn-large:hover {
+    background-color: var(--selected-button);
+}
+
+.chip {
+    background: var(--primary-color);
+    color: white;
+    text-transform: capitalize !important;
+}
+
+/* Debate */
+.debate-info-holder {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1%;
+    align-items: center;
+}
+
+.debate-holder-separator {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.debate-title {
+    padding-bottom: 1%;
+    margin: 0;
+}
+
+.debate-footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-top: 1%;
+}
+
+.image-width {
+    min-width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2%;
+}
+
+.limit-img {
+    max-height: 250px;
+    max-width: 250px !important;
+    height: 15vw !important;
+    width: 15vw;
+}
+
+/* Login and Register */
+.login-container {
+    width: 40%;
+    margin: 1% auto;
+    padding-bottom: 1%;
+}
+
 label.input-label.active {
     background: var(--white);
 }
