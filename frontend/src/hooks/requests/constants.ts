@@ -5,3 +5,8 @@ export enum RequestMethod {
     DELETE = "DELETE",
     PATCH = "PATCH",
 }
+
+export const AUTHORIZATION_HEADER = "authorization";
+export const REFRESH_HEADER = "x-refresh";
+
+export const LOGIN_URL = "/debates";

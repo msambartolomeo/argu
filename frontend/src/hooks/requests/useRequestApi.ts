@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useAuth } from "../useAuth";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse, HttpStatusCode } from "axios";
 import { useNavigate } from "react-router-dom";
 import { Buffer } from "buffer";
+import { AUTHORIZATION_HEADER, REFRESH_HEADER } from "./constants";
 
 export interface BasicCredentials {
     username: string;
@@ -17,9 +18,6 @@ export interface RequestApiInput {
     requiresAuth?: boolean;
     credentials?: BasicCredentials;
 }
-
-const AUTHORIZATION_HEADER = "authorization";
-const REFRESH_HEADER = "x-refresh";
 
 export const useRequestApi = () => {
     const [loading, setLoading] = useState(false);
@@ -38,8 +36,9 @@ export const useRequestApi = () => {
 
         if (requiresAuth) {
             if (!authToken && !refreshToken && !credentials) {
+                // TODO: If we already throw an error (to avoid infinite recursion), should we still navigate to login or leave it to component?
                 navigate("/login");
-                throw new Error("No credentials provided");
+                throw new Error("No auth token or credentials");
             }
         }
         if (authToken) {
@@ -52,7 +51,7 @@ export const useRequestApi = () => {
                 Authorization: `${refreshToken}`,
                 ...headers,
             };
-        } else {
+        } else if (credentials) {
             const encodedBasic = Buffer.from(
                 `${credentials?.username}:${credentials?.password}`
             ).toString("base64");
@@ -85,7 +84,9 @@ export const useRequestApi = () => {
                 const axiosError = err as AxiosError;
 
                 // TODO: Preguntar si deberíamos también incluir 403 acá.
-                if (axiosError.response?.status === 401) {
+                if (
+                    axiosError.response?.status === HttpStatusCode.Unauthorized
+                ) {
                     if (authToken) {
                         // NOTE: authToken expired or invalid, trying again with refreshToken
                         setAuthToken(null);
