@@ -33,7 +33,7 @@
 
 .user-debates {
     height: fit-content;
-    padding: 2%;
+    padding: 1% 3%;
     display: flex;
     flex-direction: column;
 }

@@ -18,6 +18,8 @@ interface ParallaxBackgroundProps {
 const LandingPage = ({
     background = parallaxBackgroud,
 }: ParallaxBackgroundProps) => {
+    document.title = "Argu";
+
     const parallaxPages = 5;
     const categories = Object.values(DebateCategory);
 

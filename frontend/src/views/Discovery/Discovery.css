@@ -10,13 +10,13 @@
     justify-content: center;
     position: relative;
     box-shadow: 0 8px 17px 2px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%),
-        0 5px 5px -3px rgb(0 0 0 / 20%) !important;
+        0 5px 5px -3px rgb(0 0 0 / 20%);
     width: fit-content;
     height: fit-content;
     min-width: 15%;
     background-color: white;
     border-radius: 10px;
-    margin: 1% auto 1% 9%;
+    margin: 2% auto 1% 9%;
     padding: 0 2px 0 2px;
 }
 
@@ -25,9 +25,7 @@
     flex-direction: column;
     justify-content: center;
     border-radius: 10px;
-    width: 94%;
-    margin-left: 3%;
-    margin-bottom: 1%;
+    margin-bottom: 5%;
     box-shadow: 0 8px 17px 2px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%),
         0 5px 5px -3px rgb(0 0 0 / 20%);
 }
@@ -36,9 +34,8 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    /* align-items: flex-start; */
     position: relative;
     width: 60%;
     background-color: transparent;
-    margin: 1% auto 1% 1% !important;
+    margin: 2% 9% 1% auto;
 }

@@ -172,6 +172,7 @@ export const TRANSLATIONS_ES = {
         },
     },
     discovery: {
+        title: "Debates",
         categories: {
             title: "Categorías",
             all: "Todos",

@@ -16,7 +16,10 @@ const LandingPageExploreComponent = ({ categories }: CategoriesProps) => {
 
     return (
         <div className="explore-component-container">
-            <h2 className="text-container">{t("landingPage.explore.title")}</h2>
+            <h2 className="text-container">
+                <i className="material-icons left medium">explore</i>
+                {t("landingPage.explore.title")}
+            </h2>
             <div className="chip-container">
                 <Stack direction="row" spacing={1}>
                     {categories.map((category) => (

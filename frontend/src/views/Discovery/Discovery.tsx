@@ -10,9 +10,13 @@ import "./Discovery.css";
 import CategorySelector from "../../components/CategoryButton/CategorySelector";
 import DebateDto from "../../types/dto/DebateDto";
 import DebateStatus from "../../types/enums/DebateStatus";
+import { useTranslation } from "react-i18next";
+import "../../locales/index";
 
 const Discovery = () => {
-    document.title = "Argu | Debates";
+    const { t } = useTranslation();
+
+    document.title = "Argu | " + t("discovery.title");
 
     const debatesList: DebateDto[] = [
         {

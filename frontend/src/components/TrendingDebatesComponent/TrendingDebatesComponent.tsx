@@ -35,6 +35,9 @@ const TrendingDebatesComponent = () => {
     return (
         <div className="trending-debates-component-container">
             <h2 className="title-container">
+                <i className="medium material-icons left">
+                    local_fire_department
+                </i>
                 {t("landingPage.trending.title")}
             </h2>
             <div className="debate-list-container">
