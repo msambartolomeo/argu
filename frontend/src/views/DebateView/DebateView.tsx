@@ -16,11 +16,13 @@ import Pagination from "../../components/Pagination/Pagination";
 import TextArea from "../../components/TextArea/TextArea";
 import Chat from "../../types/Chat";
 import DebateListItem from "../../components/DebateListItem/DebateListItem";
+import UserRole from "../../types/enums/UserRole";
 
+// TODO: Connect to API and remove
 const user1: User = {
     username: "User 1",
-    email: "user1@mail.com",
     createdDate: "2021-01-01",
+    role: UserRole.MODERATOR,
 };
 
 const debate1: Debate = {
