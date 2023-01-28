@@ -484,7 +484,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                                             handleCloseDebate
                                                         }
                                                     >
-                                                        Close Debate
+                                                        {t("debate.close")}
                                                         <i className="material-icons right">
                                                             close
                                                         </i>

@@ -76,6 +76,7 @@ export const TRANSLATIONS_EN = {
             statusVoting: "Voting",
         },
         userDeleted: "[deleted]",
+        close: "Close debate",
         deleteConfirmation: "Are you sure you want to delete this debate?",
         delete: "Delete debate",
         for: "For: ",
