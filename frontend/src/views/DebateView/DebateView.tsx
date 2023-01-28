@@ -2,9 +2,13 @@ import "./DebateView.css";
 import "../../locales/index";
 import User from "../../types/User";
 import Debate from "../../types/Debate";
+import DebateDto from "../../types/dto/DebateDto";
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useGetDebateById } from "../../hooks/debates/useGetDebateById";
+import { useParams } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
 import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
 import Chip from "../../components/Chip/Chip";
@@ -20,7 +24,7 @@ import UserRole from "../../types/enums/UserRole";
 
 // TODO: Connect to API and remove
 const user1: User = {
-    username: "User 1",
+    username: "azul",
     createdDate: "2021-01-01",
     role: UserRole.MODERATOR,
 };
@@ -437,6 +441,24 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
     const argumentsList: Argument[] = [argument1];
     const { t } = useTranslation();
 
+    const params = useParams();
+
+    const {
+        data: debateData,
+        loading: isDebateLoading,
+        getDebate: getDebate,
+    } = useGetDebateById();
+
+    useEffect(() => {
+        const id: string = params.id?.toString() || "";
+
+        getDebate({ id: parseInt(id) });
+    }, [debate.id]);
+
+    if (isDebateLoading) {
+        return <CircularProgress size={100} />;
+    }
+
     const handleCloseDebate = () => {
         // TODO: Implement close debate call
     };
@@ -467,17 +489,19 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                         <div className="debate-text-organizer">
                             <div className="debate-info-holder">
                                 <h4 className="debate-title word-wrap">
-                                    {debate.name}
+                                    {debateData?.name}
                                 </h4>
                                 {userData && (
                                     <div className="right debate-buttons-display">
                                         <div className="col">
-                                            {debate.status === "open" &&
+                                            {debateData?.status ===
+                                                t(
+                                                    "debate.statuses.statusOpen"
+                                                ) &&
                                                 (userData?.username ===
-                                                    debate.creator.username ||
+                                                    debateData?.creatorName ||
                                                     userData?.username ===
-                                                        debate.opponent
-                                                            ?.username) && (
+                                                        debateData?.opponentName) && (
                                                     <button
                                                         className="btn waves-effect chip"
                                                         onClick={
@@ -490,7 +514,10 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                                         </i>
                                                     </button>
                                                 )}
-                                            {debate.status !== "deleted" &&
+                                            {debateData?.status !==
+                                                t(
+                                                    "debate.statuses.statusDeleted"
+                                                ) &&
                                                 userData?.username ===
                                                     debate.creator.username && (
                                                     <DeleteDialog
@@ -512,27 +539,27 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                             </div>
                             <hr className="dashed" />
                             <h5 className="debate-description word-wrap">
-                                {debate.description}
+                                {debateData?.description}
                             </h5>
-                            {debate.isCreatorFor ? (
+                            {debateData?.isCreatorFor ? (
                                 <>
                                     <DebaterDisplay
-                                        debater={debate.creator.username}
+                                        debater={debateData?.creatorName}
                                         position={t("debate.for")}
                                     />
                                     <DebaterDisplay
-                                        debater="oponent"
+                                        debater={debateData?.opponentName}
                                         position={t("debate.against")}
                                     />
                                 </>
                             ) : (
                                 <>
                                     <DebaterDisplay
-                                        debater="oponent"
+                                        debater={debateData?.opponentName}
                                         position={t("debate.for")}
                                     />
                                     <DebaterDisplay
-                                        debater={debate.creator.username}
+                                        debater={debateData?.creatorName}
                                         position={t("debate.against")}
                                     />
                                 </>
@@ -564,13 +591,13 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                                     )}
                                 </>
                             )}
-                            <Chip name={debate.category} />
-                            <Chip name={debate.createdDate} />
-                            <Chip name={debate.status} />
+                            <Chip name={debateData?.category} />
+                            <Chip name={debateData?.createdDate.toString()} />
+                            <Chip name={debateData?.status} />
                             <NonClickableChip
                                 name={
                                     t("debate.subscribed") +
-                                    debate.subscriptions
+                                    debateData?.subscriptionsCount
                                 }
                             />
                         </div>
@@ -606,39 +633,44 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                     <Pagination param="" totalPages={1} />
                 </div>
                 <div className="post-arguments">
-                    {debate.status !== "closed" && debate.status !== "voting" && (
-                        <div className="card no-top-margin">
-                            <div className="card-content">
-                                {userData &&
-                                    (argumentsList[argumentsList.length - 1]
-                                        .creator.username === user1.username ? (
-                                        <PostArgumentCard
-                                            handleSubmit={handlePostArgument}
-                                            lastArgument={
-                                                argumentsList[
-                                                    argumentsList.length - 1
-                                                ]
-                                            }
-                                            debateCreator={
-                                                debate.creator.username
-                                            }
-                                        />
-                                    ) : (
+                    {debateData?.status !== t("debate.statuses.statusClosed") &&
+                        debateData?.status !==
+                            t("debate.statuses.statusVoting") && (
+                            <div className="card no-top-margin">
+                                <div className="card-content">
+                                    {userData &&
+                                        (argumentsList[argumentsList.length - 1]
+                                            .creator.username ===
+                                        user1.username ? (
+                                            <PostArgumentCard
+                                                handleSubmit={
+                                                    handlePostArgument
+                                                }
+                                                lastArgument={
+                                                    argumentsList[
+                                                        argumentsList.length - 1
+                                                    ]
+                                                }
+                                                debateCreator={
+                                                    debateData?.creatorName
+                                                }
+                                            />
+                                        ) : (
+                                            <div className="card-title card-title-margins">
+                                                {t("debate.waitTurn")}
+                                            </div>
+                                        ))}
+                                    {!userData && (
                                         <div className="card-title card-title-margins">
-                                            {t("debate.waitTurn")}
+                                            {t("debate.needToLogin")}
+                                            <a onClick={handleGoToLogin}>
+                                                {t("debate.firstLogin")}
+                                            </a>
                                         </div>
-                                    ))}
-                                {!userData && (
-                                    <div className="card-title card-title-margins">
-                                        {t("debate.needToLogin")}
-                                        <a onClick={handleGoToLogin}>
-                                            {t("debate.firstLogin")}
-                                        </a>
-                                    </div>
-                                )}
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
                     <VoteSection debate={debate} userData={userData} />
                     <ChatSection debate={debate} userData={userData} />
                     <RecommendedDebatesSection />
