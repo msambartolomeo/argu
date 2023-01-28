@@ -1,4 +1,3 @@
-import "./TextArea.css";
 import { ChangeEventHandler } from "react";
 import cn from "classnames";
 
@@ -20,7 +19,7 @@ function TextArea({ text, value, error, onChange }: Props) {
                     "materialize-textarea": true,
                 })}
             />
-            <label className="active">{text}</label>
+            <label className="input-label active">{text}</label>
             {error && <span className="helper-text error">{error}</span>}
         </div>
     );

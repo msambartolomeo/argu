@@ -68,8 +68,13 @@ export const TRANSLATIONS_EN = {
         subscribedUsers: "Subscribed users",
         created: "Created",
         status: "Status",
-        statusOpen: "Open",
-        statusClosed: "Closed",
+        statuses: {
+            statusOpen: "Open",
+            statusClosed: "Closed",
+            statusDeleted: "Deleted",
+            statusClosing: "Closing",
+            statusVoting: "Voting",
+        },
         userDeleted: "[deleted]",
         deleteConfirmation: "Are you sure you want to delete this debate?",
         delete: "Delete debate",
@@ -205,5 +210,9 @@ export const TRANSLATIONS_EN = {
             showingDebatesInCategory:
                 "Showing debates in category: {{category}}",
         },
+    },
+    error: {
+        title: "Oops!",
+        goBack: "Go back to the homepage",
     },
 };

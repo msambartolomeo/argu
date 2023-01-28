@@ -1,5 +1,3 @@
-import "./Register.css";
-
 import InputField from "../../components/InputField/InputField";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 

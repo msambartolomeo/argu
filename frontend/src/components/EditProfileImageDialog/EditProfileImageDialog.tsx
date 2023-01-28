@@ -1,4 +1,3 @@
-import "./EditProfileImageDialog.css";
 import { useTranslation } from "react-i18next";
 import "../../locales/index";
 

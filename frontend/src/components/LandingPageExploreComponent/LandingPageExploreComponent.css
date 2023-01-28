@@ -1,17 +1,29 @@
-:root {
-    --text-color: var(--white);
+.explore-component-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* align-self: center; */
+    flex-direction: column;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    padding: 20px 30px 80px;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 8px 17px 2px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%),
+        0 5px 5px -3px rgb(0 0 0 / 20%) !important;
 }
 
 .text-container {
     display: flex;
-    color: var(--text-color);
+    color: white;
     justify-content: center;
     align-items: center;
+    margin-bottom: 40px;
 }
 
 .chip-class {
     background-color: transparent;
-    color: var(--text-color) !important;
+    color: white !important;
     box-shadow: 0 1.5px #999 !important;
     text-transform: uppercase !important;
     width: 100%;
@@ -33,4 +45,6 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+    max-width: 80%;
 }

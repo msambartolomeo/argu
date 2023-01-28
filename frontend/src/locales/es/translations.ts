@@ -70,6 +70,9 @@ export const TRANSLATIONS_ES = {
         status: "Estado",
         statusOpen: "Abierto",
         statusClosed: "Cerrado",
+        statusDeleted: "Eliminado",
+        statusClosing: "Cerrando",
+        statusVoting: "Votando",
         userDeleted: "[usuario eliminado]",
         deleteConfirmation: "¿Estás seguro de borrar este debate?",
         delete: "Borrar debate",
@@ -205,5 +208,9 @@ export const TRANSLATIONS_ES = {
             showingDebatesInCategory:
                 "Mostrando debates en la categoría: {{category}}",
         },
+    },
+    error: {
+        title: "¡Ups!",
+        goBack: "Volver a inicio.",
     },
 };

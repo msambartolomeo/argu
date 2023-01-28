@@ -8,13 +8,13 @@ import DebateCategory from "../../types/enums/DebateCategory";
 import Debate from "../../types/Debate";
 import "./Discovery.css";
 import CategorySelector from "../../components/CategoryButton/CategorySelector";
-import UserRole from "../../types/enums/UserRole";
+import DebateDto from "../../types/dto/DebateDto";
+import DebateStatus from "../../types/enums/DebateStatus";
 
 const Discovery = () => {
     document.title = "Argu | Debates";
 
-    // TODO: Connect to API and remove
-    const debatesList: Debate[] = [
+    const debatesList: DebateDto[] = [
         {
             id: 1,
             name: "Is the earth flat?",
@@ -22,16 +22,17 @@ const Discovery = () => {
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
             isCreatorFor: true,
             category: DebateCategory.SCIENCE,
-            status: "open",
-            createdDate: "2021-05-01",
-            subscriptions: 3,
+            status: DebateStatus.OPEN,
+            createdDate: new Date("2021-05-01"),
+            subscriptionsCount: 3,
             votesFor: 2,
             votesAgainst: 1,
-            creator: {
-                username: "user1",
-                createdDate: "2021-05-01",
-                role: UserRole.MODERATOR,
-            },
+            creatorName: "user1",
+            self: "",
+            image: "",
+            opponent: "",
+            arguments: "",
+            chats: "",
         },
         {
             id: 2,
@@ -40,16 +41,17 @@ const Discovery = () => {
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
             isCreatorFor: false,
             category: DebateCategory.TECHNOLOGY,
-            status: "open",
-            createdDate: "2022-05-01",
-            subscriptions: 5,
+            status: DebateStatus.OPEN,
+            createdDate: new Date("2021-05-01"),
+            subscriptionsCount: 5,
             votesFor: 2,
             votesAgainst: 3,
-            creator: {
-                username: "user2",
-                createdDate: "2022-05-01",
-                role: UserRole.MODERATOR,
-            },
+            creatorName: "user2",
+            self: "",
+            image: "",
+            opponent: "",
+            arguments: "",
+            chats: "",
         },
     ];
 

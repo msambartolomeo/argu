@@ -5,17 +5,19 @@
     align-items: center;
 }
 
-.debate-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.trending-debates-container {
+.trending-debates-component-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     color: white;
+    width: 100%;
+}
+
+.debate-list-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }

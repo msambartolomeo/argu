@@ -1,5 +1,3 @@
-import "./NonClickableChip.css";
-
 interface NonClickableChipProps {
     name: string;
 }
