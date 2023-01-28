@@ -12,11 +12,19 @@ export default interface DebateDto {
     subscriptionsCount: number;
     votesFor: number;
     votesAgainst: number;
+    creatorName: string;
+    opponentName?: string;
 
     self: string;
     image: string;
-    creatorName: string;
+    creator?: string;
     opponent: string;
     arguments: string;
     chats: string;
+    reccomendations?: string;
+    sameCategory?: string;
+    sameStatus?: string;
+    afterSameDate?: string;
+    vote?: string;
+    subscription?: string;
 }
