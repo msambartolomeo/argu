@@ -7,7 +7,7 @@ import DebateDto from "../../types/dto/DebateDto";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useGetDebateById } from "../../hooks/debates/useGetDebateById";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 
 import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
@@ -22,6 +22,7 @@ import Chat from "../../types/Chat";
 import DebateListItem from "../../components/DebateListItem/DebateListItem";
 import UserRole from "../../types/enums/UserRole";
 import { useGetDebatesByUrl } from "../../hooks/debates/useGetDebatesByUrl";
+import { Error } from "../Error/Error";
 
 // TODO: Connect to API and remove
 const user1: User = {
@@ -447,9 +448,10 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
     const [subscribed, setSubscribed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const argumentsList: Argument[] = [argument1];
-    const { t } = useTranslation();
 
+    const { t } = useTranslation();
     const params = useParams();
+    const navigate = useNavigate();
 
     const {
         data: debateData,
@@ -479,6 +481,10 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
             });
         }
     }, [debateData]);
+
+    if (typeof debateData === "string") {
+        return <Error status={404} message={debateData} />;
+    }
 
     if (
         isDebateLoading ||
