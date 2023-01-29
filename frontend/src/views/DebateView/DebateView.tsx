@@ -437,13 +437,9 @@ const RecommendedDebatesSection = ({
     );
 };
 
-// DEBATE VIEW
-interface DebateViewProps {
-    debate?: Debate;
-}
-
-const DebateView = ({ debate = debate1 }: DebateViewProps) => {
+const DebateView = () => {
     // TODO: Change to real values and hooks
+    const debate = debate1;
     const [userData, setuserData] = useState<User | undefined>(user1);
     const [subscribed, setSubscribed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
