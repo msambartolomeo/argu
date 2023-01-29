@@ -21,7 +21,7 @@ export default interface DebateDto {
     opponent: string;
     arguments: string;
     chats: string;
-    reccomendations?: string;
+    recommendations?: string;
     sameCategory?: string;
     sameStatus?: string;
     afterSameDate?: string;
