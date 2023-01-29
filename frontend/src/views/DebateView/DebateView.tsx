@@ -166,7 +166,7 @@ const PostArgumentCard = ({
 
 // VOTES SECTION
 interface VotesSectionProps {
-    debate: Debate;
+    debate?: DebateDto | null;
     userData?: User;
 }
 
@@ -177,11 +177,11 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
 
     const handleUserVoted = (vote: string) => {
         if (vote === "for") {
-            if (debate.isCreatorFor) return debate.creator.username;
-            return debate.opponent?.username;
+            if (debate?.isCreatorFor) return debate.creatorName;
+            return debate?.opponentName;
         }
-        if (debate.isCreatorFor) return debate.opponent?.username;
-        return debate.creator.username;
+        if (debate?.isCreatorFor) return debate.opponentName;
+        return debate?.creatorName;
     };
 
     const handleVoteButton = () => {
@@ -189,18 +189,18 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
     };
 
     const handleVoteResult = () => {
-        const result = debate.votesFor - debate.votesAgainst;
+        const result = (debate?.votesFor || 0) - (debate?.votesAgainst || 0);
         if (result === 0) return t("debate.votes.draw");
 
         let winner: string | undefined;
         if (result > 0) {
-            winner = debate.isCreatorFor
-                ? debate.creator.username
-                : debate.opponent?.username;
+            winner = debate?.isCreatorFor
+                ? debate.creatorName
+                : debate?.opponentName;
         } else {
-            winner = debate.isCreatorFor
-                ? debate.opponent?.username
-                : debate.creator.username;
+            winner = debate?.isCreatorFor
+                ? debate.opponentName
+                : debate?.creatorName;
         }
         winner = winner ? winner : t("debate.userDeleted").toString();
         return t("debate.votes.winner") + winner;
@@ -211,9 +211,9 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
             <h5>{t("debate.votes.votes")}</h5>
             {userData &&
                 !vote &&
-                (debate.status === "open" ||
-                    debate.status === "voting" ||
-                    debate.status === "closing") && (
+                (debate?.status === t("debate.statuses.statusOpen") ||
+                    debate?.status === t("debate.statuses.statusVoting") ||
+                    debate?.status === t("debate.statuses.statusClosing")) && (
                     <>
                         <h5>{t("debate.votes.whoWins")}</h5>
                         <div className="vote-buttons">
@@ -221,13 +221,13 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
                                 onClick={handleVoteButton}
                                 className="btn waves-effect"
                             >
-                                {debate.creator.username}
+                                {debate?.creatorName}
                             </button>
                             <button
                                 onClick={handleVoteButton}
                                 className="btn waves-effect"
                             >
-                                {debate.opponent?.username}
+                                {debate.opponentName}
                             </button>
                         </div>
                     </>
@@ -239,38 +239,41 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
             )}
             {((userData && vote) || !userData) && (
                 <div className="progress red">
-                    {debate.votesFor > 0 && (
+                    {(debate?.votesFor || 0) > 0 && (
                         <div
                             className="votes-format blue"
-                            style={{ width: debate.votesFor + "%" }}
+                            style={{ width: debate?.votesFor + "%" }}
                         >
                             <span>
-                                {debate.isCreatorFor
-                                    ? debate.creator.username
-                                    : debate.opponent?.username}
+                                {debate?.isCreatorFor
+                                    ? debate.creatorName
+                                    : debate?.opponentName}
                             </span>
-                            <span>{debate.votesFor}%</span>
+                            <span>{debate?.votesFor}%</span>
                         </div>
                     )}
-                    {debate.votesAgainst > 0 && (
+                    {(debate?.votesAgainst || 0) > 0 && (
                         <div
                             className="votes-format"
-                            style={{ width: debate.votesAgainst + "%" }}
+                            style={{ width: debate?.votesAgainst + "%" }}
                         >
                             <span>
-                                {debate.isCreatorFor
-                                    ? debate.opponent?.username
-                                    : debate.creator.username}
+                                {debate?.isCreatorFor
+                                    ? debate.opponentName
+                                    : debate?.creatorName}
                             </span>
-                            <span>{debate.votesAgainst}%</span>
+                            <span>{debate?.votesAgainst}%</span>
                         </div>
                     )}
                 </div>
             )}
-            {debate.status === "closed" && <h6>{handleVoteResult()}</h6>}
+            {debate?.status === t("debate.statuses.statusClosed") && (
+                <h6>{handleVoteResult()}</h6>
+            )}
             {userData &&
                 vote &&
-                (debate.status === "open" || debate.status === "voting") && (
+                (debate?.status === t("debate.statuses.statusOpen") ||
+                    debate?.status === t("debate.statuses.statusVoting")) && (
                     <>
                         <h6>{t("debate.votes.changeVote")}</h6>
                         <button className="btn waves-effect">
@@ -278,10 +281,10 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
                         </button>
                     </>
                 )}
-            {debate.votesFor + debate.votesAgainst === 0 && (
+            {(debate?.votesFor || 0) + (debate?.votesAgainst || 0) === 0 && (
                 <h5 className="center">{t("debate.votes.noVotes")}</h5>
             )}
-            {debate.status === "voting" && (
+            {debate?.status === t("debate.statuses.statusVoting") && (
                 <h6 className="center">
                     {t("debate.votes.votingEnds")} 17/02/2023
                 </h6>
@@ -705,7 +708,7 @@ const DebateView = () => {
                                 </div>
                             </div>
                         )}
-                    <VoteSection debate={debate} userData={userData} />
+                    <VoteSection debate={debateData} userData={userData} />
                     <ChatSection debate={debateData} userData={userData} />
                     <RecommendedDebatesSection
                         recommendedDebates={recommendedDebatesData}
