@@ -7,7 +7,7 @@ import DebateDto from "../../types/dto/DebateDto";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useGetDebateById } from "../../hooks/debates/useGetDebateById";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 
 import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
@@ -451,7 +451,6 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
 
     const { t } = useTranslation();
     const params = useParams();
-    const navigate = useNavigate();
 
     const {
         data: debateData,
