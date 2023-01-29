@@ -17,6 +17,7 @@ export interface RequestApiInput {
     headers?: Record<string, string>;
     requiresAuth?: boolean;
     credentials?: BasicCredentials;
+    queryParams?: Record<string, string>;
 }
 
 export const useRequestApi = () => {
@@ -68,6 +69,7 @@ export const useRequestApi = () => {
                 method: method || "GET",
                 data: body,
                 headers: headers,
+                params: input.queryParams,
             });
             if (requiresAuth) {
                 // NOTE: axios forces all headers into lower case
