@@ -379,7 +379,6 @@ interface RecommendedDebatesSectionProps {
 const RecommendedDebatesSection = ({
     recommendedDebates,
 }: RecommendedDebatesSectionProps) => {
-    // const recommendedDebates: Debate[] = [debate1, debate1, debate1];
     const { t } = useTranslation();
     const [slideIndex, setSlideIndex] = useState(0);
 
@@ -445,7 +444,6 @@ const RecommendedDebatesSection = ({
 
 const DebateView = () => {
     // TODO: Change to real values and hooks
-    const debate = debate1;
     const [userData, setuserData] = useState<User | undefined>(user1);
     const [subscribed, setSubscribed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
