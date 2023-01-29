@@ -292,7 +292,7 @@ const VoteSection = ({ debate, userData }: VotesSectionProps) => {
 
 // CHAT SECTION
 interface ChatSectionProps {
-    debate: Debate;
+    debate?: DebateDto | null;
     userData: User | undefined;
 }
 const ChatSection = ({ debate, userData }: ChatSectionProps) => {
@@ -305,10 +305,11 @@ const ChatSection = ({ debate, userData }: ChatSectionProps) => {
 
     return (
         <>
-            {((debate.status !== "open" && debate.status !== "closing") ||
+            {((debate?.status !== t("debate.statuses.statusOpen") &&
+                debate?.status !== t("debate.statuses.statusClosing")) ||
                 !userData ||
-                (userData.username !== debate.creator.username &&
-                    userData.username !== debate.opponent?.username)) && (
+                (userData.username !== debate.creatorName &&
+                    userData.username !== debate.opponentName)) && (
                 <div className="card">
                     <div className="chat-box card-content">
                         <h5>{t("debate.chat.title")}</h5>
@@ -330,8 +331,10 @@ const ChatSection = ({ debate, userData }: ChatSectionProps) => {
                             )}
                         </div>
                         {userData &&
-                            debate.status !== "closed" &&
-                            debate.status !== "deleted" && (
+                            debate?.status !==
+                                t("debate.statuses.statusClosed") &&
+                            debate?.status !==
+                                t("debate.statuses.statusDeleted") && (
                                 <>
                                     <form
                                         method="post"
@@ -550,7 +553,7 @@ const DebateView = () => {
                                                     "debate.statuses.statusDeleted"
                                                 ) &&
                                                 userData?.username ===
-                                                    debate.creator.username && (
+                                                    debateData?.creatorName && (
                                                     <DeleteDialog
                                                         id="delete-debate"
                                                         handleDelete={
@@ -703,7 +706,7 @@ const DebateView = () => {
                             </div>
                         )}
                     <VoteSection debate={debate} userData={userData} />
-                    <ChatSection debate={debate} userData={userData} />
+                    <ChatSection debate={debateData} userData={userData} />
                     <RecommendedDebatesSection
                         recommendedDebates={recommendedDebatesData}
                     />
