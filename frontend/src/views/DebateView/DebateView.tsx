@@ -21,6 +21,7 @@ import TextArea from "../../components/TextArea/TextArea";
 import Chat from "../../types/Chat";
 import DebateListItem from "../../components/DebateListItem/DebateListItem";
 import UserRole from "../../types/enums/UserRole";
+import { useGetDebatesByUrl } from "../../hooks/debates/useGetDebatesByUrl";
 
 // TODO: Connect to API and remove
 const user1: User = {
@@ -363,9 +364,15 @@ const ChatSection = ({ debate, userData }: ChatSectionProps) => {
     );
 };
 
+interface RecommendedDebatesSectionProps {
+    recommendedDebates: DebateDto[];
+}
+
 // RECOMMENDED DEBATES SECTION
-const RecommendedDebatesSection = () => {
-    const recommendedDebates: Debate[] = [debate1, debate1, debate1];
+const RecommendedDebatesSection = ({
+    recommendedDebates,
+}: RecommendedDebatesSectionProps) => {
+    // const recommendedDebates: Debate[] = [debate1, debate1, debate1];
     const { t } = useTranslation();
     const [slideIndex, setSlideIndex] = useState(0);
 
@@ -376,7 +383,7 @@ const RecommendedDebatesSection = () => {
                     <h5>{t("debate.recommendedDebates")}</h5>
                     <div className="row">
                         <div className="slideshow-container">
-                            {recommendedDebates.map((d: Debate, index) => (
+                            {recommendedDebates.map((d: DebateDto, index) => (
                                 <div
                                     key={d.id}
                                     className="fade"
@@ -387,7 +394,7 @@ const RecommendedDebatesSection = () => {
                                                 : "none",
                                     }}
                                 >
-                                    {/* <DebateListItem debate={d} /> */}
+                                    <DebateListItem debate={d} />
                                 </div>
                             ))}
                         </div>
@@ -438,6 +445,7 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
     // TODO: Change to real values and hooks
     const [userData, setuserData] = useState<User | undefined>(user1);
     const [subscribed, setSubscribed] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const argumentsList: Argument[] = [argument1];
     const { t } = useTranslation();
 
@@ -449,13 +457,35 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
         getDebate: getDebate,
     } = useGetDebateById();
 
+    const {
+        data: recommendedDebatesData,
+        loading: isRecommendedDebatesLoading,
+        getDebatesByUrl: getRecommendedDebates,
+    } = useGetDebatesByUrl();
+
     useEffect(() => {
         const id: string = params.id?.toString() || "";
 
         getDebate({ id: parseInt(id) });
-    }, [debate.id]);
+    }, []);
 
-    if (isDebateLoading) {
+    useEffect(() => {
+        setIsLoading(true);
+        if (debateData?.recommendations) {
+            getRecommendedDebates({
+                url: debateData?.recommendations || "",
+            }).then(() => {
+                setIsLoading(false);
+            });
+        }
+    }, [debateData]);
+
+    if (
+        isDebateLoading ||
+        isRecommendedDebatesLoading ||
+        !debateData ||
+        isLoading
+    ) {
         return <CircularProgress size={100} />;
     }
 
@@ -673,7 +703,9 @@ const DebateView = ({ debate = debate1 }: DebateViewProps) => {
                         )}
                     <VoteSection debate={debate} userData={userData} />
                     <ChatSection debate={debate} userData={userData} />
-                    <RecommendedDebatesSection />
+                    <RecommendedDebatesSection
+                        recommendedDebates={recommendedDebatesData}
+                    />
                 </div>
             </div>
         </>
