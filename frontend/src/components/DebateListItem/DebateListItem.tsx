@@ -60,9 +60,10 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                     <div className="image-width">
                         <img
                             src={
-                                debate.image
-                                    ? "/images/" + debate.image
-                                    : defaultDebatePhoto
+                                // debate.image
+                                //     ? "/images/" + debate.image
+                                //     :
+                                defaultDebatePhoto
                             }
                             alt="Debate photo"
                             className="limit-img-sm responsive-img"
