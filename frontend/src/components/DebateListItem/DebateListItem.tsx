@@ -16,10 +16,8 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const debateCategory = t(
-        "discovery.categories." + debate.category.toLocaleLowerCase()
-    );
-    const debateStatus = t("debate.statuses.status" + debate.status);
+    const debateCategory = debate.category;
+    const debateStatus = debate.status;
 
     const handleNavigateToDebate = () => {
         navigate("/debate/" + debate.id);
