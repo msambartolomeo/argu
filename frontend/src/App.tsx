@@ -2,7 +2,6 @@
 import "materialize-css/dist/css/materialize.min.css";
 import "./root.css";
 
-import logo from "./logo.svg";
 import "./App.css";
 
 import { useEffect } from "react";
