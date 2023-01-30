@@ -1,5 +1,5 @@
 import { usePut } from "../requests/usePut";
-import { IMAGE_ENDPOINT, USERS_ENDPOINT } from "./constants";
+import { imageEndpoint, USERS_ENDPOINT } from "./constants";
 
 export interface UseUpdateUserImageInput {
     username: string;
@@ -18,7 +18,7 @@ export const useUpdateUserImage = () => {
         formData.append("image", image);
 
         const response = await callPut(
-            USERS_ENDPOINT + encodeURI(username) + IMAGE_ENDPOINT,
+            imageEndpoint(encodeURI(username)),
             formData,
             {
                 "Content-Type": "multipart/form-data",

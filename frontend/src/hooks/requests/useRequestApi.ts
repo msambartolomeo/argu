@@ -72,7 +72,6 @@ export const useRequestApi = () => {
                 params: input.queryParams,
             });
             if (requiresAuth) {
-                // NOTE: axios forces all headers into lower case
                 if (response.headers[AUTHORIZATION_HEADER]) {
                     setAuthToken(response.headers[AUTHORIZATION_HEADER]);
                 }

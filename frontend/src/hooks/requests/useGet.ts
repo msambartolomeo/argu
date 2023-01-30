@@ -13,7 +13,10 @@ export const useGet = () => {
         return await requestApi({
             url: url,
             method: RequestMethod.GET,
-            headers: headers,
+            headers: {
+                ...headers,
+                "Accept-Language": navigator.language,
+            },
             requiresAuth: requiresAuth,
             queryParams: queryParams,
         });
