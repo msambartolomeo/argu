@@ -8,7 +8,8 @@ export const usePost = () => {
         url: string,
         inData: object,
         headers: Record<string, string>,
-        requiresAuth: boolean
+        requiresAuth: boolean,
+        queryParams: Record<string, string>
     ) {
         return await requestApi({
             url: url,
@@ -19,6 +20,7 @@ export const usePost = () => {
                 ...headers,
             },
             requiresAuth: requiresAuth,
+            queryParams: queryParams,
         });
     }
 
