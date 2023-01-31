@@ -9,7 +9,7 @@ export const usePost = () => {
         inData: object,
         headers: Record<string, string>,
         requiresAuth: boolean,
-        queryParams: Record<string, string>
+        queryParams?: Record<string, string>
     ) {
         return await requestApi({
             url: url,
