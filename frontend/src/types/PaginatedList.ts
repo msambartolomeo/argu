@@ -1,5 +1,4 @@
-// NOTE: This is a generic class that can be used for any type of data that is paginated.
-// It parses the link header and stores the links to the first, last, previous and next pages.
+import parseLinkHeader from "parse-link-header";
 export class PaginatedList<T> {
     data: T[];
     first: string;
@@ -10,18 +9,13 @@ export class PaginatedList<T> {
     constructor(data: T[], linkHeader: string) {
         this.data = data;
 
-        const links = linkHeader.split(", ");
-        const linkMap = new Map<string, string>();
-        links.forEach((link) => {
-            const [url, rel] = link.split("; ");
-            const relValue = rel.split("=")[1].replace(/"/g, "");
-            const urlWithoutBrackets = url.replace(/</g, "").replace(/>/g, "");
-            linkMap.set(relValue, urlWithoutBrackets);
-        });
-
-        this.first = linkMap.get("first") as string;
-        this.last = linkMap.get("last") as string;
-        this.prev = linkMap.get("prev");
-        this.next = linkMap.get("next");
+        const links = parseLinkHeader(linkHeader);
+        if (!links) {
+            throw new Error("Link header is missing");
+        }
+        this.first = links.first.url;
+        this.last = links.last.url;
+        this.prev = links.prev?.url;
+        this.next = links.next?.url;
     }
 }
