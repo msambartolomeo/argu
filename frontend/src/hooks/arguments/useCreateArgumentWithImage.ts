@@ -1,6 +1,5 @@
 import { HttpStatusCode } from "axios";
 import { usePost } from "../requests/usePost";
-import { argumentsEndpoint } from "./constants";
 import { CreateArgumentInput, CreateArgumentOutput } from "./useCreateArgument";
 
 export interface CreateArgumentWithImageInput extends CreateArgumentInput {
@@ -10,15 +9,17 @@ export interface CreateArgumentWithImageInput extends CreateArgumentInput {
 export const createArgumentWithImage = () => {
     const { loading, callPost } = usePost();
 
-    async function createArgumentWithImage(
-        inData: CreateArgumentWithImageInput
-    ): Promise<CreateArgumentOutput> {
+    async function createArgumentWithImage({
+        argumentsURL,
+        content,
+        image,
+    }: CreateArgumentWithImageInput): Promise<CreateArgumentOutput> {
         const formData = new FormData();
-        formData.append("image", inData.image);
-        formData.append("content", inData.content);
+        formData.append("content", content);
+        formData.append("image", image);
 
         const response = await callPost(
-            argumentsEndpoint(inData.debateId),
+            argumentsURL,
             formData,
             {
                 "Content-Type": "multipart/form-data",

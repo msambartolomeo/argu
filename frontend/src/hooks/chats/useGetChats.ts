@@ -2,11 +2,10 @@ import { HttpStatusCode } from "axios";
 import { PaginatedList } from "../../types/PaginatedList";
 import ChatDto from "../../types/dto/ChatDto";
 import { useGet } from "../requests/useGet";
-import { chatsEndpoint } from "./constants";
 import PaginatedOutput from "../../types/PaginatedOutput";
 
 export interface GetChatsInput {
-    debateId: number;
+    debateUrl: string;
     page: number;
     size: number;
 }
@@ -15,11 +14,11 @@ export const useGetChats = () => {
     const { loading, callGet } = useGet();
 
     async function getChats({
-        debateId,
+        debateUrl,
         page,
         size,
     }: GetChatsInput): Promise<PaginatedOutput<ChatDto>> {
-        const response = await callGet(chatsEndpoint(debateId), {}, false, {
+        const response = await callGet(debateUrl, {}, false, {
             page: page.toString(),
             size: size.toString(),
         });

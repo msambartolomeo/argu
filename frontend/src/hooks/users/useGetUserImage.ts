@@ -7,8 +7,8 @@ export const useGetUserImage = () => {
     const [data, setData] = useState<HTMLImageElement | null>(null);
     const { loading, callGet } = useGet();
 
-    async function getUserImage(url: string) {
-        const response = await callGet(url);
+    async function getUserImage(imageUrl: string) {
+        const response = await callGet(imageUrl);
 
         if (response.status === HttpStatusCode.Ok) {
             setData(response.data as HTMLImageElement);

@@ -1,8 +1,7 @@
 import { usePut } from "../requests/usePut";
-import { imageEndpoint, USERS_ENDPOINT } from "./constants";
 
 export interface UseUpdateUserImageInput {
-    username: string;
+    imageUrl: string;
     image: File;
 }
 
@@ -10,7 +9,7 @@ export const useUpdateUserImage = () => {
     const { loading, callPut } = usePut();
 
     async function updateUserImage({
-        username,
+        imageUrl,
         image,
     }: UseUpdateUserImageInput) {
         // TODO: Validate MimeType header usage
@@ -18,7 +17,7 @@ export const useUpdateUserImage = () => {
         formData.append("image", image);
 
         const response = await callPut(
-            imageEndpoint(encodeURI(username)),
+            imageUrl,
             formData,
             {
                 "Content-Type": "multipart/form-data",

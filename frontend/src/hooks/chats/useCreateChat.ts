@@ -1,10 +1,9 @@
 import { HttpStatusCode } from "axios";
 import { PostOutput } from "../../types/PostOutput";
 import { usePost } from "../requests/usePost";
-import { chatsEndpoint } from "./constants";
 
 export interface CreateChatInput {
-    debateId: number;
+    debateUrl: string;
     message: string;
 }
 
@@ -12,11 +11,11 @@ export const useCreateChat = () => {
     const { loading, callPost } = usePost();
 
     async function createChat({
-        debateId,
+        debateUrl,
         message,
     }: CreateChatInput): Promise<PostOutput> {
         const response = await callPost(
-            chatsEndpoint(debateId),
+            debateUrl,
             { message },
             {
                 "Content-Type": "application/json",

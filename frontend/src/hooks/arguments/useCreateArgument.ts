@@ -1,11 +1,10 @@
 import { HttpStatusCode } from "axios";
 import { usePost } from "../requests/usePost";
-import { argumentsEndpoint } from "./constants";
 import BadRequestError from "../../types/errors/BadRequestError";
 import { PostOutput } from "../../types/PostOutput";
 
 export interface CreateArgumentInput {
-    debateId: number;
+    argumentsURL: string;
     content: string;
 }
 
@@ -17,11 +16,11 @@ export const useCreateArgument = () => {
     const { loading, callPost } = usePost();
 
     async function createArgument({
-        debateId,
+        argumentsURL,
         content,
     }: CreateArgumentInput): Promise<CreateArgumentOutput> {
         const response = await callPost(
-            argumentsEndpoint(debateId),
+            argumentsURL,
             { content },
             {
                 "Content-Type": "application/json",

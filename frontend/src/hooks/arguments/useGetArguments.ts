@@ -1,12 +1,11 @@
 import { useGet } from "../requests/useGet";
-import { argumentsEndpoint } from "./constants";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import { PaginatedList } from "../../types/PaginatedList";
 import { HttpStatusCode } from "axios";
 import PaginatedOutput from "../../types/PaginatedOutput";
 
 export interface GetArgumentsInput {
-    debateId: number;
+    argumentsUrl: string;
     page: number;
     size: number;
 }
@@ -15,11 +14,11 @@ export const useGetArguments = () => {
     const { loading, callGet } = useGet();
 
     async function getArguments({
-        debateId,
+        argumentsUrl,
         page,
         size,
     }: GetArgumentsInput): Promise<PaginatedOutput<ArgumentDto>> {
-        const response = await callGet(argumentsEndpoint(debateId), {}, false, {
+        const response = await callGet(argumentsUrl, {}, false, {
             page: page.toString(),
             size: size.toString(),
         });
