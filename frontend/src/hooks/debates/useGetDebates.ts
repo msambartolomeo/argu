@@ -29,18 +29,21 @@ export const useGetDebates = () => {
     const { loading, callGet } = useGet();
 
     async function getDebates(inData: GetDebatesInput) {
-        let endpoint = DEBATES_ENDPOINT;
-
+        const queryParams: Record<string, string> = {};
         if (inData) {
-            endpoint += "?";
             for (const [key, value] of Object.entries(inData)) {
                 if (value) {
-                    endpoint += key + "=" + value + "&";
+                    queryParams[key] = value.toString();
                 }
             }
         }
 
-        const response = await callGet(endpoint, {}, false);
+        const response = await callGet(
+            DEBATES_ENDPOINT,
+            {},
+            false,
+            queryParams
+        );
 
         if (response.status === HttpStatusCode.Ok) {
             setData(response.data as DebateDto[]);

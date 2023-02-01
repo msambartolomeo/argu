@@ -7,13 +7,15 @@ export const useDelete = () => {
     async function callDelete(
         url: string,
         headers?: Record<string, string>,
-        requiresAuth?: boolean
+        requiresAuth?: boolean,
+        queryParams?: Record<string, string>
     ) {
         return await requestApi({
             url: url,
             method: RequestMethod.DELETE,
             headers: headers,
             requiresAuth: requiresAuth,
+            queryParams: queryParams,
         });
     }
 

@@ -7,13 +7,18 @@ export const useGet = () => {
     async function callGet(
         url: string,
         headers?: Record<string, string>,
-        requiresAuth?: boolean
+        requiresAuth?: boolean,
+        queryParams?: Record<string, string>
     ) {
         return await requestApi({
             url: url,
             method: RequestMethod.GET,
-            headers: headers,
+            headers: {
+                ...headers,
+                "Accept-Language": navigator.language,
+            },
             requiresAuth: requiresAuth,
+            queryParams: queryParams,
         });
     }
 

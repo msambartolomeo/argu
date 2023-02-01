@@ -8,17 +8,16 @@ export const usePost = () => {
         url: string,
         inData: object,
         headers: Record<string, string>,
-        requiresAuth: boolean
+        requiresAuth: boolean,
+        queryParams?: Record<string, string>
     ) {
         return await requestApi({
             url: url,
             method: RequestMethod.POST,
             body: inData,
-            headers: {
-                "Content-Type": "application/json",
-                ...headers,
-            },
+            headers: headers,
             requiresAuth: requiresAuth,
+            queryParams: queryParams,
         });
     }
 
