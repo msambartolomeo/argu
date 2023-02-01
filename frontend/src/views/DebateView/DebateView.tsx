@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
 
+import { HttpStatusCode } from "axios";
+
 import ArgumentBubble from "../../components/ArgumentBubble/ArgumentBubble";
 import Chip from "../../components/Chip/Chip";
 import DebateListItem from "../../components/DebateListItem/DebateListItem";
@@ -13,12 +15,19 @@ import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
 import NonClickableChip from "../../components/NonClickableChip/NonClickableChip";
 import Pagination from "../../components/Pagination/Pagination";
 import TextArea from "../../components/TextArea/TextArea";
-import { useGetDebateById } from "../../hooks/debates/useGetDebateById";
-import { useGetDebatesByUrl } from "../../hooks/debates/useGetDebatesByUrl";
+import {
+    GetDebateByIdOutput,
+    useGetDebateById,
+} from "../../hooks/debates/useGetDebateById";
+import {
+    GetDebatesByUrlOutput,
+    useGetDebatesByUrl,
+} from "../../hooks/debates/useGetDebatesByUrl";
 import "../../locales/index";
 import Argument from "../../types/Argument";
 import Chat from "../../types/Chat";
 import Debate from "../../types/Debate";
+import { PaginatedList } from "../../types/PaginatedList";
 import User from "../../types/User";
 import DebateDto from "../../types/dto/DebateDto";
 import UserRole from "../../types/enums/UserRole";
@@ -445,53 +454,51 @@ const RecommendedDebatesSection = ({
 
 const DebateView = () => {
     // TODO: Change to real values and hooks
+    const [debateData, setDebateData] = useState<DebateDto | undefined>();
+    const [recommendedDebates, setRecommendedDebates] = useState<
+        PaginatedList<DebateDto> | undefined
+    >();
     const [userData, setuserData] = useState<User | undefined>(user1);
-    const [subscribed, setSubscribed] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [subscribed, setSubscribed] = useState<boolean>(false);
     const argumentsList: Argument[] = [argument1];
 
     const { t } = useTranslation();
     const params = useParams();
 
-    const {
-        data: debateData,
-        loading: isDebateLoading,
-        getDebate: getDebate,
-    } = useGetDebateById();
+    const { loading: isDebateLoading, getDebate: getDebate } =
+        useGetDebateById();
 
     const {
-        data: recommendedDebatesData,
         loading: isRecommendedDebatesLoading,
         getDebatesByUrl: getRecommendedDebates,
     } = useGetDebatesByUrl();
 
     useEffect(() => {
         const id: string = params.id?.toString() || "";
-
-        getDebate({ id: parseInt(id) });
+        getDebate({ id: parseInt(id) }).then((output: GetDebateByIdOutput) => {
+            if (output.status === HttpStatusCode.Ok) {
+                setDebateData(output.data);
+            }
+        });
     }, []);
 
     useEffect(() => {
-        setIsLoading(true);
         if (debateData?.recommendations) {
             getRecommendedDebates({
                 url: debateData?.recommendations || "",
-            }).then(() => {
-                setIsLoading(false);
+            }).then((output: GetDebatesByUrlOutput) => {
+                if (output.status === HttpStatusCode.Ok) {
+                    setRecommendedDebates(output.data);
+                }
             });
         }
     }, [debateData]);
 
     if (typeof debateData === "string") {
-        return <Error status={404} message={debateData} />;
+        return <Error status={HttpStatusCode.NotFound} message={debateData} />;
     }
 
-    if (
-        isDebateLoading ||
-        isRecommendedDebatesLoading ||
-        !debateData ||
-        isLoading
-    ) {
+    if (isDebateLoading || isRecommendedDebatesLoading || !debateData) {
         return <CircularProgress size={100} />;
     }
 
@@ -710,7 +717,7 @@ const DebateView = () => {
                     <VoteSection debate={debateData} userData={userData} />
                     <ChatSection debate={debateData} userData={userData} />
                     <RecommendedDebatesSection
-                        recommendedDebates={recommendedDebatesData}
+                        recommendedDebates={recommendedDebates?.data || []}
                     />
                 </div>
             </div>
