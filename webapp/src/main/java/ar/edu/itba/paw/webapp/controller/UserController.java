@@ -5,8 +5,10 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.dto.UserDto;
+import ar.edu.itba.paw.webapp.form.ModeratorForm;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import ar.edu.itba.paw.webapp.utils.ImageUtils;
+import ar.edu.itba.paw.webapp.utils.PATCH;
 import ar.edu.itba.paw.webapp.validators.Image;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -87,6 +89,15 @@ public class UserController {
 
         return Response.created(uriInfo.getBaseUriBuilder().path("images")
                 .path(String.valueOf(user.getImage().getId())).build()).build();
+    }
+
+    @PATCH
+    @Path("/{url}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response patchUser(@PathParam("url") final String url, @Valid @NotNull final ModeratorForm form) throws UnsupportedEncodingException {
+        final String username = URLDecoder.decode(url, User.ENCODING);
+        userService.requestModerator(username, form.getReason());
+        return Response.noContent().build();
     }
 
     @DELETE
