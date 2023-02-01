@@ -21,5 +21,16 @@
                 "parser": "json"
             }
         }
-    ]
+    ],
+    "importOrder": [
+        "^react$",
+        "^react-dom$",
+        "^react-router-dom$",
+        "^axios$",
+        "^@mui$",
+        "^\\w$",
+        "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
 }

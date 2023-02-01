@@ -66,6 +66,7 @@
         ]
     },
     "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^4.0.0",
         "@types/parse-link-header": "^2.0.0",
         "eslint": "^8.24.0",
         "eslint-config-prettier": "^8.5.0",
