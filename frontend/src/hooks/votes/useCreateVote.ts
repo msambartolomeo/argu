@@ -1,4 +1,5 @@
 import { HttpStatusCode } from "axios";
+
 import { usePost } from "../requests/usePost";
 
 export interface CreateVoteInput {

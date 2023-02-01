@@ -1,8 +1,9 @@
 import { HttpStatusCode } from "axios";
+
 import { PaginatedList } from "../../types/PaginatedList";
+import PaginatedOutput from "../../types/PaginatedOutput";
 import ChatDto from "../../types/dto/ChatDto";
 import { useGet } from "../requests/useGet";
-import PaginatedOutput from "../../types/PaginatedOutput";
 
 export interface GetChatsInput {
     debateUrl: string;

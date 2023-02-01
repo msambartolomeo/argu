@@ -1,10 +1,12 @@
 import { useState } from "react";
+
+import { HttpStatusCode } from "axios";
+
 import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateOrder from "../../types/enums/DebateOrder";
 import { useGet } from "../requests/useGet";
 import { DEBATES_ENDPOINT } from "./constants";
-import { HttpStatusCode } from "axios";
 
 export interface GetDebatesInput {
     search?: string;

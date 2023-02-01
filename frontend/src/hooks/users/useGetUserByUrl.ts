@@ -1,7 +1,9 @@
 import { useState } from "react";
+
+import { HttpStatusCode } from "axios";
+
 import UserDto from "../../types/dto/UserDto";
 import { useGet } from "../requests/useGet";
-import { HttpStatusCode } from "axios";
 
 export interface GetUserByUrlInput {
     url: string;

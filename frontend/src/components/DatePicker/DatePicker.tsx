@@ -1,5 +1,7 @@
-import { RefObject, useEffect, useRef } from "react";
 import M from "materialize-css";
+
+import { RefObject, useEffect, useRef } from "react";
+
 import "./DatePicker.css";
 
 // TODO: add i18n to DatePicker

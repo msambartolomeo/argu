@@ -1,7 +1,8 @@
-import "./ProfileImage.css";
-import defaultProfilePhoto from "../../assets/default-profile-photo.png";
 import { useTranslation } from "react-i18next";
+
+import defaultProfilePhoto from "../../assets/default-profile-photo.png";
 import "../../locales/index";
+import "./ProfileImage.css";
 
 interface ProfileImageProps {
     image?: string;

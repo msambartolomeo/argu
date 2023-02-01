@@ -1,10 +1,10 @@
 import { HttpStatusCode } from "axios";
+
+import { PostOutput } from "../../types/PostOutput";
 import DebateCategory from "../../types/enums/DebateCategory";
+import BadRequestError from "../../types/errors/BadRequestError";
 import { usePost } from "../requests/usePost";
 import { DEBATES_ENDPOINT } from "./constants";
-import { useState } from "react";
-import { PostOutput } from "../../types/PostOutput";
-import BadRequestError from "../../types/errors/BadRequestError";
 
 export interface CreateDebateInput {
     title: string;
@@ -20,9 +20,10 @@ export interface CreateDebateOutput extends PostOutput {
 
 export const useCreateDebate = () => {
     const { loading, callPost } = usePost();
-    const [data, setData] = useState<CreateDebateOutput>();
 
-    async function createDebate(inData: CreateDebateInput): Promise<void> {
+    async function createDebate(
+        inData: CreateDebateInput
+    ): Promise<CreateDebateOutput> {
         const response = await callPost(
             DEBATES_ENDPOINT,
             inData,
@@ -34,23 +35,21 @@ export const useCreateDebate = () => {
 
         switch (response.status) {
             case HttpStatusCode.Created:
-                setData({
+                return {
                     status: response.status,
                     location: response.headers.location,
-                });
-                break;
+                };
             case HttpStatusCode.BadRequest:
-                setData({
+                return {
                     status: response.status,
                     errors: response.data as BadRequestError[],
-                });
-                break;
+                };
             default:
-                setData({
+                return {
                     status: response.status,
-                });
+                };
         }
     }
 
-    return { data, loading, createDebate };
+    return { loading, createDebate };
 };

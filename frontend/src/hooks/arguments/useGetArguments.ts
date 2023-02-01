@@ -1,8 +1,9 @@
-import { useGet } from "../requests/useGet";
-import ArgumentDto from "../../types/dto/ArgumentDto";
-import { PaginatedList } from "../../types/PaginatedList";
 import { HttpStatusCode } from "axios";
+
+import { PaginatedList } from "../../types/PaginatedList";
 import PaginatedOutput from "../../types/PaginatedOutput";
+import ArgumentDto from "../../types/dto/ArgumentDto";
+import { useGet } from "../requests/useGet";
 
 export interface GetArgumentsInput {
     argumentsUrl: string;

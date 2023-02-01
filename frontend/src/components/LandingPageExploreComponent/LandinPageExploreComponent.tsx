@@ -1,9 +1,11 @@
-import React from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
-import "./LandingPageExploreComponent.css";
 import { useTranslation } from "react-i18next";
+
+import React from "react";
+
 import "../../locales/index";
+import "./LandingPageExploreComponent.css";
 
 // TODO: Add icons
 

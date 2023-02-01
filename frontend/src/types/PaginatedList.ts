@@ -1,4 +1,5 @@
 import parseLinkHeader from "parse-link-header";
+
 export class PaginatedList<T> {
     data: T[];
     first: string;

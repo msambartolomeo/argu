@@ -1,4 +1,5 @@
 import { HttpStatusCode } from "axios";
+
 import { useDelete } from "../requests/useDelete";
 
 export interface DeleteVoteInput {

@@ -1,25 +1,25 @@
 // NOTE: import base css
+import M from "materialize-css";
 import "materialize-css/dist/css/materialize.min.css";
-import "./root.css";
-
-import "./App.css";
 
 import { useEffect } from "react";
-import M from "materialize-css";
 
 // import router
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./views/LandingPage/LandingPage";
-import RequestModerator from "./views/RequestModerator/RequestModerator";
-import Navbar from "./components/Navbar/Navbar";
-import Login from "./views/Login/Login";
-import UserProfile from "./views/UserProfile/UserProfile";
-import Register from "./views/Register/Register";
-import CreateDebate from "./views/CreateDebate/CreateDebate";
-import Discovery from "./views/Discovery/Discovery";
-import { DebaterProfile } from "./views/DebaterProfile/DebaterProfile";
-import DebateView from "./views/DebateView/DebateView";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
+import "./App.css";
 import Footer from "./components/Footer/Footer";
+import Navbar from "./components/Navbar/Navbar";
+import "./root.css";
+import CreateDebate from "./views/CreateDebate/CreateDebate";
+import DebateView from "./views/DebateView/DebateView";
+import { DebaterProfile } from "./views/DebaterProfile/DebaterProfile";
+import Discovery from "./views/Discovery/Discovery";
+import LandingPage from "./views/LandingPage/LandingPage";
+import Login from "./views/Login/Login";
+import Register from "./views/Register/Register";
+import RequestModerator from "./views/RequestModerator/RequestModerator";
+import UserProfile from "./views/UserProfile/UserProfile";
 
 function App() {
     useEffect(() => {

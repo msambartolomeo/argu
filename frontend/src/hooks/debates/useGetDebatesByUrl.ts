@@ -1,7 +1,9 @@
 import { useState } from "react";
+
+import { HttpStatusCode } from "axios";
+
 import DebateDto from "../../types/dto/DebateDto";
 import { useGet } from "../requests/useGet";
-import { HttpStatusCode } from "axios";
 
 export interface GetDebatesByUrlInput {
     url: string;

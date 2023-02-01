@@ -1,6 +1,7 @@
 import { HttpStatusCode } from "axios";
-import { useGet } from "../requests/useGet";
+
 import VoteDto from "../../types/dto/VoteDto";
+import { useGet } from "../requests/useGet";
 
 export interface GetLikeInput {
     likeUrl: string;

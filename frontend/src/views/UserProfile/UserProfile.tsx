@@ -1,16 +1,18 @@
-import { useState } from "react";
-import "./UserProfile.css";
-import ProfileImage from "../../components/ProfileImage/ProfileImage";
-import DebatesList from "../../components/DebatesList/DebatesList";
-import EditProfileImageDialog from "../../components/EditProfileImageDialog/EditProfileImageDialog";
-import DeleteAccountModal from "../../components/DeleteAccountModal/DeleteAccountModal";
-import "../../root.css";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
+
+import { useState } from "react";
+
+import DebatesList from "../../components/DebatesList/DebatesList";
+import DeleteAccountModal from "../../components/DeleteAccountModal/DeleteAccountModal";
+import EditProfileImageDialog from "../../components/EditProfileImageDialog/EditProfileImageDialog";
+import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import "../../locales/index";
+import "../../root.css";
 import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateStatus from "../../types/enums/DebateStatus";
+import "./UserProfile.css";
 
 const UserProfile = () => {
     const debates: DebateDto[] = [

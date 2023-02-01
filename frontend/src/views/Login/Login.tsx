@@ -1,11 +1,11 @@
-import "./Login.css";
-import "../../locales/index";
+import { useTranslation } from "react-i18next";
 
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
 import InputField from "../../components/InputField/InputField";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
+import "../../locales/index";
+import "./Login.css";
 
 const Login = () => {
     const navigate = useNavigate();

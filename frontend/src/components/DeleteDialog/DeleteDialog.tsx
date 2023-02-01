@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import M from "materialize-css";
 import { useTranslation } from "react-i18next";
 
-import "./DeleteDialog.css";
+import { useEffect } from "react";
+
 import "../../locales/index";
-import M from "materialize-css";
+import "./DeleteDialog.css";
 
 interface DeleteDialogProps {
     id: string;

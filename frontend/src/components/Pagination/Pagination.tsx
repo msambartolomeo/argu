@@ -1,5 +1,6 @@
-import "./Pagination.css";
 import cn from "classnames";
+
+import "./Pagination.css";
 
 interface Props {
     param: string;

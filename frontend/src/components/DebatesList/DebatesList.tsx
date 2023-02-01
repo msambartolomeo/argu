@@ -1,8 +1,10 @@
-import DebateListItem from "../DebateListItem/DebateListItem";
-import { useLocation } from "react-router-dom";
-import "../../locales/index";
 import { useTranslation } from "react-i18next";
+
+import { useLocation } from "react-router-dom";
+
+import "../../locales/index";
 import DebateDto from "../../types/dto/DebateDto";
+import DebateListItem from "../DebateListItem/DebateListItem";
 
 interface DebatesListProps {
     debates: DebateDto[];

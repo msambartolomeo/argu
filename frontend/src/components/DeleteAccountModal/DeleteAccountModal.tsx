@@ -1,6 +1,7 @@
-import "./DeleteAccountModal.css";
 import { useTranslation } from "react-i18next";
+
 import "../../locales/index";
+import "./DeleteAccountModal.css";
 
 const DeleteConfirmationForm = () => {
     const { t } = useTranslation();

@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+
 import "../../locales/index";
 
 const ProfilePhotoForm = () => {

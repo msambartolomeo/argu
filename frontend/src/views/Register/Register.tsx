@@ -1,8 +1,9 @@
-import InputField from "../../components/InputField/InputField";
-import SubmitButton from "../../components/SubmitButton/SubmitButton";
+import { useTranslation } from "react-i18next";
 
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+
+import InputField from "../../components/InputField/InputField";
+import SubmitButton from "../../components/SubmitButton/SubmitButton";
 
 const Register = () => {
     const navigate = useNavigate();

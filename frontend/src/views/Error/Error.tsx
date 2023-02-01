@@ -1,10 +1,11 @@
-import "./Error.css";
+import { useTranslation } from "react-i18next";
+
+import { Link } from "react-router-dom";
+
 import error400 from "../../assets/error400.png";
 import error404 from "../../assets/error404.png";
 import error500 from "../../assets/error500.png";
-
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import "./Error.css";
 
 interface ErrorProps {
     status: number;

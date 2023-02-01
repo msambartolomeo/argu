@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { useGet } from "../requests/useGet";
+
 import { HttpStatusCode } from "axios";
+
+import { useGet } from "../requests/useGet";
 
 export const useGetUserImage = () => {
     // TODO: Validate HTMLImageElement type

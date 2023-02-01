@@ -5,9 +5,10 @@ import {
     Select,
     SelectChangeEvent,
 } from "@mui/material";
-import "./SortSelectComponent.css";
 import { useTranslation } from "react-i18next";
+
 import "../../../locales/index";
+import "./SortSelectComponent.css";
 
 interface SortSelectComponentProps {
     header: string;

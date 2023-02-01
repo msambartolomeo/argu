@@ -1,10 +1,12 @@
-import React from "react";
-import "./LandingPageAboutComponent.css";
-import debateIcon from "../../assets/debate-icon.png";
-import createParticipateDebate from "../../assets/create-participate-debate.png";
-import subscribeLikeVote from "../../assets/subscribe-like-vote.png";
 import { useTranslation } from "react-i18next";
+
+import React from "react";
+
+import createParticipateDebate from "../../assets/create-participate-debate.png";
+import debateIcon from "../../assets/debate-icon.png";
+import subscribeLikeVote from "../../assets/subscribe-like-vote.png";
 import "../../locales/index";
+import "./LandingPageAboutComponent.css";
 
 // TODO: Align text and images
 

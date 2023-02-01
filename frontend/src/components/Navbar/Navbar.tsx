@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
-import "./Navbar.css";
-import arguLogo from "../../assets/argu-logo-2.jpeg";
-import SearchBar from "../SearchBar/SearchBar";
 import { useTranslation } from "react-i18next";
+
+import { Link } from "react-router-dom";
+
+import arguLogo from "../../assets/argu-logo-2.jpeg";
 import "../../locales/index";
+import SearchBar from "../SearchBar/SearchBar";
 import NavButton from "./NavButton";
+import "./Navbar.css";
 
 interface ArguLogoProps {
     image?: string;

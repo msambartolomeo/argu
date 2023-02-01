@@ -1,5 +1,6 @@
-import { ChangeEventHandler } from "react";
 import cn from "classnames";
+
+import { ChangeEventHandler } from "react";
 
 interface Props {
     type?: "text" | "email" | "password";

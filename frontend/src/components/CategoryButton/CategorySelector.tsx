@@ -1,5 +1,6 @@
-import "./CategorySelector.css";
 import cn from "classnames";
+
+import "./CategorySelector.css";
 
 interface Props {
     categories: Array<string>;

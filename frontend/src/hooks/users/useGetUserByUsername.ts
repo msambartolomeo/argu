@@ -1,5 +1,5 @@
-import { useGetUserByUrl } from "./useGetUserByUrl";
 import { USERS_ENDPOINT } from "./constants";
+import { useGetUserByUrl } from "./useGetUserByUrl";
 
 export interface GetUserByUsernameInput {
     username: string;

@@ -1,10 +1,10 @@
-import "../UserProfile/UserProfile.css";
-
 import { useTranslation } from "react-i18next";
+
 import { useParams } from "react-router-dom";
 
-import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import DebatesList from "../../components/DebatesList/DebatesList";
+import ProfileImage from "../../components/ProfileImage/ProfileImage";
+import "../UserProfile/UserProfile.css";
 
 export const DebaterProfile = () => {
     const { t } = useTranslation();

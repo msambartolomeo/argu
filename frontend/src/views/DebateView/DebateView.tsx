@@ -1,28 +1,29 @@
-import "./DebateView.css";
-import "../../locales/index";
-import User from "../../types/User";
-import Debate from "../../types/Debate";
-import DebateDto from "../../types/dto/DebateDto";
-
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useGetDebateById } from "../../hooks/debates/useGetDebateById";
-import { useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
-import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
-import Chip from "../../components/Chip/Chip";
-import NonClickableChip from "../../components/NonClickableChip/NonClickableChip";
-import DebatePhoto from "../../components/DebatePhoto/DebatePhoto";
-import Argument from "../../types/Argument";
+import { useEffect, useState } from "react";
+
+import { useParams } from "react-router-dom";
+
 import ArgumentBubble from "../../components/ArgumentBubble/ArgumentBubble";
+import Chip from "../../components/Chip/Chip";
+import DebateListItem from "../../components/DebateListItem/DebateListItem";
+import DebatePhoto from "../../components/DebatePhoto/DebatePhoto";
+import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
+import NonClickableChip from "../../components/NonClickableChip/NonClickableChip";
 import Pagination from "../../components/Pagination/Pagination";
 import TextArea from "../../components/TextArea/TextArea";
-import Chat from "../../types/Chat";
-import DebateListItem from "../../components/DebateListItem/DebateListItem";
-import UserRole from "../../types/enums/UserRole";
+import { useGetDebateById } from "../../hooks/debates/useGetDebateById";
 import { useGetDebatesByUrl } from "../../hooks/debates/useGetDebatesByUrl";
+import "../../locales/index";
+import Argument from "../../types/Argument";
+import Chat from "../../types/Chat";
+import Debate from "../../types/Debate";
+import User from "../../types/User";
+import DebateDto from "../../types/dto/DebateDto";
+import UserRole from "../../types/enums/UserRole";
 import { Error } from "../Error/Error";
+import "./DebateView.css";
 
 // TODO: Connect to API and remove
 const user1: User = {

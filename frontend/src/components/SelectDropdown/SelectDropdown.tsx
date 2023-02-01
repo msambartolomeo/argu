@@ -1,5 +1,6 @@
-import { useState } from "react";
 import Select, { GroupBase, OptionsOrGroups } from "react-select";
+
+import { useState } from "react";
 
 import "./SelectDropdown.css";
 

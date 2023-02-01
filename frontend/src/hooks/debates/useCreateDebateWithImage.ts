@@ -1,8 +1,8 @@
 import { HttpStatusCode } from "axios";
+
+import BadRequestError from "../../types/errors/BadRequestError";
 import { usePost } from "../requests/usePost";
 import { DEBATES_ENDPOINT } from "./constants";
-import { useState } from "react";
-import BadRequestError from "../../types/errors/BadRequestError";
 import { CreateDebateInput, CreateDebateOutput } from "./useCreateDebate";
 
 export interface CreateDebateWithImageInput extends CreateDebateInput {
@@ -11,11 +11,10 @@ export interface CreateDebateWithImageInput extends CreateDebateInput {
 
 export const createDebateWithImage = () => {
     const { loading, callPost } = usePost();
-    const [data, setData] = useState<CreateDebateOutput>();
 
     async function createDebateWithImage(
         inData: CreateDebateWithImageInput
-    ): Promise<void> {
+    ): Promise<CreateDebateOutput> {
         const formData = new FormData();
         formData.append("image", inData.image);
         formData.append("title", inData.title);
@@ -35,23 +34,21 @@ export const createDebateWithImage = () => {
 
         switch (response.status) {
             case HttpStatusCode.Created:
-                setData({
+                return {
                     status: response.status,
                     location: response.headers.location,
-                });
-                break;
+                };
             case HttpStatusCode.BadRequest:
-                setData({
+                return {
                     status: response.status,
                     errors: response.data as BadRequestError[],
-                });
-                break;
+                };
             default:
-                setData({
+                return {
                     status: response.status,
-                });
+                };
         }
     }
 
-    return { data, loading, createDebate: createDebateWithImage };
+    return { loading, createDebateWithImage };
 };

@@ -1,6 +1,5 @@
 // TODO: Complete missing fields
 // TODO: Change image data type
-
 import User from "./User";
 
 export default interface Debate {

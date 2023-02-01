@@ -1,10 +1,12 @@
 import { SelectChangeEvent } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
 import { useLocation } from "react-router-dom";
+
+import "../../locales/index";
 import DatePicker from "../DatePicker/DatePicker";
 import "./OrderByComponent.css";
 import SortSelectComponent from "./SortSelectComponent/SortSelectComponent";
-import { useTranslation } from "react-i18next";
-import "../../locales/index";
 
 // TODO: add i18n to DatePicker
 

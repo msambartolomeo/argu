@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
-import "./TrendingDebatesComponent.css";
 import { useTranslation } from "react-i18next";
-import "../../locales/index";
-import DebateCategory from "../../types/enums/DebateCategory";
-import Debate from "../../types/Debate";
-import DebatesList from "../DebatesList/DebatesList";
-import DebateDto from "../../types/dto/DebateDto";
+
+import React, { useEffect, useState } from "react";
+
 import { useGetDebates } from "../../hooks/debates/useGetDebates";
+import "../../locales/index";
+import Debate from "../../types/Debate";
+import DebateDto from "../../types/dto/DebateDto";
+import DebateCategory from "../../types/enums/DebateCategory";
 import DebateOrder from "../../types/enums/DebateOrder";
 import DebateStatus from "../../types/enums/DebateStatus";
+import DebatesList from "../DebatesList/DebatesList";
+import "./TrendingDebatesComponent.css";
 
 // TODO: Add icons
 

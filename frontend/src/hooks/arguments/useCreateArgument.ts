@@ -1,7 +1,8 @@
 import { HttpStatusCode } from "axios";
-import { usePost } from "../requests/usePost";
-import BadRequestError from "../../types/errors/BadRequestError";
+
 import { PostOutput } from "../../types/PostOutput";
+import BadRequestError from "../../types/errors/BadRequestError";
+import { usePost } from "../requests/usePost";
 
 export interface CreateArgumentInput {
     argumentsURL: string;
