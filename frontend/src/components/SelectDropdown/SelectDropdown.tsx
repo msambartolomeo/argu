@@ -1,4 +1,4 @@
-import Select, { GroupBase, OptionsOrGroups } from "react-select";
+import Select from "react-select";
 
 import { useState } from "react";
 

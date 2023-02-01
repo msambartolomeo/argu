@@ -13,7 +13,6 @@ export const useDeleteUser = () => {
         );
 
         // TODO: Validate return object
-        console.log(response);
         return response.status;
     }
     return { loading, deleteUser };

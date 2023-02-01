@@ -1,13 +1,7 @@
-import { Parallax, ParallaxLayer } from "@react-spring/parallax";
-
-import React from "react";
-
 import parallaxBackgroud from "../../assets/speech-bubbles.jpeg";
 import LandingPageAboutComponent from "../../components/LandingPageAboutComponent/LandingPageAboutComponent";
 import LandingPageExploreComponent from "../../components/LandingPageExploreComponent/LandinPageExploreComponent";
-import Navbar from "../../components/Navbar/Navbar";
 import TrendingDebatesComponent from "../../components/TrendingDebatesComponent/TrendingDebatesComponent";
-import Debate from "../../types/Debate";
 import DebateCategory from "../../types/enums/DebateCategory";
 import "./LandingPage.css";
 

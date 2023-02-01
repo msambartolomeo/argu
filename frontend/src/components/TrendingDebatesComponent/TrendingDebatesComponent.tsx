@@ -1,12 +1,9 @@
 import { useTranslation } from "react-i18next";
 
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { useGetDebates } from "../../hooks/debates/useGetDebates";
 import "../../locales/index";
-import Debate from "../../types/Debate";
-import DebateDto from "../../types/dto/DebateDto";
-import DebateCategory from "../../types/enums/DebateCategory";
 import DebateOrder from "../../types/enums/DebateOrder";
 import DebateStatus from "../../types/enums/DebateStatus";
 import DebatesList from "../DebatesList/DebatesList";
@@ -30,7 +27,7 @@ const TrendingDebatesComponent = () => {
             page: 0,
             size: 3,
         }).catch((error) => {
-            console.log("Error loading debates list: ", error);
+            throw new Error("Error loading debates list: ", error);
         });
     }, []);
 

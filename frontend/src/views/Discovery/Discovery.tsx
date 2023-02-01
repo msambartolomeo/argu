@@ -5,12 +5,10 @@ import { useEffect, useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
-import CategorySelector from "../../components/CategoryButton/CategorySelector";
 import CategoryFilters from "../../components/CategoryFilters/CategoryFilters";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import OrderByComponent from "../../components/OrderByComponent/OrderByComponent";
 import "../../locales/index";
-import Debate from "../../types/Debate";
 import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateStatus from "../../types/enums/DebateStatus";
