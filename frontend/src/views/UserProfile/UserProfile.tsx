@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./UserProfile.css";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import EditProfileImageDialog from "../../components/EditProfileImageDialog/EditProfileImageDialog";
 import DeleteAccountModal from "../../components/DeleteAccountModal/DeleteAccountModal";
-import Debate from "../../types/Debate";
-import User from "../../types/User";
 import "../../root.css";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";

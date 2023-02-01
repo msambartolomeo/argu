@@ -1,5 +1,5 @@
 interface ChipProps {
-    name: string;
+    name?: string;
     path?: string;
 }
 

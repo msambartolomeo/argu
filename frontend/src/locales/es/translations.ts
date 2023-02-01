@@ -74,6 +74,7 @@ export const TRANSLATIONS_ES = {
         statusClosing: "Cerrando",
         statusVoting: "Votando",
         userDeleted: "[usuario eliminado]",
+        close: "Cerrar debate",
         deleteConfirmation: "¿Estás seguro de borrar este debate?",
         delete: "Borrar debate",
         for: "A favor: ",
@@ -85,7 +86,7 @@ export const TRANSLATIONS_ES = {
         waitTurn: "Debes esperar a tu turno para dar tu argumento.",
         needToLogin:
             "¡Hola! ¿Te gustaría poder participar en la discusión, argumentar, darle me gusta a los argumentos de \
-            otros, votar por quien crees que es el ganador de un debate y suscribirte a debates? ",
+              otros, votar por quien crees que es el ganador de un debate y suscribirte a debates? ",
         firstLogin: "¡Primero debes iniciar sesión!",
         argument: {
             introduction: "Introducción",
