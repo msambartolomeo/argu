@@ -48,8 +48,6 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                                     t("debate.created") +
                                     " " +
                                     debate.createdDate
-                                        .toISOString()
-                                        .split("T")[0]
                                 }
                             />
                             <NonClickableChip
