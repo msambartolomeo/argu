@@ -14,10 +14,7 @@ export const usePut = () => {
             url: url,
             method: RequestMethod.PUT,
             body: inData,
-            headers: {
-                "Content-Type": "application/json",
-                ...headers,
-            },
+            headers: headers,
             requiresAuth: requiresAuth,
         });
     }

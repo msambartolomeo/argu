@@ -15,10 +15,7 @@ export const usePost = () => {
             url: url,
             method: RequestMethod.POST,
             body: inData,
-            headers: {
-                "Content-Type": "application/json",
-                ...headers,
-            },
+            headers: headers,
             requiresAuth: requiresAuth,
             queryParams: queryParams,
         });
