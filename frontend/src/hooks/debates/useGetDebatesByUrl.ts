@@ -30,8 +30,11 @@ export const useGetDebatesByUrl = () => {
             case HttpStatusCode.Ok:
                 return {
                     status: response.status,
-                    data: response.data as PaginatedList<DebateDto>,
-                };
+                    data: new PaginatedList(
+                        response.data,
+                        response.headers.link as string
+                    ),
+                } as GetDebatesByUrlOutput;
 
             default:
                 return {
