@@ -88,10 +88,10 @@ export const useRequestApi = () => {
             if (axios.isAxiosError(err)) {
                 const axiosError = err as AxiosError;
 
+                const response = axiosError.response;
+
                 // TODO: Preguntar si deberíamos también incluir 403 acá.
-                if (
-                    axiosError.response?.status === HttpStatusCode.Unauthorized
-                ) {
+                if (response?.status === HttpStatusCode.Unauthorized) {
                     if (authToken) {
                         // NOTE: authToken expired or invalid, trying again with refreshToken
                         setAuthToken(null);
@@ -106,6 +106,15 @@ export const useRequestApi = () => {
                         headers,
                         requiresAuth,
                     });
+                }
+
+                if (requiresAuth) {
+                    if (response?.headers[AUTHORIZATION_HEADER]) {
+                        setAuthToken(response.headers[AUTHORIZATION_HEADER]);
+                    }
+                    if (response?.headers[REFRESH_HEADER]) {
+                        setRefreshToken(response.headers[REFRESH_HEADER]);
+                    }
                 }
                 return axiosError.response as AxiosResponse;
             }
