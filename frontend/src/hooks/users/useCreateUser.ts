@@ -26,36 +26,31 @@ export interface CreateUserConflictError {
 
 export const useCreateUser = () => {
     const { loading, callPost } = usePost();
-    const [data, setData] = useState<CreateUserOutput>();
 
     async function createUser(inData: CreateUserInput) {
         const response = await callPost(USERS_ENDPOINT, inData, {}, false);
 
         switch (response.status) {
             case HttpStatusCode.Created:
-                setData({
+                return {
                     status: response.status,
                     location: response.headers.location,
-                });
-                break;
+                };
             case HttpStatusCode.BadRequest:
-                setData({
+                return {
                     status: response.status,
                     errors: response.data as BadRequestError[],
-                });
-                break;
+                };
             case HttpStatusCode.Conflict:
-                setData({
+                return {
                     status: response.status,
                     errors: response.data as CreateUserConflictError,
-                });
-                break;
+                };
             default:
-                setData({
+                return {
                     status: response.status,
-                });
-                break;
+                };
         }
     }
-    return { data, loading, createUser };
+    return { loading, createUser };
 };
