@@ -6,6 +6,7 @@ import { PaginatedList } from "../../types/PaginatedList";
 import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateOrder from "../../types/enums/DebateOrder";
+import DebateStatus from "../../types/enums/DebateStatus";
 import { useGet } from "../requests/useGet";
 
 export interface GetDebatesInput {
@@ -14,7 +15,7 @@ export interface GetDebatesInput {
     // TODO: Should we verify that the category is valid?
     category?: DebateCategory;
     order?: DebateOrder;
-    status?: string;
+    status?: DebateStatus;
     date?: Date;
     recommendToDebate?: number;
     userUrl?: string;

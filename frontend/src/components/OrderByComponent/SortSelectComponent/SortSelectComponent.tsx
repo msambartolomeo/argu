@@ -7,6 +7,8 @@ import {
     Select,
     SelectChangeEvent,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import Placeholder from "react-select/dist/declarations/src/components/Placeholder";
 
 import "./SortSelectComponent.css";
 
@@ -35,6 +37,8 @@ const SortSelectComponent = ({
 }: SortSelectComponentProps) => {
     const { t } = useTranslation();
 
+    const placeholder = t(`discovery.orderBy.placeholders.${defaultValue}`);
+
     return (
         <div className="select-container">
             <FormControl
@@ -46,9 +50,14 @@ const SortSelectComponent = ({
                     {t(`discovery.orderBy.${name}.title`)}
                 </InputLabel>
                 <Select
+                    classes={{
+                        icon: "white-text",
+                    }}
                     className="white-text"
                     labelId={labelId}
                     id={id}
+                    placeholder={placeholder}
+                    displayEmpty={true}
                     defaultValue={defaultValue}
                     value={query}
                     onChange={handleSelectChange}

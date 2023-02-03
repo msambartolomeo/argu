@@ -219,6 +219,10 @@ export const TRANSLATIONS_ES = {
             other: "Otros",
         },
         orderBy: {
+            placeholders: {
+                all: "Todos",
+                newest: "Más reciente",
+            },
             orderBy: {
                 title: "Ordenar por",
                 dateDesc: "Más reciente",

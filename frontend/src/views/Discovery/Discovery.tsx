@@ -1,3 +1,6 @@
+import { Pagination, SelectChangeEvent } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
 import { useEffect, useState } from "react";
 
 import { useTranslation } from "react-i18next";
@@ -10,9 +13,11 @@ import "./Discovery.css";
 import CategoryFilters from "../../components/CategoryFilters/CategoryFilters";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import OrderByComponent from "../../components/OrderByComponent/OrderByComponent";
+import { useGetDebates } from "../../hooks/debates/useGetDebates";
 import "../../locales/index";
 import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
+import DebateOrder from "../../types/enums/DebateOrder";
 import DebateStatus from "../../types/enums/DebateStatus";
 
 const Discovery = () => {
@@ -20,52 +25,12 @@ const Discovery = () => {
 
     document.title = "Argu | " + t("discovery.title");
 
-    const debatesList: DebateDto[] = [
-        {
-            id: 1,
-            name: "Is the earth flat?",
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
-            isCreatorFor: true,
-            category: DebateCategory.SCIENCE,
-            status: DebateStatus.OPEN,
-            createdDate: new Date("2021-05-01"),
-            subscriptionsCount: 3,
-            votesFor: 2,
-            votesAgainst: 1,
-            creatorName: "user1",
-            self: "",
-            image: "",
-            opponent: "",
-            arguments: "",
-            chats: "",
-        },
-        {
-            id: 2,
-            name: "The best programming language is Java",
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
-            isCreatorFor: false,
-            category: DebateCategory.TECHNOLOGY,
-            status: DebateStatus.OPEN,
-            createdDate: new Date("2021-05-01"),
-            subscriptionsCount: 5,
-            votesFor: 2,
-            votesAgainst: 3,
-            creatorName: "user2",
-            self: "",
-            image: "",
-            opponent: "",
-            arguments: "",
-            chats: "",
-        },
-    ];
-
     const search = useLocation().search;
     const selectedCategory = new URLSearchParams(search).get("category");
 
     const [queryOrder, setQueryOrder] = useState("");
     const [queryStatus, setQueryStatus] = useState("");
+    const [page, setPage] = useState(1);
     const navigate = useNavigate();
 
     const handleSelectOrderChange = (event: SelectChangeEvent) => {
@@ -74,6 +39,19 @@ const Discovery = () => {
 
     const handleSelectStatusChange = (event: SelectChangeEvent) => {
         setQueryStatus(event.target.value);
+    };
+
+    const {
+        data: debatesList,
+        loading: isLoading,
+        getDebates: getDebates,
+    } = useGetDebates();
+
+    const handlePageChange = (
+        event: React.ChangeEvent<unknown>,
+        value: number
+    ) => {
+        setPage(value);
     };
 
     useEffect(() => {
@@ -94,8 +72,18 @@ const Discovery = () => {
                 queryParams.append("status", queryStatus);
             }
         }
+        queryParams.append("page", page.toString());
         navigate("/discover?" + queryParams.toString());
-    }, [queryOrder, queryStatus, navigate]);
+        getDebates({
+            category: selectedCategory as DebateCategory,
+            order: queryOrder as DebateOrder,
+            status: queryStatus as DebateStatus,
+            page: page - 1,
+            size: 5,
+        }).catch((error) => {
+            throw new Error("Error loading debates list: ", error);
+        });
+    }, [queryOrder, queryStatus, selectedCategory, page, navigate]);
 
     const orderByProps = {
         queryOrder: queryOrder,
@@ -118,6 +106,9 @@ const Discovery = () => {
                 </div>
                 <div className="debates-list-container">
                     <DebatesList debates={debatesList} />
+                </div>
+                <div className="pagination-container">
+                    <Pagination count={10} onChange={handlePageChange} />
                 </div>
             </div>
         </div>

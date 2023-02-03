@@ -215,6 +215,10 @@ export const TRANSLATIONS_EN = {
             other: "Other",
         },
         orderBy: {
+            placeholders: {
+                all: "All",
+                newest: "Newest",
+            },
             orderBy: {
                 title: "Order by",
                 dateDesc: "Newest",
