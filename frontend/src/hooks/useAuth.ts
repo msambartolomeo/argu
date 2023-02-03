@@ -27,8 +27,6 @@ const useAuth = () => {
         return null;
     });
 
-    console.log(userInfo);
-
     const getAuthToken = () => {
         return localStorage.getItem("authToken");
     };
@@ -55,12 +53,18 @@ const useAuth = () => {
         }
     };
 
+    const callLogout = () => {
+        setRefreshToken(null);
+        setAuthToken(null);
+    };
+
     return {
         getAuthToken,
         getRefreshToken,
         setAuthToken,
         setRefreshToken,
         userInfo,
+        callLogout,
     };
 };
 
