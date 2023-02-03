@@ -56,7 +56,7 @@ function App() {
                             />
 
                             <Route
-                                path="/create_debate"
+                                path="/create-debate"
                                 element={<CreateDebate />}
                             />
 
