@@ -146,6 +146,21 @@ export const TRANSLATIONS_ES = {
         register: "Registrarse",
         alreadyHaveAccount: "¿Ya tienes una cuenta? ",
         login: "¡Ingresa aquí!",
+        errors: {
+            emailEmpty: "La dirección de correo no puede estar vacía",
+            emailTooLong:
+                "La dirección de correo no puede ser más larga que 64 caracteres",
+            emailInvalid: "Por favor ingrese una dirección de correo válida",
+            usernameEmpty: "El nombre de usuario no puede estar vacío",
+            usernameTooLong:
+                "El nombre de usuario no puede ser más largo que 64 caracteres",
+            passwordEmpty: "La contraseña no puede estar vacía",
+            passwordTooLong:
+                "La contraseña no puede ser más larga que 100 caracteres",
+            passwordsDontMatch: "Las contraseñas no coinciden",
+            usernameTaken: "El nombre de usuario ya está en uso",
+            emailTaken: "La dirección de correo ya está en uso",
+        },
     },
     createDebate: {
         createDebate: "Crear debate",

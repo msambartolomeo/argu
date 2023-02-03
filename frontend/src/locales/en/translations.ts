@@ -144,6 +144,18 @@ export const TRANSLATIONS_EN = {
         register: "Register",
         alreadyHaveAccount: "Already have an account? ",
         login: "Login here!",
+        errors: {
+            emailEmpty: "Email cannot be empty",
+            emailTooLong: "Email cannot be longer than 100 characters",
+            emailInvalid: "Please enter a valid email",
+            usernameEmpty: "Username cannot be empty",
+            usernameTooLong: "Username cannot be longer than 64 characters",
+            passwordEmpty: "Password cannot be empty",
+            passwordTooLong: "Password cannot be longer than 100 characters",
+            passwordsDontMatch: "Passwords do not match",
+            usernameTaken: "Username already taken",
+            emailTaken: "Email already taken",
+        },
     },
     createDebate: {
         createDebate: "Create debate",
