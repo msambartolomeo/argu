@@ -1,4 +1,5 @@
 import jwtDecode from "jwt-decode";
+import { useBetween } from "use-between";
 
 import { useState } from "react";
 
@@ -13,12 +14,20 @@ interface UserInfo {
     points: number;
 }
 
-export const useAuth = () => {
+const useAuth = () => {
     // TODO: Deberíamos tener una forma de guardar estos token en la memoria de la página
     // sin siempre buscar a localStorage. Esto es para que no nos modifiquen localStorage
     // mientras se navega y se rompa algo (podría devolver 403 un pedido)
 
-    const [userInfo, setUserInfo] = useState<UserInfo | null>();
+    const [userInfo, setUserInfo] = useState<UserInfo | null>(() => {
+        const token = localStorage.getItem("authToken")?.split(" ")[1];
+        if (token) {
+            return jwtDecode(token);
+        }
+        return null;
+    });
+
+    console.log(userInfo);
 
     const getAuthToken = () => {
         return localStorage.getItem("authToken");
@@ -54,3 +63,5 @@ export const useAuth = () => {
         userInfo,
     };
 };
+
+export const useSharedAuth = () => useBetween(useAuth);
