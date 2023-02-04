@@ -3,10 +3,13 @@ import { useTranslation } from "react-i18next";
 
 import { useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import DebatesList from "../../components/DebatesList/DebatesList";
 import DeleteAccountModal from "../../components/DeleteAccountModal/DeleteAccountModal";
 import EditProfileImageDialog from "../../components/EditProfileImageDialog/EditProfileImageDialog";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
+import { useSharedAuth } from "../../hooks/useAuth";
 import "../../locales/index";
 import "../../root.css";
 import DebateDto from "../../types/dto/DebateDto";
@@ -41,7 +44,13 @@ const UserProfile = () => {
 
     const { t } = useTranslation();
 
-    // TODO: Implement i18n
+    const navigate = useNavigate();
+
+    const { callLogout } = useSharedAuth();
+    const logout = () => {
+        callLogout();
+        navigate("/login");
+    };
 
     return (
         <div className="profile-container">
@@ -58,13 +67,13 @@ const UserProfile = () => {
                     <h6>example@email.com</h6>
                 </div>
                 <h6>{t("profile.createdIn")}: 01/12/22</h6>
-                <a
+                <div
                     className="waves-effect waves-light btn logout-btn"
-                    href="/logout"
+                    onClick={logout}
                 >
                     <i className="material-icons left">logout</i>
                     {t("profile.logout")}
-                </a>
+                </div>
                 <DeleteAccountModal />
             </div>
             <div className="debates-column">
