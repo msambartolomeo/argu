@@ -2,6 +2,7 @@ import { Pagination, SelectChangeEvent } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import { useEffect, useState } from "react";
+import React from "react";
 
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -35,10 +36,12 @@ const Discovery = () => {
 
     const handleSelectOrderChange = (event: SelectChangeEvent) => {
         setQueryOrder(event.target.value);
+        setPage(1);
     };
 
     const handleSelectStatusChange = (event: SelectChangeEvent) => {
         setQueryStatus(event.target.value);
+        setPage(1);
     };
 
     const {
@@ -73,7 +76,6 @@ const Discovery = () => {
             }
         }
         queryParams.append("page", page.toString());
-        navigate("/discover?" + queryParams.toString());
         getDebates({
             category: selectedCategory as DebateCategory,
             order: queryOrder as DebateOrder,
@@ -83,6 +85,7 @@ const Discovery = () => {
         }).catch((error) => {
             throw new Error("Error loading debates list: ", error);
         });
+        navigate("/discover?" + queryParams.toString());
     }, [queryOrder, queryStatus, selectedCategory, page, navigate]);
 
     const orderByProps = {
@@ -94,6 +97,8 @@ const Discovery = () => {
     };
 
     const categories = Object.values(DebateCategory);
+
+    console.log("debatesList", debatesList);
 
     return (
         <div className="discovery-container">
@@ -108,7 +113,14 @@ const Discovery = () => {
                     <DebatesList debates={debatesList} />
                 </div>
                 <div className="pagination-container">
-                    <Pagination count={10} onChange={handlePageChange} />
+                    <Pagination
+                        count={10}
+                        page={page}
+                        onChange={handlePageChange}
+                        showLastButton
+                        showFirstButton
+                        size="large"
+                    />
                 </div>
             </div>
         </div>
