@@ -50,7 +50,7 @@
 
 .section {
     display: flex;
-    flex-display: row;
+    flex-direction: row;
     justify-content: center;
 }
 
