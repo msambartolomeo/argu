@@ -49,10 +49,12 @@ export const DebaterProfile = () => {
         const username = params.url || "";
         getUserByUsername({ username: username }).then(
             (res: GetUserByUrlOutput) => {
-                if (res.status === HttpStatusCode.Ok) {
-                    setUserData(res.data);
-                } else {
-                    setError(res.message);
+                switch (res.status) {
+                    case HttpStatusCode.Ok:
+                        setUserData(res.data);
+                        break;
+                    default:
+                        setError(res.message);
                 }
             }
         );
@@ -76,9 +78,12 @@ export const DebaterProfile = () => {
 
     useEffect(() => {
         if (userData?.image) {
-            getUserImage(userData.image).then((res) => {
-                if (res !== HttpStatusCode.NotFound) {
-                    setUserImage(userData.image);
+            getUserImage(userData.image).then((status) => {
+                switch (status) {
+                    case HttpStatusCode.NotFound:
+                        break;
+                    default:
+                        setUserImage(userData.image);
                 }
             });
         }
