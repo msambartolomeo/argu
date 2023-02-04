@@ -3,10 +3,13 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { FormEvent, useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 import InputField from "../../components/InputField/InputField";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
+import { useLogin } from "../../hooks/requests/useLogin";
 import "../../locales/index";
 import "./Login.css";
 
@@ -14,52 +17,23 @@ const Login = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
+    const { callLogin } = useLogin();
+    const [username, setUsername] = useState<string>();
+    const [password, setPassword] = useState<string>();
+
     const handleRedirect = () => {
         navigate("/register");
     };
 
-    const schema = z.object({
-        username: z
-            .string()
-            .max(64, t("login.usernameTooLong") as string)
-            .min(1, t("login.usernameEmpty") as string),
-        password: z
-            .string()
-            .max(100, t("login.passwordTooLong") as string)
-            .min(1, t("login.passwordEmpty") as string),
-    });
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: zodResolver(schema),
-    });
-
     return (
         <div className="card login-container">
-            <form
-                acceptCharset="utf-8"
-                onSubmit={handleSubmit((data) => {
-                    // TODO: Implement login
-                })}
-            >
+            <form method="post" acceptCharset="utf-8">
                 <div className="card-content container-with-space">
                     <span className="card-title center">
                         {t("login.welcomeBack")}
                     </span>
-                    <InputField
-                        text={t("login.username")}
-                        register={register("username")}
-                        error={errors.username?.message?.toString()}
-                    />
-                    <InputField
-                        text={t("login.password")}
-                        type="password"
-                        register={register("password")}
-                        error={errors.password?.message?.toString()}
-                    />
+                    <InputField text={t("login.username")} />
+                    <InputField text={t("login.password")} type="password" />
                     <div className="left">
                         <label>
                             <input

@@ -4,6 +4,9 @@ export const TRANSLATIONS_ES = {
         login: "Ingresar",
         register: "Registrarse",
         searchBar: "Buscar",
+        createDebate: "Crear Debate",
+        moderator: "Ser Moderador",
+        profile: "Perfil",
     },
     landingPage: {
         about: {

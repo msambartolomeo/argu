@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import axios, { AxiosError, AxiosResponse, HttpStatusCode } from "axios";
 
-import { useAuth } from "../useAuth";
+import { useSharedAuth } from "../useAuth";
 import { AUTHORIZATION_HEADER, REFRESH_HEADER } from "./constants";
 
 export interface BasicCredentials {
@@ -28,7 +28,7 @@ export const useRequestApi = () => {
     const [loading, setLoading] = useState(false);
 
     const { getAuthToken, getRefreshToken, setAuthToken, setRefreshToken } =
-        useAuth();
+        useSharedAuth();
 
     const navigate = useNavigate();
 
@@ -88,10 +88,10 @@ export const useRequestApi = () => {
             if (axios.isAxiosError(err)) {
                 const axiosError = err as AxiosError;
 
+                const response = axiosError.response;
+
                 // TODO: Preguntar si deberíamos también incluir 403 acá.
-                if (
-                    axiosError.response?.status === HttpStatusCode.Unauthorized
-                ) {
+                if (response?.status === HttpStatusCode.Unauthorized) {
                     if (authToken) {
                         // NOTE: authToken expired or invalid, trying again with refreshToken
                         setAuthToken(null);
@@ -106,6 +106,15 @@ export const useRequestApi = () => {
                         headers,
                         requiresAuth,
                     });
+                }
+
+                if (requiresAuth) {
+                    if (response?.headers[AUTHORIZATION_HEADER]) {
+                        setAuthToken(response.headers[AUTHORIZATION_HEADER]);
+                    }
+                    if (response?.headers[REFRESH_HEADER]) {
+                        setRefreshToken(response.headers[REFRESH_HEADER]);
+                    }
                 }
                 return axiosError.response as AxiosResponse;
             }
