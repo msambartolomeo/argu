@@ -72,7 +72,7 @@ export const DebaterProfile = () => {
                 }
             });
         }
-    }, [page]);
+    }, [userData, page]);
 
     useEffect(() => {
         if (userData?.image) {
