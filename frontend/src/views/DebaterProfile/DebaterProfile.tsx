@@ -1,9 +1,9 @@
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination, PaginationItem } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import { useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 import { HttpStatusCode } from "axios";
 
@@ -32,6 +32,11 @@ export const DebaterProfile = () => {
     >();
     const [error, setError] = useState<string | undefined>();
 
+    const [page, setPage] = useState(1);
+    // const location = useLocation();
+    // const query = new URLSearchParams(location.search);
+    // const page = parseInt(query.get("page") || "1", 10);
+
     const { loading: userLoading, getUserByUsername: getUserByUsername } =
         useGetUserByUsername();
 
@@ -55,9 +60,20 @@ export const DebaterProfile = () => {
     }, []);
 
     useEffect(() => {
+        if (userData?.image) {
+            getUserImage(userData.image).then((res) => {
+                if (res !== HttpStatusCode.NotFound) {
+                    setUserImage(userData.image);
+                }
+            });
+        }
+    }, [userData]);
+
+    useEffect(() => {
         if (userData?.debates) {
             getDebatesByUrl({
                 url: userData.debates,
+                page: page - 1,
                 size: 5,
             }).then((res: GetDebatesByUrlOutput) => {
                 switch (res.status) {
@@ -67,15 +83,7 @@ export const DebaterProfile = () => {
                 }
             });
         }
-
-        if (userData?.image) {
-            getUserImage(userData.image).then((res) => {
-                if (res !== HttpStatusCode.NotFound) {
-                    setUserImage(userData.image);
-                }
-            });
-        }
-    }, [userData]);
+    }, [userData, page]);
 
     if (error)
         return <Error status={HttpStatusCode.NotFound} message={error} />;
@@ -101,6 +109,24 @@ export const DebaterProfile = () => {
                         {t("profile.userDebates", { username: "username" })}
                     </h3>
                     <DebatesList debates={userDebates?.data || []} />
+
+                    <Pagination
+                        count={userDebates?.totalPages || 0}
+                        color="primary"
+                        className="white"
+                        renderItem={(item) => (
+                            <PaginationItem
+                                component={Link}
+                                to={
+                                    "/user/" +
+                                    userData?.username +
+                                    "?page=" +
+                                    item.page
+                                }
+                                {...item}
+                            />
+                        )}
+                    />
                 </div>
             </div>
         </div>
