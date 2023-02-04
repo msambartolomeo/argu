@@ -53,3 +53,8 @@
     flex-display: row;
     justify-content: center;
 }
+
+.pagination-format {
+    display: flex;
+    align-self: center;
+}
