@@ -32,10 +32,9 @@ export const DebaterProfile = () => {
     >();
     const [error, setError] = useState<string | undefined>();
 
-    const [page, setPage] = useState(1);
-    // const location = useLocation();
-    // const query = new URLSearchParams(location.search);
-    // const page = parseInt(query.get("page") || "1", 10);
+    const location = useLocation();
+    const query = new URLSearchParams(location.search);
+    const page = parseInt(query.get("page") || "1", 10);
 
     const { loading: userLoading, getUserByUsername: getUserByUsername } =
         useGetUserByUsername();
@@ -60,16 +59,6 @@ export const DebaterProfile = () => {
     }, []);
 
     useEffect(() => {
-        if (userData?.image) {
-            getUserImage(userData.image).then((res) => {
-                if (res !== HttpStatusCode.NotFound) {
-                    setUserImage(userData.image);
-                }
-            });
-        }
-    }, [userData]);
-
-    useEffect(() => {
         if (userData?.debates) {
             getDebatesByUrl({
                 url: userData.debates,
@@ -83,7 +72,17 @@ export const DebaterProfile = () => {
                 }
             });
         }
-    }, [userData, page]);
+    }, [page]);
+
+    useEffect(() => {
+        if (userData?.image) {
+            getUserImage(userData.image).then((res) => {
+                if (res !== HttpStatusCode.NotFound) {
+                    setUserImage(userData.image);
+                }
+            });
+        }
+    }, [userData]);
 
     if (error)
         return <Error status={HttpStatusCode.NotFound} message={error} />;
@@ -114,6 +113,7 @@ export const DebaterProfile = () => {
                         count={userDebates?.totalPages || 0}
                         color="primary"
                         className="white"
+                        page={page}
                         renderItem={(item) => (
                             <PaginationItem
                                 component={Link}
