@@ -29,6 +29,8 @@ public class ListResponseBuilder {
             builder = builder.link(uriInfo.getRequestUriBuilder().replaceQueryParam("page", page + 1).build(), "next");
         }
 
+        builder.header("X-Total-Pages", totalPages);
+
         return builder;
     }
 }
