@@ -7,8 +7,8 @@ import { useGet } from "../requests/useGet";
 
 export interface GetArgumentsInput {
     argumentsUrl: string;
-    page: number;
-    size: number;
+    page?: number;
+    size?: number;
 }
 
 export const useGetArguments = () => {
@@ -20,8 +20,8 @@ export const useGetArguments = () => {
         size,
     }: GetArgumentsInput): Promise<PaginatedOutput<ArgumentDto>> {
         const response = await callGet(argumentsUrl, {}, false, {
-            page: page.toString(),
-            size: size.toString(),
+            page: page?.toString() ?? "0",
+            size: size?.toString() ?? "5",
         });
         switch (response.status) {
             case HttpStatusCode.Ok:
