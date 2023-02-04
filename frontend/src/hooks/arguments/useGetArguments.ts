@@ -29,7 +29,8 @@ export const useGetArguments = () => {
                     status: response.status,
                     data: new PaginatedList<ArgumentDto>(
                         response.data as ArgumentDto[],
-                        response.headers.link as string
+                        response.headers.link as string,
+                        response.headers["x-total-pages"] as string
                     ),
                 };
             default:

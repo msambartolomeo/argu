@@ -1,24 +1,22 @@
+import { CircularProgress } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useGetDebates } from "../../hooks/debates/useGetDebates";
 import "../../locales/index";
+import DebateDto from "../../types/dto/DebateDto";
 import DebateOrder from "../../types/enums/DebateOrder";
 import DebateStatus from "../../types/enums/DebateStatus";
 import DebatesList from "../DebatesList/DebatesList";
 import "./TrendingDebatesComponent.css";
 
-// TODO: Add icons
-
 const TrendingDebatesComponent = () => {
     const { t } = useTranslation();
 
-    const {
-        data: debatesList,
-        loading: isLoading,
-        getDebates: getDebates,
-    } = useGetDebates();
+    const [debates, setDebates] = useState<DebateDto[]>([]);
+
+    const { loading, getDebates } = useGetDebates();
 
     useEffect(() => {
         getDebates({
@@ -26,9 +24,15 @@ const TrendingDebatesComponent = () => {
             status: DebateStatus.OPEN,
             page: 0,
             size: 3,
-        }).catch((error) => {
-            throw new Error("Error loading debates list: ", error);
-        });
+        })
+            .then((out) => {
+                if (out.data) {
+                    setDebates(out.data.data);
+                }
+            })
+            .catch((error) => {
+                throw new Error("Error loading debates list: ", error);
+            });
     }, []);
 
     return (
@@ -40,7 +44,9 @@ const TrendingDebatesComponent = () => {
                 {t("landingPage.trending.title")}
             </h2>
             <div className="debate-list-container">
-                <DebatesList debates={debatesList} />
+                {loading && <CircularProgress size={100} />}
+
+                <DebatesList debates={debates} />
             </div>
         </div>
     );

@@ -1,7 +1,6 @@
-import { useState } from "react";
-
 import { HttpStatusCode } from "axios";
 
+import { PaginatedList } from "../../types/PaginatedList";
 import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateOrder from "../../types/enums/DebateOrder";
@@ -27,7 +26,6 @@ export interface GetDebatesInput {
 }
 
 export const useGetDebates = () => {
-    const [data, setData] = useState<DebateDto[]>([]);
     const { loading, callGet } = useGet();
 
     async function getDebates(inData: GetDebatesInput) {
@@ -47,9 +45,21 @@ export const useGetDebates = () => {
             queryParams
         );
 
-        if (response.status === HttpStatusCode.Ok) {
-            setData(response.data as DebateDto[]);
+        switch (response.status) {
+            case HttpStatusCode.Ok:
+                return {
+                    status: response.status,
+                    data: new PaginatedList<DebateDto>(
+                        response.data as DebateDto[],
+                        response.headers.link as string,
+                        response.headers["x-total-pages"] as string
+                    ),
+                };
+            default:
+                return {
+                    status: response.status,
+                };
         }
     }
-    return { data, loading, getDebates };
+    return { loading, getDebates };
 };

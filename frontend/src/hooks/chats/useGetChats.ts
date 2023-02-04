@@ -29,7 +29,8 @@ export const useGetChats = () => {
                     status: response.status,
                     data: new PaginatedList<ChatDto>(
                         response.data as ChatDto[],
-                        response.headers.link as string
+                        response.headers.link as string,
+                        response.headers["x-total-pages"] as string
                     ),
                 };
             default:
