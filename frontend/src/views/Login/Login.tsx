@@ -27,6 +27,8 @@ const Login = () => {
 
         // TODO: validate username and password are filled with zod
         callLogin(username || "", password || "");
+        // FIXME: Go to last page
+        navigate("/");
     };
 
     return (

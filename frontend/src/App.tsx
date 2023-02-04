@@ -10,7 +10,9 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
+import { useSharedAuth } from "./hooks/useAuth";
 import "./root.css";
+import UserRole from "./types/enums/UserRole";
 import CreateDebate from "./views/CreateDebate/CreateDebate";
 import DebateView from "./views/DebateView/DebateView";
 import { DebaterProfile } from "./views/DebaterProfile/DebaterProfile";
@@ -26,6 +28,8 @@ function App() {
         M.AutoInit();
     }, []);
 
+    const { userInfo } = useSharedAuth();
+
     return (
         <div className="page-container">
             <div className="content-wrap">
@@ -39,29 +43,39 @@ function App() {
                                 path="/user/:url"
                                 element={<DebaterProfile />}
                             />
-                            <Route // Profile Page
-                                path="/profile/"
-                                element={<UserProfile />}
-                            />
-
                             <Route path="/discover" element={<Discovery />} />
                             <Route
                                 path="/debate/:id"
                                 element={<DebateView />}
                             />
-
-                            <Route // Maybe this could be a modal, and avoid the extra page
-                                path="/moderator"
-                                element={<RequestModerator />}
-                            />
-
-                            <Route
-                                path="/create-debate"
-                                element={<CreateDebate />}
-                            />
-
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
+                            {userInfo ? (
+                                <>
+                                    <Route // Profile Page
+                                        path="/profile/"
+                                        element={<UserProfile />}
+                                    />
+                                    {userInfo.role === UserRole.USER ? (
+                                        <Route // Maybe this could be a modal, and avoid the extra page
+                                            path="/moderator"
+                                            element={<RequestModerator />}
+                                        />
+                                    ) : (
+                                        <Route
+                                            path="/create-debate"
+                                            element={<CreateDebate />}
+                                        />
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <Route path="/login" element={<Login />} />
+                                    <Route
+                                        path="/register"
+                                        element={<Register />}
+                                    />
+                                </>
+                            )}
+                            {/* TODO: Add error pages routing */}
                         </Routes>
                     </div>
                 </Router>
