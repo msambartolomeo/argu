@@ -122,26 +122,26 @@ export const DebaterProfile = () => {
                     </h3>
                     <DebatesList debates={userDebates?.data || []} />
 
-                    <div className="pagination-format">
-                        <Pagination
-                            count={userDebates?.totalPages || 0}
-                            color="primary"
-                            className="white"
-                            page={page}
-                            renderItem={(item) => (
-                                <PaginationItem
-                                    component={Link}
-                                    to={
-                                        "/user/" +
-                                        userData?.username +
-                                        "?page=" +
-                                        item.page
-                                    }
-                                    {...item}
-                                />
-                            )}
-                        />
-                    </div>
+                    {userDebates && (
+                        <div className="pagination-format">
+                            <Pagination
+                                count={userDebates?.totalPages || 0}
+                                color="primary"
+                                className="white"
+                                page={page}
+                                renderItem={(item) => (
+                                    <PaginationItem
+                                        component={Link}
+                                        to={{
+                                            pathname: `/user/${params.url}`,
+                                            search: `?page=${item.page}`,
+                                        }}
+                                        {...item}
+                                    />
+                                )}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
