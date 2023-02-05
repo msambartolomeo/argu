@@ -14,11 +14,10 @@ interface ErrorProps {
     message?: string;
 }
 
-export const Error = ({
-    status,
-    message = "An error has ocurred",
-}: ErrorProps) => {
+export const Error = ({ status, message }: ErrorProps) => {
     const { t } = useTranslation();
+
+    typeof message === "undefined" ? t("error.message") : message;
 
     let image = "";
     switch (status) {
