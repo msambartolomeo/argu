@@ -1,3 +1,5 @@
+import { SelectChangeEvent } from "@mui/material";
+import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 
 import { RefObject } from "react";
@@ -33,6 +35,8 @@ const OrderByComponent = ({
     date,
 }: OrderByComponentProps) => {
     const { t } = useTranslation();
+
+    const today = format(new Date(), "dd-MM-yyyy");
 
     const datePickerPlaceholder: string = t(
         "discovery.orderBy.datePicker.placeholder"
@@ -95,7 +99,7 @@ const OrderByComponent = ({
                     <DatePicker
                         label={t("discovery.orderBy.datePicker.label")}
                         placeholder={datePickerPlaceholder}
-                        // currentDate={today}
+                        currentDate={today}
                         date={date}
                         // setDate={setDate}
                     />

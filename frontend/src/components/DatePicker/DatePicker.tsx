@@ -13,12 +13,12 @@ type Props = {
     date: RefObject<HTMLInputElement>;
 };
 
-function DatePicker({ label, placeholder, currentDate }: Props) {
-    const date = useRef() as RefObject<HTMLInputElement>;
+function DatePicker({ label, placeholder, currentDate, date }: Props) {
+    // const date = useRef() as RefObject<HTMLInputElement>;
 
     function reloadDebates() {
         // TODO: check if it is necesary to reload (maybe it can be done in the store)
-        // console.log(date.current?.value);
+        console.log(date.current?.value);
         // TODO: change debates state
     }
 
