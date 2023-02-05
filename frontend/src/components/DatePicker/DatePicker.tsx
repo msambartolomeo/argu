@@ -41,7 +41,7 @@ function DatePicker({ label, placeholder, currentDate, date }: Props) {
                     id="datepicker"
                     placeholder={placeholder}
                     type="text"
-                    className="datepicker white-text"
+                    className="datepicker white-text no-autoinit"
                     ref={date}
                     value={currentDate}
                 />
