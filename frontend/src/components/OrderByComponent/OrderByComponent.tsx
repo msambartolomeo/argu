@@ -1,5 +1,4 @@
 import { SelectChangeEvent } from "@mui/material";
-import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 
 import { RefObject } from "react";
@@ -11,11 +10,6 @@ import { SelectChangeEvent } from "@mui/material";
 import "./OrderByComponent.css";
 import SortSelectComponent from "./SortSelectComponent/SortSelectComponent";
 
-import "../../locales/index";
-import DatePicker from "../DatePicker/DatePicker";
-
-// TODO: add i18n to DatePicker
-
 interface OrderByComponentProps {
     queryOrder: string;
     handleSelectOrderChange: (event: SelectChangeEvent) => void;
@@ -23,7 +17,6 @@ interface OrderByComponentProps {
     handleSelectStatusChange: (event: SelectChangeEvent) => void;
     selectedCategory: string | null;
     date: RefObject<HTMLInputElement>;
-    // setDate: (date: SetStateAction<Dayjs | null>) => void;
 }
 
 const OrderByComponent = ({
@@ -35,8 +28,6 @@ const OrderByComponent = ({
     date,
 }: OrderByComponentProps) => {
     const { t } = useTranslation();
-
-    const today = format(new Date(), "dd-MM-yyyy");
 
     const datePickerPlaceholder: string = t(
         "discovery.orderBy.datePicker.placeholder"
@@ -99,9 +90,8 @@ const OrderByComponent = ({
                     <DatePicker
                         label={t("discovery.orderBy.datePicker.label")}
                         placeholder={datePickerPlaceholder}
-                        currentDate={today}
                         date={date}
-                        // setDate={setDate}
+                        currentDate=""
                     />
                 </div>
             </div>

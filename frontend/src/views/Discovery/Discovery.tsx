@@ -62,19 +62,18 @@ const Discovery = () => {
         const queryParams = new URLSearchParams();
         if (selectedCategory) {
             queryParams.append("category", selectedCategory);
-            if (queryOrder) {
-                queryParams.append("order", queryOrder);
-            }
-            if (queryStatus) {
-                queryParams.append("status", queryStatus);
-            }
-        } else {
-            if (queryOrder) {
-                queryParams.append("order", queryOrder);
-            }
-            if (queryStatus) {
-                queryParams.append("status", queryStatus);
-            }
+        }
+        if (queryOrder) {
+            queryParams.append("order", queryOrder);
+        }
+        if (queryStatus) {
+            queryParams.append("status", queryStatus);
+        }
+        // if (selectedDate) {
+        //     queryParams.append("date", selectedDate);
+        // }
+        if (date.current && date.current.value !== "") {
+            queryParams.append("date", date.current.value);
         }
         queryParams.append("page", page.toString());
         getDebates({
@@ -87,7 +86,7 @@ const Discovery = () => {
             throw new Error("Error loading debates list: ", error);
         });
         navigate("/discover?" + queryParams.toString());
-    }, [queryOrder, queryStatus, selectedCategory, page, navigate]);
+    }, [queryOrder, queryStatus, selectedCategory, page, date, navigate]);
 
     const orderByProps = {
         queryOrder: queryOrder,
@@ -97,10 +96,6 @@ const Discovery = () => {
         selectedCategory: selectedCategory,
         date: date,
     };
-
-    const categories = Object.values(DebateCategory);
-
-    console.log("debatesList", debatesList);
 
     return (
         <div className="discovery-container">
