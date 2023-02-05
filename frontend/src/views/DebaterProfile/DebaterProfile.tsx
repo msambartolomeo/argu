@@ -60,7 +60,7 @@ export const DebaterProfile = () => {
         );
     }, []);
 
-    useEffect(() => {
+    const fetchUserDebates = useCallback(() => {
         if (userData?.debates) {
             getDebatesByUrl({
                 url: userData.debates,
@@ -75,6 +75,10 @@ export const DebaterProfile = () => {
             });
         }
     }, [userData, page]);
+
+    useEffect(() => {
+        fetchUserDebates();
+    }, [fetchUserDebates]);
 
     const fetchProfileImage = useCallback(() => {
         if (userData?.image) {
