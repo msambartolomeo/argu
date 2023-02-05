@@ -132,11 +132,13 @@ export const TRANSLATIONS_EN = {
         login: "Login",
         noAccount: "Don't have an account? ",
         register: "Register here!",
-        usernameOrPasswordIncorrect: "Username or password incorrect",
-        usernameEmpty: "Username cannot be empty",
-        passwordEmpty: "Password cannot be empty",
-        usernameTooLong: "Username cannot be longer than 64 characters",
-        passwordTooLong: "Password cannot be longer than 100 characters",
+        errors: {
+            usernameOrPasswordIncorrect: "Username or password incorrect",
+            usernameEmpty: "Username cannot be empty",
+            passwordEmpty: "Password cannot be empty",
+            usernameTooLong: "Username cannot be longer than 64 characters",
+            passwordTooLong: "Password cannot be longer than 100 characters",
+        },
     },
     register: {
         firstTime: "First time? Welcome!",

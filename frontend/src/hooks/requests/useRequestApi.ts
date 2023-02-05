@@ -94,6 +94,10 @@ export const useRequestApi = () => {
 
                 // TODO: Preguntar si deberíamos también incluir 403 acá.
                 if (response?.status === HttpStatusCode.Unauthorized) {
+                    if (credentials) {
+                        // NOTE: Basic credentials invalid, only possible during login, returning
+                        return axiosError.response as AxiosResponse;
+                    }
                     if (authToken) {
                         // NOTE: authToken expired or invalid, trying again with refreshToken
                         setAuthToken(null);

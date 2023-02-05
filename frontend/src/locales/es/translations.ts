@@ -131,14 +131,16 @@ export const TRANSLATIONS_ES = {
         login: "Ingresar",
         noAccount: "¿No tienes cuenta? ",
         register: "¡Regístrate aquí!",
-        usernameOrPasswordIncorrect:
-            "Nombre de usuario o contraseña incorrectos",
-        usernameEmpty: "El nombre de usuario no puede estar vacío",
-        passwordEmpty: "La contraseña no puede estar vacía",
-        usernameTooLong:
-            "El nombre de usuario no puede ser más largo que 64 caracteres",
-        passwordTooLong:
-            "La contraseña no puede ser más larga que 100 caracteres",
+        errors: {
+            usernameOrPasswordIncorrect:
+                "Nombre de usuario o contraseña incorrectos",
+            usernameEmpty: "El nombre de usuario no puede estar vacío",
+            passwordEmpty: "La contraseña no puede estar vacía",
+            usernameTooLong:
+                "El nombre de usuario no puede ser más largo que 64 caracteres",
+            passwordTooLong:
+                "La contraseña no puede ser más larga que 100 caracteres",
+        },
     },
     register: {
         firstTime: "¿Primera vez? ¡Bienvenido!",

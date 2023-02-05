@@ -33,6 +33,7 @@ const Login = () => {
         register,
         handleSubmit,
         formState: { errors },
+        setError,
     } = useForm({
         resolver: zodResolver(schema),
     });
@@ -41,13 +42,25 @@ const Login = () => {
         navigate("/register");
     };
 
-    const handleLogin = (data: FieldValues) => {
-        callLogin(data.username, data.password);
-        // NOTE: Redirect to previous page if it exists, otherwise redirect to home
-        console.log(location);
-        location.state?.from
-            ? navigate(location.state.from, { replace: true })
-            : navigate("/", { replace: true });
+    const handleLogin = async (data: FieldValues) => {
+        const loggedIn = await callLogin(data.username, data.password);
+        if (loggedIn) {
+            // NOTE: Redirect to previous page if it exists, otherwise redirect to home
+            location.state?.from
+                ? navigate(location.state.from, { replace: true })
+                : navigate("/", { replace: true });
+        } else {
+            setError("password", {
+                message: t(
+                    "login.errors.usernameOrPasswordIncorrect"
+                ) as string,
+            });
+            setError("username", {
+                message: t(
+                    "login.errors.usernameOrPasswordIncorrect"
+                ) as string,
+            });
+        }
     };
 
     return (
