@@ -10,6 +10,7 @@ type Props = {
     label: string;
     placeholder?: string;
     currentDate?: string;
+    date: RefObject<HTMLInputElement>;
 };
 
 function DatePicker({ label, placeholder, currentDate }: Props) {

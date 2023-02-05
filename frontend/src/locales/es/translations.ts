@@ -238,6 +238,10 @@ export const TRANSLATIONS_ES = {
                 closed: "Cerrado",
                 all: "Todos",
             },
+            datePicker: {
+                label: "Creado desde",
+                placeholder: "Fecha",
+            },
             showingAllDebates: "Mostrando todos los debates",
             showingDebatesInCategory:
                 "Mostrando debates en la categoría: {{category}}",

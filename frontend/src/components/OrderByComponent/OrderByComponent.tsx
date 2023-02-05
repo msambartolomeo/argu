@@ -1,5 +1,9 @@
 import { useTranslation } from "react-i18next";
 
+import { RefObject } from "react";
+
+import "../../locales/index";
+import DatePicker from "../DatePicker/DatePicker";
 import { SelectChangeEvent } from "@mui/material";
 
 import "./OrderByComponent.css";
@@ -16,6 +20,8 @@ interface OrderByComponentProps {
     queryStatus: string;
     handleSelectStatusChange: (event: SelectChangeEvent) => void;
     selectedCategory: string | null;
+    date: RefObject<HTMLInputElement>;
+    // setDate: (date: SetStateAction<Dayjs | null>) => void;
 }
 
 const OrderByComponent = ({
@@ -24,8 +30,13 @@ const OrderByComponent = ({
     queryStatus,
     handleSelectStatusChange,
     selectedCategory,
+    date,
 }: OrderByComponentProps) => {
     const { t } = useTranslation();
+
+    const datePickerPlaceholder: string = t(
+        "discovery.orderBy.datePicker.placeholder"
+    );
 
     const orderBySuppliers = [
         { value: "date_desc", label: "dateDesc" },
@@ -81,7 +92,13 @@ const OrderByComponent = ({
                     <SortSelectComponent {...statusProps} />
                 </div>
                 <div className="date-picker-container">
-                    <DatePicker label="Date" placeholder="Select a date" />
+                    <DatePicker
+                        label={t("discovery.orderBy.datePicker.label")}
+                        placeholder={datePickerPlaceholder}
+                        // currentDate={today}
+                        date={date}
+                        // setDate={setDate}
+                    />
                 </div>
             </div>
         </div>

@@ -28,6 +28,7 @@ const Discovery = () => {
 
     const search = useLocation().search;
     const selectedCategory = new URLSearchParams(search).get("category");
+    const date = useRef() as RefObject<HTMLInputElement>;
 
     const [queryOrder, setQueryOrder] = useState("");
     const [queryStatus, setQueryStatus] = useState("");
@@ -94,6 +95,7 @@ const Discovery = () => {
         queryStatus: queryStatus,
         handleSelectStatusChange: handleSelectStatusChange,
         selectedCategory: selectedCategory,
+        date: date,
     };
 
     const categories = Object.values(DebateCategory);

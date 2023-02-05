@@ -234,6 +234,10 @@ export const TRANSLATIONS_EN = {
                 closed: "Closed",
                 all: "All",
             },
+            datePicker: {
+                label: "Created since",
+                placeholder: "Date",
+            },
             showingAllDebates: "Showing all debates",
             showingDebatesInCategory:
                 "Showing debates in category: {{category}}",

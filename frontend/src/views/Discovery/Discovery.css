@@ -15,7 +15,6 @@
 .debates-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     width: 70%;
     background-color: transparent;
@@ -57,7 +56,5 @@
 }
 
 .discovery-container .debates-container .pagination-container button:focus {
-    background-color: transparent !important;
+    background-color: rgba(0, 0, 0, 0.08) !important;
 }
-
-/* .css-rppfq7-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected; */
