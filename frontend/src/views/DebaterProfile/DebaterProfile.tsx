@@ -1,7 +1,7 @@
 import { CircularProgress, Pagination, PaginationItem } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Link, useLocation, useParams } from "react-router-dom";
 
@@ -76,7 +76,7 @@ export const DebaterProfile = () => {
         }
     }, [userData, page]);
 
-    useEffect(() => {
+    const fetchProfileImage = useCallback(() => {
         if (userData?.image) {
             getUserImage(userData.image).then((status) => {
                 switch (status) {
@@ -88,6 +88,10 @@ export const DebaterProfile = () => {
             });
         }
     }, [userData]);
+
+    useEffect(() => {
+        fetchProfileImage();
+    }, [fetchProfileImage]);
 
     if (error)
         return <Error status={HttpStatusCode.NotFound} message={error} />;
