@@ -1,7 +1,7 @@
 import { Pagination, SelectChangeEvent } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { useEffect, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import React from "react";
 
 import { useTranslation } from "react-i18next";
