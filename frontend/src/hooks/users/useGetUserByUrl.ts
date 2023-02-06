@@ -9,17 +9,30 @@ export interface GetUserByUrlInput {
     url: string;
 }
 
+export interface GetUserByUrlOutput {
+    status: HttpStatusCode;
+    data?: UserDto;
+    message?: string;
+}
+
 export const useGetUserByUrl = () => {
     const { loading, callGet } = useGet();
-    const [data, setData] = useState<UserDto | null>();
 
     async function getUserByUrl({ url }: GetUserByUrlInput) {
         const response = await callGet(url, {}, false);
 
-        if (response.status === HttpStatusCode.Ok) {
-            setData(response.data as UserDto);
+        switch (response.status) {
+            case HttpStatusCode.Ok:
+                return {
+                    status: response.status,
+                    data: response.data as UserDto,
+                };
+            default:
+                return {
+                    status: response.status,
+                    message: response.data?.message,
+                };
         }
-        return response.status;
     }
-    return { data, loading, getUserByUrl };
+    return { loading, getUserByUrl };
 };

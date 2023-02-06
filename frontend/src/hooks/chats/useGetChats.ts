@@ -7,8 +7,8 @@ import { useGet } from "../requests/useGet";
 
 export interface GetChatsInput {
     debateUrl: string;
-    page: number;
-    size: number;
+    page?: number;
+    size?: number;
 }
 
 export const useGetChats = () => {
@@ -20,8 +20,8 @@ export const useGetChats = () => {
         size,
     }: GetChatsInput): Promise<PaginatedOutput<ChatDto>> {
         const response = await callGet(debateUrl, {}, false, {
-            page: page.toString(),
-            size: size.toString(),
+            page: page?.toString() ?? "0",
+            size: size?.toString() ?? "15",
         });
         switch (response.status) {
             case HttpStatusCode.Ok:
@@ -29,7 +29,8 @@ export const useGetChats = () => {
                     status: response.status,
                     data: new PaginatedList<ChatDto>(
                         response.data as ChatDto[],
-                        response.headers.link as string
+                        response.headers.link as string,
+                        response.headers["x-total-pages"] as string
                     ),
                 };
             default:

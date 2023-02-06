@@ -241,6 +241,7 @@ export const TRANSLATIONS_ES = {
     },
     error: {
         title: "¡Ups!",
+        message: "Ha ocurrido un error.",
         goBack: "Volver a inicio.",
     },
 };

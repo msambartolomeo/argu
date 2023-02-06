@@ -6,12 +6,12 @@ export interface GetUserByUsernameInput {
 }
 
 export const useGetUserByUsername = () => {
-    const { data, loading, getUserByUrl } = useGetUserByUrl();
+    const { loading, getUserByUrl } = useGetUserByUrl();
 
     async function getUserByUsername({ username }: GetUserByUsernameInput) {
         return await getUserByUrl({
-            url: `${USERS_ENDPOINT}/${encodeURI(username)}`,
+            url: `${USERS_ENDPOINT}${encodeURI(username)}`,
         });
     }
-    return { data, loading, getUserByUsername };
+    return { loading, getUserByUsername };
 };

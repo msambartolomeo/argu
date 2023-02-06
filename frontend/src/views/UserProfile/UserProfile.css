@@ -50,6 +50,11 @@
 
 .section {
     display: flex;
-    flex-display: row;
+    flex-direction: row;
     justify-content: center;
+}
+
+.pagination-format {
+    display: flex;
+    align-self: center;
 }

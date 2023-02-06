@@ -2,6 +2,8 @@ import { useTranslation } from "react-i18next";
 
 import { Link } from "react-router-dom";
 
+import { HttpStatusCode } from "axios";
+
 import error400 from "../../assets/error400.png";
 import error404 from "../../assets/error404.png";
 import error500 from "../../assets/error500.png";
@@ -9,18 +11,20 @@ import "./Error.css";
 
 interface ErrorProps {
     status: number;
-    message: string;
+    message?: string;
 }
 
 export const Error = ({ status, message }: ErrorProps) => {
     const { t } = useTranslation();
 
+    typeof message === "undefined" ? t("error.message") : message;
+
     let image = "";
     switch (status) {
-        case 400:
+        case HttpStatusCode.BadRequest:
             image = error400;
             break;
-        case 404:
+        case HttpStatusCode.NotFound:
             image = error404;
             break;
         default:

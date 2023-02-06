@@ -237,6 +237,7 @@ export const TRANSLATIONS_EN = {
     },
     error: {
         title: "Oops!",
+        message: "An error has ocurred.",
         goBack: "Go back to the homepage",
     },
 };
