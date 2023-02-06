@@ -18,7 +18,7 @@ const ProfileImage = ({ image = defaultProfilePhoto }: ProfileImageProps) => {
         <>
             <div className="profile-image">
                 <img
-                    src={image}
+                    src={image ? image : defaultProfilePhoto}
                     alt={profilePhotoAlt}
                     className="responsive-img"
                 />
