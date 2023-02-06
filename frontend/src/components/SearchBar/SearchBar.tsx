@@ -1,4 +1,10 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+
+import {
+    createSearchParams,
+    useNavigate,
+    useSearchParams,
+} from "react-router-dom";
 
 import "./SearchBar.css";
 
@@ -8,11 +14,42 @@ interface Props {
 
 function SearchBar({ placeholder }: Props) {
     const [query, setQuery] = useState("");
+    const [queryParams, setQueryParams] = useSearchParams();
+    const navigate = useNavigate();
 
     const search = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // TODO: Handle search
+        navigate({
+            pathname: "/discover",
+            search: createSearchParams(queryParams).toString(),
+        });
     };
+
+    useEffect(() => {
+        const listener = (e: KeyboardEvent) => {
+            if (e.key === "Enter" || e.key === "NumPadEnter") {
+                search(e as any);
+            }
+        };
+        // TODO: check if this is needed
+        // document.addEventListener("keydown", listener);
+        // return () => {
+        //     document.removeEventListener("keydown", listener);
+        // };
+    }, [query]);
+
+    useEffect(() => {
+        queryParams.delete("page");
+        // TODO: check if this is needed
+        // queryParams.delete("order");
+        // queryParams.delete("status");
+        // queryParams.delete("category");
+        queryParams.delete("search");
+        if (query) {
+            queryParams.append("search", query);
+        }
+        setQueryParams(queryParams);
+    }, [query]);
 
     return (
         <form onSubmit={search}>

@@ -50,6 +50,7 @@ const Discovery = () => {
                 (queryParams.get("page") as unknown as number) - 1 >= 0
                     ? (queryParams.get("page") as unknown as number) - 1
                     : 0,
+            search: queryParams.get("search") as string,
         }).catch((error) => {
             throw new Error("Error loading debates list: ", error);
         });
