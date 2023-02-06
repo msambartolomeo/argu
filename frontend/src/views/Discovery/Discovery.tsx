@@ -46,7 +46,10 @@ const Discovery = () => {
             order: queryParams.get("order") as DebateOrder,
             status: queryParams.get("status") as DebateStatus,
             date: queryParams.get("date") as string,
-            page: (queryParams.get("page") as unknown as number) - 1,
+            page:
+                (queryParams.get("page") as unknown as number) - 1 >= 0
+                    ? (queryParams.get("page") as unknown as number) - 1
+                    : 0,
         }).catch((error) => {
             throw new Error("Error loading debates list: ", error);
         });
