@@ -42,6 +42,10 @@
     border-radius: 10px !important;
 }
 
+.category-button:hover {
+    cursor: pointer;
+}
+
 .category-filters-container .categories-stack .selected-category-button {
     background-color: var(--primary-color) !important;
     color: white !important;

@@ -1,5 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+
+import { useEffect, useState } from "react";
+
+import { useSearchParams } from "react-router-dom";
 
 import { Stack } from "@mui/material";
 
@@ -8,14 +11,23 @@ import "./CategoryFilters.css";
 import "../../locales/index";
 import DebateCategory from "../../types/enums/DebateCategory";
 
-interface CategoryFiltersProps {
-    selectedCategory: string | null;
-}
-
-const CategoryFilters = ({ selectedCategory }: CategoryFiltersProps) => {
+const CategoryFilters = () => {
     const { t } = useTranslation();
 
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [selectedCategory, setSelectedCategory] = useState(
+        queryParams.get("category")
+    );
     const categories = Object.values(DebateCategory);
+
+    useEffect(() => {
+        queryParams.delete("category");
+        queryParams.delete("page");
+        if (selectedCategory) {
+            queryParams.append("category", selectedCategory);
+        }
+        setQueryParams(queryParams);
+    }, [selectedCategory]);
 
     return (
         <div className="category-filters-container">
@@ -23,8 +35,10 @@ const CategoryFilters = ({ selectedCategory }: CategoryFiltersProps) => {
                 {t("discovery.categories.title")}
             </h5>
             <Stack direction="column" spacing={1} className="categories-stack">
-                <Link
-                    to="/discover"
+                <div
+                    onClick={() => {
+                        setSelectedCategory(null);
+                    }}
                     className={`category-button ${
                         selectedCategory === null
                             ? "selected-category-button"
@@ -32,19 +46,21 @@ const CategoryFilters = ({ selectedCategory }: CategoryFiltersProps) => {
                     }`}
                 >
                     {t("discovery.categories.all")}
-                </Link>
+                </div>
                 {categories.map((category) => (
-                    <Link
+                    <div
                         key={category}
-                        to={`/discover?category=${category}`}
                         className={`category-button ${
                             category === selectedCategory
                                 ? "selected-category-button"
                                 : ""
                         }`}
+                        onClick={() => {
+                            setSelectedCategory(category);
+                        }}
                     >
                         {t(`discovery.categories.${category}`)}
-                    </Link>
+                    </div>
                 ))}
             </Stack>
         </div>

@@ -16,7 +16,7 @@ export interface GetDebatesInput {
     category?: DebateCategory;
     order?: DebateOrder;
     status?: DebateStatus;
-    date?: Date;
+    date?: string;
     recommendToDebate?: number;
     userUrl?: string;
     subscribed?: boolean;

@@ -1,7 +1,9 @@
 import M from "materialize-css";
 import { useTranslation } from "react-i18next";
 
-import { RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
+
+import { useSearchParams } from "react-router-dom";
 
 import "../../locales/index";
 import "./DatePicker.css";
@@ -9,35 +11,50 @@ import "./DatePicker.css";
 type Props = {
     label: string;
     placeholder?: string;
-    currentDate?: string;
-    date: RefObject<HTMLInputElement>;
 };
 
-function DatePicker({ label, placeholder, currentDate, date }: Props) {
+function DatePicker({ label, placeholder }: Props) {
     const { t } = useTranslation();
 
-    function reloadDebates() {
-        // TODO: check if it is necesary to reload (maybe it can be done in the store)
-    }
+    const date = useRef() as RefObject<HTMLInputElement>;
+
+    const [queryParams, setQueryParams] = useSearchParams();
+
+    const [update, setUpdate] = useState(false);
+
+    useEffect(() => {
+        queryParams.delete("date");
+        queryParams.delete("page");
+        if (date.current && date.current.value.toString() !== "") {
+            queryParams.append("date", date.current.value);
+        }
+        setQueryParams(queryParams);
+        setUpdate(false);
+    }, [update]);
 
     const datePickerCancel: string = t("discovery.orderBy.datePicker.cancel");
     const datePickerClear: string = t("discovery.orderBy.datePicker.clear");
     const datePickerDone: string = t("discovery.orderBy.datePicker.done");
 
+    const queryDate = queryParams.get("date");
+    let defaultDate: Date | null;
+    if (queryDate) {
+        const queryDateArray = queryDate.split("-");
+        const dateString = `${queryDateArray[2]}-${queryDateArray[1]}-${
+            Number(queryDateArray[0]) + 1
+        }`;
+        defaultDate = new Date(dateString);
+    } else {
+        defaultDate = null;
+    }
+
     useEffect(() => {
-        const queryParams = new URLSearchParams();
         M.Datepicker.init(document.querySelectorAll(".datepicker"), {
             format: "dd-mm-yyyy",
             showClearBtn: true,
-            onClose: () => {
-                // TODO check why url is not updated instantly but after other action
-                // console.log(date.current?.value);
-                // queryParams.delete("date");
-                // if (date.current && date.current.value.toString() !== "") {
-                //     queryParams.append("date", date.current.value);
-                // }
-                // navigate({ search: queryParams.toString() });
-            },
+            onClose: () => setUpdate(true),
+            setDefaultDate: true,
+            defaultDate: defaultDate,
             i18n: {
                 cancel: datePickerCancel,
                 clear: datePickerClear,
@@ -113,7 +130,6 @@ function DatePicker({ label, placeholder, currentDate, date }: Props) {
                     type="text"
                     className="datepicker white-text no-autoinit"
                     ref={date}
-                    value={date.current?.value || currentDate || ""}
                 />
             </div>
         </>

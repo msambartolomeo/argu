@@ -1,7 +1,9 @@
 import { SelectChangeEvent } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { RefObject } from "react";
+import { useEffect, useState } from "react";
+
+import { useSearchParams } from "react-router-dom";
 
 import "../../locales/index";
 import DatePicker from "../DatePicker/DatePicker";
@@ -10,23 +12,7 @@ import { SelectChangeEvent } from "@mui/material";
 import "./OrderByComponent.css";
 import SortSelectComponent from "./SortSelectComponent/SortSelectComponent";
 
-interface OrderByComponentProps {
-    queryOrder: string;
-    handleSelectOrderChange: (event: SelectChangeEvent) => void;
-    queryStatus: string;
-    handleSelectStatusChange: (event: SelectChangeEvent) => void;
-    selectedCategory: string | null;
-    date: RefObject<HTMLInputElement>;
-}
-
-const OrderByComponent = ({
-    queryOrder,
-    handleSelectOrderChange,
-    queryStatus,
-    handleSelectStatusChange,
-    selectedCategory,
-    date,
-}: OrderByComponentProps) => {
+const OrderByComponent = () => {
     const { t } = useTranslation();
 
     const datePickerPlaceholder: string = t(
@@ -47,6 +33,41 @@ const OrderByComponent = ({
         { value: "open", label: "open" },
         { value: "closed", label: "closed" },
     ];
+
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [queryOrder, setQueryOrder] = useState(
+        queryParams.get("order") ?? ""
+    );
+    const [queryStatus, setQueryStatus] = useState(
+        queryParams.get("status") ?? ""
+    );
+    const selectedCategory = queryParams.get("category");
+
+    const handleSelectOrderChange = (event: SelectChangeEvent) => {
+        setQueryOrder(event.target.value);
+    };
+
+    const handleSelectStatusChange = (event: SelectChangeEvent) => {
+        setQueryStatus(event.target.value);
+    };
+
+    useEffect(() => {
+        queryParams.delete("order");
+        queryParams.delete("page");
+        if (queryOrder) {
+            queryParams.append("order", queryOrder);
+        }
+        setQueryParams(queryParams);
+    }, [queryOrder]);
+
+    useEffect(() => {
+        queryParams.delete("status");
+        queryParams.delete("page");
+        if (queryStatus) {
+            queryParams.append("status", queryStatus);
+        }
+        setQueryParams(queryParams);
+    }, [queryStatus]);
 
     const orderByProps = {
         header: "Order by",
@@ -90,8 +111,6 @@ const OrderByComponent = ({
                     <DatePicker
                         label={t("discovery.orderBy.datePicker.label")}
                         placeholder={datePickerPlaceholder}
-                        date={date}
-                        currentDate=""
                     />
                 </div>
             </div>
