@@ -24,12 +24,10 @@
     ],
     "importOrder": [
         "^react$",
-        "^react-dom$",
-        "^react-router-dom$",
-        "^axios$",
-        "^@mui$",
-        "^\\w$",
-        "^[./]"
+        "^[a-zA-Z0-9].*",
+        "@.*",
+        "^./[./]*",
+        "^[./]*"
     ],
     "importOrderSeparation": true,
     "importOrderSortSpecifiers": true
