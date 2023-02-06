@@ -15,7 +15,6 @@ import DebatesList from "../../components/DebatesList/DebatesList";
 import OrderByComponent from "../../components/OrderByComponent/OrderByComponent";
 import { useGetDebates } from "../../hooks/debates/useGetDebates";
 import "../../locales/index";
-import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateOrder from "../../types/enums/DebateOrder";
 import DebateStatus from "../../types/enums/DebateStatus";
@@ -35,22 +34,19 @@ const Discovery = () => {
         getDebates: getDebates,
     } = useGetDebates();
 
-    const handlePageChange = (
-        event: React.ChangeEvent<unknown>,
-        value: number
-    ) => {
-        setPage(value);
-    };
+    useEffect(() => {
+        queryParams.delete("page");
+        queryParams.append("page", page.toString());
+        setQueryParams(queryParams);
+    }, [page]);
 
     useEffect(() => {
-        // TODO: handle page updates in another useEffect
-        // queryParams.append("page", page.toString());
         getDebates({
             category: queryParams.get("category") as DebateCategory,
             order: queryParams.get("order") as DebateOrder,
             status: queryParams.get("status") as DebateStatus,
             date: queryParams.get("date") as string,
-            page: page - 1,
+            page: (queryParams.get("page") as unknown as number) - 1,
         }).catch((error) => {
             throw new Error("Error loading debates list: ", error);
         });
@@ -72,7 +68,9 @@ const Discovery = () => {
                     <Pagination
                         count={10}
                         page={page}
-                        onChange={handlePageChange}
+                        onChange={(e, v) => {
+                            setPage(v);
+                        }}
                         showLastButton
                         showFirstButton
                         size="large"
