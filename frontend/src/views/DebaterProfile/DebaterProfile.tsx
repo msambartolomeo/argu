@@ -99,7 +99,7 @@ export const DebaterProfile = () => {
 
     if (error)
         return <Error status={HttpStatusCode.NotFound} message={error} />;
-    if (userLoading || debatesLoading || imageLoading || !userData)
+    if (userLoading || imageLoading || !userData)
         return <CircularProgress size={100} />;
 
     return (
@@ -120,7 +120,11 @@ export const DebaterProfile = () => {
                     <h3 className="center">
                         {t("profile.userDebates", { username: "username" })}
                     </h3>
-                    <DebatesList debates={userDebates?.data || []} />
+                    {debatesLoading ? (
+                        <CircularProgress size={100} />
+                    ) : (
+                        <DebatesList debates={userDebates?.data || []} />
+                    )}
 
                     {userDebates && (
                         <div className="pagination-format">
