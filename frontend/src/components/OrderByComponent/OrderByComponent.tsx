@@ -1,16 +1,15 @@
-import { SelectChangeEvent } from "@mui/material";
-import { useTranslation } from "react-i18next";
-
 import { useEffect, useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
-import "../../locales/index";
-import DatePicker from "../DatePicker/DatePicker";
 import { SelectChangeEvent } from "@mui/material";
 
 import "./OrderByComponent.css";
 import SortSelectComponent from "./SortSelectComponent/SortSelectComponent";
+
+import "../../locales/index";
+import DatePicker from "../DatePicker/DatePicker";
 
 const OrderByComponent = () => {
     const { t } = useTranslation();

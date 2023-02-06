@@ -40,10 +40,8 @@ function SearchBar({ placeholder }: Props) {
 
     useEffect(() => {
         queryParams.delete("page");
-        // TODO: check if this is needed
-        // queryParams.delete("order");
-        // queryParams.delete("status");
-        // queryParams.delete("category");
+        queryParams.delete("order");
+        queryParams.delete("status");
         queryParams.delete("search");
         if (query) {
             queryParams.append("search", query);

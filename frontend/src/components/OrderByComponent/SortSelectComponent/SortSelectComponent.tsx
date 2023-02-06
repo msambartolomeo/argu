@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import Placeholder from "react-select/dist/declarations/src/components/Placeholder";
 
 import {
     FormControl,
@@ -7,8 +8,6 @@ import {
     Select,
     SelectChangeEvent,
 } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import Placeholder from "react-select/dist/declarations/src/components/Placeholder";
 
 import "./SortSelectComponent.css";
 

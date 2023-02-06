@@ -1,11 +1,11 @@
-import { Pagination } from "@mui/material";
-import { useTranslation } from "react-i18next";
-
 import { useEffect, useState } from "react";
 import React from "react";
 
+import { HttpStatusCode } from "axios";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
+import { CircularProgress, Pagination } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material";
 
 import "./Discovery.css";
@@ -15,6 +15,8 @@ import DebatesList from "../../components/DebatesList/DebatesList";
 import OrderByComponent from "../../components/OrderByComponent/OrderByComponent";
 import { useGetDebates } from "../../hooks/debates/useGetDebates";
 import "../../locales/index";
+import { PaginatedList } from "../../types/PaginatedList";
+import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateOrder from "../../types/enums/DebateOrder";
 import DebateStatus from "../../types/enums/DebateStatus";
@@ -26,17 +28,19 @@ const Discovery = () => {
 
     const [page, setPage] = useState(1);
 
+    const [debatesList, setDebatesList] = useState<
+        PaginatedList<DebateDto> | undefined
+    >(undefined);
+
     const [queryParams, setQueryParams] = useSearchParams();
 
-    const {
-        data: debatesList,
-        loading: isLoading,
-        getDebates: getDebates,
-    } = useGetDebates();
+    const { loading: isLoading, getDebates: getDebates } = useGetDebates();
 
     useEffect(() => {
         queryParams.delete("page");
-        queryParams.append("page", page.toString());
+        if (page > 1) {
+            queryParams.append("page", page.toString());
+        }
         setQueryParams(queryParams);
     }, [page]);
 
@@ -51,9 +55,27 @@ const Discovery = () => {
                     ? (queryParams.get("page") as unknown as number) - 1
                     : 0,
             search: queryParams.get("search") as string,
-        }).catch((error) => {
-            throw new Error("Error loading debates list: ", error);
-        });
+            size: 5,
+        })
+            .then((res) => {
+                switch (res.status) {
+                    case HttpStatusCode.Ok:
+                        setDebatesList(res.data);
+                        break;
+                    case HttpStatusCode.NotFound:
+                    case HttpStatusCode.NoContent:
+                        setDebatesList(undefined);
+                        break;
+                    case HttpStatusCode.BadRequest:
+                        throw new Error("Bad request");
+                    default:
+                        throw new Error("Unknown error");
+                }
+            })
+
+            .catch((error) => {
+                throw new Error("Error loading debates list: ", error);
+            });
     }, [queryParams]);
 
     return (
@@ -65,21 +87,27 @@ const Discovery = () => {
                 <div className="discovery-order-container">
                     <OrderByComponent />
                 </div>
-                <div className="debates-list-container">
-                    <DebatesList debates={debatesList} />
-                </div>
-                <div className="pagination-container">
-                    <Pagination
-                        count={10}
-                        page={page}
-                        onChange={(e, v) => {
-                            setPage(v);
-                        }}
-                        showLastButton
-                        showFirstButton
-                        size="large"
-                    />
-                </div>
+                {isLoading ? (
+                    <CircularProgress size={100} />
+                ) : (
+                    <>
+                        <div className="debates-list-container">
+                            <DebatesList debates={debatesList?.data || []} />
+                        </div>
+                        <div className="pagination-container">
+                            <Pagination
+                                count={debatesList?.totalPages || 1}
+                                page={page}
+                                onChange={(e, v) => {
+                                    setPage(v);
+                                }}
+                                showLastButton
+                                showFirstButton
+                                size="large"
+                            />
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
