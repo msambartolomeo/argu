@@ -14,6 +14,12 @@ export class PaginatedList<T> {
         if (!links) {
             throw new Error("Link header is missing");
         }
+        if (!links.first) {
+            throw new Error('Link header is missing "first" link');
+        }
+        if (!links.last) {
+            throw new Error('Link header is missing "last" link');
+        }
         this.first = links.first.url;
         this.last = links.last.url;
         this.prev = links.prev?.url;

@@ -1,4 +1,5 @@
 import cn from "classnames";
+import { UseFormRegisterReturn } from "react-hook-form/dist/types/form";
 
 import { ChangeEventHandler } from "react";
 
@@ -8,9 +9,17 @@ interface Props {
     value?: string;
     error?: string;
     onChange?: ChangeEventHandler<HTMLInputElement>;
+    register?: UseFormRegisterReturn;
 }
 
-function InputField({ type, text, value, error, onChange }: Props) {
+const InputField = ({
+    type,
+    text,
+    value,
+    error,
+    onChange,
+    register,
+}: Props) => {
     if (type === undefined) {
         type = "text";
     }
@@ -22,11 +31,12 @@ function InputField({ type, text, value, error, onChange }: Props) {
                 value={value}
                 onChange={onChange}
                 className={cn({ invalid: error !== undefined })}
+                {...register}
             />
             <label className="input-label active">{text}</label>
             {error && <span className="helper-text error">{error}</span>}
         </div>
     );
-}
+};
 
 export default InputField;

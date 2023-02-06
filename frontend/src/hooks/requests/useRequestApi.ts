@@ -42,7 +42,9 @@ export const useRequestApi = () => {
         if (requiresAuth) {
             if (!authToken && !refreshToken && !credentials) {
                 // TODO: If we already throw an error (to avoid infinite recursion), should we still navigate to login or leave it to component?
-                navigate("/login");
+                navigate("/login", {
+                    state: { from: window.location.pathname },
+                });
                 throw new Error("No auth token or credentials");
             }
         }
@@ -92,6 +94,10 @@ export const useRequestApi = () => {
 
                 // TODO: Preguntar si deberíamos también incluir 403 acá.
                 if (response?.status === HttpStatusCode.Unauthorized) {
+                    if (credentials) {
+                        // NOTE: Basic credentials invalid, only possible during login, returning
+                        return axiosError.response as AxiosResponse;
+                    }
                     if (authToken) {
                         // NOTE: authToken expired or invalid, trying again with refreshToken
                         setAuthToken(null);
