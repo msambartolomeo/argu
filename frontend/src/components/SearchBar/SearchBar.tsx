@@ -27,19 +27,6 @@ function SearchBar({ placeholder }: Props) {
     };
 
     useEffect(() => {
-        const listener = (e: KeyboardEvent) => {
-            if (e.key === "Enter" || e.key === "NumPadEnter") {
-                search(e as any);
-            }
-        };
-        // TODO: check if this is needed
-        // document.addEventListener("keydown", listener);
-        // return () => {
-        //     document.removeEventListener("keydown", listener);
-        // };
-    }, [query]);
-
-    useEffect(() => {
         queryParams.delete("page");
         queryParams.delete("order");
         queryParams.delete("status");
