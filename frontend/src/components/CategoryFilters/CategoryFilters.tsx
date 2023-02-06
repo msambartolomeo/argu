@@ -23,6 +23,7 @@ const CategoryFilters = () => {
     useEffect(() => {
         queryParams.delete("category");
         queryParams.delete("page");
+        queryParams.delete("search");
         if (selectedCategory) {
             queryParams.append("category", selectedCategory);
         }
