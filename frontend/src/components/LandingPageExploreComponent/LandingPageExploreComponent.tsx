@@ -1,14 +1,13 @@
 import React from "react";
 
 import { useTranslation } from "react-i18next";
+import { createSearchParams, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 
 import "./LandingPageExploreComponent.css";
-
-import { createSearchParams, useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 import "../../locales/index";
 

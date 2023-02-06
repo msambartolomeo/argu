@@ -1,12 +1,12 @@
-import M from "materialize-css";
-import { useTranslation } from "react-i18next";
-
 import { RefObject, useEffect, useRef, useState } from "react";
 
+import M from "materialize-css";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
-import "../../locales/index";
 import "./DatePicker.css";
+
+import "../../locales/index";
 
 type Props = {
     label: string;
