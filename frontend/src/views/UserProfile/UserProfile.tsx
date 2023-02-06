@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { HttpStatusCode } from "axios";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import { CircularProgress, Pagination, PaginationItem } from "@mui/material";
 
 import "./UserProfile.css";
 
@@ -10,41 +13,41 @@ import DebatesList from "../../components/DebatesList/DebatesList";
 import DeleteAccountModal from "../../components/DeleteAccountModal/DeleteAccountModal";
 import EditProfileImageDialog from "../../components/EditProfileImageDialog/EditProfileImageDialog";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
+import { useGetDebatesByUrl } from "../../hooks/debates/useGetDebatesByUrl";
 import { useSharedAuth } from "../../hooks/useAuth";
+import { GetUserByUrlOutput } from "../../hooks/users/useGetUserByUrl";
+import { useGetUserByUsername } from "../../hooks/users/useGetUserByUsername";
 import "../../locales/index";
 import "../../root.css";
+import { PaginatedList } from "../../types/PaginatedList";
 import DebateDto from "../../types/dto/DebateDto";
-import DebateCategory from "../../types/enums/DebateCategory";
-import DebateStatus from "../../types/enums/DebateStatus";
+import UserDto from "../../types/dto/UserDto";
+import { Error } from "../Error/Error";
 
 const UserProfile = () => {
-    const debates: DebateDto[] = [
-        {
-            id: 1,
-            name: "Is the earth flat?",
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl euismod nunc.",
-            isCreatorFor: true,
-            category: DebateCategory.SCIENCE,
-            status: DebateStatus.OPEN,
-            createdDate: new Date("2021-05-01"),
-            subscriptionsCount: 3,
-            votesFor: 2,
-            votesAgainst: 1,
-            creatorName: "user1",
-            self: "",
-            image: "",
-            opponent: "",
-            arguments: "",
-            chats: "",
-        },
-    ];
-
+    const [userData, setUserData] = useState<UserDto | undefined>(undefined);
+    const [debates, setDebates] = useState<
+        PaginatedList<DebateDto> | undefined
+    >();
     const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
+    const [error, setError] = useState<GetUserByUrlOutput | undefined>(
+        undefined
+    );
 
     const { t } = useTranslation();
-
     const navigate = useNavigate();
+
+    const { userInfo } = useSharedAuth();
+
+    const location = useLocation();
+    const query = new URLSearchParams(location.search);
+    const page = parseInt(query.get("page") || "1", 10);
+
+    const { loading: isUserLoading, getUserByUsername: getUser } =
+        useGetUserByUsername();
+
+    const { loading: isUserDebatesLoading, getDebatesByUrl: getDebates } =
+        useGetDebatesByUrl();
 
     const { callLogout } = useSharedAuth();
     const logout = () => {
@@ -52,21 +55,57 @@ const UserProfile = () => {
         navigate("/login");
     };
 
+    useEffect(() => {
+        if (userInfo) {
+            getUser({ username: userInfo.username }).then((res) => {
+                switch (res.status) {
+                    case HttpStatusCode.Ok:
+                        setUserData(res.data);
+                        break;
+                    default:
+                        setError(res);
+                }
+            });
+        } else {
+            navigate("/login");
+        }
+    }, [userInfo]);
+
+    useEffect(() => {
+        const url =
+            (showMyDebates ? userData?.debates : userData?.subscribedDebates) ||
+            "";
+        getDebates({ url: url, page: page - 1, size: 5 }).then((res) => {
+            switch (res.status) {
+                case HttpStatusCode.Ok:
+                    setDebates(res.data);
+                    break;
+                case HttpStatusCode.Unauthorized:
+                    console.log("UNAUTHORIZED");
+                    callLogout();
+                    navigate("/login");
+                    break;
+            }
+        });
+    }, [showMyDebates, page]);
+
+    if (error) return <Error status={error.status} message={error.message} />;
+
+    if (isUserLoading) return <CircularProgress size={100} />;
+
     return (
         <div className="profile-container">
             <div className="card profile-data">
-                <ProfileImage />
+                <ProfileImage image={userData?.image} />
                 <EditProfileImageDialog />
-                <h4>username</h4>
+                <h4>{userData?.username}</h4>
                 <h5>
                     <i className="material-icons left">stars</i>
-                    100
+                    {userData?.points}
                 </h5>
-                <div className="email-format">
-                    <i className="material-icons">email</i>
-                    <h6>example@email.com</h6>
-                </div>
-                <h6>{t("profile.createdIn")}: 01/12/22</h6>
+                <h6>
+                    {t("profile.createdIn")}: {userData?.createdDate}
+                </h6>
                 <div
                     className="waves-effect waves-light btn logout-btn"
                     onClick={logout}
@@ -99,7 +138,32 @@ const UserProfile = () => {
                     <h3 className="center">
                         {t("profile.userDebates", { username: "username" })}
                     </h3>
-                    <DebatesList debates={debates} />
+                    {isUserDebatesLoading ? (
+                        <CircularProgress size={100} />
+                    ) : (
+                        <DebatesList debates={debates?.data || []} />
+                    )}
+
+                    {debates && (
+                        <div className="pagination-format">
+                            <Pagination
+                                count={debates?.totalPages || 0}
+                                color="primary"
+                                className="white"
+                                page={page}
+                                renderItem={(item) => (
+                                    <PaginationItem
+                                        component={Link}
+                                        to={{
+                                            pathname: `/profile`,
+                                            search: `?page=${item.page}`,
+                                        }}
+                                        {...item}
+                                    />
+                                )}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
