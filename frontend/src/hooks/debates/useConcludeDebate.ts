@@ -1,5 +1,6 @@
-import { usePatch } from "../requests/usePatch";
 import { DEBATES_ENDPOINT } from "./constants";
+
+import { usePatch } from "../requests/usePatch";
 
 export const useConcludeDebate = () => {
     const { loading, callPatch } = usePatch();

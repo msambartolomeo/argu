@@ -1,6 +1,6 @@
-import M from "materialize-css";
-
 import { RefObject, useEffect, useRef } from "react";
+
+import M from "materialize-css";
 
 import "./DatePicker.css";
 

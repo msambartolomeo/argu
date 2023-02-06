@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import {
     FormControl,
     InputLabel,
@@ -5,10 +7,10 @@ import {
     Select,
     SelectChangeEvent,
 } from "@mui/material";
-import { useTranslation } from "react-i18next";
+
+import "./SortSelectComponent.css";
 
 import "../../../locales/index";
-import "./SortSelectComponent.css";
 
 interface SortSelectComponentProps {
     header: string;

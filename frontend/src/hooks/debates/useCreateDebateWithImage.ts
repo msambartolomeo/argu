@@ -1,9 +1,10 @@
 import { HttpStatusCode } from "axios";
 
-import BadRequestError from "../../types/errors/BadRequestError";
-import { usePost } from "../requests/usePost";
 import { DEBATES_ENDPOINT } from "./constants";
 import { CreateDebateInput, CreateDebateOutput } from "./useCreateDebate";
+
+import BadRequestError from "../../types/errors/BadRequestError";
+import { usePost } from "../requests/usePost";
 
 export interface CreateDebateWithImageInput extends CreateDebateInput {
     image: File;

@@ -1,7 +1,10 @@
-import { CircularProgress } from "@mui/material";
+import { useEffect, useState } from "react";
+
 import { useTranslation } from "react-i18next";
 
-import { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
+
+import "./TrendingDebatesComponent.css";
 
 import { useGetDebates } from "../../hooks/debates/useGetDebates";
 import "../../locales/index";
@@ -9,7 +12,6 @@ import DebateDto from "../../types/dto/DebateDto";
 import DebateOrder from "../../types/enums/DebateOrder";
 import DebateStatus from "../../types/enums/DebateStatus";
 import DebatesList from "../DebatesList/DebatesList";
-import "./TrendingDebatesComponent.css";
 
 const TrendingDebatesComponent = () => {
     const { t } = useTranslation();

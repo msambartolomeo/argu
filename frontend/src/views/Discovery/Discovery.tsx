@@ -1,9 +1,11 @@
-import { SelectChangeEvent } from "@mui/material";
-import { useTranslation } from "react-i18next";
-
 import { useEffect, useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import { SelectChangeEvent } from "@mui/material";
+
+import "./Discovery.css";
 
 import CategoryFilters from "../../components/CategoryFilters/CategoryFilters";
 import DebatesList from "../../components/DebatesList/DebatesList";
@@ -12,7 +14,6 @@ import "../../locales/index";
 import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateStatus from "../../types/enums/DebateStatus";
-import "./Discovery.css";
 
 const Discovery = () => {
     const { t } = useTranslation();

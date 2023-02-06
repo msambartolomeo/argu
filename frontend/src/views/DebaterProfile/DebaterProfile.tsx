@@ -1,11 +1,10 @@
-import { CircularProgress, Pagination, PaginationItem } from "@mui/material";
-import { useTranslation } from "react-i18next";
-
 import { useCallback, useEffect, useState } from "react";
 
+import { HttpStatusCode } from "axios";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation, useParams } from "react-router-dom";
 
-import { HttpStatusCode } from "axios";
+import { CircularProgress, Pagination, PaginationItem } from "@mui/material";
 
 import DebatesList from "../../components/DebatesList/DebatesList";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";

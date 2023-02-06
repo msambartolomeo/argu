@@ -1,6 +1,8 @@
+import { useRef } from "react";
+
 import { useTranslation } from "react-i18next";
 
-import { useRef } from "react";
+import "./CreateDebate.css";
 
 import InputField from "../../components/InputField/InputField";
 import SelectDropdown from "../../components/SelectDropdown/SelectDropdown";
@@ -8,7 +10,6 @@ import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import TextArea from "../../components/TextArea/TextArea";
 import "../../locales/index";
 import DebateCategory from "../../types/enums/DebateCategory";
-import "./CreateDebate.css";
 
 const CreateDebate = () => {
     const { t } = useTranslation();

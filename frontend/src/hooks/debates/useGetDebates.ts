@@ -1,11 +1,12 @@
 import { HttpStatusCode } from "axios";
 
+import { DEBATES_ENDPOINT } from "./constants";
+
 import { PaginatedList } from "../../types/PaginatedList";
 import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateOrder from "../../types/enums/DebateOrder";
 import { useGet } from "../requests/useGet";
-import { DEBATES_ENDPOINT } from "./constants";
 
 export interface GetDebatesInput {
     search?: string;

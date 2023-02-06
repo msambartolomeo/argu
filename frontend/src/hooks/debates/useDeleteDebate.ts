@@ -1,5 +1,6 @@
-import { useDelete } from "../requests/useDelete";
 import { DEBATES_ENDPOINT } from "./constants";
+
+import { useDelete } from "../requests/useDelete";
 
 export const useDeleteDebate = () => {
     const { loading, callDelete } = useDelete();

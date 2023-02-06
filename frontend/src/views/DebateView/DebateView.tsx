@@ -1,11 +1,12 @@
-import { CircularProgress } from "@mui/material";
-import { useTranslation } from "react-i18next";
-
 import { useEffect, useState } from "react";
 
+import { HttpStatusCode } from "axios";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
-import { HttpStatusCode } from "axios";
+import { CircularProgress } from "@mui/material";
+
+import "./DebateView.css";
 
 import ArgumentBubble from "../../components/ArgumentBubble/ArgumentBubble";
 import Chip from "../../components/Chip/Chip";
@@ -32,7 +33,6 @@ import User from "../../types/User";
 import DebateDto from "../../types/dto/DebateDto";
 import UserRole from "../../types/enums/UserRole";
 import { Error } from "../Error/Error";
-import "./DebateView.css";
 
 // TODO: Connect to API and remove
 const user1: User = {

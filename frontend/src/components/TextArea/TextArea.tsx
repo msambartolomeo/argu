@@ -1,6 +1,6 @@
-import cn from "classnames";
-
 import { ChangeEventHandler } from "react";
+
+import cn from "classnames";
 
 interface Props {
     text: string;

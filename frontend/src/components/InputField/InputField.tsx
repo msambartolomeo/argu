@@ -1,7 +1,7 @@
+import { ChangeEventHandler } from "react";
+
 import cn from "classnames";
 import { UseFormRegisterReturn } from "react-hook-form/dist/types/form";
-
-import { ChangeEventHandler } from "react";
 
 interface Props {
     type?: "text" | "email" | "password";

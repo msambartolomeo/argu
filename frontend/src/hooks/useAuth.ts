@@ -1,7 +1,7 @@
+import { useState } from "react";
+
 import jwtDecode from "jwt-decode";
 import { useBetween } from "use-between";
-
-import { useState } from "react";
 
 import UserRole from "../types/enums/UserRole";
 

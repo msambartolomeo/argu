@@ -1,5 +1,6 @@
-import { useDelete } from "../requests/useDelete";
 import { USERS_ENDPOINT } from "./constants";
+
+import { useDelete } from "../requests/useDelete";
 
 export const useDeleteUser = () => {
     const { loading, callDelete } = useDelete();

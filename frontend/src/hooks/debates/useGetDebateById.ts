@@ -1,8 +1,9 @@
 import { HttpStatusCode } from "axios";
 
+import { DEBATES_ENDPOINT } from "./constants";
+
 import DebateDto from "../../types/dto/DebateDto";
 import { useGet } from "../requests/useGet";
-import { DEBATES_ENDPOINT } from "./constants";
 
 export interface GetDebateByIdInput {
     id: number;

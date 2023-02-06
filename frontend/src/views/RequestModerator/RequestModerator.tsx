@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
 
+import "./RequestModerator.css";
+
 import TextArea from "../../components/TextArea/TextArea";
 import "../../locales/index";
-import "./RequestModerator.css";
 
 const RequestModerator = () => {
     const { t } = useTranslation();

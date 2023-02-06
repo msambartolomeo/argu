@@ -2,10 +2,11 @@ import { useState } from "react";
 
 import { HttpStatusCode } from "axios";
 
+import { USERS_ENDPOINT } from "./constants";
+
 import { PostOutput } from "../../types/PostOutput";
 import BadRequestError from "../../types/errors/BadRequestError";
 import { usePost } from "../requests/usePost";
-import { USERS_ENDPOINT } from "./constants";
 
 export interface CreateUserInput {
     username: string;

@@ -1,10 +1,11 @@
 import { HttpStatusCode } from "axios";
 
+import { DEBATES_ENDPOINT } from "./constants";
+
 import { PostOutput } from "../../types/PostOutput";
 import DebateCategory from "../../types/enums/DebateCategory";
 import BadRequestError from "../../types/errors/BadRequestError";
 import { usePost } from "../requests/usePost";
-import { DEBATES_ENDPOINT } from "./constants";
 
 export interface CreateDebateInput {
     title: string;

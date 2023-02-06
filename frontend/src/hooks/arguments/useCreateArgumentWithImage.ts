@@ -1,7 +1,8 @@
 import { HttpStatusCode } from "axios";
 
-import { usePost } from "../requests/usePost";
 import { CreateArgumentInput, CreateArgumentOutput } from "./useCreateArgument";
+
+import { usePost } from "../requests/usePost";
 
 export interface CreateArgumentWithImageInput extends CreateArgumentInput {
     image: File;

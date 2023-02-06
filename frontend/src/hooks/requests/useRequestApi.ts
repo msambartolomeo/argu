@@ -1,13 +1,12 @@
-import { Buffer } from "buffer";
-
 import { useState } from "react";
 
+import axios, { AxiosError, AxiosResponse, HttpStatusCode } from "axios";
+import { Buffer } from "buffer";
 import { useNavigate } from "react-router-dom";
 
-import axios, { AxiosError, AxiosResponse, HttpStatusCode } from "axios";
+import { AUTHORIZATION_HEADER, REFRESH_HEADER } from "./constants";
 
 import { useSharedAuth } from "../useAuth";
-import { AUTHORIZATION_HEADER, REFRESH_HEADER } from "./constants";
 
 export interface BasicCredentials {
     username: string;

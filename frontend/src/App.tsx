@@ -1,9 +1,8 @@
 // NOTE: import base css
-import M from "materialize-css";
-import "materialize-css/dist/css/materialize.min.css";
-
 import { useEffect } from "react";
 
+import M from "materialize-css";
+import "materialize-css/dist/css/materialize.min.css";
 // import router
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 

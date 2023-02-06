@@ -1,15 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import "./Login.css";
 
 import InputField from "../../components/InputField/InputField";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import { useLogin } from "../../hooks/requests/useLogin";
 import "../../locales/index";
-import "./Login.css";
 
 const Login = () => {
     const navigate = useNavigate();

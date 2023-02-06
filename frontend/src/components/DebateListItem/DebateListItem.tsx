@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
-
 import { useNavigate } from "react-router-dom";
+
+import "./DebateListItem.css";
 
 import defaultDebatePhoto from "../../assets/debate_stock.png";
 import "../../locales/index";
 import DebateDto from "../../types/dto/DebateDto";
 import NonClickableChip from "../NonClickableChip/NonClickableChip";
-import "./DebateListItem.css";
 
 interface DebateListItemProps {
     debate: DebateDto;

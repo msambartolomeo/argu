@@ -1,14 +1,14 @@
 import { useTranslation } from "react-i18next";
-
 import { Link } from "react-router-dom";
+
+import NavButton from "./NavButton";
+import "./Navbar.css";
 
 import arguLogo from "../../assets/argu-logo-2.jpeg";
 import { useSharedAuth } from "../../hooks/useAuth";
 import "../../locales/index";
 import UserRole from "../../types/enums/UserRole";
 import SearchBar from "../SearchBar/SearchBar";
-import NavButton from "./NavButton";
-import "./Navbar.css";
 
 interface ArguLogoProps {
     image?: string;

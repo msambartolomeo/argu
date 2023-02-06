@@ -1,7 +1,9 @@
+import { useState } from "react";
+
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
 
-import { useState } from "react";
+import "./ArgumentBubble.css";
 
 import "../../locales/index";
 import Argument from "../../types/Argument";
@@ -10,7 +12,6 @@ import User from "../../types/User";
 import UserRole from "../../types/enums/UserRole";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
 import NonClickableChip from "../NonClickableChip/NonClickableChip";
-import "./ArgumentBubble.css";
 
 // TODO: Connect to API and remove
 const user1: User = {

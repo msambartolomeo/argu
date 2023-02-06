@@ -1,9 +1,10 @@
-import cn from "classnames";
-import { useTranslation } from "react-i18next";
-
 import { useState } from "react";
 
+import cn from "classnames";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+
+import "./UserProfile.css";
 
 import DebatesList from "../../components/DebatesList/DebatesList";
 import DeleteAccountModal from "../../components/DeleteAccountModal/DeleteAccountModal";
@@ -15,7 +16,6 @@ import "../../root.css";
 import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateStatus from "../../types/enums/DebateStatus";
-import "./UserProfile.css";
 
 const UserProfile = () => {
     const debates: DebateDto[] = [
