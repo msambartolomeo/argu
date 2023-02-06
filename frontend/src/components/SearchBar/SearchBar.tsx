@@ -19,6 +19,7 @@ function SearchBar({ placeholder }: Props) {
 
     const search = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setQueryParams(queryParams);
         navigate({
             pathname: "/discover",
             search: createSearchParams(queryParams).toString(),
@@ -46,7 +47,6 @@ function SearchBar({ placeholder }: Props) {
         if (query) {
             queryParams.append("search", query);
         }
-        setQueryParams(queryParams);
     }, [query]);
 
     return (
