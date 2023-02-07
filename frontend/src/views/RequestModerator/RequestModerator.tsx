@@ -36,7 +36,7 @@ const RequestModerator = () => {
 
     const handleRequestModerator = async (data: FieldValues) => {
         await requestModerator({
-            userUrl: userInfo?.username as string,
+            userUrl: userInfo?.sub as string,
             reason: data.reason,
         });
     };
