@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { HttpStatusCode } from "axios";
 
 import { USERS_ENDPOINT } from "./constants";

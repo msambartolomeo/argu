@@ -1,31 +1,23 @@
+import { useState } from "react";
+
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 
 import { SelectChangeEvent } from "@mui/material";
 
 import "./OrderByComponent.css";
 import SortSelectComponent from "./SortSelectComponent/SortSelectComponent";
 
+import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 import "../../locales/index";
 import DatePicker from "../DatePicker/DatePicker";
 
-// TODO: add i18n to DatePicker
-
-interface OrderByComponentProps {
-    queryOrder: string;
-    handleSelectOrderChange: (event: SelectChangeEvent) => void;
-    queryStatus: string;
-    handleSelectStatusChange: (event: SelectChangeEvent) => void;
-    selectedCategory: string | null;
-}
-
-const OrderByComponent = ({
-    queryOrder,
-    handleSelectOrderChange,
-    queryStatus,
-    handleSelectStatusChange,
-    selectedCategory,
-}: OrderByComponentProps) => {
+const OrderByComponent = () => {
     const { t } = useTranslation();
+
+    const datePickerPlaceholder: string = t(
+        "discovery.orderBy.datePicker.placeholder"
+    );
 
     const orderBySuppliers = [
         { value: "date_desc", label: "dateDesc" },
@@ -41,6 +33,41 @@ const OrderByComponent = ({
         { value: "open", label: "open" },
         { value: "closed", label: "closed" },
     ];
+
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [queryOrder, setQueryOrder] = useState(
+        queryParams.get("order") ?? ""
+    );
+    const [queryStatus, setQueryStatus] = useState(
+        queryParams.get("status") ?? ""
+    );
+    const selectedCategory = queryParams.get("category");
+
+    const handleSelectOrderChange = (event: SelectChangeEvent) => {
+        setQueryOrder(event.target.value);
+    };
+
+    const handleSelectStatusChange = (event: SelectChangeEvent) => {
+        setQueryStatus(event.target.value);
+    };
+
+    useNonInitialEffect(() => {
+        queryParams.delete("order");
+        queryParams.delete("page");
+        if (queryOrder) {
+            queryParams.append("order", queryOrder);
+        }
+        setQueryParams(queryParams);
+    }, [queryOrder]);
+
+    useNonInitialEffect(() => {
+        queryParams.delete("status");
+        queryParams.delete("page");
+        if (queryStatus) {
+            queryParams.append("status", queryStatus);
+        }
+        setQueryParams(queryParams);
+    }, [queryStatus]);
 
     const orderByProps = {
         header: "Order by",
@@ -81,7 +108,10 @@ const OrderByComponent = ({
                     <SortSelectComponent {...statusProps} />
                 </div>
                 <div className="date-picker-container">
-                    <DatePicker label="Date" placeholder="Select a date" />
+                    <DatePicker
+                        label={t("discovery.orderBy.datePicker.label")}
+                        placeholder={datePickerPlaceholder}
+                    />
                 </div>
             </div>
         </div>

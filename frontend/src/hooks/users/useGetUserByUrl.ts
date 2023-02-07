@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { HttpStatusCode } from "axios";
 
 import UserDto from "../../types/dto/UserDto";
