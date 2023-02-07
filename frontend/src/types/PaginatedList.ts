@@ -28,4 +28,13 @@ export class PaginatedList<T> {
 
         this.totalPages = Number(totalPagesHeader);
     }
+
+    static emptyList(): PaginatedList<never> {
+        return {
+            data: [],
+            first: "",
+            last: "",
+            totalPages: 0,
+        };
+    }
 }

@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 
 import { CircularProgress } from "@mui/material";
 
+import ArgumentList from "./ArgumentList";
 import ChatSection from "./ChatSection";
 import DebateHeader from "./DebateHeader";
 import "./DebateView.css";
@@ -13,8 +14,6 @@ import PostArgumentCard from "./PostArgumentCard";
 import RecommendedDebatesSection from "./RecommendedDebatesSection";
 import VoteSection from "./VoteSection";
 
-import ArgumentBubble from "../../components/ArgumentBubble/ArgumentBubble";
-import Pagination from "../../components/Pagination/Pagination";
 import {
     GetDebateByIdOutput,
     useGetDebateById,
@@ -102,32 +101,7 @@ const DebateView = () => {
         <>
             <DebateHeader debate={debateData} userData={userData} />
             <div className="debate-content">
-                <div className="z-depth-3 argument-list">
-                    {argumentsList.map((argument) => {
-                        let header;
-                        switch (argument.status) {
-                            case "introduction":
-                                header = t("debate.argument.introduction");
-                                break;
-                            case "closing":
-                                header = t("debate.argument.conclusion");
-                                break;
-                            case "argument":
-                                header = t("debate.argument.argument");
-                                break;
-                        }
-                        return (
-                            <>
-                                <h5 className="center">{header}</h5>
-                                <ArgumentBubble argument={argument} />
-                            </>
-                        );
-                    })}
-                    {argumentsList.length === 0 && (
-                        <h5 className="center">{t("debate.noArguments")}</h5>
-                    )}
-                    <Pagination param="" totalPages={1} />
-                </div>
+                <ArgumentList debate={debateData} />
                 <div className="post-arguments">
                     {debateData?.status !== t("debate.statuses.statusClosed") &&
                         debateData?.status !==

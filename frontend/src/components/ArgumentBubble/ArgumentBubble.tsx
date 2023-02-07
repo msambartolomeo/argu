@@ -6,44 +6,9 @@ import { useTranslation } from "react-i18next";
 import "./ArgumentBubble.css";
 
 import "../../locales/index";
-import Argument from "../../types/Argument";
-import Debate from "../../types/Debate";
-import User from "../../types/User";
-import UserRole from "../../types/enums/UserRole";
+import ArgumentDto from "../../types/dto/ArgumentDto";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
 import NonClickableChip from "../NonClickableChip/NonClickableChip";
-
-// TODO: Connect to API and remove
-const user1: User = {
-    username: "User 1",
-    createdDate: "2021-01-01",
-    role: UserRole.MODERATOR,
-};
-
-const debate1: Debate = {
-    id: 1,
-    name: "Debate 1",
-    description: "Description 1",
-    isCreatorFor: true,
-    category: "Category 1",
-    createdDate: "2021-01-01",
-    status: "Status 1",
-    subscriptions: 1,
-    votesFor: 0,
-    votesAgainst: 0,
-    creator: user1,
-};
-
-const arg: Argument = {
-    content: "Argument 1",
-    createdDate: "2021-01-01",
-    status: "Status 1",
-    likes: 1,
-    likedByUser: true,
-    deleted: false,
-    creator: user1,
-    debate: debate1,
-};
 
 interface LikeButtonProps {
     icon: string;
@@ -59,10 +24,11 @@ const LikeButton = ({ icon, handleSubmit }: LikeButtonProps) => {
 };
 
 interface ArgumentBubbleProps {
-    argument?: Argument;
+    argument: ArgumentDto;
+    debateCreator: string;
 }
 
-const ArgumentBubble = ({ argument = arg }: ArgumentBubbleProps) => {
+const ArgumentBubble = ({ argument, debateCreator }: ArgumentBubbleProps) => {
     const [authorized, setAuthorized] = useState(false);
     const { t } = useTranslation();
 
@@ -85,18 +51,14 @@ const ArgumentBubble = ({ argument = arg }: ArgumentBubbleProps) => {
     return (
         <div
             className={cn("speech-bubble", {
-                "sb-left":
-                    argument.creator.username ===
-                    argument.debate.creator.username,
-                "sb-right":
-                    argument.creator.username !==
-                    argument.debate.creator.username,
+                "sb-left": argument.creatorName === debateCreator,
+                "sb-right": argument.creatorName !== debateCreator,
             })}
         >
             <div className="comment-info">
                 <h6 className="comment-owner">
                     {t("components.argumentBubble.userSaid", {
-                        username: argument.creator.username,
+                        username: argument.creatorName,
                     })}
                 </h6>
                 <div className="comment-extra">
