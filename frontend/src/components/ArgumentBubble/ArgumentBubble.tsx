@@ -19,11 +19,12 @@ import NonClickableChip from "../NonClickableChip/NonClickableChip";
 interface LikeButtonProps {
     icon: string;
     handleSubmit?: () => void;
+    disabled?: boolean;
 }
 
-const LikeButton = ({ icon, handleSubmit }: LikeButtonProps) => {
+const LikeButton = ({ disabled, icon, handleSubmit }: LikeButtonProps) => {
     return (
-        <button type="submit" className="btn-flat" onClick={handleSubmit}>
+        <button disabled={disabled} className="btn-flat" onClick={handleSubmit}>
             <i className="material-icons">{icon}</i>
         </button>
     );
@@ -46,9 +47,10 @@ const ArgumentBubble = ({
 
     const [argument, setArgument] = useState<ArgumentDto>(argumentData);
 
-    const { createLike: callLike } = useCreateLike();
-    const { callDeleteLike: callUnlike } = useDeleteLike();
-    const { deleteArgument } = useDeleteArgument();
+    const { loading: likeLoading, createLike: callLike } = useCreateLike();
+    const { loading: unlikeLoading, callDeleteLike: callUnlike } =
+        useDeleteLike();
+    const { loading: deleteLoading, deleteArgument } = useDeleteArgument();
 
     const likeSubmit = () => {
         callLike({
@@ -114,11 +116,13 @@ const ArgumentBubble = ({
                             (userInfo ? (
                                 argument.likedByUser ? (
                                     <LikeButton
+                                        disabled={unlikeLoading}
                                         icon="favorite"
                                         handleSubmit={unlikeSubmit}
                                     />
                                 ) : (
                                     <LikeButton
+                                        disabled={likeLoading}
                                         icon="favorite_border"
                                         handleSubmit={likeSubmit}
                                     />
@@ -145,6 +149,7 @@ const ArgumentBubble = ({
                     {!argument.deleted &&
                         userInfo?.username === argument.creatorName && (
                             <DeleteDialog
+                                disabled={deleteLoading}
                                 id="delete-argument"
                                 handleDelete={handleDelete}
                                 title={t(

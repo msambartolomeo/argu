@@ -12,9 +12,16 @@ interface DeleteDialogProps {
     handleDelete: () => void;
     title: string;
     name?: string | null;
+    disabled?: boolean;
 }
 
-const DeleteDialog = ({ id, handleDelete, title, name }: DeleteDialogProps) => {
+const DeleteDialog = ({
+    id,
+    handleDelete,
+    title,
+    name,
+    disabled,
+}: DeleteDialogProps) => {
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -39,6 +46,7 @@ const DeleteDialog = ({ id, handleDelete, title, name }: DeleteDialogProps) => {
                         {t("components.deleteDialog.cancel")}
                     </a>
                     <button
+                        disabled={disabled}
                         onClick={handleDelete}
                         className="modal-close waves-effect btn-flat"
                     >
