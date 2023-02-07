@@ -63,7 +63,7 @@ public class ArgumentDto {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
             try {
-                dto.like = uriInfo.getBaseUriBuilder().path("debates").path(debateId).path("arguments").path(id)
+                dto.like = uriInfo.getBaseUriBuilder().path("debates").path(debateId).path("arguments").path(id).path("likes")
                         .queryParam("user", URLEncoder.encode(auth.getName(), User.ENCODING)).build();
             } catch (UnsupportedEncodingException e) {
                 // NOTE: Encoding is valid, should not happen
