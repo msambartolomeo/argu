@@ -180,6 +180,10 @@ export const TRANSLATIONS_EN = {
         message:
             "Once you become a moderator, you will be able to create your own debates. To prevent our users from misinformation, we ask you to tell us a bit about why you want to become one. We will review it and contact you as soon as possible.",
         label: "Explain why you should become a moderator",
+        errors: {
+            reasonEmpty: "You must provide a reason to become a moderator",
+            reasonTooLong: "Your message cannot be longer than 2000 characters",
+        },
     },
     components: {
         deleteDialog: {
