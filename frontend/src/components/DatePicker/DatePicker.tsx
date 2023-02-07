@@ -49,6 +49,31 @@ function DatePicker({ label, placeholder }: Props) {
         defaultDate = null;
     }
 
+    const monthsArray = [
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+    ];
+
+    const daysArray = [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+    ];
+
     useEffect(() => {
         M.Datepicker.init(document.querySelectorAll(".datepicker"), {
             format: "dd-mm-yyyy",
@@ -60,61 +85,27 @@ function DatePicker({ label, placeholder }: Props) {
                 cancel: datePickerCancel,
                 clear: datePickerClear,
                 done: datePickerDone,
-                months: [
-                    t("discovery.orderBy.datePicker.months.january"),
-                    t("discovery.orderBy.datePicker.months.february"),
-                    t("discovery.orderBy.datePicker.months.march"),
-                    t("discovery.orderBy.datePicker.months.april"),
-                    t("discovery.orderBy.datePicker.months.may"),
-                    t("discovery.orderBy.datePicker.months.june"),
-                    t("discovery.orderBy.datePicker.months.july"),
-                    t("discovery.orderBy.datePicker.months.august"),
-                    t("discovery.orderBy.datePicker.months.september"),
-                    t("discovery.orderBy.datePicker.months.october"),
-                    t("discovery.orderBy.datePicker.months.november"),
-                    t("discovery.orderBy.datePicker.months.december"),
-                ],
-                monthsShort: [
-                    t("discovery.orderBy.datePicker.monthsShort.january"),
-                    t("discovery.orderBy.datePicker.monthsShort.february"),
-                    t("discovery.orderBy.datePicker.monthsShort.march"),
-                    t("discovery.orderBy.datePicker.monthsShort.april"),
-                    t("discovery.orderBy.datePicker.monthsShort.may"),
-                    t("discovery.orderBy.datePicker.monthsShort.june"),
-                    t("discovery.orderBy.datePicker.monthsShort.july"),
-                    t("discovery.orderBy.datePicker.monthsShort.august"),
-                    t("discovery.orderBy.datePicker.monthsShort.september"),
-                    t("discovery.orderBy.datePicker.monthsShort.october"),
-                    t("discovery.orderBy.datePicker.monthsShort.november"),
-                    t("discovery.orderBy.datePicker.monthsShort.december"),
-                ],
-                weekdays: [
-                    t("discovery.orderBy.datePicker.weekdays.sunday"),
-                    t("discovery.orderBy.datePicker.weekdays.monday"),
-                    t("discovery.orderBy.datePicker.weekdays.tuesday"),
-                    t("discovery.orderBy.datePicker.weekdays.wednesday"),
-                    t("discovery.orderBy.datePicker.weekdays.thursday"),
-                    t("discovery.orderBy.datePicker.weekdays.friday"),
-                    t("discovery.orderBy.datePicker.weekdays.saturday"),
-                ],
-                weekdaysShort: [
-                    t("discovery.orderBy.datePicker.weekdaysShort.sunday"),
-                    t("discovery.orderBy.datePicker.weekdaysShort.monday"),
-                    t("discovery.orderBy.datePicker.weekdaysShort.tuesday"),
-                    t("discovery.orderBy.datePicker.weekdaysShort.wednesday"),
-                    t("discovery.orderBy.datePicker.weekdaysShort.thursday"),
-                    t("discovery.orderBy.datePicker.weekdaysShort.friday"),
-                    t("discovery.orderBy.datePicker.weekdaysShort.saturday"),
-                ],
-                weekdaysAbbrev: [
-                    t("discovery.orderBy.datePicker.weekdaysAbbrev.sunday"),
-                    t("discovery.orderBy.datePicker.weekdaysAbbrev.monday"),
-                    t("discovery.orderBy.datePicker.weekdaysAbbrev.tuesday"),
-                    t("discovery.orderBy.datePicker.weekdaysAbbrev.wednesday"),
-                    t("discovery.orderBy.datePicker.weekdaysAbbrev.thursday"),
-                    t("discovery.orderBy.datePicker.weekdaysAbbrev.friday"),
-                    t("discovery.orderBy.datePicker.weekdaysAbbrev.saturday"),
-                ],
+                months: monthsArray.map((month) => {
+                    return t(`discovery.orderBy.datePicker.months.${month}`);
+                }),
+                monthsShort: monthsArray.map((month) => {
+                    return t(
+                        `discovery.orderBy.datePicker.monthsShort.${month}`
+                    );
+                }),
+                weekdays: daysArray.map((day) => {
+                    return t(`discovery.orderBy.datePicker.weekdays.${day}`);
+                }),
+                weekdaysShort: daysArray.map((day) => {
+                    return t(
+                        `discovery.orderBy.datePicker.weekdaysShort.${day}`
+                    );
+                }),
+                weekdaysAbbrev: daysArray.map((day) => {
+                    return t(
+                        `discovery.orderBy.datePicker.weekdaysAbbrev.${day}`
+                    );
+                }),
             },
         });
     }, []);
