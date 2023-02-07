@@ -26,6 +26,7 @@ import { Error } from "../Error/Error";
 
 const UserProfile = () => {
     const [userData, setUserData] = useState<UserDto | undefined>(undefined);
+    // TODO: Make pagination use links provided by API
     const [debates, setDebates] = useState<
         PaginatedList<DebateDto> | undefined
     >();
