@@ -4,7 +4,7 @@ import { LOGIN_URL, RequestMethod } from "./constants";
 import { useRequestApi } from "./useRequestApi";
 
 export function useLogin() {
-    const { requestApi } = useRequestApi();
+    const { loading, requestApi } = useRequestApi();
 
     async function callLogin(username: string, password: string) {
         const response = await requestApi({
@@ -22,5 +22,5 @@ export function useLogin() {
         return response.status !== HttpStatusCode.Unauthorized;
     }
 
-    return { callLogin };
+    return { loading, callLogin };
 }

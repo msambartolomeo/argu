@@ -17,7 +17,7 @@ const Login = () => {
     const location = useLocation();
     const { t } = useTranslation();
 
-    const { callLogin } = useLogin();
+    const { loading, callLogin } = useLogin();
 
     const schema = z.object({
         username: z
@@ -98,7 +98,7 @@ const Login = () => {
                             <span>{t("login.rememberMe")}</span>
                         </label>
                     </div>
-                    <SubmitButton text={t("login.login")} />
+                    <SubmitButton text={t("login.login")} disabled={loading} />
                 </div>
             </form>
             <h6 className="center">

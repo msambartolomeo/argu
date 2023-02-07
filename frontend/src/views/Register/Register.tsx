@@ -130,7 +130,10 @@ const Register = () => {
                         register={register("confirmPassword")}
                         error={formErrors.confirmPassword?.message as string}
                     />
-                    <SubmitButton text={t("register.register")} />
+                    <SubmitButton
+                        text={t("register.register")}
+                        disabled={loading}
+                    />
                 </div>
             </form>
             <h6 className="center">
