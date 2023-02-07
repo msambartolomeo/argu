@@ -2,7 +2,7 @@ import "./LandingPage.css";
 
 import parallaxBackgroud from "../../assets/speech-bubbles.jpeg";
 import LandingPageAboutComponent from "../../components/LandingPageAboutComponent/LandingPageAboutComponent";
-import LandingPageExploreComponent from "../../components/LandingPageExploreComponent/LandinPageExploreComponent";
+import LandingPageExploreComponent from "../../components/LandingPageExploreComponent/LandingPageExploreComponent";
 import TrendingDebatesComponent from "../../components/TrendingDebatesComponent/TrendingDebatesComponent";
 import DebateCategory from "../../types/enums/DebateCategory";
 

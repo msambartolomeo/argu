@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+.list-item:hover {
+    cursor: pointer;
+}
+
 a.card {
     display: block;
 }
