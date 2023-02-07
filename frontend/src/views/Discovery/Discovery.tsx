@@ -98,6 +98,8 @@ const Discovery = () => {
                             <Pagination
                                 count={debatesList?.totalPages || 1}
                                 page={page}
+                                siblingCount={0}
+                                boundaryCount={0}
                                 onChange={(e, v) => {
                                     setPage(v);
                                 }}
