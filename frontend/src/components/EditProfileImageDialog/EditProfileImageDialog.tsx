@@ -104,7 +104,6 @@ const EditImageDialog = ({ imageUrl, imageChange }: EditImageDialogProps) => {
                                 <input
                                     className="file-path validate"
                                     type="text"
-                                    {...register("filename")}
                                 />
                             </div>
                             {formErrors.filename && (
