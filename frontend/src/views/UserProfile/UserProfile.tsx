@@ -30,6 +30,7 @@ const UserProfile = () => {
         PaginatedList<DebateDto> | undefined
     >();
     const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
+    const [reloadImage, setReloadImage] = useState<number>(1);
     const [error, setError] = useState<GetUserByUrlOutput | undefined>(
         undefined
     );
@@ -53,6 +54,10 @@ const UserProfile = () => {
     const logout = () => {
         callLogout();
         navigate("/login");
+    };
+
+    const handleUpdateImage = () => {
+        setReloadImage(Date.now());
     };
 
     useEffect(() => {
@@ -95,8 +100,14 @@ const UserProfile = () => {
     return (
         <div className="profile-container">
             <div className="card profile-data">
-                <ProfileImage image={userData?.image} />
-                <EditProfileImageDialog />
+                <ProfileImage
+                    image={userData?.image || ""}
+                    reloadImage={reloadImage}
+                />
+                <EditProfileImageDialog
+                    imageUrl={userData?.image || ""}
+                    imageChange={handleUpdateImage}
+                />
                 <h4>{userData?.username}</h4>
                 <h5>
                     <i className="material-icons left">stars</i>

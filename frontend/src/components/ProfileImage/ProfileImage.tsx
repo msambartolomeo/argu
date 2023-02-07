@@ -7,9 +7,13 @@ import "../../locales/index";
 
 interface ProfileImageProps {
     image?: string;
+    reloadImage?: number;
 }
 
-const ProfileImage = ({ image = defaultProfilePhoto }: ProfileImageProps) => {
+const ProfileImage = ({
+    image = defaultProfilePhoto,
+    reloadImage,
+}: ProfileImageProps) => {
     const { t } = useTranslation();
 
     const profilePhotoAlt: string = t("profile.profilePhotoAlt");
@@ -18,9 +22,13 @@ const ProfileImage = ({ image = defaultProfilePhoto }: ProfileImageProps) => {
         <>
             <div className="profile-image">
                 <img
+                    key={reloadImage}
                     src={image ? image : defaultProfilePhoto}
                     alt={profilePhotoAlt}
                     defaultValue={defaultProfilePhoto}
+                    onError={({ target }) => {
+                        (target as HTMLImageElement).src = defaultProfilePhoto;
+                    }}
                     className="responsive-img"
                 />
             </div>

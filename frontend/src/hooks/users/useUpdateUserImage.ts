@@ -24,7 +24,7 @@ export const useUpdateUserImage = () => {
             },
             true
         );
-        return response.status;
+        return { status: response.status, message: response.data.message };
     }
 
     return { loading, updateUserImage };
