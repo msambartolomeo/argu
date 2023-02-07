@@ -20,6 +20,7 @@ const ProfileImage = ({ image = defaultProfilePhoto }: ProfileImageProps) => {
                 <img
                     src={image ? image : defaultProfilePhoto}
                     alt={profilePhotoAlt}
+                    defaultValue={defaultProfilePhoto}
                     className="responsive-img"
                 />
             </div>
