@@ -1,64 +1,68 @@
+import { useCallback, useEffect } from "react";
+
+import { HttpStatusCode } from "axios";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import "./DeleteAccountModal.css";
 
+import { useSharedAuth } from "../../hooks/useAuth";
+import { useDeleteUser } from "../../hooks/users/useDeleteUser";
 import "../../locales/index";
-
-const DeleteConfirmationForm = () => {
-    const { t } = useTranslation();
-
-    function handleSubmit(): void {
-        // console.log("Confirm submition of profile photo");
-    }
-
-    // TODO: Add error handling
-
-    return (
-        <form
-            method="delete"
-            acceptCharset="utf-8"
-            id="confirmationForm"
-            encType="multipart/form-data"
-            onSubmit={handleSubmit}
-        >
-            <div className="modal-content">
-                <h4>{t("profile.areYouSure")}</h4>
-                <div className="input-field">
-                    <label>{t("profile.introducePswd")}</label>
-                    <input type="password" className="validate" />
-                </div>
-            </div>
-            <div className="modal-footer">
-                <a href="" className="modal-close waves-effect btn-flat">
-                    {t("profile.close")}
-                </a>
-                <button
-                    className="modal-close waves-effect btn-flat"
-                    type="submit"
-                    form="confirmationForm"
-                    id="confirmationForm"
-                    name="deleteAccount"
-                >
-                    {t("profile.confirm")}
-                </button>
-            </div>
-        </form>
-    );
-};
+import { Error } from "../../views/Error/Error";
 
 const DeleteAccountModal = () => {
     const { t } = useTranslation();
+
+    const { loading: isDeleteUserLoading, deleteUser } = useDeleteUser();
+    const { callLogout, userInfo } = useSharedAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        M.Modal.init(document.querySelectorAll(".modal"));
+    }, []);
+
+    const handleDeleteUser = useCallback(async () => {
+        const res = await deleteUser(userInfo?.username || "");
+        switch (res.status) {
+            case HttpStatusCode.NoContent:
+                callLogout();
+                navigate("/");
+                break;
+            case HttpStatusCode.Unauthorized:
+                callLogout();
+                navigate("/login");
+                break;
+            case HttpStatusCode.NotFound:
+                return <Error status={res.status} message={res.message} />;
+            default:
+                break;
+        }
+    }, []);
 
     return (
         <>
             <a
                 className="waves-effect waves-light btn modal-trigger delete-account-btn"
-                href="#delete-account"
+                href="#delete-profile"
             >
                 {t("profile.deleteAccount")}
             </a>
-            <div id="delete-account" className="modal">
-                <DeleteConfirmationForm />
+            <div id="delete-profile" className="modal">
+                <div className="modal-content">
+                    <h4>{t("profile.areYouSure")}</h4>
+                </div>
+                <div className="modal-footer">
+                    <a className="modal-close waves-effect btn-flat">
+                        {t("profile.close")}
+                    </a>
+                    <button
+                        className="modal-close waves-effect btn-flat"
+                        onClick={handleDeleteUser}
+                    >
+                        {t("profile.confirm")}
+                    </button>
+                </div>
             </div>
         </>
     );

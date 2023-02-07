@@ -81,7 +81,6 @@ const UserProfile = () => {
                     setDebates(res.data);
                     break;
                 case HttpStatusCode.Unauthorized:
-                    console.log("UNAUTHORIZED");
                     callLogout();
                     navigate("/login");
                     break;
