@@ -1,10 +1,16 @@
 import { useState } from "react";
 
+import { HttpStatusCode } from "axios";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import "./ArgumentBubble.css";
 
+import { useDeleteArgument } from "../../hooks/arguments/useDeleteArgument";
+import { useCreateLike } from "../../hooks/likes/useCreateLike";
+import { useDeleteLike } from "../../hooks/likes/useDeleteLike";
+import { useSharedAuth } from "../../hooks/useAuth";
 import "../../locales/index";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
@@ -17,35 +23,76 @@ interface LikeButtonProps {
 
 const LikeButton = ({ icon, handleSubmit }: LikeButtonProps) => {
     return (
-        <button type="submit" className="btn-flat" onSubmit={handleSubmit}>
+        <button type="submit" className="btn-flat" onClick={handleSubmit}>
             <i className="material-icons">{icon}</i>
         </button>
     );
 };
 
 interface ArgumentBubbleProps {
-    argument: ArgumentDto;
+    argumentData: ArgumentDto;
     debateCreator: string;
 }
 
-const ArgumentBubble = ({ argument, debateCreator }: ArgumentBubbleProps) => {
-    const [authorized, setAuthorized] = useState(false);
+const ArgumentBubble = ({
+    argumentData,
+    debateCreator,
+}: ArgumentBubbleProps) => {
+    const { userInfo } = useSharedAuth();
+
     const { t } = useTranslation();
 
-    const handleLikeSubmit = () => {
-        // TODO: Implement like
+    const navigate = useNavigate();
+
+    const [argument, setArgument] = useState<ArgumentDto>(argumentData);
+
+    const { createLike: callLike } = useCreateLike();
+    const { callDeleteLike: callUnlike } = useDeleteLike();
+    const { deleteArgument } = useDeleteArgument();
+
+    const likeSubmit = () => {
+        callLike({
+            likeUrl: argument.like as string,
+        }).then((code) => {
+            switch (code) {
+                case HttpStatusCode.Created:
+                    argument.likes += 1;
+                    argument.likedByUser = true;
+                    setArgument(argument);
+                    break;
+                default:
+                // TODO: Error
+            }
+        });
     };
 
-    const handleUnlikeSubmit = () => {
-        // TODO: Implement unlike
-    };
-
-    const handleGoToLogin = () => {
-        // TODO: Redirect to login
+    const unlikeSubmit = () => {
+        callUnlike({
+            likeUrl: argument.like as string,
+        }).then((code) => {
+            switch (code) {
+                case HttpStatusCode.NoContent:
+                    argument.likedByUser = false;
+                    argument.likes -= 1;
+                    setArgument(argument);
+                    break;
+                default:
+                // TODO: Error
+            }
+        });
     };
 
     const handleDelete = () => {
-        // TODO: Implement delete argument
+        deleteArgument(argument.self).then((code) => {
+            switch (code) {
+                case HttpStatusCode.NoContent:
+                    argument.deleted = true;
+                    setArgument(argument);
+                    break;
+                default:
+                // TODO: Error
+            }
+        });
     };
 
     return (
@@ -63,47 +110,48 @@ const ArgumentBubble = ({ argument, debateCreator }: ArgumentBubbleProps) => {
                 </h6>
                 <div className="comment-extra">
                     <div className="comment-header-section">
-                        {authorized ? (
-                            argument.likedByUser ? (
-                                <form
-                                    method="delete"
-                                    acceptCharset="utf-8"
-                                    onSubmit={handleUnlikeSubmit}
-                                >
-                                    <LikeButton icon="favorite" />
-                                </form>
+                        {!argument.deleted &&
+                            (userInfo ? (
+                                argument.likedByUser ? (
+                                    <LikeButton
+                                        icon="favorite"
+                                        handleSubmit={unlikeSubmit}
+                                    />
+                                ) : (
+                                    <LikeButton
+                                        icon="favorite_border"
+                                        handleSubmit={likeSubmit}
+                                    />
+                                )
                             ) : (
-                                <form
-                                    method="post"
-                                    acceptCharset="utf-8"
-                                    onSubmit={handleLikeSubmit}
-                                >
-                                    <LikeButton icon="favorite_border" />
-                                </form>
-                            )
-                        ) : (
-                            <LikeButton
-                                icon="favorite_border"
-                                handleSubmit={handleGoToLogin}
-                            />
+                                <LikeButton
+                                    icon="favorite_border"
+                                    handleSubmit={() => {
+                                        // TODO: add toast?
+                                        navigate("/login");
+                                    }}
+                                />
+                            ))}
+                        {!argument.deleted && (
+                            <div>
+                                <p>{argument.likes}</p>
+                            </div>
                         )}
-                        <div>
-                            <p>{argument.likes}</p>
-                        </div>
                     </div>
                     <div className="comment-header-section">
                         <NonClickableChip name={argument.createdDate} />
                         <NonClickableChip name={argument.status} />
                     </div>
-                    {!argument.deleted && authorized && (
-                        <DeleteDialog
-                            id="delete-argument"
-                            handleDelete={handleDelete}
-                            title={t(
-                                "components.argumentBubble.deleteConfirmation"
-                            )}
-                        />
-                    )}
+                    {!argument.deleted &&
+                        userInfo?.username === argument.creatorName && (
+                            <DeleteDialog
+                                id="delete-argument"
+                                handleDelete={handleDelete}
+                                title={t(
+                                    "components.argumentBubble.deleteConfirmation"
+                                )}
+                            />
+                        )}
                 </div>
             </div>
             <div>

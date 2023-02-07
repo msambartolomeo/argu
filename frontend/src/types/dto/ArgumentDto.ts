@@ -10,6 +10,6 @@ export default interface ArgumentDto {
     self: string;
     creator: string;
     debate: string;
-    image: string;
-    like: string;
+    image?: string;
+    like?: string;
 }

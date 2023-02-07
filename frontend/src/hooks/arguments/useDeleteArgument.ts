@@ -1,10 +1,17 @@
-import { useDelete } from "../requests/useDelete";
+import { usePatch } from "../requests/usePatch";
 
 export const useDeleteArgument = () => {
-    const { loading, callDelete } = useDelete();
+    const { loading, callPatch } = usePatch();
 
     async function deleteArgument(argumentsURL: string): Promise<number> {
-        const response = await callDelete(argumentsURL, {}, true);
+        const response = await callPatch(
+            argumentsURL,
+            {
+                delete: true,
+            },
+            {},
+            true
+        );
         return response.status;
     }
 

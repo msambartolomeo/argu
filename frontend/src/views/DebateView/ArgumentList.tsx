@@ -44,8 +44,9 @@ function ArgumentList({ debate }: Props) {
 
     if (loading) {
         return (
+            // TODO: Center
             <div className="z-depth-3 argument-list">
-                <CircularProgress size={100} />;
+                <CircularProgress size={100} />
             </div>
         );
     }
@@ -69,7 +70,8 @@ function ArgumentList({ debate }: Props) {
                     <>
                         <h5 className="center">{header}</h5>
                         <ArgumentBubble
-                            argument={argument}
+                            key={argument.self}
+                            argumentData={argument}
                             debateCreator={debate.creatorName}
                         />
                     </>
