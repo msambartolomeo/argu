@@ -29,10 +29,6 @@ const DeleteAccountModal = () => {
                 callLogout();
                 navigate("/");
                 break;
-            case HttpStatusCode.Unauthorized:
-                callLogout();
-                navigate("/login");
-                break;
             case HttpStatusCode.NotFound:
                 return <Error status={res.status} message={res.message} />;
             default:

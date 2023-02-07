@@ -85,10 +85,6 @@ const UserProfile = () => {
                 case HttpStatusCode.Ok:
                     setDebates(res.data);
                     break;
-                case HttpStatusCode.Unauthorized:
-                    callLogout();
-                    navigate("/login");
-                    break;
             }
         });
     }, [showMyDebates, page]);
