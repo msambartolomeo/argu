@@ -110,6 +110,10 @@ const UserProfile = () => {
                     <i className="material-icons left">stars</i>
                     {userData?.points}
                 </h5>
+                <div className="email-format">
+                    <i className="material-icons">email</i>
+                    <h6>{userInfo?.email}</h6>
+                </div>
                 <h6>
                     {t("profile.createdIn")}: {userData?.createdDate}
                 </h6>
