@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
 import { CircularProgress, Pagination } from "@mui/material";
-import { SelectChangeEvent } from "@mui/material";
 
 import "./Discovery.css";
 
@@ -14,6 +13,7 @@ import CategoryFilters from "../../components/CategoryFilters/CategoryFilters";
 import DebatesList from "../../components/DebatesList/DebatesList";
 import OrderByComponent from "../../components/OrderByComponent/OrderByComponent";
 import { useGetDebates } from "../../hooks/debates/useGetDebates";
+import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 import "../../locales/index";
 import { PaginatedList } from "../../types/PaginatedList";
 import DebateDto from "../../types/dto/DebateDto";
@@ -36,7 +36,7 @@ const Discovery = () => {
 
     const { loading: isLoading, getDebates: getDebates } = useGetDebates();
 
-    useEffect(() => {
+    useNonInitialEffect(() => {
         queryParams.delete("page");
         if (page > 1) {
             queryParams.append("page", page.toString());
@@ -51,8 +51,8 @@ const Discovery = () => {
             status: queryParams.get("status") as DebateStatus,
             date: queryParams.get("date") as string,
             page:
-                (queryParams.get("page") as unknown as number) - 1 >= 0
-                    ? (queryParams.get("page") as unknown as number) - 1
+                Number(queryParams.get("page")) - 1 >= 0
+                    ? Number(queryParams.get("page")) - 1
                     : 0,
             search: queryParams.get("search") as string,
             size: 5,

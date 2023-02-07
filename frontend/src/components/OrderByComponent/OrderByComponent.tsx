@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import { SelectChangeEvent } from "@mui/material";
 import "./OrderByComponent.css";
 import SortSelectComponent from "./SortSelectComponent/SortSelectComponent";
 
+import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 import "../../locales/index";
 import DatePicker from "../DatePicker/DatePicker";
 
@@ -50,7 +51,7 @@ const OrderByComponent = () => {
         setQueryStatus(event.target.value);
     };
 
-    useEffect(() => {
+    useNonInitialEffect(() => {
         queryParams.delete("order");
         queryParams.delete("page");
         if (queryOrder) {
@@ -59,7 +60,7 @@ const OrderByComponent = () => {
         setQueryParams(queryParams);
     }, [queryOrder]);
 
-    useEffect(() => {
+    useNonInitialEffect(() => {
         queryParams.delete("status");
         queryParams.delete("page");
         if (queryStatus) {

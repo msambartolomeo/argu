@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
@@ -7,6 +7,7 @@ import { Stack } from "@mui/material";
 
 import "./CategoryFilters.css";
 
+import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 import "../../locales/index";
 import DebateCategory from "../../types/enums/DebateCategory";
 
@@ -19,7 +20,7 @@ const CategoryFilters = () => {
     );
     const categories = Object.values(DebateCategory);
 
-    useEffect(() => {
+    useNonInitialEffect(() => {
         queryParams.delete("category");
         queryParams.delete("page");
         queryParams.delete("search");

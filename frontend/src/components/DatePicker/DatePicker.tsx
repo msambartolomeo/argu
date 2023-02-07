@@ -6,6 +6,7 @@ import { useSearchParams } from "react-router-dom";
 
 import "./DatePicker.css";
 
+import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 import "../../locales/index";
 
 type Props = {
@@ -22,7 +23,7 @@ function DatePicker({ label, placeholder }: Props) {
 
     const [update, setUpdate] = useState(false);
 
-    useEffect(() => {
+    useNonInitialEffect(() => {
         queryParams.delete("date");
         queryParams.delete("page");
         if (date.current && date.current.value.toString() !== "") {

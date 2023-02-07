@@ -1,20 +1,18 @@
 import { FormEvent, useEffect, useState } from "react";
 
-import {
-    createSearchParams,
-    useNavigate,
-    useSearchParams,
-} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import "./SearchBar.css";
+
+import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 
 interface Props {
     placeholder?: string;
 }
 
 function SearchBar({ placeholder }: Props) {
-    const [query, setQuery] = useState("");
     const [queryParams, setQueryParams] = useSearchParams();
+    const [query, setQuery] = useState(queryParams.get("search") ?? "");
     const navigate = useNavigate();
 
     const search = (e: FormEvent<HTMLFormElement>) => {
@@ -22,19 +20,25 @@ function SearchBar({ placeholder }: Props) {
         setQueryParams(queryParams);
         navigate({
             pathname: "/discover",
-            search: createSearchParams(queryParams).toString(),
+            search: queryParams.toString(),
         });
     };
 
-    useEffect(() => {
+    useNonInitialEffect(() => {
+        const oldSearch = queryParams.get("search");
         queryParams.delete("page");
-        queryParams.delete("order");
-        queryParams.delete("status");
         queryParams.delete("search");
         if (query) {
             queryParams.append("search", query);
+        } else if (oldSearch) {
+            // NOTE: if there was a search param, and query was cleared, now we want to delete it
+            setQueryParams(queryParams);
         }
     }, [query]);
+
+    useEffect(() => {
+        setQuery(queryParams.get("search") ?? "");
+    }, [queryParams]);
 
     return (
         <form onSubmit={search}>
