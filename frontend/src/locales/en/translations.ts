@@ -182,7 +182,7 @@ export const TRANSLATIONS_EN = {
         label: "Explain why you should become a moderator",
         errors: {
             reasonEmpty: "You must provide a reason to become a moderator",
-            reasonTooLong: "Your message cannot be longer than 2000 characters",
+            reasonTooLong: "Your message cannot exceed 2000 characters",
         },
     },
     components: {

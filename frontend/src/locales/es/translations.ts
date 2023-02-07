@@ -187,8 +187,7 @@ export const TRANSLATIONS_ES = {
         label: "Explica por qué deberías ser un moderador",
         errors: {
             reasonEmpty: "Debes especificar una razón para ser moderador",
-            reasonTooLong:
-                "La razón no puede ser más larga que 2000 caracteres",
+            reasonTooLong: "Tu razón no puede superar los 2000 caracteres",
         },
     },
     components: {
