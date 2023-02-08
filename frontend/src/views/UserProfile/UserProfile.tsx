@@ -3,7 +3,12 @@ import { useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+    Link,
+    createSearchParams,
+    useNavigate,
+    useSearchParams,
+} from "react-router-dom";
 
 import { CircularProgress, Pagination, PaginationItem } from "@mui/material";
 
@@ -178,8 +183,12 @@ const UserProfile = () => {
                                     <PaginationItem
                                         component={Link}
                                         to={{
-                                            pathname: `/profile`,
-                                            search: `?page=${item.page}`,
+                                            pathname: "/profile",
+                                            search: createSearchParams({
+                                                page:
+                                                    item.page?.toString() ||
+                                                    "1",
+                                            }).toString(),
                                         }}
                                         {...item}
                                     />
