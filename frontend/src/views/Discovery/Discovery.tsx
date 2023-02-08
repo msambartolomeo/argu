@@ -11,6 +11,7 @@ import "./Discovery.css";
 
 import CategoryFilters from "../../components/CategoryFilters/CategoryFilters";
 import DebatesList from "../../components/DebatesList/DebatesList";
+import NoDebatesFound from "../../components/NoDebatesFound/NoDebatesFound";
 import OrderByComponent from "../../components/OrderByComponent/OrderByComponent";
 import { useGetDebates } from "../../hooks/debates/useGetDebates";
 import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
@@ -89,7 +90,7 @@ const Discovery = () => {
                 </div>
                 {isLoading ? (
                     <CircularProgress size={100} />
-                ) : (
+                ) : debatesList && debatesList?.data.length > 0 ? (
                     <>
                         <div className="debates-list-container">
                             <DebatesList debates={debatesList?.data || []} />
@@ -109,6 +110,10 @@ const Discovery = () => {
                             />
                         </div>
                     </>
+                ) : (
+                    <div className="no-debates-container">
+                        <NoDebatesFound />
+                    </div>
                 )}
             </div>
         </div>

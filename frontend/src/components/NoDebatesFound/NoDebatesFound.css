@@ -1,0 +1,33 @@
+.speech-bubble {
+    width: 80%;
+    margin: 2% 10%;
+    height: 120px;
+    border-radius: 15px;
+    color: black;
+    padding: 2% 2% 5%;
+    text-align: left;
+    font-weight: 500;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.speech-bubble.sb-right {
+    background: var(--againstColor);
+}
+
+.speech-bubble.sb-left {
+    background: var(--forColor);
+}
+
+.comment-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.comment-owner {
+    color: slategrey !important;
+}

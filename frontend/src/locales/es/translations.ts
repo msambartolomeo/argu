@@ -308,6 +308,13 @@ export const TRANSLATIONS_ES = {
             showingDebatesInCategory:
                 "Mostrando debates en la categoría: {{category}}",
         },
+        noDebates: {
+            arguTeam: "El equipo de Argu dijo",
+            arguTeamText: "Aún no hay debates para esta búsqueda",
+            arguCommunity: "La comunidad de Argu dijo",
+            arguCommunityText:
+                "¡Pero podés crear tu propio debate y así ayudar a la comunidad a crecer!",
+        },
     },
     error: {
         title: "¡Ups!",
