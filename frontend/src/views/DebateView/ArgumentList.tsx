@@ -8,6 +8,7 @@ import { CircularProgress } from "@mui/material";
 import ArgumentBubble from "../../components/ArgumentBubble/ArgumentBubble";
 import Pagination from "../../components/Pagination/Pagination";
 import { useGetArguments } from "../../hooks/arguments/useGetArguments";
+import "../../locales/index";
 import { PaginatedList } from "../../types/PaginatedList";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import DebateDto from "../../types/dto/DebateDto";
@@ -51,32 +52,29 @@ function ArgumentList({ debate }: Props) {
         );
     }
 
+    const list = argumentList?.data.map((argument, index) => {
+        return (
+            <div key={argument.self}>
+                {
+                    /* NOTE: only show header if it is the first element 
+                       or if the status of the previous one is different */
+                    (index === 0 ||
+                        argumentList.data[index - 1].status !==
+                            argument.status) && (
+                        <h5 className="center">{argument.status}</h5>
+                    )
+                }
+                <ArgumentBubble
+                    argumentData={argument}
+                    debateCreator={debate.creatorName}
+                />
+            </div>
+        );
+    });
+
     return (
         <div className="z-depth-3 argument-list">
-            {argumentList?.data.map((argument) => {
-                let header;
-                switch (argument.status) {
-                    case "introduction":
-                        header = t("debate.argument.introduction");
-                        break;
-                    case "closing":
-                        header = t("debate.argument.conclusion");
-                        break;
-                    case "argument":
-                        header = t("debate.argument.argument");
-                        break;
-                }
-                return (
-                    <>
-                        <h5 className="center">{header}</h5>
-                        <ArgumentBubble
-                            key={argument.self}
-                            argumentData={argument}
-                            debateCreator={debate.creatorName}
-                        />
-                    </>
-                );
-            })}
+            {list}
             {argumentList?.data.length === 0 && (
                 <h5 className="center">{t("debate.noArguments")}</h5>
             )}
