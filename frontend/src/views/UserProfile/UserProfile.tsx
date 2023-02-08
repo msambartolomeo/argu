@@ -3,14 +3,9 @@ import { useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import {
-    Link,
-    createSearchParams,
-    useNavigate,
-    useSearchParams,
-} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { CircularProgress, Pagination, PaginationItem } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 
 import "./UserProfile.css";
 
@@ -94,7 +89,7 @@ const UserProfile = () => {
                 (showMyDebates
                     ? userData?.debates
                     : userData?.subscribedDebates) || "";
-            getDebates({ url: url, page: page - 1, size: 5 }).then((res) => {
+            getDebates({ url: url }).then((res) => {
                 switch (res.status) {
                     case HttpStatusCode.Ok:
                         setDebates(res.data);
@@ -105,7 +100,36 @@ const UserProfile = () => {
                 }
             });
         }
-    }, [userData, showMyDebates, page]);
+    }, [userData, showMyDebates]);
+
+    const handleChangePage = async (value: number) => {
+        let url = "";
+        switch (value) {
+            case 1:
+                url = debates?.first || "";
+                break;
+            case debates?.totalPages:
+                url = debates?.last || "";
+                break;
+            case page - 1:
+                url = debates?.prev || "";
+                break;
+            case page + 1:
+                url = debates?.next || "";
+                break;
+        }
+        const res = await getDebates({ url: url });
+        switch (res.status) {
+            case HttpStatusCode.Ok:
+                setDebates(res.data);
+                break;
+            case HttpStatusCode.NoContent:
+                setDebates(undefined);
+                break;
+        }
+        page = value;
+        setQueryParams({ page: value.toString() });
+    };
 
     if (error) return <Error status={error.status} message={error.message} />;
 
@@ -179,20 +203,11 @@ const UserProfile = () => {
                                 color="primary"
                                 className="white"
                                 page={page}
-                                renderItem={(item) => (
-                                    <PaginationItem
-                                        component={Link}
-                                        to={{
-                                            pathname: "/profile",
-                                            search: createSearchParams({
-                                                page:
-                                                    item.page?.toString() ||
-                                                    "1",
-                                            }).toString(),
-                                        }}
-                                        {...item}
-                                    />
-                                )}
+                                showFirstButton
+                                showLastButton
+                                onChange={(event, page) =>
+                                    handleChangePage(page)
+                                }
                             />
                         </div>
                     )}
