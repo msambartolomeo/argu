@@ -132,7 +132,13 @@ const ArgumentBubble = ({
                                     icon="favorite_border"
                                     handleSubmit={() => {
                                         // TODO: add toast?
-                                        navigate("/login");
+                                        navigate("/login", {
+                                            state: {
+                                                from: window.location.pathname.substring(
+                                                    13
+                                                ),
+                                            },
+                                        });
                                     }}
                                 />
                             ))}
