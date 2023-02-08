@@ -1,29 +1,30 @@
-import { useState } from "react";
-
 import Select from "react-select";
 
 import "./SelectDropdown.css";
 
 interface SelectDropdownProps {
     suppliers: { value: string; label: string }[];
+    error?: string;
+    placeholder?: string;
 }
 
-const SelectDropdown = ({ suppliers }: SelectDropdownProps) => {
-    const [seledSupplier, setSelectedSupplier] = useState();
-
-    const handleSelectChange = () => {
-        console.log("value");
-        // const value = event.target.value;
-        // setSelectedSupplier(value);
-    };
-
+const SelectDropdown = ({
+    suppliers,
+    placeholder,
+    // TODO: Add error management
+    error,
+}: SelectDropdownProps) => {
     return (
         <div className="select-container">
             <Select
+                form="create-product-form"
                 menuPortalTarget={document.body}
                 styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
                 options={suppliers}
-                onChange={handleSelectChange}
+                isSearchable={true}
+                isClearable={true}
+                required={true}
+                placeholder={placeholder}
             />
         </div>
     );

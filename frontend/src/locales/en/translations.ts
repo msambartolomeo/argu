@@ -171,8 +171,23 @@ export const TRANSLATIONS_EN = {
         against: "Against",
         opponentUsername: "Your opponent's username:",
         category: "Debate category:",
+        categoryPlaceholder: "Select a category",
         image: "Debate image (optional):",
         uploadImage: "Upload Image",
+        errors: {
+            titleEmpty: "Title cannot be empty",
+            titleTooLong: "Title cannot be longer than 100 characters",
+            descriptionEmpty: "Description cannot be empty",
+            descriptionTooLong:
+                "Description cannot be longer than 1000 characters",
+            opponentUsernameEmpty: "Opponent's username cannot be empty",
+            opponentUsernameTooLong:
+                "Opponent's username cannot be longer than 64 characters",
+            opponentUsernameSame: "You cannot debate with yourself",
+            categoryInvalid: "Category is invalid",
+            imageTooBig: "Image cannot be bigger than 10MB",
+            imageInvalid: "Image format is invalid",
+        },
     },
     requestModerator: {
         requestModerator: "Want to become a moderator?",
