@@ -55,6 +55,7 @@ const DeleteAccountModal = () => {
                     <button
                         className="modal-close waves-effect btn-flat"
                         onClick={handleDeleteUser}
+                        disabled={isDeleteUserLoading}
                     >
                         {t("profile.confirm")}
                     </button>

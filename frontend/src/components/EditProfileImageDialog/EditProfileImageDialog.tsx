@@ -125,6 +125,7 @@ const EditImageDialog = ({ imageUrl, imageChange }: EditImageDialogProps) => {
                         <button
                             className="modal-close waves-effect btn-flat"
                             type="submit"
+                            disabled={isUpdateImageLoading}
                         >
                             {t("profile.confirm")}
                         </button>
