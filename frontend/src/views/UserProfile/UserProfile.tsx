@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import { CircularProgress, Pagination, PaginationItem } from "@mui/material";
 
@@ -41,9 +41,8 @@ const UserProfile = () => {
 
     const { userInfo } = useSharedAuth();
 
-    const location = useLocation();
-    const query = new URLSearchParams(location.search);
-    const page = parseInt(query.get("page") || "1", 10);
+    const [queryParams, setQueryParams] = useSearchParams();
+    let page = parseInt(queryParams.get("page") || "1", 10);
 
     const { loading: isUserLoading, getUserByUsername: getUser } =
         useGetUserByUsername();
@@ -59,6 +58,13 @@ const UserProfile = () => {
 
     const handleUpdateImage = () => {
         setReloadImage(Date.now());
+    };
+
+    const handleUpdateDebates = (value: boolean) => {
+        page = 1;
+        queryParams.delete("page");
+        setQueryParams(queryParams);
+        setShowMyDebates(value);
     };
 
     useEffect(() => {
@@ -78,17 +84,23 @@ const UserProfile = () => {
     }, [userInfo]);
 
     useEffect(() => {
-        const url =
-            (showMyDebates ? userData?.debates : userData?.subscribedDebates) ||
-            "";
-        getDebates({ url: url, page: page - 1, size: 5 }).then((res) => {
-            switch (res.status) {
-                case HttpStatusCode.Ok:
-                    setDebates(res.data);
-                    break;
-            }
-        });
-    }, [showMyDebates, page]);
+        if (userData) {
+            const url =
+                (showMyDebates
+                    ? userData?.debates
+                    : userData?.subscribedDebates) || "";
+            getDebates({ url: url, page: page - 1, size: 5 }).then((res) => {
+                switch (res.status) {
+                    case HttpStatusCode.Ok:
+                        setDebates(res.data);
+                        break;
+                    case HttpStatusCode.NoContent:
+                        setDebates(undefined);
+                        break;
+                }
+            });
+        }
+    }, [userData, showMyDebates, page]);
 
     if (error) return <Error status={error.status} message={error.message} />;
 
@@ -129,7 +141,7 @@ const UserProfile = () => {
             <div className="debates-column">
                 <div className="section">
                     <a
-                        onClick={() => setShowMyDebates(false)}
+                        onClick={() => handleUpdateDebates(false)}
                         className={cn("waves-effect btn-large", {
                             "btn-active": !showMyDebates,
                         })}
@@ -137,7 +149,7 @@ const UserProfile = () => {
                         {t("profile.debatesSubscribed")}
                     </a>
                     <a
-                        onClick={() => setShowMyDebates(true)}
+                        onClick={() => handleUpdateDebates(true)}
                         className={cn("waves-effect btn-large", {
                             "btn-active": showMyDebates,
                         })}
