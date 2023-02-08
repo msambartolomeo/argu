@@ -42,7 +42,7 @@ export const useRequestApi = () => {
             if (!authToken && !refreshToken && !credentials) {
                 // TODO: If we already throw an error (to avoid infinite recursion), should we still navigate to login or leave it to component?
                 navigate("/login", {
-                    state: { from: window.location.pathname },
+                    state: { from: window.location.pathname.substring(13) },
                 });
                 throw new Error("No auth token or credentials");
             }

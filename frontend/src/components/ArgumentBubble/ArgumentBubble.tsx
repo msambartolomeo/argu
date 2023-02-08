@@ -3,7 +3,6 @@ import { useState } from "react";
 import { HttpStatusCode } from "axios";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 import "./ArgumentBubble.css";
 
@@ -42,8 +41,6 @@ const ArgumentBubble = ({
     const { userInfo } = useSharedAuth();
 
     const { t } = useTranslation();
-
-    const navigate = useNavigate();
 
     const [argument, setArgument] = useState<ArgumentDto>(argumentData);
 
@@ -113,33 +110,17 @@ const ArgumentBubble = ({
                 <div className="comment-extra">
                     <div className="comment-header-section">
                         {!argument.deleted &&
-                            (userInfo ? (
-                                argument.likedByUser ? (
-                                    <LikeButton
-                                        disabled={unlikeLoading}
-                                        icon="favorite"
-                                        handleSubmit={unlikeSubmit}
-                                    />
-                                ) : (
-                                    <LikeButton
-                                        disabled={likeLoading}
-                                        icon="favorite_border"
-                                        handleSubmit={likeSubmit}
-                                    />
-                                )
+                            (argument.likedByUser ? (
+                                <LikeButton
+                                    disabled={unlikeLoading}
+                                    icon="favorite"
+                                    handleSubmit={unlikeSubmit}
+                                />
                             ) : (
                                 <LikeButton
+                                    disabled={likeLoading}
                                     icon="favorite_border"
-                                    handleSubmit={() => {
-                                        // TODO: add toast?
-                                        navigate("/login", {
-                                            state: {
-                                                from: window.location.pathname.substring(
-                                                    13
-                                                ),
-                                            },
-                                        });
-                                    }}
+                                    handleSubmit={likeSubmit}
                                 />
                             ))}
                         {!argument.deleted && (
