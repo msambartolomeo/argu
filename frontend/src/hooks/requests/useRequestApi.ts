@@ -109,7 +109,7 @@ export const useRequestApi = () => {
                         delete headers["Authorization"];
                     }
 
-                    await requestApi({
+                    return await requestApi({
                         url,
                         method,
                         body,

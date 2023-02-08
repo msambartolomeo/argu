@@ -1,18 +1,20 @@
 interface ChipProps {
-    name?: string;
-    path?: string;
+    children?: React.ReactNode;
+    onClick?: () => void;
+    disabled?: boolean;
 }
 
-const Chip = ({ name, path }: ChipProps) => {
+const Chip = ({ children, onClick, disabled }: ChipProps) => {
     return (
         <>
-            <a
+            <button
                 className="chip btn waves-effect"
-                style={{ pointerEvents: path ? "auto" : "none" }}
-                href={path}
+                disabled={disabled}
+                style={{ pointerEvents: onClick ? "auto" : "none" }}
+                onClick={onClick}
             >
-                {name}
-            </a>
+                {children}
+            </button>
         </>
     );
 };

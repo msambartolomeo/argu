@@ -4,8 +4,6 @@ import { useDelete } from "../requests/useDelete";
 
 export interface DeleteSubscriptionInput {
     subscriptionUrl: string;
-    // TODO: Maybe get the userUrl from the context
-    userUrl: string;
 }
 
 export const useDeleteSubscription = () => {
@@ -13,11 +11,8 @@ export const useDeleteSubscription = () => {
 
     async function callDeleteSubscription({
         subscriptionUrl,
-        userUrl,
     }: DeleteSubscriptionInput): Promise<HttpStatusCode> {
-        const response = await callDelete(subscriptionUrl, {}, true, {
-            user: userUrl,
-        });
+        const response = await callDelete(subscriptionUrl, {}, true);
         return response.status;
     }
 

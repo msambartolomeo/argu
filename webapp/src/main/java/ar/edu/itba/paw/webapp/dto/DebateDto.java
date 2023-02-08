@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.enums.DebateStatus;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -81,7 +82,11 @@ public class DebateDto {
 
         dto.recommendations = uriInfo.getBaseUriBuilder().path("debates").queryParam("recommendToDebate", String.valueOf(debate.getDebateId())).build();
         dto.sameCategory = uriInfo.getBaseUriBuilder().path("debates").queryParam("category", debate.getCategory().getName()).build();
-        dto.sameStatus = uriInfo.getBaseUriBuilder().path("debates").queryParam("status", debate.getStatus().getName()).build();
+        DebateStatus status = debate.getStatus();
+        if (status == DebateStatus.CLOSING || status == DebateStatus.VOTING) {
+            status = DebateStatus.OPEN;
+        }
+        dto.sameStatus = uriInfo.getBaseUriBuilder().path("debates").queryParam("status", status.getName()).build();
         dto.afterSameDate = uriInfo.getBaseUriBuilder().path("debates").queryParam("date", debate.getCreatedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))).build();
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

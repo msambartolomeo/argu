@@ -21,6 +21,7 @@ export default interface DebateDto {
     opponent: string;
     arguments: string;
     chats: string;
+    // TODO: Remove question mark from the following 4, cant do it now or else user profile breaks
     recommendations?: string;
     sameCategory?: string;
     sameStatus?: string;

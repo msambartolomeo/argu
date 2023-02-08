@@ -62,6 +62,7 @@ const DebateView = () => {
     // TODO: Change to real values and hooks
     const [debateData, setDebateData] = useState<DebateDto | undefined>();
 
+    const [refresh, setRefresh] = useState<boolean>(true);
     const [userData, setuserData] = useState<User | undefined>(user1);
     const argumentsList: Argument[] = [argument1];
 
@@ -72,13 +73,18 @@ const DebateView = () => {
         useGetDebateById();
 
     useEffect(() => {
-        const id: string = params.id?.toString() || "";
-        getDebate({ id: parseInt(id) }).then((output: GetDebateByIdOutput) => {
-            if (output.status === HttpStatusCode.Ok) {
-                setDebateData(output.data);
-            }
-        });
-    }, []);
+        if (refresh) {
+            const id: string = params.id?.toString() || "";
+            getDebate({ id: parseInt(id) }).then(
+                (output: GetDebateByIdOutput) => {
+                    if (output.status === HttpStatusCode.Ok) {
+                        setDebateData(output.data);
+                    }
+                }
+            );
+            setRefresh(false);
+        }
+    }, [refresh]);
 
     if (typeof debateData === "string") {
         return <Error status={HttpStatusCode.NotFound} message={debateData} />;
@@ -99,7 +105,10 @@ const DebateView = () => {
     // TODO: use router for redirecting category
     return (
         <>
-            <DebateHeader debate={debateData} userData={userData} />
+            <DebateHeader
+                debate={debateData}
+                refreshDebate={() => setRefresh(true)}
+            />
             <div className="debate-content">
                 <ArgumentList debate={debateData} />
                 <div className="post-arguments">

@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { HttpStatusCode } from "axios";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
+import { CircularProgress } from "@mui/material";
 
 import DebaterDisplay from "./DebaterDisplay";
 
@@ -8,66 +12,155 @@ import Chip from "../../components/Chip/Chip";
 import DebatePhoto from "../../components/DebatePhoto/DebatePhoto";
 import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
 import NonClickableChip from "../../components/NonClickableChip/NonClickableChip";
-import User from "../../types/User";
+import { useConcludeDebate } from "../../hooks/debates/useConcludeDebate";
+import { useDeleteDebate } from "../../hooks/debates/useDeleteDebate";
+import { useCreateSubscription } from "../../hooks/subscriptions/useCreateSubscription";
+import { useDeleteSubscription } from "../../hooks/subscriptions/useDeleteSubscription";
+import { useGetSubscription } from "../../hooks/subscriptions/useGetSubscription";
+import { useSharedAuth } from "../../hooks/useAuth";
 import DebateDto from "../../types/dto/DebateDto";
 
 interface Props {
-    debate?: DebateDto | null;
-    userData?: User;
+    debate: DebateDto;
+    refreshDebate: () => void;
 }
 
-function DebateHeader({ debate, userData }: Props) {
+function DebateHeader({ debate, refreshDebate }: Props) {
     const { t } = useTranslation();
 
-    const [subscribed, setSubscribed] = useState<boolean>(false);
+    const { userInfo } = useSharedAuth();
+    const navigate = useNavigate();
 
-    const handleCloseDebate = () => {
-        // TODO: Implement close debate call
+    const [subscribed, setSubscribed] = useState<boolean>(false);
+    const [subscriptionCount, setSubscriptionCount] = useState<number>(
+        debate.subscriptionsCount
+    );
+
+    const { loading: getSubLoading, getSubscription } = useGetSubscription();
+    const { loading: subLoading, createSubscription: callSubscribe } =
+        useCreateSubscription();
+    const { loading: unsubLoading, callDeleteSubscription: callUnsubscribe } =
+        useDeleteSubscription();
+    const { deleteDebate } = useDeleteDebate();
+    const { loading: concludeLoading, concludeDebate } = useConcludeDebate();
+
+    useEffect(() => {
+        getSubscription({
+            subscriptionUrl: debate.subscription as string,
+        }).then((code) => {
+            switch (code) {
+                case HttpStatusCode.Ok:
+                    setSubscribed(true);
+                    break;
+                case HttpStatusCode.NotFound:
+                    setSubscribed(false);
+                    break;
+                default:
+                // TODO: Error
+            }
+        });
+    }, []);
+
+    const subscribe = () => {
+        callSubscribe({
+            subscriptionUrl: debate.subscription as string,
+        }).then((code) => {
+            switch (code) {
+                case HttpStatusCode.Created:
+                    setSubscriptionCount(subscriptionCount + 1);
+                    setSubscribed(true);
+                    break;
+                default:
+                // TODO: Error
+            }
+        });
+    };
+
+    const unsubscribe = () => {
+        callUnsubscribe({
+            subscriptionUrl: debate.subscription as string,
+        }).then((code) => {
+            switch (code) {
+                case HttpStatusCode.NoContent:
+                    setSubscriptionCount(subscriptionCount - 1);
+                    setSubscribed(false);
+                    break;
+                default:
+                // TODO: Error
+            }
+        });
     };
 
     const handleDeleteDebate = () => {
-        // TODO: Implement delete debate call
+        deleteDebate(debate.self).then((code) => {
+            switch (code) {
+                case HttpStatusCode.NoContent:
+                    // TODO: toast?
+                    navigate("/");
+                    break;
+                default:
+                // TODO: Error
+            }
+        });
     };
 
-    const handleSubscribe = () => {
-        // TODO: Implement subscribe call
-        // consider subscribed state for the call
+    const handleConcludeDebate = () => {
+        concludeDebate(debate.self).then((code) => {
+            switch (code) {
+                case HttpStatusCode.NoContent:
+                    refreshDebate();
+                    break;
+                default:
+                // TODO: Error
+            }
+        });
+    };
+
+    const navigateDiscoverUrl = (path?: string) => {
+        const url = new URL(path as string);
+        navigate({
+            pathname: "/discover",
+            search: url.search,
+        });
     };
 
     return (
         <div className="card normalized-margins">
+            {getSubLoading && <CircularProgress size={100} />}
             <div className="card-content debate-info-holder">
                 <div className="debate-holder-separator">
                     <div className="debate-text-organizer">
                         <div className="debate-info-holder">
                             <h4 className="debate-title word-wrap">
-                                {debate?.name}
+                                {debate.name}
                             </h4>
-                            {userData && (
+                            {userInfo && (
                                 <div className="right debate-buttons-display">
                                     <div className="col">
-                                        {debate?.status ===
+                                        {debate.status ===
                                             t("debate.statuses.statusOpen") &&
-                                            (userData?.username ===
-                                                debate?.creatorName ||
-                                                userData?.username ===
-                                                    debate?.opponentName) && (
-                                                <button
-                                                    className="btn waves-effect chip"
-                                                    onClick={handleCloseDebate}
+                                            (userInfo.username ===
+                                                debate.creatorName ||
+                                                userInfo.username ===
+                                                    debate.opponentName) && (
+                                                <Chip
+                                                    disabled={concludeLoading}
+                                                    onClick={
+                                                        handleConcludeDebate
+                                                    }
                                                 >
                                                     {t("debate.close")}
                                                     <i className="material-icons right">
                                                         close
                                                     </i>
-                                                </button>
+                                                </Chip>
                                             )}
-                                        {debate?.status !==
+                                        {debate.status !==
                                             t(
                                                 "debate.statuses.statusDeleted"
                                             ) &&
-                                            userData?.username ===
-                                                debate?.creatorName && (
+                                            userInfo.username ===
+                                                debate.creatorName && (
                                                 <DeleteDialog
                                                     id="delete-debate"
                                                     handleDelete={
@@ -85,66 +178,81 @@ function DebateHeader({ debate, userData }: Props) {
                         </div>
                         <hr className="dashed" />
                         <h5 className="debate-description word-wrap">
-                            {debate?.description}
+                            {debate.description}
                         </h5>
-                        {debate?.isCreatorFor ? (
+                        {debate.isCreatorFor ? (
                             <>
                                 <DebaterDisplay
-                                    debater={debate?.creatorName}
+                                    debater={debate.creatorName}
                                     position={t("debate.for")}
                                 />
                                 <DebaterDisplay
-                                    debater={debate?.opponentName}
+                                    debater={debate.opponentName}
                                     position={t("debate.against")}
                                 />
                             </>
                         ) : (
                             <>
                                 <DebaterDisplay
-                                    debater={debate?.opponentName}
+                                    debater={debate.opponentName}
                                     position={t("debate.for")}
                                 />
                                 <DebaterDisplay
-                                    debater={debate?.creatorName}
+                                    debater={debate.creatorName}
                                     position={t("debate.against")}
                                 />
                             </>
                         )}
                     </div>
                     <div className="debate-footer">
-                        {userData && (
+                        {userInfo && !getSubLoading && (
                             <>
                                 {subscribed ? (
-                                    <button
-                                        className="btn waves-effect chip"
-                                        onClick={handleSubscribe}
+                                    <Chip
+                                        disabled={unsubLoading}
+                                        onClick={unsubscribe}
                                     >
                                         {t("debate.unsubscribe")}
                                         <i className="material-icons right">
                                             notifications_off
                                         </i>
-                                    </button>
+                                    </Chip>
                                 ) : (
-                                    <button
-                                        className="btn waves-effect chip"
-                                        onClick={handleSubscribe}
+                                    <Chip
+                                        disabled={subLoading}
+                                        onClick={subscribe}
                                     >
                                         {t("debate.subscribe")}
                                         <i className="material-icons right">
                                             notifications_active
                                         </i>
-                                    </button>
+                                    </Chip>
                                 )}
                             </>
                         )}
-                        <Chip name={debate?.category} />
-                        <Chip name={debate?.createdDate.toString()} />
-                        <Chip name={debate?.status} />
-                        <NonClickableChip
-                            name={
-                                t("debate.subscribed") +
-                                debate?.subscriptionsCount
+                        <Chip
+                            onClick={() =>
+                                navigateDiscoverUrl(debate.sameCategory)
                             }
+                        >
+                            {debate.category}
+                        </Chip>
+                        <Chip
+                            onClick={() =>
+                                navigateDiscoverUrl(debate.afterSameDate)
+                            }
+                        >
+                            {debate.createdDate.toString()}
+                        </Chip>
+                        <Chip
+                            onClick={() =>
+                                navigateDiscoverUrl(debate.sameStatus)
+                            }
+                        >
+                            {debate.status}
+                        </Chip>
+                        <NonClickableChip
+                            name={t("debate.subscribed") + subscriptionCount}
                         />
                     </div>
                 </div>
