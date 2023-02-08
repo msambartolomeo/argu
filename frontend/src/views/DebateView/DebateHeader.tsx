@@ -256,7 +256,7 @@ function DebateHeader({ debate, refreshDebate }: Props) {
                         />
                     </div>
                 </div>
-                <DebatePhoto id={undefined} alt="debate photo" />
+                <DebatePhoto id={debate.image} alt="debate photo" />
             </div>
         </div>
     );

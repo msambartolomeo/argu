@@ -16,7 +16,7 @@ export default interface DebateDto {
     opponentName?: string;
 
     self: string;
-    image: string;
+    image?: string;
     creator?: string;
     opponent: string;
     arguments: string;
