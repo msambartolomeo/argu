@@ -76,14 +76,14 @@ export const useRequestApi = () => {
                 headers: headers,
                 params: input.queryParams,
             });
-            if (requiresAuth) {
-                if (response.headers[AUTHORIZATION_HEADER]) {
-                    setAuthToken(response.headers[AUTHORIZATION_HEADER]);
-                }
-                if (response.headers[REFRESH_HEADER]) {
-                    setRefreshToken(response.headers[REFRESH_HEADER]);
-                }
+
+            if (response.headers[AUTHORIZATION_HEADER]) {
+                setAuthToken(response.headers[AUTHORIZATION_HEADER]);
             }
+            if (response.headers[REFRESH_HEADER]) {
+                setRefreshToken(response.headers[REFRESH_HEADER]);
+            }
+
             return response;
         } catch (err) {
             if (axios.isAxiosError(err)) {
@@ -104,6 +104,11 @@ export const useRequestApi = () => {
                         // NOTE: refreshToken expired or invalid, forcing login with Basic
                         setRefreshToken(null);
                     }
+
+                    if (headers) {
+                        delete headers["Authorization"];
+                    }
+
                     await requestApi({
                         url,
                         method,
@@ -113,14 +118,13 @@ export const useRequestApi = () => {
                     });
                 }
 
-                if (requiresAuth) {
-                    if (response?.headers[AUTHORIZATION_HEADER]) {
-                        setAuthToken(response.headers[AUTHORIZATION_HEADER]);
-                    }
-                    if (response?.headers[REFRESH_HEADER]) {
-                        setRefreshToken(response.headers[REFRESH_HEADER]);
-                    }
+                if (response?.headers[AUTHORIZATION_HEADER]) {
+                    setAuthToken(response.headers[AUTHORIZATION_HEADER]);
                 }
+                if (response?.headers[REFRESH_HEADER]) {
+                    setRefreshToken(response.headers[REFRESH_HEADER]);
+                }
+
                 return axiosError.response as AxiosResponse;
             }
             throw err;
