@@ -55,8 +55,13 @@
     align-items: baseline;
 }
 
+.link {
+    color: blue;
+}
+
 .link:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 /* Post Argument */

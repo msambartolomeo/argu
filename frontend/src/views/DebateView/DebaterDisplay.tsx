@@ -1,27 +1,29 @@
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
 interface DebaterDisplayProps {
     debater?: string;
     position: string;
 }
 
-const DebaterDisplay = ({
-    debater = "[deleted]",
-    position,
-}: DebaterDisplayProps) => {
-    const handleGoToProfile = () => {
-        // TODO: Implement go to profile call
-    };
+const DebaterDisplay = ({ debater, position }: DebaterDisplayProps) => {
+    const navigate = useNavigate();
+    const { t } = useTranslation();
 
     return (
         <div className="username-container">
             <h6>
                 <b>{position}</b>
             </h6>
-            {debater !== "[deleted]" ? (
-                <a className="link" onClick={handleGoToProfile}>
+            {debater ? (
+                <i
+                    className="link"
+                    onClick={() => navigate(`/user/${encodeURI(debater)}`)}
+                >
                     {debater}
-                </a>
+                </i>
             ) : (
-                <i>{debater}</i>
+                <i>{t("debate.userDeleted")}</i>
             )}
         </div>
     );
