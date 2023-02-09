@@ -318,5 +318,12 @@ export const TRANSLATIONS_ES = {
         title: "¡Ups!",
         message: "Ha ocurrido un error.",
         goBack: "Volver a inicio.",
+        notFound: {
+            debate: "Debate pedido no encontrado",
+            user: "User pedido no encontrado",
+        },
+        conflict: {
+            debateClosed: "El debate está cerrado, la acción no es posible",
+        },
     },
 };

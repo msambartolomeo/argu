@@ -314,5 +314,13 @@ export const TRANSLATIONS_EN = {
         title: "Oops!",
         message: "An error has ocurred.",
         goBack: "Go back to the homepage",
+        notFound: {
+            debate: "Debate requested not found",
+            user: "User requested not found",
+        },
+        conflict: {
+            debateClosed:
+                "Debate is not open anymore so the operation can not be completed",
+        },
     },
 };
