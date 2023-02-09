@@ -80,7 +80,6 @@ const DebateView = () => {
                     <PostArgument
                         debate={debateData}
                         argumentList={argumentList}
-                        setArgumentList={setArgumentList}
                         refreshArgs={handleRefreshArguments}
                     />
                     <VoteSection debateData={debateData} />

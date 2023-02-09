@@ -26,16 +26,10 @@ type FieldValues = {
 interface Props {
     debate: DebateDto;
     argumentList: PaginatedList<ArgumentDto>;
-    setArgumentList: (list: PaginatedList<ArgumentDto>) => void;
     refreshArgs: () => void;
 }
 
-function PostArgument({
-    debate,
-    argumentList,
-    setArgumentList,
-    refreshArgs,
-}: Props) {
+function PostArgument({ debate, argumentList, refreshArgs }: Props) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [lastArgument, setLastArgument] = useState<ArgumentDto | undefined>(
