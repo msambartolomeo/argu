@@ -23,6 +23,7 @@ public class DebateDto {
     private String description;
     private boolean isCreatorFor;
     private String createdDate;
+    private String dateToClose;
     private String category;
     private String status;
     private int subscriptionsCount;
@@ -52,6 +53,7 @@ public class DebateDto {
         dto.description = debate.getDescription();
         dto.isCreatorFor = debate.getIsCreatorFor();
         dto.createdDate = debate.getFormattedDate();
+        dto.dateToClose = debate.getFormattedDateToClose();
         dto.category = messageSource.getMessage("category." + debate.getCategory().getName(), null, locale);
         dto.status = messageSource.getMessage("status." + debate.getStatus().getName(), null, locale);
         dto.subscriptionsCount = debate.getSubscribedUsersCount();
@@ -295,5 +297,13 @@ public class DebateDto {
 
     public void setSubscription(URI subscription) {
         this.subscription = subscription;
+    }
+
+    public String getDateToClose() {
+        return dateToClose;
+    }
+
+    public void setDateToClose(String dateToClose) {
+        this.dateToClose = dateToClose;
     }
 }

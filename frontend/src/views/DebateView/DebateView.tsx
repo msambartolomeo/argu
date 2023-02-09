@@ -19,28 +19,17 @@ import {
 } from "../../hooks/debates/useGetDebateById";
 import "../../locales/index";
 import { PaginatedList } from "../../types/PaginatedList";
-import User from "../../types/User";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import DebateDto from "../../types/dto/DebateDto";
-import UserRole from "../../types/enums/UserRole";
 import { Error } from "../Error/Error";
 
-// TODO: Connect to API and remove
-const user1: User = {
-    username: "azul",
-    createdDate: "2021-01-01",
-    role: UserRole.MODERATOR,
-};
-
 const DebateView = () => {
-    // TODO: Change to real values and hooks
     const [debateData, setDebateData] = useState<DebateDto | undefined>();
     const [argumentList, setArgumentList] = useState<
         PaginatedList<ArgumentDto>
     >(PaginatedList.emptyList());
 
     const [refresh, setRefresh] = useState<boolean>(true);
-    const [userData, setuserData] = useState<User | undefined>(user1);
 
     const params = useParams();
 
@@ -87,7 +76,10 @@ const DebateView = () => {
                         argumentList={argumentList}
                         setArgumentList={setArgumentList}
                     />
-                    <VoteSection debate={debateData} userData={userData} />
+                    <VoteSection
+                        debate={debateData}
+                        refreshDebate={() => setRefresh(true)}
+                    />
                     <ChatSection debate={debateData} />
                     <RecommendedDebatesSection debate={debateData} />
                 </div>

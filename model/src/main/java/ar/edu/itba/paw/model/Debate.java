@@ -161,7 +161,10 @@ public class Debate {
     }
 
     public String getFormattedDateToClose() {
-        return dateToClose.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        if (dateToClose != null) {
+            return dateToClose.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
+        return null;
     }
 
     public void setDateToClose(LocalDate dateToClose) {

@@ -1,11 +1,11 @@
 import { HttpStatusCode } from "axios";
 
+import DebateVote from "../../types/enums/DebateVote";
 import { usePost } from "../requests/usePost";
 
 export interface CreateVoteInput {
     voteUrl: string;
-    // TODO: Maybe get the userUrl from the context
-    userUrl: string;
+    type: DebateVote;
 }
 
 export const useCreateVote = () => {
@@ -13,11 +13,16 @@ export const useCreateVote = () => {
 
     async function createVote({
         voteUrl,
-        userUrl,
+        type,
     }: CreateVoteInput): Promise<HttpStatusCode> {
-        const response = await callPost(voteUrl, {}, {}, true, {
-            user: userUrl,
-        });
+        const response = await callPost(
+            voteUrl,
+            {
+                vote: type,
+            },
+            {},
+            true
+        );
         return response.status;
     }
 

@@ -7,6 +7,7 @@ export default interface DebateDto {
     description: string;
     isCreatorFor: boolean;
     createdDate: Date;
+    dateToClose?: string;
     category: DebateCategory;
     status: DebateStatus;
     subscriptionsCount: number;
