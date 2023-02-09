@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import { HttpStatusCode } from "axios";
 import { useForm } from "react-hook-form";
@@ -142,6 +142,19 @@ function PostArgument({
         }
     }, []);
 
+    const handleResetImage = () => {
+        const fileInput = document.getElementById(
+            "imageFileText"
+        ) as HTMLInputElement;
+        fileInput.value = "";
+        fileInput.classList.remove("valid");
+
+        const imageFile = document.getElementById(
+            "imageFile"
+        ) as HTMLInputElement;
+        imageFile.value = "";
+    };
+
     useEffect(() => {
         if (argumentList.lastArgument) {
             getLastArgument({ url: argumentList.lastArgument }).then((res) => {
@@ -204,6 +217,7 @@ function PostArgument({
                                                         <input
                                                             type="file"
                                                             accept="image/*"
+                                                            id="imageFile"
                                                             {...register(
                                                                 "image"
                                                             )}
@@ -213,6 +227,7 @@ function PostArgument({
                                                         <input
                                                             className="file-path validate"
                                                             type="text"
+                                                            id="imageFileText"
                                                         />
                                                     </div>
                                                     {errors.image && (
@@ -232,6 +247,7 @@ function PostArgument({
                                                 <a
                                                     id="x"
                                                     className="material-icons"
+                                                    onClick={handleResetImage}
                                                 >
                                                     close
                                                 </a>
