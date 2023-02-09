@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next";
 
 import TextArea from "../../components/TextArea/TextArea";
-import Argument from "../../types/Argument";
+import ArgumentDto from "../../types/dto/ArgumentDto";
 
 interface PostArgumentCardProps {
     handleSubmit: () => void;
-    lastArgument: Argument;
+    lastArgument: ArgumentDto;
     debateCreator: string | undefined;
 }
 
@@ -23,7 +23,7 @@ const PostArgumentCard = ({
     if (
         lastArgument === null ||
         (lastArgument.status === "introduction" &&
-            lastArgument.creator.username === debateCreator)
+            lastArgument.creatorName === debateCreator)
     ) {
         message = t("debate.argument.introMessage");
         submitMessage = t("debate.argument.postIntro");

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { HttpStatusCode } from "axios";
 import { useTranslation } from "react-i18next";
@@ -15,12 +15,11 @@ import DebateDto from "../../types/dto/DebateDto";
 
 interface Props {
     debate: DebateDto;
+    argumentList: PaginatedList<ArgumentDto>;
+    setArgumentList: (list: PaginatedList<ArgumentDto>) => void;
 }
 
-function ArgumentList({ debate }: Props) {
-    const [argumentList, setArgumentList] =
-        useState<PaginatedList<ArgumentDto>>();
-
+function ArgumentList({ debate, argumentList, setArgumentList }: Props) {
     const { t } = useTranslation();
 
     const { loading, getArguments } = useGetArguments();
@@ -32,7 +31,7 @@ function ArgumentList({ debate }: Props) {
         }).then((out) => {
             switch (out.status) {
                 case HttpStatusCode.Ok:
-                    setArgumentList(out.data);
+                    if (out.data) setArgumentList(out.data);
                     break;
                 case HttpStatusCode.NoContent:
                     setArgumentList(PaginatedList.emptyList());
@@ -41,7 +40,7 @@ function ArgumentList({ debate }: Props) {
                 // TODO: error
             }
         });
-    }, [debate]);
+    }, []);
 
     if (loading) {
         return (
