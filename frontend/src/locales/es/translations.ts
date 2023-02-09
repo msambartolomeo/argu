@@ -8,6 +8,20 @@ export const TRANSLATIONS_ES = {
         moderator: "Ser Moderador",
         profile: "Perfil",
     },
+    categories: {
+        culture: "Cultura",
+        economics: "Economía",
+        education: "Educación",
+        entertainment: "Entretenimiento",
+        history: "Historia",
+        literature: "Literatura",
+        politics: "Política",
+        religion: "Religión",
+        science: "Ciencia",
+        technology: "Tecnología",
+        world: "Mundo",
+        other: "Otros",
+    },
     landingPage: {
         about: {
             about: "Acerca de Argu",
@@ -225,18 +239,6 @@ export const TRANSLATIONS_ES = {
         categories: {
             title: "Categorías",
             all: "Todos",
-            culture: "Cultura",
-            economics: "Economía",
-            education: "Educación",
-            entertainment: "Entretenimiento",
-            history: "Historia",
-            literature: "Literatura",
-            politics: "Política",
-            religion: "Religión",
-            science: "Ciencia",
-            technology: "Tecnología",
-            world: "Mundo",
-            other: "Otros",
         },
         orderBy: {
             placeholders: {

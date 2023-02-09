@@ -60,7 +60,7 @@ const CategoryFilters = () => {
                             setSelectedCategory(category);
                         }}
                     >
-                        {t(`discovery.categories.${category}`)}
+                        {t(`categories.${category}`)}
                     </div>
                 ))}
             </Stack>
