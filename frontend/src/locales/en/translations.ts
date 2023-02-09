@@ -121,6 +121,11 @@ export const TRANSLATIONS_EN = {
             message: "Message",
             send: "Send",
             noMessages: "There are no messages in this debate",
+            errors: {
+                messageEmpty: "Enter a message to send",
+                messageTooLong:
+                    "The message cannot be longer than 2000 characters",
+            },
         },
         recommendedDebates: "Recommended debates",
     },

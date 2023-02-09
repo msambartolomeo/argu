@@ -88,7 +88,7 @@ const DebateView = () => {
                         setArgumentList={setArgumentList}
                     />
                     <VoteSection debate={debateData} userData={userData} />
-                    <ChatSection debate={debateData} userData={userData} />
+                    <ChatSection debate={debateData} />
                     <RecommendedDebatesSection debate={debateData} />
                 </div>
             </div>

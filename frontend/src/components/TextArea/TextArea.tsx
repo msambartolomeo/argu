@@ -6,12 +6,13 @@ interface Props {
     value?: string;
     error?: string;
     register?: UseFormRegisterReturn;
+    className?: string;
 }
 
-function TextArea({ text, value, error, register }: Props) {
+function TextArea({ text, value, error, register, className }: Props) {
     return (
-        <div className="input-field">
-            <textarea
+        <div className={`input-field ${className}`}>
+            <input
                 value={value}
                 className={cn({
                     invalid: error !== undefined,
