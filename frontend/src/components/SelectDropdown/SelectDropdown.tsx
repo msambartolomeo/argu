@@ -13,6 +13,7 @@ const SelectDropdown = ({
     placeholder,
     // TODO: Add error management
     error,
+    ...props
 }: SelectDropdownProps) => (
     <div className="select-container">
         <Select
@@ -21,8 +22,8 @@ const SelectDropdown = ({
             options={suppliers}
             isSearchable={true}
             isClearable={true}
-            required={true}
             placeholder={placeholder}
+            {...props}
         />
     </div>
 );

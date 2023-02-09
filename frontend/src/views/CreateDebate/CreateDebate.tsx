@@ -31,7 +31,12 @@ const CreateDebate = () => {
             .string()
             .min(1, t("createDebate.errors.descriptionEmpty") as string)
             .max(280, t("createDebate.errors.descriptionTooLong") as string),
-        category: z.nativeEnum(DebateCategory),
+        category: z.any().refine((value) => {
+            if (!value) {
+                return false;
+            }
+            return Object.values(DebateCategory).includes(value.value);
+        }),
         isCreatorFor: z
             .string()
             .refine((value) => value === "true" || value === "false"),
@@ -115,7 +120,7 @@ const CreateDebate = () => {
     };
 
     const handleCreateSubmit = async (data: FieldValues) => {
-        console.log(data);
+        // TODO
     };
 
     return (
@@ -123,12 +128,9 @@ const CreateDebate = () => {
             <form
                 acceptCharset="utf-8"
                 encType="multipart/form-data"
-                onSubmit={
-                    (console.log(errors),
-                    handleSubmit((data) => {
-                        handleCreateSubmit(data);
-                    }))
-                }
+                onSubmit={handleSubmit((data) => {
+                    handleCreateSubmit(data);
+                })}
             >
                 <div className="card-content">
                     <span className="card-title center">
@@ -179,7 +181,11 @@ const CreateDebate = () => {
                             </tr>
                         </tbody>
                     </table>
-                    <InputField text={t("createDebate.opponentUsername")} />
+                    <InputField
+                        text={t("createDebate.opponentUsername")}
+                        register={register("opponent")}
+                        error={errors.opponent?.message as string}
+                    />
                     <table className="no-borders">
                         <tbody>
                             <tr>
