@@ -17,9 +17,15 @@ interface Props {
     debate: DebateDto;
     argumentList: PaginatedList<ArgumentDto>;
     setArgumentList: (list: PaginatedList<ArgumentDto>) => void;
+    refreshArguments: boolean;
 }
 
-function ArgumentList({ debate, argumentList, setArgumentList }: Props) {
+function ArgumentList({
+    debate,
+    argumentList,
+    setArgumentList,
+    refreshArguments,
+}: Props) {
     const { t } = useTranslation();
 
     const { loading, getArguments } = useGetArguments();
@@ -40,7 +46,7 @@ function ArgumentList({ debate, argumentList, setArgumentList }: Props) {
                 // TODO: error
             }
         });
-    }, []);
+    }, [refreshArguments]);
 
     if (loading) {
         return (

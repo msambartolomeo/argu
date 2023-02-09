@@ -30,6 +30,7 @@ const DebateView = () => {
     >(PaginatedList.emptyList());
 
     const [refresh, setRefresh] = useState<boolean>(true);
+    const [refreshArguments, setRefreshArguments] = useState<boolean>(false);
 
     const params = useParams();
 
@@ -58,6 +59,10 @@ const DebateView = () => {
         return <CircularProgress size={100} />;
     }
 
+    const handleRefreshArguments = () => {
+        setRefreshArguments(!refreshArguments);
+    };
+
     return (
         <>
             <DebateHeader
@@ -69,12 +74,14 @@ const DebateView = () => {
                     debate={debateData}
                     argumentList={argumentList}
                     setArgumentList={setArgumentList}
+                    refreshArguments={refreshArguments}
                 />
                 <div className="post-arguments">
                     <PostArgument
                         debate={debateData}
                         argumentList={argumentList}
                         setArgumentList={setArgumentList}
+                        refreshArgs={handleRefreshArguments}
                     />
                     <VoteSection debateData={debateData} />
                     <ChatSection debate={debateData} />
