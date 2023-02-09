@@ -5,7 +5,7 @@ import ArgumentDto from "../../types/dto/ArgumentDto";
 
 interface PostArgumentCardProps {
     handleSubmit: () => void;
-    lastArgument: ArgumentDto;
+    lastArgument?: ArgumentDto;
     debateCreator: string | undefined;
 }
 
@@ -22,12 +22,12 @@ const PostArgumentCard = ({
     let submitMessage = t("debate.argument.postArgument");
     if (
         lastArgument === null ||
-        (lastArgument.status === "introduction" &&
-            lastArgument.creatorName === debateCreator)
+        (lastArgument?.status === "introduction" &&
+            lastArgument?.creatorName === debateCreator)
     ) {
         message = t("debate.argument.introMessage");
         submitMessage = t("debate.argument.postIntro");
-    } else if (lastArgument.status === "closing") {
+    } else if (lastArgument?.status === "closing") {
         message = t("debate.argument.conclusionMessage");
         submitMessage = t("debate.argument.postConclusion");
     }

@@ -32,7 +32,7 @@ function PostArgument({ debate, argumentList, setArgumentList }: Props) {
                     <div className="card no-top-margin">
                         <div className="card-content">
                             {userInfo &&
-                                (argumentList.data[-1].creatorName ===
+                                (argumentList.data[-1]?.creatorName ===
                                 userInfo.username ? (
                                     <PostArgumentCard
                                         handleSubmit={handlePostArgument}
@@ -48,7 +48,8 @@ function PostArgument({ debate, argumentList, setArgumentList }: Props) {
                             {!userInfo && (
                                 <div className="card-title card-title-margins">
                                     {t("debate.needToLogin")}
-                                    <a
+                                    <i
+                                        className="link"
                                         onClick={() =>
                                             navigate("/login", {
                                                 state: {
@@ -60,7 +61,7 @@ function PostArgument({ debate, argumentList, setArgumentList }: Props) {
                                         }
                                     >
                                         {t("debate.firstLogin")}
-                                    </a>
+                                    </i>
                                 </div>
                             )}
                         </div>
