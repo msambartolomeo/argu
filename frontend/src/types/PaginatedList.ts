@@ -8,6 +8,7 @@ export class PaginatedList<T> {
     next?: string;
     lastElement?: string;
     totalPages: number;
+    lastArgument?: string;
 
     constructor(data: T[], linkHeader: string, totalPagesHeader: string) {
         this.data = data;
@@ -28,6 +29,7 @@ export class PaginatedList<T> {
         this.last = links.last.url;
         this.prev = links.prev?.url;
         this.next = links.next?.url;
+        this.lastArgument = links.last_element?.url;
 
         this.totalPages = Number(totalPagesHeader);
     }
