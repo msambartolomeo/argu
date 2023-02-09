@@ -185,6 +185,10 @@ export const TRANSLATIONS_ES = {
         message:
             "Cuando te conviertas en moderador, podrás crear tus propios debates. Para proteger a nuestros usuarios de la desinformación, te pediremos que nos cuentes la razón por la cuál quieres ser moderador. Lo revisaremos y te notificaremos cuando seas aceptado.",
         label: "Explica por qué deberías ser un moderador",
+        errors: {
+            reasonEmpty: "Debes especificar una razón para ser moderador",
+            reasonTooLong: "Tu razón no puede superar los 2000 caracteres",
+        },
     },
     components: {
         delete: {
