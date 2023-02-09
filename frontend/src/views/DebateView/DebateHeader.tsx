@@ -45,20 +45,22 @@ function DebateHeader({ debate, refreshDebate }: Props) {
     const { loading: concludeLoading, concludeDebate } = useConcludeDebate();
 
     useEffect(() => {
-        getSubscription({
-            subscriptionUrl: debate.subscription as string,
-        }).then((code) => {
-            switch (code) {
-                case HttpStatusCode.Ok:
-                    setSubscribed(true);
-                    break;
-                case HttpStatusCode.NotFound:
-                    setSubscribed(false);
-                    break;
-                default:
-                // TODO: Error
-            }
-        });
+        if (userInfo) {
+            getSubscription({
+                subscriptionUrl: debate.subscription as string,
+            }).then((code) => {
+                switch (code) {
+                    case HttpStatusCode.Ok:
+                        setSubscribed(true);
+                        break;
+                    case HttpStatusCode.NotFound:
+                        setSubscribed(false);
+                        break;
+                    default:
+                    // TODO: Error
+                }
+            });
+        }
     }, []);
 
     const subscribe = () => {
