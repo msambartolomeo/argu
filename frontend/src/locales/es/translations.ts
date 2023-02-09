@@ -204,7 +204,7 @@ export const TRANSLATIONS_ES = {
             opponentUsernameTooLong:
                 "Opponent's username cannot be longer than 64 characters",
             opponentUsernameSame: "You cannot debate with yourself",
-            categoryInvalid: "Category is invalid",
+            categoryEmpty: "La categoría no puede estar vacía",
             imageTooBig: "Image cannot be bigger than 10MB",
             imageInvalid: "Image format is invalid",
         },

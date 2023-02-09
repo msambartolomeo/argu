@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import "./CreateDebate.css";
 
 import InputField from "../../components/InputField/InputField";
+import SelectComponent from "../../components/SelectComponent/SelectComponent";
 import SelectDropdown from "../../components/SelectDropdown/SelectDropdown";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import TextArea from "../../components/TextArea/TextArea";
@@ -31,12 +32,19 @@ const CreateDebate = () => {
             .string()
             .min(1, t("createDebate.errors.descriptionEmpty") as string)
             .max(280, t("createDebate.errors.descriptionTooLong") as string),
-        category: z.any().refine((value) => {
-            if (!value) {
-                return false;
+        category: z.any().refine(
+            (value) => {
+                if (!value) {
+                    return false;
+                }
+                return Object.values(DebateCategory).includes(
+                    value.value as DebateCategory
+                );
+            },
+            {
+                message: t("createDebate.errors.categoryEmpty") as string,
             }
-            return Object.values(DebateCategory).includes(value.value);
-        }),
+        ),
         isCreatorFor: z
             .string()
             .refine((value) => value === "true" || value === "false"),
@@ -53,24 +61,6 @@ const CreateDebate = () => {
             .any()
             .optional()
             .refine(
-                (value: FileList) => {
-                    if (!value || value.length === 0) {
-                        return true;
-                    }
-                    if (value.length > 1) {
-                        return false;
-                    }
-                    const image = value[0];
-                    const allowedExtensions = ["jpg", "jpeg", "png"];
-                    const extension = image.name.split(".").pop();
-                    if (extension) {
-                        return allowedExtensions.includes(extension);
-                    }
-                    return false;
-                },
-                { message: t("createDebate.errors.imageInvalid") as string }
-            )
-            .refine(
                 (value: FieldValues) => {
                     if (!value || value.length === 0) {
                         return true;
@@ -78,7 +68,7 @@ const CreateDebate = () => {
                     if (value.length > 1) {
                         return false;
                     }
-                    return value[0].size <= 1024 * 1024 * 10;
+                    return value[0].size <= 10 * 1024 * 1024;
                 },
                 {
                     message: t("createDebate.errors.imageTooLarge") as string,
@@ -154,6 +144,7 @@ const CreateDebate = () => {
                                 </td>
                             </tr>
                             <tr>
+                                {/* TODO: Replace with RadioGroup component (https://mui.com/material-ui/react-radio-button/) */}
                                 <td className="radio-button-label">
                                     <label>
                                         <input
@@ -189,22 +180,19 @@ const CreateDebate = () => {
                     <table className="no-borders">
                         <tbody>
                             <tr>
-                                <td>{t("createDebate.category")}</td>
                                 <td>
-                                    <Controller
+                                    <SelectComponent
                                         name="category"
+                                        label={
+                                            t(
+                                                "createDebate.categoryPlaceholder"
+                                            ) as string
+                                        }
                                         control={control}
-                                        render={({ field }) => (
-                                            <SelectDropdown
-                                                {...field}
-                                                suppliers={categories}
-                                                placeholder={
-                                                    t(
-                                                        "createDebate.categoryPlaceholder"
-                                                    ) as string
-                                                }
-                                            />
-                                        )}
+                                        options={categories}
+                                        error={
+                                            errors.category?.message as string
+                                        }
                                     />
                                 </td>
                             </tr>
@@ -232,6 +220,7 @@ const CreateDebate = () => {
                                                 {...register("image")}
                                                 id="image"
                                                 type="file"
+                                                accept="image/*"
                                             />
                                         </div>
                                         <div className="file-path-wrapper">
