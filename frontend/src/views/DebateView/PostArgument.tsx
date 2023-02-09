@@ -43,7 +43,7 @@ function PostArgument({
     );
     const [requestErr, setRequestErr] = useState<string | undefined>(undefined);
 
-    // const MAX_FILE_SIZE = 10 * 1024 * 1024;
+    const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
     const { userInfo } = useSharedAuth();
 
@@ -64,13 +64,19 @@ function PostArgument({
 
     const schema = z.object({
         content: z.string().min(1).max(2000),
-        // image: z
-        //     .any()
-        //     .optional()
-        //     .refine(
-        //         (file) => file[0]?.size <= MAX_FILE_SIZE,
-        //         t("profile.imageTooBig").toString()
-        //     ),
+        image: z
+            .any()
+            .optional()
+            .refine((file) => {
+                if (file === undefined || file.length === 0) return true;
+                if (file.length > 1) {
+                    return false;
+                }
+                return (
+                    file[0]?.size <= MAX_FILE_SIZE,
+                    t("profile.imageTooBig").toString()
+                );
+            }),
     });
 
     const { loading: isCreateArgLoading, createArgument: createArgument } =
@@ -88,13 +94,12 @@ function PostArgument({
         register,
         handleSubmit,
         formState: { errors },
-        setError,
     } = useForm<FieldValues>({
         resolver: zodResolver(schema),
     });
 
     const handlePostArgument = useCallback(async (data: FieldValues) => {
-        if (data.image) {
+        if (data.image !== undefined && data.image[0] !== undefined) {
             const response = await createArgumentWithImage({
                 argumentsURL: debate.arguments,
                 content: data.content,
