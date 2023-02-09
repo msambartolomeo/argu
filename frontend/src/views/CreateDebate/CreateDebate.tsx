@@ -89,11 +89,19 @@ const CreateDebate = () => {
         setError,
     } = useForm({
         resolver: zodResolver(schema),
+        defaultValues: {
+            title: "",
+            description: "",
+            category: null,
+            isCreatorFor: null,
+            opponent: "",
+            image: null,
+        },
     });
 
     const categories = Object.values(DebateCategory).map((category) => ({
         value: category,
-        label: category.charAt(0).toUpperCase() + category.slice(1),
+        label: t(`categories.${category}`) as string,
     }));
 
     const imageRef = useRef<HTMLInputElement>(null);
