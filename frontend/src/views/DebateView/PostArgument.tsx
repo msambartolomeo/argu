@@ -62,6 +62,7 @@ function PostArgument({
         submitMessage = t("debate.argument.postConclusion");
     }
 
+    // TODO: Validate image type with zod
     const schema = z.object({
         content: z.string().min(1).max(2000),
         image: z
