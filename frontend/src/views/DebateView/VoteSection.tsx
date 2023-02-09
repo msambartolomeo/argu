@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { CircularProgress } from "@mui/material";
 
+import { useGetDebateById } from "../../hooks/debates/useGetDebateById";
 import { useSharedAuth } from "../../hooks/useAuth";
 import { useCreateVote } from "../../hooks/votes/useCreateVote";
 import { useDeleteVote } from "../../hooks/votes/useDeleteVote";
@@ -13,20 +14,20 @@ import DebateDto from "../../types/dto/DebateDto";
 import DebateVote from "../../types/enums/DebateVote";
 
 interface VotesSectionProps {
-    debate: DebateDto;
-    // TODO: Do not refresh everything
-    refreshDebate: () => void;
+    debateData: DebateDto;
 }
 
-const VoteSection = ({ debate, refreshDebate }: VotesSectionProps) => {
+const VoteSection = ({ debateData }: VotesSectionProps) => {
     const { t } = useTranslation();
 
     const { userInfo } = useSharedAuth();
     const [vote, setVote] = useState<DebateVote | null>(null);
+    const [debate, setDebate] = useState<DebateDto>(debateData);
 
     const { loading, getVote } = useGetVote();
     const { loading: postLoading, createVote } = useCreateVote();
     const { loading: deleteLoading, callDeleteVote } = useDeleteVote();
+    const { loading: debateLoading, getDebate } = useGetDebateById();
 
     const userFor = debate.isCreatorFor
         ? debate.creatorName
@@ -51,7 +52,18 @@ const VoteSection = ({ debate, refreshDebate }: VotesSectionProps) => {
         createVote({ voteUrl: debate.vote as string, type }).then((output) => {
             switch (output) {
                 case HttpStatusCode.Created:
+                    setVote(type);
                     refreshDebate();
+                    break;
+            }
+        });
+    };
+
+    const refreshDebate = () => {
+        getDebate({ id: debate.id }).then((output) => {
+            switch (output.status) {
+                case HttpStatusCode.Ok:
+                    if (output.data) setDebate(output.data);
                     break;
             }
         });
@@ -61,6 +73,7 @@ const VoteSection = ({ debate, refreshDebate }: VotesSectionProps) => {
         callDeleteVote({ voteUrl: debate.vote as string }).then((output) => {
             switch (output) {
                 case HttpStatusCode.NoContent:
+                    setVote(null);
                     refreshDebate();
                     break;
             }
@@ -78,104 +91,117 @@ const VoteSection = ({ debate, refreshDebate }: VotesSectionProps) => {
 
     return (
         <div className="card vote-section no-top-margin">
-            {loading && <CircularProgress size={100} />}
-            <h5>{t("debate.votes.votes")}</h5>
-            {userInfo &&
-                (!vote ? (
-                    (debate.status === t("debate.statuses.statusOpen") ||
-                        debate.status === t("debate.statuses.statusVoting") ||
-                        debate.status ===
-                            t("debate.statuses.statusClosing")) && (
-                        <>
-                            <h5>{t("debate.votes.whoWins")}</h5>
-                            <div className="vote-buttons">
-                                <button
-                                    onClick={() =>
-                                        handleVoteButton(DebateVote.FOR)
-                                    }
-                                    className="btn waves-effect"
-                                    disabled={postLoading}
+            {loading && debateLoading ? (
+                <CircularProgress size={100} />
+            ) : (
+                <>
+                    <h5>{t("debate.votes.votes")}</h5>
+                    {userInfo &&
+                        (!vote ? (
+                            (debate.status ===
+                                t("debate.statuses.statusOpen") ||
+                                debate.status ===
+                                    t("debate.statuses.statusVoting") ||
+                                debate.status ===
+                                    t("debate.statuses.statusClosing")) && (
+                                <>
+                                    <h5>{t("debate.votes.whoWins")}</h5>
+                                    <div className="vote-buttons">
+                                        <button
+                                            onClick={() =>
+                                                handleVoteButton(DebateVote.FOR)
+                                            }
+                                            className="btn waves-effect"
+                                            disabled={postLoading}
+                                        >
+                                            {userFor}
+                                        </button>
+                                        <button
+                                            onClick={() =>
+                                                handleVoteButton(
+                                                    DebateVote.AGAINST
+                                                )
+                                            }
+                                            className="btn waves-effect"
+                                            disabled={postLoading}
+                                        >
+                                            {userAgainst}
+                                        </button>
+                                    </div>
+                                    {(debate.votesFor || 0) +
+                                        (debate.votesAgainst || 0) ===
+                                        0 && (
+                                        <h5 className="center">
+                                            {t("debate.votes.noVotes")}
+                                        </h5>
+                                    )}
+                                </>
+                            )
+                        ) : (
+                            <h6>
+                                {t("debate.votes.voted")}{" "}
+                                {vote === DebateVote.FOR
+                                    ? userFor
+                                    : userAgainst}
+                            </h6>
+                        ))}
+                    {(!userInfo || vote) && (
+                        <div className="progress red">
+                            {(debate.votesFor || 0) > 0 && (
+                                <div
+                                    className="votes-format blue"
+                                    style={{ width: debate.votesFor + "%" }}
                                 >
-                                    {userFor}
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        handleVoteButton(DebateVote.AGAINST)
-                                    }
-                                    className="btn waves-effect"
-                                    disabled={postLoading}
-                                >
-                                    {userAgainst}
-                                </button>
-                            </div>
-                            {(debate.votesFor || 0) +
-                                (debate.votesAgainst || 0) ===
-                                0 && (
-                                <h5 className="center">
-                                    {t("debate.votes.noVotes")}
-                                </h5>
+                                    <span>
+                                        {debate.isCreatorFor
+                                            ? debate.creatorName
+                                            : debate.opponentName}
+                                    </span>
+                                    <span>{debate.votesFor}%</span>
+                                </div>
                             )}
-                        </>
-                    )
-                ) : (
-                    <h6>
-                        {t("debate.votes.voted")}{" "}
-                        {vote === DebateVote.FOR ? userFor : userAgainst}
-                    </h6>
-                ))}
-            {(!userInfo || vote) && (
-                <div className="progress red">
-                    {(debate.votesFor || 0) > 0 && (
-                        <div
-                            className="votes-format blue"
-                            style={{ width: debate.votesFor + "%" }}
-                        >
-                            <span>
-                                {debate.isCreatorFor
-                                    ? debate.creatorName
-                                    : debate.opponentName}
-                            </span>
-                            <span>{debate.votesFor}%</span>
+                            {(debate.votesAgainst || 0) > 0 && (
+                                <div
+                                    className="votes-format"
+                                    style={{ width: debate.votesAgainst + "%" }}
+                                >
+                                    <span>
+                                        {debate.isCreatorFor
+                                            ? debate.opponentName
+                                            : debate.creatorName}
+                                    </span>
+                                    <span>{debate.votesAgainst}%</span>
+                                </div>
+                            )}
                         </div>
                     )}
-                    {(debate.votesAgainst || 0) > 0 && (
-                        <div
-                            className="votes-format"
-                            style={{ width: debate.votesAgainst + "%" }}
-                        >
-                            <span>
-                                {debate.isCreatorFor
-                                    ? debate.opponentName
-                                    : debate.creatorName}
-                            </span>
-                            <span>{debate.votesAgainst}%</span>
-                        </div>
+                    {debate.status === t("debate.statuses.statusClosed") && (
+                        <h6>{calculateVoteResult()}</h6>
                     )}
-                </div>
-            )}
-            {debate.status === t("debate.statuses.statusClosed") && (
-                <h6>{calculateVoteResult()}</h6>
-            )}
-            {userInfo &&
-                vote &&
-                (debate.status === t("debate.statuses.statusOpen") ||
-                    debate.status === t("debate.statuses.statusClosing") ||
-                    debate.status === t("debate.statuses.statusVoting")) && (
-                    <>
-                        <h6>{t("debate.votes.changeVote")}</h6>
-                        <button
-                            className="btn waves-effect"
-                            onClick={handleUnvoteButton}
-                            disabled={deleteLoading}
-                        >
-                            {t("debate.votes.unvote")}
-                        </button>
-                    </>
-                )}
-            {debate.status === t("debate.statuses.statusVoting") && (
-                <h6 className="center">
-                    {t("debate.votes.votingEnds") + debate.dateToClose}
-                </h6>
+                    {userInfo &&
+                        vote &&
+                        (debate.status === t("debate.statuses.statusOpen") ||
+                            debate.status ===
+                                t("debate.statuses.statusClosing") ||
+                            debate.status ===
+                                t("debate.statuses.statusVoting")) && (
+                            <>
+                                <h6>{t("debate.votes.changeVote")}</h6>
+                                <button
+                                    className="btn waves-effect"
+                                    onClick={handleUnvoteButton}
+                                    disabled={deleteLoading}
+                                >
+                                    {t("debate.votes.unvote")}
+                                </button>
+                            </>
+                        )}
+                    {debate.status === t("debate.statuses.statusVoting") && (
+                        <h6 className="center">
+                            {t("debate.votes.votingEnds") + debate.dateToClose}
+                        </h6>
+                    )}
+                </>
             )}
         </div>
     );

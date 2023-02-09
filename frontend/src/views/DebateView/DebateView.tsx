@@ -76,10 +76,7 @@ const DebateView = () => {
                         argumentList={argumentList}
                         setArgumentList={setArgumentList}
                     />
-                    <VoteSection
-                        debate={debateData}
-                        refreshDebate={() => setRefresh(true)}
-                    />
+                    <VoteSection debateData={debateData} />
                     <ChatSection debate={debateData} />
                     <RecommendedDebatesSection debate={debateData} />
                 </div>
