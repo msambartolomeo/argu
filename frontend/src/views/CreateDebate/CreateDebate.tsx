@@ -1,5 +1,6 @@
 import { useRef } from "react";
 
+import { HttpStatusCode } from "axios";
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +16,8 @@ import RadioComponent from "../../components/RadioComponent/RadioComponent";
 import SelectComponent from "../../components/SelectComponent/SelectComponent";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import TextArea from "../../components/TextArea/TextArea";
+import { useCreateDebate } from "../../hooks/debates/useCreateDebate";
+import { useCreateDebateWithImage } from "../../hooks/debates/useCreateDebateWithImage";
 import { useSharedAuth } from "../../hooks/useAuth";
 import "../../locales/index";
 import DebateCategory from "../../types/enums/DebateCategory";
@@ -23,6 +26,9 @@ const CreateDebate = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { userInfo } = useSharedAuth();
+    const { loading, createDebate } = useCreateDebate();
+    const { loading: loadingWithImage, createDebateWithImage } =
+        useCreateDebateWithImage();
 
     const schema = z.object({
         title: z
@@ -122,7 +128,45 @@ const CreateDebate = () => {
     };
 
     const handleCreateSubmit = async (data: FieldValues) => {
-        // TODO
+        const { title, description, category, isCreatorFor, opponent, image } =
+            data;
+        const imageList = image as FileList;
+        const imageFile = imageList?.length > 0 ? imageList[0] : null;
+
+        const debateData = {
+            title: title as string,
+            description: description as string,
+            category: category.value as DebateCategory,
+            isCreatorFor: isCreatorFor === "true",
+            opponentUsername: opponent as string,
+        };
+
+        const response = imageFile
+            ? await createDebateWithImage({
+                  ...debateData,
+                  image: imageFile,
+              })
+            : await createDebate(debateData);
+
+        switch (response.status) {
+            case HttpStatusCode.Created:
+                navigate({
+                    pathname: response.location as string,
+                });
+                break;
+            case HttpStatusCode.BadRequest:
+                setError("opponent", {
+                    type: "manual",
+                    // TODO: Use API error messages to i18n
+                    message: t(
+                        "createDebate.errors.opponentUsernameInvalid"
+                    ) as string,
+                });
+                break;
+            case HttpStatusCode.NotFound:
+                // TODO: Add toast with something like "An error occurred, please try again later"
+                break;
+        }
     };
 
     return (
