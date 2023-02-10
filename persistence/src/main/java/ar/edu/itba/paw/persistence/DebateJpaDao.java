@@ -189,7 +189,7 @@ public class DebateJpaDao implements DebateDao {
                 "    GROUP BY s.debateid\n" +
                 ")\n" +
                 "SELECT si.debateid\n" +
-                "FROM selected_ids si" +
+                "FROM selected_ids si\n" +
                 "LEFT JOIN subscribed s ON si.debateid = s.debateid\n" +
                 "INNER JOIN debates d2 on s.debateid = d2.debateid\n" +
                 "WHERE si.debateid != :debateid AND d2.status != 2\n" +
@@ -219,7 +219,7 @@ public class DebateJpaDao implements DebateDao {
                 "    GROUP BY s.debateid\n" +
                 ")\n" +
                 "SELECT si.debateid\n" +
-                "FROM selected_ids si " +
+                "FROM selected_ids si\n" +
                 "LEFT JOIN subscribed s ON si.debateid = s.debateid\n" +
                 "INNER JOIN debates d2 on s.debateid = d2.debateid\n" +
                 "WHERE si.debateid != :debateid AND d2.status != 2\n" +
