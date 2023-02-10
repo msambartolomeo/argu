@@ -12,6 +12,7 @@ import "../../locales/index";
 import { PaginatedList } from "../../types/PaginatedList";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import DebateDto from "../../types/dto/DebateDto";
+import { PAGE_DEFAULT } from "../../types/globalConstants";
 
 interface Props {
     debate: DebateDto;
@@ -31,7 +32,7 @@ function ArgumentList({
     const { loading, getArguments } = useGetArguments();
 
     const [queryParams, setQueryParams] = useSearchParams();
-    let page = parseInt(queryParams.get("page") || "1", 10);
+    let page = parseInt(queryParams.get("page") || PAGE_DEFAULT, 10);
 
     useEffect(() => {
         getArguments({
