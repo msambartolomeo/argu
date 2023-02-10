@@ -1,17 +1,18 @@
 import { useRef } from "react";
 
-import { Controller, FieldValues, useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Radio } from "@mui/material";
 
 import "./CreateDebate.css";
 
 import InputField from "../../components/InputField/InputField";
+import RadioComponent from "../../components/RadioComponent/RadioComponent";
 import SelectComponent from "../../components/SelectComponent/SelectComponent";
-import SelectDropdown from "../../components/SelectDropdown/SelectDropdown";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import TextArea from "../../components/TextArea/TextArea";
 import { useSharedAuth } from "../../hooks/useAuth";
@@ -94,10 +95,21 @@ const CreateDebate = () => {
         },
     });
 
-    const categories = Object.values(DebateCategory).map((category) => ({
+    const categoryOptions = Object.values(DebateCategory).map((category) => ({
         value: category,
         label: t(`categories.${category}`) as string,
     }));
+
+    const isCreatorForOptions = [
+        {
+            value: "true",
+            label: t("createDebate.for") as string,
+        },
+        {
+            value: "false",
+            label: t("createDebate.against") as string,
+        },
+    ];
 
     const imageRef = useRef<HTMLInputElement>(null);
     const imageNameRef = useRef<HTMLInputElement>(null);
@@ -136,42 +148,15 @@ const CreateDebate = () => {
                         register={register("description")}
                         error={errors.description?.message as string}
                     />
-                    <table className="no-borders radio-button-class">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <label>{t("createDebate.position")}</label>
-                                </td>
-                            </tr>
-                            <tr>
-                                {/* TODO: Replace with RadioGroup component (https://mui.com/material-ui/react-radio-button/) */}
-                                <td className="radio-button-label">
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            value="true"
-                                            id="for"
-                                            {...register("isCreatorFor")}
-                                        />
-                                        <span>{t("createDebate.for")}</span>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="radio-button-label">
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            value="false"
-                                            id="against"
-                                            {...register("isCreatorFor")}
-                                        />
-                                        <span>{t("createDebate.against")}</span>
-                                    </label>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                    <RadioComponent
+                        name="isCreatorFor"
+                        label={t("createDebate.position") as string}
+                        control={control}
+                        options={isCreatorForOptions}
+                        error={errors.isCreatorFor?.message as string}
+                    />
+
                     <InputField
                         text={t("createDebate.opponentUsername")}
                         register={register("opponent")}
@@ -189,7 +174,7 @@ const CreateDebate = () => {
                                             ) as string
                                         }
                                         control={control}
-                                        options={categories}
+                                        options={categoryOptions}
                                         error={
                                             errors.category?.message as string
                                         }
