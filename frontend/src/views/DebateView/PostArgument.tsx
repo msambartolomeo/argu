@@ -150,8 +150,8 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
     };
 
     useEffect(() => {
-        if (argumentList.lastArgument) {
-            getLastArgument({ url: argumentList.lastArgument }).then((res) => {
+        if (argumentList.lastElement) {
+            getLastArgument({ url: argumentList.lastElement }).then((res) => {
                 switch (res.status) {
                     case HttpStatusCode.Ok:
                         setLastArgument(res.data);
