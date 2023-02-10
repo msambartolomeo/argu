@@ -70,7 +70,7 @@ public class DebateJpaDao implements DebateDao {
 
         Map<String, Object> params = setupDiscovery(searchQuery, category, queryString, status, date);
 
-        switch(orderBy) {
+        switch (orderBy) {
             case DATE_ASC:
                 queryString.append(" ORDER BY created_date ASC");
                 break;
@@ -119,11 +119,11 @@ public class DebateJpaDao implements DebateDao {
     private Map<String, Object> setupDiscovery(String searchQuery, DebateCategory category, StringBuilder queryString, DebateStatus status, LocalDate date) {
         Map<String, Object> params = new HashMap<>();
 
-        if(searchQuery != null) {
+        if (searchQuery != null) {
             queryString.append(" AND lower(name) LIKE lower(:searchWord)");
             params.put("searchWord", "%" + searchQuery + "%");
         }
-        if(category != null) {
+        if (category != null) {
             queryString.append(" AND category = :category");
             params.put("category", category.ordinal());
         }
@@ -259,7 +259,7 @@ public class DebateJpaDao implements DebateDao {
 
         List<Debate> unsortedList = query.getResultList();
         List<Debate> sortedList = new ArrayList<>();
-        for (Long id: ids)
+        for (Long id : ids)
             sortedList.add(unsortedList.stream().filter(d -> d.getDebateId().equals(id)).findFirst().get());
         return sortedList;
     }
