@@ -12,7 +12,6 @@ interface DebateListItemProps {
     debate: DebateDto;
 }
 
-// TODO: Check if creator is received like a string or an URI
 const DebateListItem = ({ debate }: DebateListItemProps) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
