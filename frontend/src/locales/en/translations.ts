@@ -304,6 +304,13 @@ export const TRANSLATIONS_EN = {
             showingDebatesInCategory:
                 "Showing debates in category: {{category}}",
         },
+        noDebates: {
+            arguTeam: "The Argu team said",
+            arguTeamText: "There are no debates for this search yet.",
+            arguCommunity: "The Argu community said",
+            arguCommunityText:
+                "But you can create your own debate and help the community grow!",
+        },
     },
     error: {
         title: "Oops!",

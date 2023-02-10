@@ -58,3 +58,7 @@
 .discovery-container .debates-container .pagination-container button:focus {
     background-color: rgba(0, 0, 0, 0.08) !important;
 }
+
+.no-debates-container {
+    width: 80%;
+}
