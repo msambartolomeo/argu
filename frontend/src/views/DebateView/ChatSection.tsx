@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Pagination } from "@mui/material";
 
 import InputField from "../../components/InputField/InputField";
-import Pagination from "../../components/Pagination/Pagination";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import { useCreateChat } from "../../hooks/chats/useCreateChat";
 import { useGetChats } from "../../hooks/chats/useGetChats";
@@ -16,6 +16,7 @@ import { useSharedAuth } from "../../hooks/useAuth";
 import { PaginatedList } from "../../types/PaginatedList";
 import ChatDto from "../../types/dto/ChatDto";
 import DebateDto from "../../types/dto/DebateDto";
+import { PAGE_DEFAULT } from "../../types/globalConstants";
 
 interface ChatSectionProps {
     debate: DebateDto;
@@ -31,6 +32,7 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
         PaginatedList.emptyList()
     );
     const [refresh, setRefresh] = useState<boolean>(true);
+    const [page, setPage] = useState<number>(parseInt(PAGE_DEFAULT));
 
     const schema = z.object({
         message: z
@@ -87,6 +89,38 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
         const chatElem = document.getElementById("chat");
         chatElem?.scrollTo(0, chatElem.scrollHeight);
     }, [refresh]);
+
+    const handleChangePage = async (value: number) => {
+        let url = "";
+        switch (value) {
+            case 1:
+                url = chat?.first || "";
+                break;
+            case chat?.totalPages:
+                url = chat?.last || "";
+                break;
+            case page - 1:
+                url = chat?.prev || "";
+                break;
+            case page + 1:
+                url = chat?.next || "";
+                break;
+        }
+        getChats({
+            chatUrl: url,
+            // TODO: page
+        }).then((output) => {
+            switch (output.status) {
+                case HttpStatusCode.Ok:
+                    if (output.data) setChat(output.data);
+                    break;
+                case HttpStatusCode.NoContent:
+                    setChat(PaginatedList.emptyList());
+                    break;
+            }
+        });
+        setPage(value);
+    };
 
     return (
         <>
@@ -145,7 +179,21 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
                                     </form>
                                 </>
                             )}
-                        {userInfo && <Pagination param="todo" totalPages={1} />}
+                        {chat.data.length > 0 && (
+                            <div className="pagination-format">
+                                <Pagination
+                                    count={chat?.totalPages || 0}
+                                    color="primary"
+                                    className="white"
+                                    page={page}
+                                    showFirstButton
+                                    showLastButton
+                                    onChange={(event, page) =>
+                                        handleChangePage(page)
+                                    }
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
