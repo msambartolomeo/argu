@@ -49,7 +49,7 @@ const LandingPageExploreComponent = ({ categories }: CategoriesProps) => {
                         key={category}
                         replace={false}
                     >
-                        {t(`discovery.categories.${category}`)}
+                        {t(`categories.${category}`)}
                     </Link>
                 ))}
             </div>

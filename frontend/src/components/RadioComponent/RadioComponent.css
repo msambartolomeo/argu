@@ -1,0 +1,22 @@
+table.radio-button-class tbody tr td label {
+    font-size: 1rem;
+    color: black !important;
+}
+
+[type="radio"]:checked + span::after {
+    background-color: var(--selected-button);
+    border: var(--selected-button);
+}
+
+[type="radio"]:not(:checked) + span:before {
+    border: 0px !important;
+}
+
+[type="radio"]:not(:checked) + span,
+[type="radio"]:checked + span {
+    padding-left: 0px !important;
+}
+
+.radio-button-style {
+    padding-left: 0px !important;
+}

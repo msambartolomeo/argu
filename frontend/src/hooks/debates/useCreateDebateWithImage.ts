@@ -10,7 +10,7 @@ export interface CreateDebateWithImageInput extends CreateDebateInput {
     image: File;
 }
 
-export const createDebateWithImage = () => {
+export const useCreateDebateWithImage = () => {
     const { loading, callPost } = usePost();
 
     async function createDebateWithImage(

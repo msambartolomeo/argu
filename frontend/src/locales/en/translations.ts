@@ -8,6 +8,20 @@ export const TRANSLATIONS_EN = {
         moderator: "Become Moderator",
         profile: "Profile",
     },
+    categories: {
+        culture: "Culture",
+        economics: "Economics",
+        education: "Education",
+        entertainment: "Entertainment",
+        history: "History",
+        literature: "Literature",
+        politics: "Politics",
+        religion: "Religion",
+        science: "Science",
+        technology: "Technology",
+        world: "World",
+        other: "Other",
+    },
     landingPage: {
         about: {
             about: "About Argu",
@@ -179,8 +193,26 @@ export const TRANSLATIONS_EN = {
         against: "Against",
         opponentUsername: "Your opponent's username:",
         category: "Debate category:",
+        categoryPlaceholder: "Select a category",
         image: "Debate image (optional):",
         uploadImage: "Upload Image",
+        errors: {
+            titleEmpty: "Title cannot be empty",
+            titleTooLong: "Title cannot be longer than 100 characters",
+            descriptionEmpty: "Description cannot be empty",
+            descriptionTooLong:
+                "Description cannot be longer than 1000 characters",
+            opponentUsernameEmpty: "You must specify an opponent",
+            opponentUsernameTooLong:
+                "Opponent's username cannot be longer than 64 characters",
+            opponentUsernameSame: "You cannot debate with yourself",
+            categoryEmpty: "Category cannot be empty",
+            imageTooBig: "Image cannot be bigger than 10MB",
+            imageInvalid: "Image format is invalid",
+            opponentUsernameNotFound: "The selected opponent does not exist",
+            isCreatorForEmpty: "You must specify a position",
+            isCreatorForInvalid: "Invalid position",
+        },
     },
     requestModerator: {
         requestModerator: "Want to become a moderator?",
@@ -213,18 +245,6 @@ export const TRANSLATIONS_EN = {
         categories: {
             title: "Categories",
             all: "All",
-            culture: "Culture",
-            economics: "Economics",
-            education: "Education",
-            entertainment: "Entertainment",
-            history: "History",
-            literature: "Literature",
-            politics: "Politics",
-            religion: "Religion",
-            science: "Science",
-            technology: "Technology",
-            world: "World",
-            other: "Other",
         },
         orderBy: {
             placeholders: {

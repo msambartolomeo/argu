@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import Placeholder from "react-select/dist/declarations/src/components/Placeholder";
 
 import {
     FormControl,

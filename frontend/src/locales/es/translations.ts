@@ -8,6 +8,20 @@ export const TRANSLATIONS_ES = {
         moderator: "Ser Moderador",
         profile: "Perfil",
     },
+    categories: {
+        culture: "Cultura",
+        economics: "Economía",
+        education: "Educación",
+        entertainment: "Entretenimiento",
+        history: "Historia",
+        literature: "Literatura",
+        politics: "Política",
+        religion: "Religión",
+        science: "Ciencia",
+        technology: "Tecnología",
+        world: "Mundo",
+        other: "Otros",
+    },
     landingPage: {
         about: {
             about: "Acerca de Argu",
@@ -183,8 +197,26 @@ export const TRANSLATIONS_ES = {
         against: "En contra",
         opponentUsername: "Nombre de usuario de tu oponente:",
         category: "Categoría del debate:",
+        categoryPlaceholder: "Seleccione una categoría",
         image: "Imagen del debate (opcional):",
         uploadImage: "Subir foto",
+        errors: {
+            titleEmpty: "El título no puede estar vacío",
+            titleTooLong: "El título no puede superar los 100 caracteres",
+            descriptionEmpty: "La descripción no puede estar vacía",
+            descriptionTooLong:
+                "La descripción no puede superar los 1000 caracteres",
+            opponentUsernameEmpty: "Debe especificar un oponente",
+            opponentUsernameTooLong:
+                "El nombre de usuario del oponente no puede superar los 64 caracteres",
+            opponentUsernameSame: "No puedes ser tu propio oponente",
+            categoryEmpty: "La categoría no puede estar vacía",
+            imageTooBig: "La imagen no puede superar los 10MB",
+            imageInvalid: "El formato de la imagen no es válido",
+            opponentUsernameNotFound: "El oponente seleccionado no existe",
+            isCreatorForEmpty: "Debe especificar una posición",
+            isCreatorForInvalid: "Posición inválida",
+        },
     },
     requestModerator: {
         requestModerator: "¿Quieres ser moderador?",
@@ -216,18 +248,6 @@ export const TRANSLATIONS_ES = {
         categories: {
             title: "Categorías",
             all: "Todos",
-            culture: "Cultura",
-            economics: "Economía",
-            education: "Educación",
-            entertainment: "Entretenimiento",
-            history: "Historia",
-            literature: "Literatura",
-            politics: "Política",
-            religion: "Religión",
-            science: "Ciencia",
-            technology: "Tecnología",
-            world: "Mundo",
-            other: "Otros",
         },
         orderBy: {
             placeholders: {

@@ -96,9 +96,7 @@ const OrderByComponent = () => {
             <h5 className="order-by-header">
                 {selectedCategory
                     ? t("discovery.orderBy.showingDebatesInCategory", {
-                          category: t(
-                              "discovery.categories." + selectedCategory
-                          ),
+                          category: t("categories." + selectedCategory),
                       })
                     : t("discovery.orderBy.showingAllDebates")}
             </h5>
