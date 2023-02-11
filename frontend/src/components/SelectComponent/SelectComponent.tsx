@@ -20,7 +20,7 @@ const SelectComponent = ({
     ...props
 }: SelectComponentProps) => {
     return (
-        <FormControl {...props}>
+        <FormControl {...props} fullWidth={true}>
             <Controller
                 name={name}
                 control={control}

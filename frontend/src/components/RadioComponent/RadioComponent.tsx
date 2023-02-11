@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import FormControl from "@mui/material/FormControl/FormControl";
 
+import "./RadioComponent.css";
+
 interface RadioComponentProps {
     name: string;
     label: string;
@@ -36,7 +38,7 @@ const RadioComponent = ({
                         <RadioGroup
                             {...field}
                             value={field.value}
-                            row
+                            // row
                             defaultValue={null}
                         >
                             {options.map((option) => (
