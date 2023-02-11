@@ -105,7 +105,10 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
                                         <p className="datetime">
                                             {c.createdDate}
                                         </p>
-                                        <p>{c.creator}</p>
+                                        <p>
+                                            {c.creatorName ??
+                                                t("debate.userDeleted")}
+                                        </p>
                                         <p>{c.message}</p>
                                     </div>
                                 ))
