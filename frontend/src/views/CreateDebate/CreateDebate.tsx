@@ -264,7 +264,10 @@ const CreateDebate = () => {
                             </tr>
                         </tbody>
                     </table>
-                    <SubmitButton text={t("createDebate.createDebate")} />
+                    <SubmitButton
+                        text={t("createDebate.createDebate")}
+                        disabled={loading || loadingWithImage}
+                    />
                 </div>
             </form>
         </div>
