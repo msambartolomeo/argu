@@ -12,7 +12,7 @@ interface Props {
 function TextArea({ text, value, error, register, className }: Props) {
     return (
         <div className={`input-field ${className}`}>
-            <input
+            <textarea
                 value={value}
                 className={cn({
                     invalid: error !== undefined,

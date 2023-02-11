@@ -79,13 +79,13 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
                         setChat(PaginatedList.emptyList());
                         break;
                 }
+                const chatElem = document.getElementById("chat");
+                chatElem?.scrollTo(0, chatElem.scrollHeight);
             });
             setRefresh(false);
         }
 
         // FIXME: the scrolling is not working after a post
-        const chatElem = document.getElementById("chat");
-        chatElem?.scrollTo(0, chatElem.scrollHeight);
     }, [refresh]);
 
     return (
@@ -129,6 +129,7 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
                                         onSubmit={handleSubmit((data) => {
                                             handlePostChat(data);
                                         })}
+                                        ref={form}
                                     >
                                         <div className="send-chat">
                                             <InputField
