@@ -216,6 +216,8 @@ export const TRANSLATIONS_ES = {
             opponentUsernameNotFound: "El oponente seleccionado no existe",
             isCreatorForEmpty: "Debe especificar una posición",
             isCreatorForInvalid: "Posición inválida",
+            unexpected:
+                "Ocurrió un error inesperado, por favor intente de nuevo más tarde",
         },
     },
     requestModerator: {

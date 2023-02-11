@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { HttpStatusCode } from "axios";
 import { FieldValues, useForm } from "react-hook-form";
@@ -7,9 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, Snackbar } from "@mui/material";
 
 import "./CreateDebate.css";
 
+import AlertToast from "../../components/AlertToast/AlertToast";
 import InputField from "../../components/InputField/InputField";
 import RadioComponent from "../../components/RadioComponent/RadioComponent";
 import SelectComponent from "../../components/SelectComponent/SelectComponent";
@@ -30,6 +32,7 @@ const CreateDebate = () => {
     const { loading: loadingWithImage, createDebateWithImage } =
         useCreateDebateWithImage();
     const { getDebateByUrl } = useGetDebateByUrl();
+    const [unexpectedError, setUnexpectedError] = useState<boolean>(false);
 
     const schema = z.object({
         title: z
@@ -184,12 +187,13 @@ const CreateDebate = () => {
                             });
                             break;
                         default:
-                            // TODO: Add toast, this should only happen in 500s
+                            setUnexpectedError(true);
                             break;
                     }
                 }
                 break;
             case HttpStatusCode.BadRequest:
+                // NOTE: Only 4XX error that zod can't handle
                 setError("opponent", {
                     type: "manual",
                     message: t(
@@ -197,8 +201,8 @@ const CreateDebate = () => {
                     ) as string,
                 });
                 break;
-            case HttpStatusCode.NotFound:
-                // TODO: Add toast with something like "An error occurred, please try again later"
+            default:
+                setUnexpectedError(true);
                 break;
         }
     };
@@ -304,6 +308,12 @@ const CreateDebate = () => {
                     />
                 </div>
             </form>
+            <AlertToast
+                message={t("createDebate.errors.unexpected") as string}
+                open={unexpectedError}
+                onClose={() => setUnexpectedError(false)}
+                severity="error"
+            />
         </div>
     );
 };
