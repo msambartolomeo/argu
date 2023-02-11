@@ -7,6 +7,7 @@ export default interface DebateDto {
     description: string;
     isCreatorFor: boolean;
     createdDate: Date;
+    dateToClose?: string;
     category: DebateCategory;
     status: DebateStatus;
     subscriptionsCount: number;
@@ -16,11 +17,12 @@ export default interface DebateDto {
     opponentName?: string;
 
     self: string;
-    image: string;
+    image?: string;
     creator?: string;
     opponent: string;
     arguments: string;
     chats: string;
+    // TODO: Remove question mark from the following 4, cant do it now or else user profile breaks
     recommendations?: string;
     sameCategory?: string;
     sameStatus?: string;

@@ -4,7 +4,7 @@ import { PostOutput } from "../../types/PostOutput";
 import { usePost } from "../requests/usePost";
 
 export interface CreateChatInput {
-    debateUrl: string;
+    chatUrl: string;
     message: string;
 }
 
@@ -12,11 +12,11 @@ export const useCreateChat = () => {
     const { loading, callPost } = usePost();
 
     async function createChat({
-        debateUrl,
+        chatUrl,
         message,
     }: CreateChatInput): Promise<PostOutput> {
         const response = await callPost(
-            debateUrl,
+            chatUrl,
             { message },
             {
                 "Content-Type": "application/json",

@@ -4,8 +4,6 @@ import { useDelete } from "../requests/useDelete";
 
 export interface DeleteVoteInput {
     voteUrl: string;
-    // TODO: Maybe get the userUrl from the context
-    userUrl: string;
 }
 
 export const useDeleteVote = () => {
@@ -13,11 +11,8 @@ export const useDeleteVote = () => {
 
     async function callDeleteVote({
         voteUrl,
-        userUrl,
     }: DeleteVoteInput): Promise<HttpStatusCode> {
-        const response = await callDelete(voteUrl, {}, true, {
-            user: userUrl,
-        });
+        const response = await callDelete(voteUrl, {}, true);
         return response.status;
     }
 

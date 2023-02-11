@@ -122,6 +122,11 @@ export const TRANSLATIONS_ES = {
             message: "Mensaje",
             send: "Enviar",
             noMessages: "No hay mensajes en este debate",
+            errors: {
+                messageEmpty: "Escriba un mensaje para participar",
+                messageTooLong:
+                    "El mensaje no puede ser más largo que 2000 caracteres",
+            },
         },
         recommendedDebates: "Debates recomendados",
     },
@@ -318,9 +323,16 @@ export const TRANSLATIONS_ES = {
                 "¡Pero podés crear tu propio debate y así ayudar a la comunidad a crecer!",
         },
     },
-    error: {
+    errors: {
         title: "¡Ups!",
         message: "Ha ocurrido un error.",
         goBack: "Volver a inicio.",
+        notFound: {
+            debate: "Debate no encontrado",
+            user: "Usuario no encontrado",
+        },
+        conflict: {
+            debateClosed: "El debate está cerrado, la acción no es posible",
+        },
     },
 };

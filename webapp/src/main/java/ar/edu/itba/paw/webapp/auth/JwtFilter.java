@@ -44,23 +44,29 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+        boolean continueFilter = true;
+
         if (header != null && !header.isEmpty()) {
             if (header.startsWith("Basic ")) {
-                basicAuthentication(header, request, response);
+                continueFilter = basicAuthentication(header, request, response);
             } else if (header.startsWith("Bearer ")) {
-                bearerAuthentication(header, request, response);
+                continueFilter = bearerAuthentication(header, request, response);
             }
         }
 
-        filterChain.doFilter(request, response);
+        if (continueFilter) {
+            filterChain.doFilter(request, response);
+        } else {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
     }
 
-    private void basicAuthentication(String header, HttpServletRequest request, HttpServletResponse response) {
+    private boolean basicAuthentication(String header, HttpServletRequest request, HttpServletResponse response) {
         final String encodedCredentials = header.split(" ")[1];
         try {
             String[] credentials = new String(Base64.getDecoder().decode(encodedCredentials)).split(":");
             if (credentials.length != 2)
-                return;
+                return false;
 
             String username = credentials[0].trim();
             String password = credentials[1].trim();
@@ -73,7 +79,7 @@ public class JwtFilter extends OncePerRequestFilter {
             UserDetails user = (UserDetails) authenticate.getPrincipal();
             User fullUser = userService.getUserByUsername(user.getUsername()).orElse(null);
             if (fullUser == null)
-                return;
+                return false;
 
             // TODO: Ask about headers
             response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUtils.generateToken(fullUser));
@@ -84,15 +90,16 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
         } catch (BadCredentialsException | IllegalArgumentException ignored) {
-            // NOTE: Ignoring exceptions, if the request was not authorized spring security will catch it later.
+            return false;
         }
+        return true;
     }
 
-    private void bearerAuthentication(String header, HttpServletRequest request, HttpServletResponse response) {
+    private boolean bearerAuthentication(String header, HttpServletRequest request, HttpServletResponse response) {
         final String token = header.split(" ")[1].trim();
 
         if (!jwtUtils.validate(token)) {
-            return;
+            return false;
         }
 
         UserDetails user;
@@ -106,7 +113,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             User fullUser = userService.getUserByUsername(user.getUsername()).orElse(null);
             if (fullUser == null)
-                return;
+                return false;
 
             response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUtils.generateToken(fullUser));
         }
@@ -118,5 +125,7 @@ public class JwtFilter extends OncePerRequestFilter {
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return true;
     }
 }

@@ -6,7 +6,7 @@ import ChatDto from "../../types/dto/ChatDto";
 import { useGet } from "../requests/useGet";
 
 export interface GetChatsInput {
-    debateUrl: string;
+    chatUrl: string;
     page?: number;
     size?: number;
 }
@@ -15,11 +15,11 @@ export const useGetChats = () => {
     const { loading, callGet } = useGet();
 
     async function getChats({
-        debateUrl,
+        chatUrl,
         page,
         size,
     }: GetChatsInput): Promise<PaginatedOutput<ChatDto>> {
-        const response = await callGet(debateUrl, {}, false, {
+        const response = await callGet(chatUrl, {}, false, {
             page: page?.toString() ?? "0",
             size: size?.toString() ?? "15",
         });

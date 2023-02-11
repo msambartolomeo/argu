@@ -4,8 +4,6 @@ import { usePost } from "../requests/usePost";
 
 export interface CreateSubscriptionInput {
     subscriptionUrl: string;
-    // TODO: Maybe get the userUrl from the context
-    userUrl: string;
 }
 
 export const useCreateSubscription = () => {
@@ -13,11 +11,8 @@ export const useCreateSubscription = () => {
 
     async function createSubscription({
         subscriptionUrl,
-        userUrl,
     }: CreateSubscriptionInput): Promise<HttpStatusCode> {
-        const response = await callPost(subscriptionUrl, {}, {}, true, {
-            user: userUrl,
-        });
+        const response = await callPost(subscriptionUrl, {}, {}, true);
         return response.status;
     }
 

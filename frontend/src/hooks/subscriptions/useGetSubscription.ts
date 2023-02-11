@@ -4,7 +4,6 @@ import { useGet } from "../requests/useGet";
 
 export interface GetSubscriptionInput {
     subscriptionUrl: string;
-    userUrl: string;
 }
 
 export const useGetSubscription = () => {
@@ -12,11 +11,8 @@ export const useGetSubscription = () => {
 
     async function getSubscription({
         subscriptionUrl,
-        userUrl,
     }: GetSubscriptionInput): Promise<HttpStatusCode> {
-        const response = await callGet(subscriptionUrl, {}, true, {
-            user: userUrl,
-        });
+        const response = await callGet(subscriptionUrl, {}, true);
 
         return response.status;
     }
