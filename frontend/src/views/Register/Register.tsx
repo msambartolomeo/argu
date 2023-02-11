@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import InputField from "../../components/InputField/InputField";
 import SubmitButton from "../../components/SubmitButton/SubmitButton";
+import { useLogin } from "../../hooks/requests/useLogin";
 import {
     CreateUserConflictError,
     CreateUserInput,
@@ -61,13 +62,19 @@ const Register = () => {
     });
 
     const { loading, createUser } = useCreateUser();
+    const { callLogin } = useLogin();
 
     const onSubmit = useCallback(async (data: CreateUserInput) => {
         const response = await createUser(data);
         switch (response.status) {
             case HttpStatusCode.Created:
-                // TODO: Add toast?
-                navigate("/login");
+                {
+                    const loggedIn = await callLogin(
+                        data.username,
+                        data.password
+                    );
+                    if (loggedIn) navigate("/login");
+                }
                 break;
             case HttpStatusCode.BadRequest:
                 // TODO: Should we even consider this? Shouldn't the schema handle this?

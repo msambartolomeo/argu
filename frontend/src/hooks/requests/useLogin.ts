@@ -8,15 +8,12 @@ export function useLogin() {
 
     async function callLogin(username: string, password: string) {
         const response = await requestApi({
-            url: LOGIN_URL,
+            url: LOGIN_URL + encodeURI(username),
             method: RequestMethod.GET,
             requiresAuth: true,
             credentials: {
                 username,
                 password,
-            },
-            queryParams: {
-                user: encodeURI(username),
             },
         });
         return response.status !== HttpStatusCode.Unauthorized;
