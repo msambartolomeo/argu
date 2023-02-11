@@ -310,13 +310,13 @@ export const TRANSLATIONS_EN = {
                 "Showing debates in category: {{category}}",
         },
     },
-    error: {
+    errors: {
         title: "Oops!",
         message: "An error has ocurred.",
         goBack: "Go back to the homepage",
         notFound: {
-            debate: "Debate requested not found",
-            user: "User requested not found",
+            debate: "Debate not found",
+            user: "User not found",
         },
         conflict: {
             debateClosed:

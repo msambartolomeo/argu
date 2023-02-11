@@ -3,11 +3,11 @@ import { HttpStatusCode } from "axios";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import { useGet } from "../requests/useGet";
 
-export interface GetUserByUrlInput {
+export interface GetArgumentByUrlInput {
     url: string;
 }
 
-export interface GetUserByUrlOutput {
+export interface GetArgumentByUrlOutput {
     status: HttpStatusCode;
     data?: ArgumentDto;
     message?: string;
@@ -16,7 +16,7 @@ export interface GetUserByUrlOutput {
 export const useGetArgumentByUrl = () => {
     const { loading, callGet } = useGet();
 
-    async function getArgumentByUrl({ url }: GetUserByUrlInput) {
+    async function getArgumentByUrl({ url }: GetArgumentByUrlInput) {
         const response = await callGet(url, {}, false);
 
         switch (response.status) {

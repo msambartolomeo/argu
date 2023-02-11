@@ -56,7 +56,6 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
         submitMessage = t("debate.argument.postConclusion");
     }
 
-    // TODO: Validate image type with zod
     const schema = z.object({
         content: z.string().min(1).max(2000),
         image: z
@@ -111,7 +110,7 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
                     });
                     break;
                 case HttpStatusCode.Conflict:
-                    setRequestErr(t("error.conflict.debateClosed").toString());
+                    setRequestErr(t("errors.conflict.debateClosed").toString());
                     break;
             }
         } else {
@@ -130,7 +129,7 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
                     });
                     break;
                 case HttpStatusCode.Conflict:
-                    setRequestErr(t("error.conflict.debateClosed").toString());
+                    setRequestErr(t("errors.conflict.debateClosed").toString());
                     break;
             }
         }
