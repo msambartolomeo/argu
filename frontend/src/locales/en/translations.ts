@@ -194,13 +194,14 @@ export const TRANSLATIONS_EN = {
             descriptionEmpty: "Description cannot be empty",
             descriptionTooLong:
                 "Description cannot be longer than 1000 characters",
-            opponentUsernameEmpty: "Opponent's username cannot be empty",
+            opponentUsernameEmpty: "You must specify an opponent",
             opponentUsernameTooLong:
                 "Opponent's username cannot be longer than 64 characters",
             opponentUsernameSame: "You cannot debate with yourself",
             categoryEmpty: "Category cannot be empty",
             imageTooBig: "Image cannot be bigger than 10MB",
             imageInvalid: "Image format is invalid",
+            opponentUsernameNotFound: "The selected opponent does not exist",
         },
     },
     requestModerator: {

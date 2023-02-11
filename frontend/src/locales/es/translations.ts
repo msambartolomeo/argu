@@ -206,6 +206,7 @@ export const TRANSLATIONS_ES = {
             categoryEmpty: "La categoría no puede estar vacía",
             imageTooBig: "La imagen no puede superar los 10MB",
             imageInvalid: "El formato de la imagen no es válido",
+            opponentUsernameNotFound: "El oponente seleccionado no existe",
         },
     },
     requestModerator: {

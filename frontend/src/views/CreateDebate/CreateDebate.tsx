@@ -159,7 +159,7 @@ const CreateDebate = () => {
                     type: "manual",
                     // TODO: Use API error messages to i18n
                     message: t(
-                        "createDebate.errors.opponentUsernameInvalid"
+                        "createDebate.errors.opponentUsernameNotFound"
                     ) as string,
                 });
                 break;
