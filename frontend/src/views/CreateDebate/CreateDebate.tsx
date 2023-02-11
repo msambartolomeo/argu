@@ -1,17 +1,16 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { HttpStatusCode } from "axios";
+import { useSnackbar } from "notistack";
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, Snackbar } from "@mui/material";
 
 import "./CreateDebate.css";
 
-import AlertToast from "../../components/AlertToast/AlertToast";
 import InputField from "../../components/InputField/InputField";
 import RadioComponent from "../../components/RadioComponent/RadioComponent";
 import SelectComponent from "../../components/SelectComponent/SelectComponent";
@@ -32,7 +31,7 @@ const CreateDebate = () => {
     const { loading: loadingWithImage, createDebateWithImage } =
         useCreateDebateWithImage();
     const { getDebateByUrl } = useGetDebateByUrl();
-    const [unexpectedError, setUnexpectedError] = useState<boolean>(false);
+    const { enqueueSnackbar } = useSnackbar();
 
     const schema = z.object({
         title: z
@@ -180,6 +179,12 @@ const CreateDebate = () => {
                     switch (debateResponse.status) {
                         case HttpStatusCode.Ok:
                             // TODO: Add routes as constants
+                            enqueueSnackbar(
+                                t("createDebate.success") as string,
+                                {
+                                    variant: "success",
+                                }
+                            );
                             navigate(`/debate/${debateResponse.data?.id}`, {
                                 state: {
                                     debate: debateResponse.data,
@@ -187,7 +192,9 @@ const CreateDebate = () => {
                             });
                             break;
                         default:
-                            setUnexpectedError(true);
+                            enqueueSnackbar(t("errors.unexpected") as string, {
+                                variant: "error",
+                            });
                             break;
                     }
                 }
@@ -202,7 +209,9 @@ const CreateDebate = () => {
                 });
                 break;
             default:
-                setUnexpectedError(true);
+                enqueueSnackbar(t("errors.unexpected") as string, {
+                    variant: "error",
+                });
                 break;
         }
     };
@@ -308,12 +317,6 @@ const CreateDebate = () => {
                     />
                 </div>
             </form>
-            <AlertToast
-                message={t("createDebate.errors.unexpected") as string}
-                open={unexpectedError}
-                onClose={() => setUnexpectedError(false)}
-                severity="error"
-            />
         </div>
     );
 };

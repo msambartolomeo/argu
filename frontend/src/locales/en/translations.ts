@@ -196,6 +196,7 @@ export const TRANSLATIONS_EN = {
         categoryPlaceholder: "Select a category",
         image: "Debate image (optional):",
         uploadImage: "Upload Image",
+        success: "Debate created successfully!",
         errors: {
             titleEmpty: "Title cannot be empty",
             titleTooLong: "Title cannot be longer than 100 characters",
@@ -212,7 +213,6 @@ export const TRANSLATIONS_EN = {
             opponentUsernameNotFound: "The selected opponent does not exist",
             isCreatorForEmpty: "You must specify a position",
             isCreatorForInvalid: "Invalid position",
-            unexpected: "An unexpected error occurred, please try again later",
         },
     },
     requestModerator: {
@@ -353,5 +353,6 @@ export const TRANSLATIONS_EN = {
             debateClosed:
                 "Debate is not open anymore so the operation can not be completed",
         },
+        unexpected: "An unexpected error occurred, please try again later",
     },
 };
