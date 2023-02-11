@@ -14,7 +14,10 @@ export const useDeleteUser = () => {
         );
 
         // TODO: Validate return object
-        return response.status;
+        return {
+            status: response.status,
+            message: response.data.message,
+        };
     }
     return { loading, deleteUser };
 };

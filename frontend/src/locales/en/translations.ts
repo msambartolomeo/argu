@@ -65,6 +65,9 @@ export const TRANSLATIONS_EN = {
         introducePswd: "Introduce your password",
         debatesSubscribed: "Debates Subscribed",
         myDebates: "My Debates",
+        imageEmpty: "The file provided is empty",
+        imageTooBig:
+            "The image provided is bigger than the maximum allowed (10MB)",
     },
     debate: {
         creator: "Creator",

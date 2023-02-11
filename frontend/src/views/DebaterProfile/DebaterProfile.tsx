@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import { HttpStatusCode } from "axios";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
-import { CircularProgress, Pagination, PaginationItem } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 
 import DebatesList from "../../components/DebatesList/DebatesList";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
@@ -31,9 +31,8 @@ export const DebaterProfile = () => {
     >();
     const [error, setError] = useState<string | undefined>();
 
-    const location = useLocation();
-    const query = new URLSearchParams(location.search);
-    const page = parseInt(query.get("page") || "1", 10);
+    const [queryParams, setQueryParams] = useSearchParams();
+    let page = parseInt(queryParams.get("page") || "1", 10);
 
     const { loading: userLoading, getUserByUsername: getUserByUsername } =
         useGetUserByUsername();
@@ -63,17 +62,18 @@ export const DebaterProfile = () => {
         if (userData?.debates) {
             getDebatesByUrl({
                 url: userData.debates,
-                page: page - 1,
-                size: 5,
             }).then((res: GetDebatesByUrlOutput) => {
                 switch (res.status) {
                     case HttpStatusCode.Ok:
                         setUserDebates(res.data);
                         break;
+                    case HttpStatusCode.NoContent:
+                        setUserDebates(undefined);
+                        break;
                 }
             });
         }
-    }, [userData, page]);
+    }, [userData]);
 
     useEffect(() => {
         fetchUserDebates();
@@ -95,6 +95,35 @@ export const DebaterProfile = () => {
     useEffect(() => {
         fetchProfileImage();
     }, [fetchProfileImage]);
+
+    const handleChangePage = async (value: number) => {
+        let url = "";
+        switch (value) {
+            case 1:
+                url = userDebates?.first || "";
+                break;
+            case userDebates?.totalPages:
+                url = userDebates?.last || "";
+                break;
+            case page - 1:
+                url = userDebates?.prev || "";
+                break;
+            case page + 1:
+                url = userDebates?.next || "";
+                break;
+        }
+        const res = await getDebatesByUrl({ url: url });
+        switch (res.status) {
+            case HttpStatusCode.Ok:
+                setUserDebates(res.data);
+                break;
+            case HttpStatusCode.NoContent:
+                setUserDebates(undefined);
+                break;
+        }
+        page = value;
+        setQueryParams({ page: value.toString() });
+    };
 
     if (error)
         return <Error status={HttpStatusCode.NotFound} message={error} />;
@@ -132,16 +161,11 @@ export const DebaterProfile = () => {
                                 color="primary"
                                 className="white"
                                 page={page}
-                                renderItem={(item) => (
-                                    <PaginationItem
-                                        component={Link}
-                                        to={{
-                                            pathname: `/user/${params.url}`,
-                                            search: `?page=${item.page}`,
-                                        }}
-                                        {...item}
-                                    />
-                                )}
+                                showFirstButton
+                                showLastButton
+                                onChange={(event, page) =>
+                                    handleChangePage(page)
+                                }
                             />
                         </div>
                     )}
