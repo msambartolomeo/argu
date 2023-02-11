@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Radio } from "@mui/material";
 
 import "./CreateDebate.css";
 
@@ -53,8 +52,27 @@ const CreateDebate = () => {
             }
         ),
         isCreatorFor: z
-            .string()
-            .refine((value) => value === "true" || value === "false"),
+            .any()
+            .refine(
+                (value) => {
+                    return value !== null;
+                },
+                {
+                    message: t(
+                        "createDebate.errors.isCreatorForEmpty"
+                    ) as string,
+                }
+            )
+            .refine(
+                (value) => {
+                    return value === "true" || value === "false";
+                },
+                {
+                    message: t(
+                        "createDebate.errors.isCreatorForInvalid"
+                    ) as string,
+                }
+            ),
         opponent: z
             .string()
             .min(1, t("createDebate.errors.opponentUsernameEmpty") as string)
@@ -157,7 +175,6 @@ const CreateDebate = () => {
             case HttpStatusCode.BadRequest:
                 setError("opponent", {
                     type: "manual",
-                    // TODO: Use API error messages to i18n
                     message: t(
                         "createDebate.errors.opponentUsernameNotFound"
                     ) as string,

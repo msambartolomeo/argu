@@ -202,6 +202,8 @@ export const TRANSLATIONS_EN = {
             imageTooBig: "Image cannot be bigger than 10MB",
             imageInvalid: "Image format is invalid",
             opponentUsernameNotFound: "The selected opponent does not exist",
+            isCreatorForEmpty: "You must specify a position",
+            isCreatorForInvalid: "Invalid position",
         },
     },
     requestModerator: {

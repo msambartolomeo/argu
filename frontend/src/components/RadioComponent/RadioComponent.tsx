@@ -49,7 +49,9 @@ const RadioComponent = ({
                                 />
                             ))}
                         </RadioGroup>
-                        <FormHelperText>{error}</FormHelperText>
+                        <FormHelperText error={Boolean(error)}>
+                            {error}
+                        </FormHelperText>
                     </>
                 )}
             />
