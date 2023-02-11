@@ -172,11 +172,12 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
                     <div className="card no-top-margin">
                         <div className="card-content">
                             {userInfo &&
-                                ((argumentList.data.length === 0 &&
+                            (userInfo.username === debate.creatorName ||
+                                userInfo.username === debate.opponentName) ? (
+                                (argumentList.data.length === 0 &&
                                     userInfo.username === debate.creatorName) ||
-                                (lastArgument?.creatorName !== undefined &&
-                                    lastArgument?.creatorName !==
-                                        userInfo.username) ? (
+                                lastArgument?.creatorName !==
+                                    userInfo.username ? (
                                     <form
                                         encType="multipart/form-data"
                                         onSubmit={handleSubmit((data) => {
@@ -266,8 +267,8 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
                                     <div className="card-title card-title-margins">
                                         {t("debate.waitTurn")}
                                     </div>
-                                ))}
-                            {!userInfo && (
+                                )
+                            ) : (
                                 <div className="card-title card-title-margins">
                                     {t("debate.needToLogin")}
                                     <i
