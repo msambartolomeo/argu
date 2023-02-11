@@ -42,7 +42,7 @@ export const useRequestApi = () => {
             if (!authToken && !refreshToken && !credentials) {
                 // TODO: If we already throw an error (to avoid infinite recursion), should we still navigate to login or leave it to component?
                 navigate("/login", {
-                    state: { from: window.location.pathname },
+                    state: { from: window.location.pathname.substring(13) },
                 });
                 throw new Error("No auth token or credentials");
             }
@@ -76,14 +76,14 @@ export const useRequestApi = () => {
                 headers: headers,
                 params: input.queryParams,
             });
-            if (requiresAuth) {
-                if (response.headers[AUTHORIZATION_HEADER]) {
-                    setAuthToken(response.headers[AUTHORIZATION_HEADER]);
-                }
-                if (response.headers[REFRESH_HEADER]) {
-                    setRefreshToken(response.headers[REFRESH_HEADER]);
-                }
+
+            if (response.headers[AUTHORIZATION_HEADER]) {
+                setAuthToken(response.headers[AUTHORIZATION_HEADER]);
             }
+            if (response.headers[REFRESH_HEADER]) {
+                setRefreshToken(response.headers[REFRESH_HEADER]);
+            }
+
             return response;
         } catch (err) {
             if (axios.isAxiosError(err)) {
@@ -104,7 +104,12 @@ export const useRequestApi = () => {
                         // NOTE: refreshToken expired or invalid, forcing login with Basic
                         setRefreshToken(null);
                     }
-                    await requestApi({
+
+                    if (headers) {
+                        delete headers["Authorization"];
+                    }
+
+                    return await requestApi({
                         url,
                         method,
                         body,
@@ -113,14 +118,13 @@ export const useRequestApi = () => {
                     });
                 }
 
-                if (requiresAuth) {
-                    if (response?.headers[AUTHORIZATION_HEADER]) {
-                        setAuthToken(response.headers[AUTHORIZATION_HEADER]);
-                    }
-                    if (response?.headers[REFRESH_HEADER]) {
-                        setRefreshToken(response.headers[REFRESH_HEADER]);
-                    }
+                if (response?.headers[AUTHORIZATION_HEADER]) {
+                    setAuthToken(response.headers[AUTHORIZATION_HEADER]);
                 }
+                if (response?.headers[REFRESH_HEADER]) {
+                    setRefreshToken(response.headers[REFRESH_HEADER]);
+                }
+
                 return axiosError.response as AxiosResponse;
             }
             throw err;

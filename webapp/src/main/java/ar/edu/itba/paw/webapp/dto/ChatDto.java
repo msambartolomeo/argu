@@ -11,6 +11,7 @@ public class ChatDto {
 
     private String message;
     private String createdDate;
+    private String creatorName;
 
     private URI self;
     private URI creator;
@@ -27,6 +28,7 @@ public class ChatDto {
         User creator = chat.getUser();
         if (creator != null && creator.getUsername() != null) {
             dto.creator = uriInfo.getBaseUriBuilder().path("users").path(creator.getUrl()).build();
+            dto.creatorName = creator.getUsername();
         }
         Debate debate = chat.getDebate();
         if (debate != null) {
@@ -74,5 +76,13 @@ public class ChatDto {
 
     public void setDebate(URI debate) {
         this.debate = debate;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
 }

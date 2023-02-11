@@ -46,9 +46,11 @@ const TrendingDebatesComponent = () => {
                 {t("landingPage.trending.title")}
             </h2>
             <div className="debate-list-container">
-                {loading && <CircularProgress size={100} />}
-
-                <DebatesList debates={debates} />
+                {loading ? (
+                    <CircularProgress size={100} />
+                ) : (
+                    <DebatesList debates={debates} />
+                )}
             </div>
         </div>
     );

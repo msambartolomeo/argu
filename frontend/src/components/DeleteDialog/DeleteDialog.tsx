@@ -12,9 +12,16 @@ interface DeleteDialogProps {
     handleDelete: () => void;
     title: string;
     name?: string | null;
+    disabled?: boolean;
 }
 
-const DeleteDialog = ({ id, handleDelete, title, name }: DeleteDialogProps) => {
+const DeleteDialog = ({
+    id,
+    handleDelete,
+    title,
+    name,
+    disabled,
+}: DeleteDialogProps) => {
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -31,22 +38,21 @@ const DeleteDialog = ({ id, handleDelete, title, name }: DeleteDialogProps) => {
                 <i className="material-icons">delete</i>
             </a>
             <div id={id} className="modal">
-                <form method="delete" onSubmit={handleDelete}>
-                    <div className="modal-content">
-                        <h4>{title}</h4>
-                    </div>
-                    <div className="modal-footer">
-                        <a className="modal-close waves-effect btn-flat">
-                            {t("components.deleteDialog.cancel")}
-                        </a>
-                        <button
-                            type="submit"
-                            className="modal-close waves-effect btn-flat"
-                        >
-                            {t("components.deleteDialog.yes")}
-                        </button>
-                    </div>
-                </form>
+                <div className="modal-content">
+                    <h4>{title}</h4>
+                </div>
+                <div className="modal-footer">
+                    <a className="modal-close waves-effect btn-flat">
+                        {t("components.deleteDialog.cancel")}
+                    </a>
+                    <button
+                        disabled={disabled}
+                        onClick={handleDelete}
+                        className="modal-close waves-effect btn-flat"
+                    >
+                        {t("components.deleteDialog.yes")}
+                    </button>
+                </div>
             </div>
         </>
     );

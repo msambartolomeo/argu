@@ -3,26 +3,20 @@ import { HttpStatusCode } from "axios";
 import VoteDto from "../../types/dto/VoteDto";
 import { useGet } from "../requests/useGet";
 
-export interface GetLikeInput {
-    likeUrl: string;
-    userUrl: string;
+export interface GetVoteInput {
+    voteUrl: string;
 }
 
-export interface GetLikeOutput {
+export interface GetVoteOutput {
     status: HttpStatusCode;
     vote?: VoteDto;
 }
 
-export const useGetLike = () => {
+export const useGetVote = () => {
     const { loading, callGet } = useGet();
 
-    async function getLike({
-        likeUrl,
-        userUrl,
-    }: GetLikeInput): Promise<GetLikeOutput> {
-        const response = await callGet(likeUrl, {}, true, {
-            user: userUrl,
-        });
+    async function getVote({ voteUrl }: GetVoteInput): Promise<GetVoteOutput> {
+        const response = await callGet(voteUrl, {}, true);
 
         switch (response.status) {
             case HttpStatusCode.Ok:
@@ -37,5 +31,5 @@ export const useGetLike = () => {
         }
     }
 
-    return { loading, getLike };
+    return { loading, getVote };
 };

@@ -79,6 +79,8 @@ export const TRANSLATIONS_ES = {
         introducePswd: "Introduce tu contraseña",
         debatesSubscribed: "Debates suscriptos",
         myDebates: "Mis debates",
+        imageEmpty: "El archivo ingresado no es una imagen.",
+        imageTooBig: "El arhivo ingresado supera el limite de tamaño (10MB).",
     },
     debate: {
         creator: "Creador",
@@ -134,6 +136,11 @@ export const TRANSLATIONS_ES = {
             message: "Mensaje",
             send: "Enviar",
             noMessages: "No hay mensajes en este debate",
+            errors: {
+                messageEmpty: "Escriba un mensaje para participar",
+                messageTooLong:
+                    "El mensaje no puede ser más largo que 2000 caracteres",
+            },
         },
         recommendedDebates: "Debates recomendados",
     },
@@ -328,10 +335,24 @@ export const TRANSLATIONS_ES = {
             showingDebatesInCategory:
                 "Mostrando debates en la categoría: {{category}}",
         },
+        noDebates: {
+            arguTeam: "El equipo de Argu dijo",
+            arguTeamText: "Aún no hay debates para esta búsqueda",
+            arguCommunity: "La comunidad de Argu dijo",
+            arguCommunityText:
+                "¡Pero podés crear tu propio debate y así ayudar a la comunidad a crecer!",
+        },
     },
-    error: {
+    errors: {
         title: "¡Ups!",
         message: "Ha ocurrido un error.",
         goBack: "Volver a inicio.",
+        notFound: {
+            debate: "Debate no encontrado",
+            user: "Usuario no encontrado",
+        },
+        conflict: {
+            debateClosed: "El debate está cerrado, la acción no es posible",
+        },
     },
 };

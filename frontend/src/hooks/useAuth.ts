@@ -41,7 +41,6 @@ const useAuth = () => {
             setUserInfo(jwtDecode(token.split(" ")[1]));
         } else {
             localStorage.removeItem("authToken");
-            setUserInfo(null);
         }
     };
 
@@ -50,6 +49,7 @@ const useAuth = () => {
             localStorage.setItem("refreshToken", token);
         } else {
             localStorage.removeItem("refreshToken");
+            setUserInfo(null);
         }
     };
 

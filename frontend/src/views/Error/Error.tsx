@@ -16,7 +16,7 @@ interface ErrorProps {
 export const Error = ({ status, message }: ErrorProps) => {
     const { t } = useTranslation();
 
-    typeof message === "undefined" ? t("error.message") : message;
+    typeof message === "undefined" ? t("errors.message") : message;
 
     let image = "";
     switch (status) {
@@ -35,10 +35,10 @@ export const Error = ({ status, message }: ErrorProps) => {
         <div className="error-container">
             <div className="error-div">
                 <img src={image} alt="Error 404" />
-                <h1>{t("error.title")}</h1>
+                <h1>{t("errors.title")}</h1>
                 <h6>{message}</h6>
                 <Link to={"/"} className="link-underlined">
-                    {t("error.goBack")}
+                    {t("errors.goBack")}
                 </Link>
             </div>
         </div>

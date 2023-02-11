@@ -7,9 +7,6 @@ import { useGet } from "../requests/useGet";
 
 export interface GetDebatesByUrlInput {
     url: string;
-
-    page?: number;
-    size?: number;
 }
 
 export interface GetDebatesByUrlOutput {
@@ -23,13 +20,8 @@ export const useGetDebatesByUrl = () => {
 
     async function getDebatesByUrl({
         url,
-        page,
-        size,
     }: GetDebatesByUrlInput): Promise<PaginatedOutput<DebateDto>> {
-        const response = await callGet(url, {}, false, {
-            page: page?.toString() ?? "0",
-            size: size?.toString() ?? "10",
-        });
+        const response = await callGet(url, {}, false, {});
 
         switch (response.status) {
             case HttpStatusCode.Ok:

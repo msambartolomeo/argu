@@ -7,15 +7,23 @@ interface Props {
     value?: string;
     error?: string;
     register?: UseFormRegisterReturn;
+    className?: string;
 }
 
-const InputField = ({ type, text, value, error, register }: Props) => {
+const InputField = ({
+    type,
+    text,
+    value,
+    error,
+    register,
+    className,
+}: Props) => {
     if (type === undefined) {
         type = "text";
     }
 
     return (
-        <div className="input-field">
+        <div className={`input-field ${className}`}>
             <input
                 type={type}
                 value={value}

@@ -1,12 +1,10 @@
-import { DEBATES_ENDPOINT } from "./constants";
-
 import { useDelete } from "../requests/useDelete";
 
 export const useDeleteDebate = () => {
     const { loading, callDelete } = useDelete();
 
-    async function deleteDebate(id: number): Promise<number> {
-        const response = await callDelete(DEBATES_ENDPOINT + id, {}, true);
+    async function deleteDebate(url: string): Promise<number> {
+        const response = await callDelete(url, {}, true);
         return response.status;
     }
 

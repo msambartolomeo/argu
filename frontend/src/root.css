@@ -95,3 +95,9 @@ body {
 label.input-label.active {
     background: var(--white);
 }
+
+/* Pagination */
+.pagination-format {
+    display: flex;
+    align-self: center;
+}

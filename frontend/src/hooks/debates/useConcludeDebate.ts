@@ -1,12 +1,17 @@
-import { DEBATES_ENDPOINT } from "./constants";
-
 import { usePatch } from "../requests/usePatch";
 
 export const useConcludeDebate = () => {
     const { loading, callPatch } = usePatch();
 
-    async function concludeDebate(id: number) {
-        const response = await callPatch(DEBATES_ENDPOINT + id, {}, {}, true);
+    async function concludeDebate(url: string) {
+        const response = await callPatch(
+            url,
+            {
+                conclusion: true,
+            },
+            {},
+            true
+        );
         return response.status;
     }
 

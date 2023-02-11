@@ -8,7 +8,7 @@ export interface CreateArgumentWithImageInput extends CreateArgumentInput {
     image: File;
 }
 
-export const createArgumentWithImage = () => {
+export const useCreateArgumentWithImage = () => {
     const { loading, callPost } = usePost();
 
     async function createArgumentWithImage({

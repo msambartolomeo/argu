@@ -6,6 +6,7 @@ export class PaginatedList<T> {
     last: string;
     prev?: string;
     next?: string;
+    lastElement?: string;
     totalPages: number;
 
     constructor(data: T[], linkHeader: string, totalPagesHeader: string) {
@@ -21,11 +22,22 @@ export class PaginatedList<T> {
         if (!links.last) {
             throw new Error('Link header is missing "last" link');
         }
+
+        this.lastElement = links.last_element?.url;
         this.first = links.first.url;
         this.last = links.last.url;
         this.prev = links.prev?.url;
         this.next = links.next?.url;
 
         this.totalPages = Number(totalPagesHeader);
+    }
+
+    static emptyList(): PaginatedList<never> {
+        return {
+            data: [],
+            first: "",
+            last: "",
+            totalPages: 0,
+        };
     }
 }
