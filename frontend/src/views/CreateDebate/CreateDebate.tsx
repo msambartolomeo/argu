@@ -17,6 +17,7 @@ import SubmitButton from "../../components/SubmitButton/SubmitButton";
 import TextArea from "../../components/TextArea/TextArea";
 import { useCreateDebate } from "../../hooks/debates/useCreateDebate";
 import { useCreateDebateWithImage } from "../../hooks/debates/useCreateDebateWithImage";
+import { useGetDebateByUrl } from "../../hooks/debates/useGetDebateByUrl";
 import { useSharedAuth } from "../../hooks/useAuth";
 import "../../locales/index";
 import DebateCategory from "../../types/enums/DebateCategory";
@@ -28,6 +29,7 @@ const CreateDebate = () => {
     const { loading, createDebate } = useCreateDebate();
     const { loading: loadingWithImage, createDebateWithImage } =
         useCreateDebateWithImage();
+    const { getDebateByUrl } = useGetDebateByUrl();
 
     const schema = z.object({
         title: z
@@ -168,9 +170,23 @@ const CreateDebate = () => {
 
         switch (response.status) {
             case HttpStatusCode.Created:
-                navigate({
-                    pathname: response.location as string,
-                });
+                {
+                    const debateResponse = await getDebateByUrl({
+                        url: response.location as string,
+                    });
+                    switch (debateResponse.status) {
+                        case HttpStatusCode.Ok:
+                            navigate(`/debate/${debateResponse.data?.id}`, {
+                                state: {
+                                    debate: debateResponse.data,
+                                },
+                            });
+                            break;
+                        default:
+                            // TODO: Add toast, this should only happen in 500s
+                            break;
+                    }
+                }
                 break;
             case HttpStatusCode.BadRequest:
                 setError("opponent", {
