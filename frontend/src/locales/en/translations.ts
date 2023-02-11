@@ -310,9 +310,17 @@ export const TRANSLATIONS_EN = {
                 "Showing debates in category: {{category}}",
         },
     },
-    error: {
+    errors: {
         title: "Oops!",
         message: "An error has ocurred.",
         goBack: "Go back to the homepage",
+        notFound: {
+            debate: "Debate not found",
+            user: "User not found",
+        },
+        conflict: {
+            debateClosed:
+                "Debate is not open anymore so the operation can not be completed",
+        },
     },
 };

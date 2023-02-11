@@ -29,6 +29,8 @@ const DebateView = () => {
         PaginatedList<ArgumentDto>
     >(PaginatedList.emptyList());
 
+    const [refreshArguments, setRefreshArguments] = useState<boolean>(false);
+
     const params = useParams();
 
     const { loading: isDebateLoading, getDebate: getDebate } =
@@ -51,6 +53,10 @@ const DebateView = () => {
         return <CircularProgress size={100} />;
     }
 
+    const handleRefreshArguments = () => {
+        setRefreshArguments(!refreshArguments);
+    };
+
     return (
         <>
             <DebateHeader debate={debateData} />
@@ -59,12 +65,13 @@ const DebateView = () => {
                     debate={debateData}
                     argumentList={argumentList}
                     setArgumentList={setArgumentList}
+                    refreshArguments={refreshArguments}
                 />
                 <div className="post-arguments">
                     <PostArgument
                         debate={debateData}
                         argumentList={argumentList}
-                        setArgumentList={setArgumentList}
+                        refreshArgs={handleRefreshArguments}
                     />
                     <VoteSection debateData={debateData} />
                     <ChatSection debate={debateData} />

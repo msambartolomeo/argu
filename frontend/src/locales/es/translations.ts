@@ -314,9 +314,16 @@ export const TRANSLATIONS_ES = {
                 "Mostrando debates en la categoría: {{category}}",
         },
     },
-    error: {
+    errors: {
         title: "¡Ups!",
         message: "Ha ocurrido un error.",
         goBack: "Volver a inicio.",
+        notFound: {
+            debate: "Debate no encontrado",
+            user: "Usuario no encontrado",
+        },
+        conflict: {
+            debateClosed: "El debate está cerrado, la acción no es posible",
+        },
     },
 };
