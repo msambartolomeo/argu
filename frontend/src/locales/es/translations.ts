@@ -194,19 +194,18 @@ export const TRANSLATIONS_ES = {
         image: "Imagen del debate (opcional):",
         uploadImage: "Subir foto",
         errors: {
-            // TODO: Translate :)
-            titleEmpty: "Title cannot be empty",
-            titleTooLong: "Title cannot be longer than 100 characters",
-            descriptionEmpty: "Description cannot be empty",
+            titleEmpty: "El título no puede estar vacío",
+            titleTooLong: "El título no puede superar los 100 caracteres",
+            descriptionEmpty: "La descripción no puede estar vacía",
             descriptionTooLong:
-                "Description cannot be longer than 1000 characters",
-            opponentUsernameEmpty: "Opponent's username cannot be empty",
+                "La descripción no puede superar los 1000 caracteres",
+            opponentUsernameEmpty: "Debe especificar un oponente",
             opponentUsernameTooLong:
-                "Opponent's username cannot be longer than 64 characters",
-            opponentUsernameSame: "You cannot debate with yourself",
+                "El nombre de usuario del oponente no puede superar los 64 caracteres",
+            opponentUsernameSame: "No puedes ser tu propio oponente",
             categoryEmpty: "La categoría no puede estar vacía",
-            imageTooBig: "Image cannot be bigger than 10MB",
-            imageInvalid: "Image format is invalid",
+            imageTooBig: "La imagen no puede superar los 10MB",
+            imageInvalid: "El formato de la imagen no es válido",
         },
     },
     requestModerator: {
