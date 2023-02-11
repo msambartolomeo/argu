@@ -176,6 +176,7 @@ const CreateDebate = () => {
                     });
                     switch (debateResponse.status) {
                         case HttpStatusCode.Ok:
+                            // TODO: Add routes as constants
                             navigate(`/debate/${debateResponse.data?.id}`, {
                                 state: {
                                     debate: debateResponse.data,

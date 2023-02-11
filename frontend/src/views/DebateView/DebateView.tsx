@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { HttpStatusCode } from "axios";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import { CircularProgress } from "@mui/material";
 
@@ -13,10 +13,8 @@ import PostArgument from "./PostArgument";
 import RecommendedDebatesSection from "./RecommendedDebatesSection";
 import VoteSection from "./VoteSection";
 
-import {
-    GetDebateByIdOutput,
-    useGetDebateById,
-} from "../../hooks/debates/useGetDebateById";
+import { useGetDebateById } from "../../hooks/debates/useGetDebateById";
+import { GetDebateOutput } from "../../hooks/debates/useGetDebateByUrl";
 import "../../locales/index";
 import { PaginatedList } from "../../types/PaginatedList";
 import ArgumentDto from "../../types/dto/ArgumentDto";
@@ -24,6 +22,7 @@ import DebateDto from "../../types/dto/DebateDto";
 import { Error } from "../Error/Error";
 
 const DebateView = () => {
+    const location = useLocation();
     const [debateData, setDebateData] = useState<DebateDto | undefined>();
     const [argumentList, setArgumentList] = useState<
         PaginatedList<ArgumentDto>
@@ -37,8 +36,13 @@ const DebateView = () => {
         useGetDebateById();
 
     useEffect(() => {
+        if (location.state?.debate) {
+            setDebateData(location.state.debate as DebateDto);
+            location.state.debate = undefined;
+            return;
+        }
         const id: string = params.id?.toString() || "";
-        getDebate({ id: parseInt(id) }).then((output: GetDebateByIdOutput) => {
+        getDebate({ id: parseInt(id) }).then((output: GetDebateOutput) => {
             if (output.status === HttpStatusCode.Ok) {
                 setDebateData(output.data);
             }
