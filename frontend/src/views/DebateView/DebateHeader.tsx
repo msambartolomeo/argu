@@ -22,10 +22,9 @@ import DebateDto from "../../types/dto/DebateDto";
 
 interface Props {
     debate: DebateDto;
-    refreshDebate: () => void;
 }
 
-function DebateHeader({ debate, refreshDebate }: Props) {
+function DebateHeader({ debate }: Props) {
     const { t } = useTranslation();
 
     const { userInfo } = useSharedAuth();
@@ -35,6 +34,7 @@ function DebateHeader({ debate, refreshDebate }: Props) {
     const [subscriptionCount, setSubscriptionCount] = useState<number>(
         debate.subscriptionsCount
     );
+    const [status, setStatus] = useState<string>(debate.status);
 
     const { loading: getSubLoading, getSubscription } = useGetSubscription();
     const { loading: subLoading, createSubscription: callSubscribe } =
@@ -110,7 +110,7 @@ function DebateHeader({ debate, refreshDebate }: Props) {
         concludeDebate(debate.self).then((code) => {
             switch (code) {
                 case HttpStatusCode.NoContent:
-                    refreshDebate();
+                    setStatus(t("debate.statuses.statusClosing").toString());
                     break;
                 default:
                 // TODO: Error
@@ -128,138 +128,149 @@ function DebateHeader({ debate, refreshDebate }: Props) {
 
     return (
         <div className="card normalized-margins">
-            {getSubLoading && <CircularProgress size={100} />}
-            <div className="card-content debate-info-holder">
-                <div className="debate-holder-separator">
-                    <div className="debate-text-organizer">
-                        <div className="debate-info-holder">
-                            <h4 className="debate-title word-wrap">
-                                {debate.name}
-                            </h4>
-                            {userInfo && (
-                                <div className="right debate-buttons-display">
-                                    <div className="col">
-                                        {debate.status ===
-                                            t("debate.statuses.statusOpen") &&
-                                            (userInfo.username ===
-                                                debate.creatorName ||
+            {getSubLoading ? (
+                <CircularProgress size={300} />
+            ) : (
+                <div className="card-content debate-info-holder">
+                    <div className="debate-holder-separator">
+                        <div className="debate-text-organizer">
+                            <div className="debate-info-holder">
+                                <h4 className="debate-title word-wrap">
+                                    {debate.name}
+                                </h4>
+                                {userInfo && (
+                                    <div className="right debate-buttons-display">
+                                        <div className="col">
+                                            {status ===
+                                                t(
+                                                    "debate.statuses.statusOpen"
+                                                ) &&
+                                                (userInfo.username ===
+                                                    debate.creatorName ||
+                                                    userInfo.username ===
+                                                        debate.opponentName) && (
+                                                    <Chip
+                                                        disabled={
+                                                            concludeLoading
+                                                        }
+                                                        onClick={
+                                                            handleConcludeDebate
+                                                        }
+                                                    >
+                                                        {t("debate.close")}
+                                                        <i className="material-icons right">
+                                                            close
+                                                        </i>
+                                                    </Chip>
+                                                )}
+                                            {status !==
+                                                t(
+                                                    "debate.statuses.statusDeleted"
+                                                ) &&
                                                 userInfo.username ===
-                                                    debate.opponentName) && (
-                                                <Chip
-                                                    disabled={concludeLoading}
-                                                    onClick={
-                                                        handleConcludeDebate
-                                                    }
-                                                >
-                                                    {t("debate.close")}
-                                                    <i className="material-icons right">
-                                                        close
-                                                    </i>
-                                                </Chip>
-                                            )}
-                                        {debate.status !==
-                                            t(
-                                                "debate.statuses.statusDeleted"
-                                            ) &&
-                                            userInfo.username ===
-                                                debate.creatorName && (
-                                                <DeleteDialog
-                                                    id="delete-debate"
-                                                    handleDelete={
-                                                        handleDeleteDebate
-                                                    }
-                                                    title={t(
-                                                        "debate.deleteConfirmation"
-                                                    )}
-                                                    name={t("debate.delete")}
-                                                />
-                                            )}
+                                                    debate.creatorName && (
+                                                    <DeleteDialog
+                                                        id="delete-debate"
+                                                        handleDelete={
+                                                            handleDeleteDebate
+                                                        }
+                                                        title={t(
+                                                            "debate.deleteConfirmation"
+                                                        )}
+                                                        name={t(
+                                                            "debate.delete"
+                                                        )}
+                                                    />
+                                                )}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
+                            </div>
+                            <hr className="dashed" />
+                            <h5 className="debate-description word-wrap">
+                                {debate.description}
+                            </h5>
+                            {debate.isCreatorFor ? (
+                                <>
+                                    <DebaterDisplay
+                                        debater={debate.creatorName}
+                                        position={t("debate.for")}
+                                    />
+                                    <DebaterDisplay
+                                        debater={debate.opponentName}
+                                        position={t("debate.against")}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <DebaterDisplay
+                                        debater={debate.opponentName}
+                                        position={t("debate.for")}
+                                    />
+                                    <DebaterDisplay
+                                        debater={debate.creatorName}
+                                        position={t("debate.against")}
+                                    />
+                                </>
                             )}
                         </div>
-                        <hr className="dashed" />
-                        <h5 className="debate-description word-wrap">
-                            {debate.description}
-                        </h5>
-                        {debate.isCreatorFor ? (
-                            <>
-                                <DebaterDisplay
-                                    debater={debate.creatorName}
-                                    position={t("debate.for")}
-                                />
-                                <DebaterDisplay
-                                    debater={debate.opponentName}
-                                    position={t("debate.against")}
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <DebaterDisplay
-                                    debater={debate.opponentName}
-                                    position={t("debate.for")}
-                                />
-                                <DebaterDisplay
-                                    debater={debate.creatorName}
-                                    position={t("debate.against")}
-                                />
-                            </>
-                        )}
+                        <div className="debate-footer">
+                            {userInfo && !getSubLoading && (
+                                <>
+                                    {subscribed ? (
+                                        <Chip
+                                            disabled={unsubLoading}
+                                            onClick={unsubscribe}
+                                        >
+                                            {t("debate.unsubscribe")}
+                                            <i className="material-icons right">
+                                                notifications_off
+                                            </i>
+                                        </Chip>
+                                    ) : (
+                                        <Chip
+                                            disabled={subLoading}
+                                            onClick={subscribe}
+                                        >
+                                            {t("debate.subscribe")}
+                                            <i className="material-icons right">
+                                                notifications_active
+                                            </i>
+                                        </Chip>
+                                    )}
+                                </>
+                            )}
+                            <Chip
+                                onClick={() =>
+                                    navigateDiscoverUrl(debate.sameCategory)
+                                }
+                            >
+                                {debate.category}
+                            </Chip>
+                            <Chip
+                                onClick={() =>
+                                    navigateDiscoverUrl(debate.afterSameDate)
+                                }
+                            >
+                                {debate.createdDate.toString()}
+                            </Chip>
+                            <Chip
+                                onClick={() =>
+                                    navigateDiscoverUrl(debate.sameStatus)
+                                }
+                            >
+                                {status}
+                            </Chip>
+                            <NonClickableChip
+                                name={
+                                    t("debate.subscribed") + subscriptionCount
+                                }
+                            />
+                        </div>
                     </div>
-                    <div className="debate-footer">
-                        {userInfo && !getSubLoading && (
-                            <>
-                                {subscribed ? (
-                                    <Chip
-                                        disabled={unsubLoading}
-                                        onClick={unsubscribe}
-                                    >
-                                        {t("debate.unsubscribe")}
-                                        <i className="material-icons right">
-                                            notifications_off
-                                        </i>
-                                    </Chip>
-                                ) : (
-                                    <Chip
-                                        disabled={subLoading}
-                                        onClick={subscribe}
-                                    >
-                                        {t("debate.subscribe")}
-                                        <i className="material-icons right">
-                                            notifications_active
-                                        </i>
-                                    </Chip>
-                                )}
-                            </>
-                        )}
-                        <Chip
-                            onClick={() =>
-                                navigateDiscoverUrl(debate.sameCategory)
-                            }
-                        >
-                            {debate.category}
-                        </Chip>
-                        <Chip
-                            onClick={() =>
-                                navigateDiscoverUrl(debate.afterSameDate)
-                            }
-                        >
-                            {debate.createdDate.toString()}
-                        </Chip>
-                        <Chip
-                            onClick={() =>
-                                navigateDiscoverUrl(debate.sameStatus)
-                            }
-                        >
-                            {debate.status}
-                        </Chip>
-                        <NonClickableChip
-                            name={t("debate.subscribed") + subscriptionCount}
-                        />
-                    </div>
+                    <DebatePhoto id={debate.image} alt="debate photo" />
                 </div>
-                <DebatePhoto id={debate.image} alt="debate photo" />
-            </div>
+            )}
         </div>
     );
 }

@@ -29,26 +29,19 @@ const DebateView = () => {
         PaginatedList<ArgumentDto>
     >(PaginatedList.emptyList());
 
-    const [refresh, setRefresh] = useState<boolean>(true);
-
     const params = useParams();
 
     const { loading: isDebateLoading, getDebate: getDebate } =
         useGetDebateById();
 
     useEffect(() => {
-        if (refresh) {
-            const id: string = params.id?.toString() || "";
-            getDebate({ id: parseInt(id) }).then(
-                (output: GetDebateByIdOutput) => {
-                    if (output.status === HttpStatusCode.Ok) {
-                        setDebateData(output.data);
-                    }
-                }
-            );
-            setRefresh(false);
-        }
-    }, [refresh]);
+        const id: string = params.id?.toString() || "";
+        getDebate({ id: parseInt(id) }).then((output: GetDebateByIdOutput) => {
+            if (output.status === HttpStatusCode.Ok) {
+                setDebateData(output.data);
+            }
+        });
+    }, [params]);
 
     if (typeof debateData === "string") {
         return <Error status={HttpStatusCode.NotFound} message={debateData} />;
@@ -60,10 +53,7 @@ const DebateView = () => {
 
     return (
         <>
-            <DebateHeader
-                debate={debateData}
-                refreshDebate={() => setRefresh(true)}
-            />
+            <DebateHeader debate={debateData} />
             <div className="debate-content">
                 <ArgumentList
                     debate={debateData}
