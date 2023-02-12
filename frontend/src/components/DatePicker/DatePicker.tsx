@@ -9,12 +9,36 @@ import "./DatePicker.css";
 import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 import "../../locales/index";
 
+const monthsArray = [
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+];
+
+const daysArray = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+];
+
 type Props = {
     label: string;
-    placeholder?: string;
 };
 
-function DatePicker({ label, placeholder }: Props) {
+function DatePicker({ label }: Props) {
     const { t } = useTranslation();
 
     const date = useRef() as RefObject<HTMLInputElement>;
@@ -33,46 +57,17 @@ function DatePicker({ label, placeholder }: Props) {
         setUpdate(false);
     }, [update]);
 
-    const datePickerCancel: string = t("discovery.orderBy.datePicker.cancel");
-    const datePickerClear: string = t("discovery.orderBy.datePicker.clear");
-    const datePickerDone: string = t("discovery.orderBy.datePicker.done");
-
-    const queryDate = queryParams.get("date");
-    let defaultDate: Date | null;
-    if (queryDate) {
-        const queryDateArray = queryDate.split("-");
-        const dateString = `${queryDateArray[2]}-${queryDateArray[1]}-${
-            Number(queryDateArray[0]) + 1
-        }`;
-        defaultDate = new Date(dateString);
-    } else {
-        defaultDate = null;
+    function getDefaultDate() {
+        const queryDate = queryParams.get("date");
+        if (queryDate) {
+            const queryDateArray = queryDate.split("-");
+            const dateString = `${queryDateArray[2]}-${queryDateArray[1]}-${
+                Number(queryDateArray[0]) + 1
+            }`;
+            return new Date(dateString);
+        }
+        return null;
     }
-
-    const monthsArray = [
-        "january",
-        "february",
-        "march",
-        "april",
-        "may",
-        "june",
-        "july",
-        "august",
-        "september",
-        "october",
-        "november",
-        "december",
-    ];
-
-    const daysArray = [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-    ];
 
     useEffect(() => {
         M.Datepicker.init(document.querySelectorAll(".datepicker"), {
@@ -80,11 +75,11 @@ function DatePicker({ label, placeholder }: Props) {
             showClearBtn: true,
             onClose: () => setUpdate(true),
             setDefaultDate: true,
-            defaultDate: defaultDate,
+            defaultDate: getDefaultDate(),
             i18n: {
-                cancel: datePickerCancel,
-                clear: datePickerClear,
-                done: datePickerDone,
+                cancel: t("discovery.orderBy.datePicker.cancel") as string,
+                clear: t("discovery.orderBy.datePicker.clear") as string,
+                done: t("discovery.orderBy.datePicker.done") as string,
                 months: monthsArray.map((month) => {
                     return t(`discovery.orderBy.datePicker.months.${month}`);
                 }),
@@ -121,7 +116,9 @@ function DatePicker({ label, placeholder }: Props) {
                 </label>
                 <input
                     id="datepicker"
-                    placeholder={placeholder}
+                    placeholder={
+                        t("discovery.orderBy.datePicker.placeholder") as string
+                    }
                     type="text"
                     className="datepicker white-text no-autoinit"
                     ref={date}

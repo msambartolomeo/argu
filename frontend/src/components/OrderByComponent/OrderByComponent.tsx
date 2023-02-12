@@ -10,23 +10,19 @@ import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 import "../../locales/index";
 import DatePicker from "../DatePicker/DatePicker";
 
+const orderValues = [
+    "date_desc",
+    "date_asc",
+    "alpha_asc",
+    "alpha_desc",
+    "subs_asc",
+    "subs_desc",
+];
+
+const statusValues = ["all", "open", "closed"];
+
 const OrderByComponent = () => {
     const { t } = useTranslation();
-
-    const datePickerPlaceholder: string = t(
-        "discovery.orderBy.datePicker.placeholder"
-    );
-
-    const orderValues = [
-        "date_desc",
-        "date_asc",
-        "alpha_asc",
-        "alpha_desc",
-        "subs_asc",
-        "subs_desc",
-    ];
-
-    const statusValues = ["all", "open", "closed"];
 
     const [queryParams, setQueryParams] = useSearchParams();
     const [queryOrder, setQueryOrder] = useState(queryParams.get("order"));
@@ -84,7 +80,6 @@ const OrderByComponent = () => {
                     />
                     <DatePicker
                         label={t("discovery.orderBy.datePicker.label")}
-                        placeholder={datePickerPlaceholder}
                     />
                 </div>
             </div>
