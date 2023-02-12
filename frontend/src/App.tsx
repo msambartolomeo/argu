@@ -1,9 +1,10 @@
-// NOTE: import base css
 import { useEffect } from "react";
 
+import { HttpStatusCode } from "axios";
+import { t } from "i18next";
+// NOTE: import base css
 import M from "materialize-css";
 import "materialize-css/dist/css/materialize.min.css";
-// import router
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import "./App.css";
@@ -16,6 +17,7 @@ import CreateDebate from "./views/CreateDebate/CreateDebate";
 import DebateView from "./views/DebateView/DebateView";
 import { DebaterProfile } from "./views/DebaterProfile/DebaterProfile";
 import Discovery from "./views/Discovery/Discovery";
+import { Error } from "./views/Error/Error";
 import LandingPage from "./views/LandingPage/LandingPage";
 import Login from "./views/Login/Login";
 import Register from "./views/Register/Register";
@@ -74,7 +76,17 @@ function App() {
                                     />
                                 </>
                             )}
-                            {/* TODO: Add error pages routing */}
+                            <Route
+                                path="*"
+                                element={
+                                    <Error
+                                        status={HttpStatusCode.NotFound}
+                                        message={
+                                            t("errors.notFound.page") as string
+                                        }
+                                    />
+                                }
+                            />
                         </Routes>
                     </div>
                 </Router>

@@ -355,6 +355,7 @@ export const TRANSLATIONS_ES = {
         message: "Ha ocurrido un error.",
         goBack: "Volver a inicio.",
         notFound: {
+            page: "Página no encontrada",
             debate: "Debate no encontrado",
             user: "Usuario no encontrado",
         },
