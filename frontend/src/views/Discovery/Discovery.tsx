@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import React from "react";
 
 import { HttpStatusCode } from "axios";
 import { useTranslation } from "react-i18next";
@@ -14,6 +13,7 @@ import DebatesList from "../../components/DebatesList/DebatesList";
 import NoDebatesFound from "../../components/NoDebatesFound/NoDebatesFound";
 import OrderByComponent from "../../components/OrderByComponent/OrderByComponent";
 import { useGetDebates } from "../../hooks/debates/useGetDebates";
+import { useGetDebatesByUrl } from "../../hooks/debates/useGetDebatesByUrl";
 import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 import "../../locales/index";
 import { PaginatedList } from "../../types/PaginatedList";
@@ -21,21 +21,53 @@ import DebateDto from "../../types/dto/DebateDto";
 import DebateCategory from "../../types/enums/DebateCategory";
 import DebateOrder from "../../types/enums/DebateOrder";
 import DebateStatus from "../../types/enums/DebateStatus";
+import { PAGE_DEFAULT } from "../../types/globalConstants";
 
 const Discovery = () => {
     const { t } = useTranslation();
 
     document.title = "Argu | " + t("discovery.title");
 
-    const [page, setPage] = useState(1);
-
     const [debatesList, setDebatesList] = useState<
         PaginatedList<DebateDto> | undefined
     >(undefined);
 
     const [queryParams, setQueryParams] = useSearchParams();
+    let page = parseInt(queryParams.get("page") || PAGE_DEFAULT, 10);
 
     const { loading: isLoading, getDebates: getDebates } = useGetDebates();
+    const { loading: isDebatesUrlLoading, getDebatesByUrl: getDebatesByUrl } =
+        useGetDebatesByUrl();
+
+    const handleChangePage = async (value: number) => {
+        let url = "";
+        switch (value) {
+            case 1:
+                url = debatesList?.first || "";
+                break;
+            case debatesList?.totalPages:
+                url = debatesList?.last || "";
+                break;
+            case page - 1:
+                url = debatesList?.prev || "";
+                break;
+            case page + 1:
+                url = debatesList?.next || "";
+                break;
+        }
+        console.log("URL: ", url);
+        const res = await getDebatesByUrl({ url: url });
+        switch (res.status) {
+            case HttpStatusCode.Ok:
+                setDebatesList(res.data);
+                break;
+            case HttpStatusCode.NoContent:
+                setDebatesList(undefined);
+                break;
+        }
+        page = value;
+        setQueryParams({ page: value.toString() });
+    };
 
     useNonInitialEffect(() => {
         queryParams.delete("page");
@@ -98,15 +130,15 @@ const Discovery = () => {
                         <div className="pagination-container">
                             <Pagination
                                 count={debatesList?.totalPages || 1}
+                                color="primary"
+                                siblingCount={1}
+                                className="white"
                                 page={page}
-                                siblingCount={0}
-                                boundaryCount={0}
                                 onChange={(e, v) => {
-                                    setPage(v);
+                                    handleChangePage(v);
                                 }}
                                 showLastButton
                                 showFirstButton
-                                size="large"
                             />
                         </div>
                     </>
