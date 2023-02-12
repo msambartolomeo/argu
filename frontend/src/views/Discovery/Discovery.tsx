@@ -55,7 +55,6 @@ const Discovery = () => {
                 url = debatesList?.next || "";
                 break;
         }
-        console.log("URL: ", url);
         const res = await getDebatesByUrl({ url: url });
         switch (res.status) {
             case HttpStatusCode.Ok:

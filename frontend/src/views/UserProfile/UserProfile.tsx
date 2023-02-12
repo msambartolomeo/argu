@@ -22,6 +22,7 @@ import "../../root.css";
 import { PaginatedList } from "../../types/PaginatedList";
 import DebateDto from "../../types/dto/DebateDto";
 import UserDto from "../../types/dto/UserDto";
+import { PAGE_DEFAULT } from "../../types/globalConstants";
 import { Error } from "../Error/Error";
 
 const UserProfile = () => {
@@ -41,7 +42,7 @@ const UserProfile = () => {
     const { userInfo } = useSharedAuth();
 
     const [queryParams, setQueryParams] = useSearchParams();
-    let page = parseInt(queryParams.get("page") || "1", 10);
+    let page = parseInt(queryParams.get("page") || PAGE_DEFAULT, 10);
 
     const { loading: isUserLoading, getUserByUsername: getUser } =
         useGetUserByUsername();
