@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { HttpStatusCode } from "axios";
+import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
@@ -28,6 +29,7 @@ function ArgumentList({
     refreshArguments,
 }: Props) {
     const { t } = useTranslation();
+    const { enqueueSnackbar } = useSnackbar();
 
     const { loading, getArguments } = useGetArguments();
 
@@ -46,7 +48,9 @@ function ArgumentList({
                     setArgumentList(PaginatedList.emptyList());
                     break;
                 default:
-                // TODO: error
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
             }
         });
     }, [refreshArguments, debate]);

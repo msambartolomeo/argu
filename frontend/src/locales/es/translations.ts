@@ -76,6 +76,7 @@ export const TRANSLATIONS_ES = {
         deleteAccount: "Eliminar cuenta",
         areYouSure:
             "¿Estás seguro de que quieres borrar la cuenta? Esta acción no se puede deshacer.",
+        deleteSuccess: "Tu cuenta ha sido eliminada exitosamente.",
         introducePswd: "Introduce tu contraseña",
         debatesSubscribed: "Debates suscriptos",
         myDebates: "Mis debates",
@@ -96,6 +97,7 @@ export const TRANSLATIONS_ES = {
         close: "Cerrar debate",
         deleteConfirmation: "¿Estás seguro de borrar este debate?",
         delete: "Borrar debate",
+        deleteSuccess: "El debate ha sido eliminado exitosamente.",
         for: "A favor: ",
         against: "En contra: ",
         subscribe: "Suscribirse",
@@ -239,6 +241,7 @@ export const TRANSLATIONS_ES = {
             userSaid: "{{username}} dijo:",
             deleteConfirmation: "¿Estás seguro de borrar este argumento?",
             deleted: "Argumento eliminado",
+            deleteSuccess: "Argumento eliminado exitosamente",
         },
         debatesList: {
             noDebates: "No se encontraron debates",

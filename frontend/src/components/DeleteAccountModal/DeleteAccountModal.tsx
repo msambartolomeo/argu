@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 
 import { HttpStatusCode } from "axios";
+import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +18,7 @@ const DeleteAccountModal = () => {
     const { loading: isDeleteUserLoading, deleteUser } = useDeleteUser();
     const { callLogout, userInfo } = useSharedAuth();
     const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         M.Modal.init(document.querySelectorAll(".modal"));
@@ -27,11 +29,17 @@ const DeleteAccountModal = () => {
         switch (res.status) {
             case HttpStatusCode.NoContent:
                 callLogout();
+                enqueueSnackbar(t("profile.deleteSuccess"), {
+                    variant: "success",
+                });
                 navigate("/");
                 break;
             case HttpStatusCode.NotFound:
                 return <Error status={res.status} message={res.message} />;
             default:
+                enqueueSnackbar(t("errors.unexpected"), {
+                    variant: "error",
+                });
                 break;
         }
     }, []);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { HttpStatusCode } from "axios";
+import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -26,6 +27,7 @@ interface Props {
 
 function DebateHeader({ debate }: Props) {
     const { t } = useTranslation();
+    const { enqueueSnackbar } = useSnackbar();
 
     const { userInfo } = useSharedAuth();
     const navigate = useNavigate();
@@ -57,7 +59,9 @@ function DebateHeader({ debate }: Props) {
                         setSubscribed(false);
                         break;
                     default:
-                    // TODO: Error
+                        enqueueSnackbar(t("errors.unexpected"), {
+                            variant: "error",
+                        });
                 }
             });
         }
@@ -73,7 +77,9 @@ function DebateHeader({ debate }: Props) {
                     setSubscribed(true);
                     break;
                 default:
-                // TODO: Error
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
             }
         });
     };
@@ -88,7 +94,9 @@ function DebateHeader({ debate }: Props) {
                     setSubscribed(false);
                     break;
                 default:
-                // TODO: Error
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
             }
         });
     };
@@ -97,11 +105,15 @@ function DebateHeader({ debate }: Props) {
         deleteDebate(debate.self).then((code) => {
             switch (code) {
                 case HttpStatusCode.NoContent:
-                    // TODO: toast?
+                    enqueueSnackbar(t("debate.deleteSuccess"), {
+                        variant: "success",
+                    });
                     navigate("/");
                     break;
                 default:
-                // TODO: Error
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
             }
         });
     };
@@ -113,7 +125,9 @@ function DebateHeader({ debate }: Props) {
                     setStatus(t("debate.statuses.statusClosing").toString());
                     break;
                 default:
-                // TODO: Error
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
             }
         });
     };

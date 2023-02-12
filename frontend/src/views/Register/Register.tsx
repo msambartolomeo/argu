@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 
 import { HttpStatusCode } from "axios";
+import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +21,7 @@ import {
 const Register = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleRedirect = () => {
         navigate("/login");
@@ -76,9 +78,6 @@ const Register = () => {
                     if (loggedIn) navigate("/login");
                 }
                 break;
-            case HttpStatusCode.BadRequest:
-                // TODO: Should we even consider this? Shouldn't the schema handle this?
-                break;
             case HttpStatusCode.Conflict:
                 {
                     const error = response.errors as CreateUserConflictError;
@@ -97,7 +96,9 @@ const Register = () => {
                 }
                 break;
             default:
-                // TODO: Add toast? Maybe something like "An unexpected error occurred"
+                enqueueSnackbar(t("errors.unexpected"), {
+                    variant: "error",
+                });
                 break;
         }
     }, []);
