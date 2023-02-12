@@ -24,6 +24,7 @@ import DebateCategory from "../../types/enums/DebateCategory";
 
 const CreateDebate = () => {
     const { t } = useTranslation();
+    document.title = "Argu | " + t("createDebate.createDebate");
     const navigate = useNavigate();
     const { userInfo } = useSharedAuth();
     const { loading, createDebate } = useCreateDebate();

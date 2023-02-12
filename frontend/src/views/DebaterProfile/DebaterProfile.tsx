@@ -130,6 +130,8 @@ export const DebaterProfile = () => {
     if (userLoading || imageLoading || !userData)
         return <CircularProgress size={100} />;
 
+    document.title = `Argu | ${userData.username}`;
+
     return (
         <div className="profile-container">
             <div className="card profile-data">

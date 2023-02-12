@@ -17,6 +17,8 @@ const Login = () => {
     const location = useLocation();
     const { t } = useTranslation();
 
+    document.title = "Argu | " + t("login.login");
+
     const { loading, callLogin } = useLogin();
 
     const schema = z.object({

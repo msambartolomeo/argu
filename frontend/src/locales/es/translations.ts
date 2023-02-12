@@ -221,6 +221,7 @@ export const TRANSLATIONS_ES = {
         },
     },
     requestModerator: {
+        title: "Solicitud de moderador",
         requestModerator: "¿Quieres ser moderador?",
         submit: "Enviar",
         message:

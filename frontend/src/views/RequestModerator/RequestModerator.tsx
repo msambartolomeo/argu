@@ -15,6 +15,8 @@ import "../../locales/index";
 
 const RequestModerator = () => {
     const { t } = useTranslation();
+
+    document.title = "Argu | " + t("requestModerator.title");
     const { loading, requestModerator } = useRequestModerator();
     const { userInfo } = useSharedAuth();
     const navigate = useNavigate();

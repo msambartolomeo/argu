@@ -217,6 +217,7 @@ export const TRANSLATIONS_EN = {
         },
     },
     requestModerator: {
+        title: "Become a moderator",
         requestModerator: "Want to become a moderator?",
         submit: "Send",
         message:

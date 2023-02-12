@@ -61,6 +61,8 @@ const DebateView = () => {
         setRefreshArguments(!refreshArguments);
     };
 
+    document.title = "Argu | " + debateData.name;
+
     return (
         <>
             <DebateHeader debate={debateData} />

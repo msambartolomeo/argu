@@ -21,6 +21,8 @@ const Register = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
+    document.title = "Argu | " + t("register.register");
+
     const handleRedirect = () => {
         navigate("/login");
     };
