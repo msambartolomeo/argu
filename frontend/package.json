@@ -81,6 +81,13 @@
         "lint-staged": "^13.0.3",
         "prettier": "^2.7.1"
     },
+    "jest": {
+        "moduleNameMapper": {
+            "axios": "axios/dist/node/axios.cjs",
+            "\\.(css|scss)$": "<rootDir>/src/__mocks__/styleMock.js",
+            "@mui/material": "<rootDir>/node_modules/@mui/material"
+        }
+    },
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
