@@ -1,7 +1,38 @@
-.select-container FormControl Select {
-    color: white;
+.margin-left {
+    margin-left: 3%;
 }
 
-.white-text {
-    color: white;
+div.input-field div.select-wrapper {
+    color: white !important;
+}
+
+div.input-field div.select-wrapper ul.dropdown-content li.selected {
+    background-color: var(--primary-color) !important;
+}
+
+div.input-field div.select-wrapper ul.dropdown-content li span {
+    color: black !important;
+}
+
+div.input-field.margin-left div.select-wrapper input {
+    color: white !important;
+}
+
+div.input-field.margin-left
+    div.select-wrapper
+    input.select-dropdown.dropdown-trigger {
+    color: white !important;
+}
+
+div.input-field.margin-left div.select-wrapper svg.caret path {
+    color: white !important;
+}
+
+div.input-field div.select-wrapper ul.dropdown-content li.selected span {
+    color: white !important;
+}
+
+div.input-field div.select-wrapper ul.dropdown-content.select-dropdown {
+    border-color: white !important;
+    border-width: thick;
 }

@@ -112,7 +112,10 @@ function DatePicker({ label, placeholder }: Props) {
 
     return (
         <>
-            <div className="input-field" style={{ display: "flex" }}>
+            <div
+                className="input-field margin-left"
+                style={{ display: "flex" }}
+            >
                 <label htmlFor="datepicker" className="active">
                     {label}
                 </label>

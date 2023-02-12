@@ -1,73 +1,47 @@
-import { useTranslation } from "react-i18next";
+import { ChangeEvent } from "react";
 
-import {
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
-} from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 
 import "./SortSelectComponent.css";
 
 import "../../../locales/index";
 
 interface SortSelectComponentProps {
-    header: string;
-    name: string;
-    defaultValue?: any;
-    id: string;
-    labelId: string;
-    suppliers: { value: any; label: string }[];
-    query: string;
-    handleSelectChange: (event: SelectChangeEvent) => void;
+    type: "status" | "order";
+    options: string[];
+    handleSelectChange: (event: ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const SortSelectComponent = ({
-    header,
-    name,
-    defaultValue,
-    id,
-    labelId,
-    suppliers,
-    query,
+    type,
+    options,
     handleSelectChange,
 }: SortSelectComponentProps) => {
     const { t } = useTranslation();
 
-    const placeholder = t(`discovery.orderBy.placeholders.${defaultValue}`);
+    const [queryParams] = useSearchParams();
+
+    const optionsElements = options.map((option) => {
+        return (
+            <option key={option} value={option}>
+                {t(`discovery.orderBy.${type}.${option}`)}
+            </option>
+        );
+    });
 
     return (
-        <div className="select-container">
-            <FormControl
-                variant="standard"
-                sx={{ m: 1, minWidth: 120 }}
-                className="white-text"
+        <div className="input-field margin-left">
+            <select
+                id="select-status"
+                onChange={handleSelectChange}
+                value={queryParams.get(type) ?? ""}
             >
-                <InputLabel id={labelId} className="white-text">
-                    {t(`discovery.orderBy.${name}.title`)}
-                </InputLabel>
-                <Select
-                    classes={{
-                        icon: "white-text",
-                    }}
-                    className="white-text"
-                    labelId={labelId}
-                    id={id}
-                    placeholder={placeholder}
-                    displayEmpty={true}
-                    defaultValue={defaultValue}
-                    value={query}
-                    onChange={handleSelectChange}
-                    label={header}
-                >
-                    {suppliers.map((supplier) => (
-                        <MenuItem key={supplier.label} value={supplier.value}>
-                            {t(`discovery.orderBy.${name}.${supplier.label}`)}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+                {optionsElements}
+            </select>
+            <label htmlFor="select-status">
+                {t(`discovery.orderBy.${type}.title`)}
+            </label>
         </div>
     );
 };
