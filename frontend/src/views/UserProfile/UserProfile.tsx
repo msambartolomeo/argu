@@ -202,6 +202,7 @@ const UserProfile = () => {
                                 count={debates?.totalPages || 0}
                                 color="primary"
                                 className="white"
+                                siblingCount={1}
                                 page={page}
                                 showFirstButton
                                 showLastButton

@@ -161,6 +161,7 @@ export const DebaterProfile = () => {
                                 count={userDebates?.totalPages || 0}
                                 color="primary"
                                 className="white"
+                                siblingCount={1}
                                 page={page}
                                 showFirstButton
                                 showLastButton
