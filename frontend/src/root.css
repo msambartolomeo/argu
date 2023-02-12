@@ -80,9 +80,7 @@ body {
 
 .limit-img {
     max-height: 250px;
-    max-width: 250px !important;
     height: 15vw !important;
-    width: 15vw;
 }
 
 /* Login and Register */
