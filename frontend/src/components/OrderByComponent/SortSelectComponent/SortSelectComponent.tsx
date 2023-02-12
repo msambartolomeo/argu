@@ -1,5 +1,6 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 
+import M from "materialize-css";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
@@ -21,6 +22,10 @@ const SortSelectComponent = ({
     const { t } = useTranslation();
 
     const [queryParams] = useSearchParams();
+
+    useEffect(() => {
+        M.AutoInit();
+    }, []);
 
     const optionsElements = options.map((option) => {
         return (
