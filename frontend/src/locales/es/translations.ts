@@ -106,6 +106,8 @@ export const TRANSLATIONS_ES = {
         needToLogin:
             "¡Hola! ¿Te gustaría poder participar en la discusión, argumentar, darle me gusta a los argumentos de \
               otros, votar por quien crees que es el ganador de un debate y suscribirte a debates? ",
+        notParticipating:
+            "No podés argumentar en este debate porque no estás participando.",
         firstLogin: "¡Primero debes iniciar sesión!",
         argument: {
             introduction: "Introducción",

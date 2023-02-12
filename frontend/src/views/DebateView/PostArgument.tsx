@@ -268,6 +268,10 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
                                         {t("debate.waitTurn")}
                                     </div>
                                 )
+                            ) : userInfo ? (
+                                <div className="card-title card-title-margins">
+                                    {t("debate.notParticipating")}
+                                </div>
                             ) : (
                                 <div className="card-title card-title-margins">
                                     {t("debate.needToLogin")}

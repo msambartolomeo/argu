@@ -108,6 +108,8 @@ export const TRANSLATIONS_EN = {
         waitTurn: "You need to wait for your turn to post your argument.",
         needToLogin:
             "Hey! Would you like to participate in the discussion, vote for the winner, argument, like other people's arguments, and subscribe to debates? ",
+        notParticipating:
+            "You can't post an argument because you're not participating in this debate.",
         firstLogin: "You need to be logged-in in order to do that!",
         argument: {
             introduction: "Introduction",
