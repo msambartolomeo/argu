@@ -77,6 +77,7 @@ export const TRANSLATIONS_EN = {
         areYouSure:
             "Are you sure you want to delete your account? This action cannot be undone.",
         introducePswd: "Introduce your password",
+        deleteSuccess: "Your account has been deleted successfully.",
         debatesSubscribed: "Debates Subscribed",
         myDebates: "My Debates",
         imageEmpty: "The file provided is empty",
@@ -99,6 +100,7 @@ export const TRANSLATIONS_EN = {
         close: "Close debate",
         deleteConfirmation: "Are you sure you want to delete this debate?",
         delete: "Delete debate",
+        deleteSuccess: "The debate has been deleted successfully.",
         for: "For: ",
         against: "Against: ",
         subscribe: "Subscribe",
@@ -198,6 +200,7 @@ export const TRANSLATIONS_EN = {
         categoryPlaceholder: "Select a category",
         image: "Debate image (optional):",
         uploadImage: "Upload Image",
+        success: "Debate created successfully!",
         errors: {
             titleEmpty: "Title cannot be empty",
             titleTooLong: "Title cannot be longer than 100 characters",
@@ -238,6 +241,7 @@ export const TRANSLATIONS_EN = {
             deleteConfirmation:
                 "Are you sure you want to delete this argument?",
             deleted: "Argument deleted",
+            deleteSuccess: "Argument deleted successfully",
         },
         debatesList: {
             noDebates: "No debates found",
@@ -355,5 +359,6 @@ export const TRANSLATIONS_EN = {
             debateClosed:
                 "Debate is not open anymore so the operation can not be completed",
         },
+        unexpected: "An unexpected error occurred, please try again later",
     },
 };

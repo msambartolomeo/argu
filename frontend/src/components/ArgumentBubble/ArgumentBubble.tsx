@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { HttpStatusCode } from "axios";
 import cn from "classnames";
+import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
 
 import "./ArgumentBubble.css";
@@ -48,6 +49,7 @@ const ArgumentBubble = ({
     const { loading: unlikeLoading, callDeleteLike: callUnlike } =
         useDeleteLike();
     const { loading: deleteLoading, deleteArgument } = useDeleteArgument();
+    const { enqueueSnackbar } = useSnackbar();
 
     const likeSubmit = () => {
         callLike({
@@ -60,7 +62,9 @@ const ArgumentBubble = ({
                     setArgument(argument);
                     break;
                 default:
-                // TODO: Error
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
             }
         });
     };
@@ -76,7 +80,9 @@ const ArgumentBubble = ({
                     setArgument(argument);
                     break;
                 default:
-                // TODO: Error
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
             }
         });
     };
@@ -87,9 +93,17 @@ const ArgumentBubble = ({
                 case HttpStatusCode.NoContent:
                     argument.deleted = true;
                     setArgument(argument);
+                    enqueueSnackbar(
+                        t("components.argumentBubble.deleteSuccess"),
+                        {
+                            variant: "success",
+                        }
+                    );
                     break;
                 default:
-                // TODO: Error
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
             }
         });
     };

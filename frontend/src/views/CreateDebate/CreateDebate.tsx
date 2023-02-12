@@ -1,6 +1,7 @@
 import { useRef } from "react";
 
 import { HttpStatusCode } from "axios";
+import { useSnackbar } from "notistack";
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +32,7 @@ const CreateDebate = () => {
     const { loading: loadingWithImage, createDebateWithImage } =
         useCreateDebateWithImage();
     const { getDebateByUrl } = useGetDebateByUrl();
+    const { enqueueSnackbar } = useSnackbar();
 
     const schema = z.object({
         title: z
@@ -178,6 +180,12 @@ const CreateDebate = () => {
                     switch (debateResponse.status) {
                         case HttpStatusCode.Ok:
                             // TODO: Add routes as constants
+                            enqueueSnackbar(
+                                t("createDebate.success") as string,
+                                {
+                                    variant: "success",
+                                }
+                            );
                             navigate(`/debate/${debateResponse.data?.id}`, {
                                 state: {
                                     debate: debateResponse.data,
@@ -185,12 +193,15 @@ const CreateDebate = () => {
                             });
                             break;
                         default:
-                            // TODO: Add toast, this should only happen in 500s
+                            enqueueSnackbar(t("errors.unexpected") as string, {
+                                variant: "error",
+                            });
                             break;
                     }
                 }
                 break;
             case HttpStatusCode.BadRequest:
+                // NOTE: Only 4XX error that zod can't handle
                 setError("opponent", {
                     type: "manual",
                     message: t(
@@ -198,8 +209,10 @@ const CreateDebate = () => {
                     ) as string,
                 });
                 break;
-            case HttpStatusCode.NotFound:
-                // TODO: Add toast with something like "An error occurred, please try again later"
+            default:
+                enqueueSnackbar(t("errors.unexpected") as string, {
+                    variant: "error",
+                });
                 break;
         }
     };

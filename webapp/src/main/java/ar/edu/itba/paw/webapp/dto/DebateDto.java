@@ -66,7 +66,7 @@ public class DebateDto {
 
         Image image = debate.getImage();
         if (image != null) {
-            dto.image = uriInfo.getBaseUriBuilder().path("images").path(id).build();
+            dto.image = uriInfo.getBaseUriBuilder().path("images").path(String.valueOf(image.getId())).build();
         }
         User creator = debate.getCreator();
         if (creator != null && creator.getUsername() != null) {

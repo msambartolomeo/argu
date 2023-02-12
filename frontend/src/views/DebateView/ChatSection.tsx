@@ -1,6 +1,7 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 
 import { HttpStatusCode } from "axios";
+import { useSnackbar } from "notistack";
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -23,6 +24,7 @@ interface ChatSectionProps {
 }
 const ChatSection = ({ debate }: ChatSectionProps) => {
     const { t } = useTranslation();
+    const { enqueueSnackbar } = useSnackbar();
 
     const { userInfo } = useSharedAuth();
 
@@ -62,7 +64,9 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
                     form.current?.reset();
                     break;
                 default:
-                // TODO: Error
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
             }
         });
     };
@@ -117,6 +121,10 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
                 case HttpStatusCode.NoContent:
                     setChat(PaginatedList.emptyList());
                     break;
+                default:
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
             }
         });
         setPage(value);
