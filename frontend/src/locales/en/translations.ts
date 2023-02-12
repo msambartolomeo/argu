@@ -95,6 +95,7 @@ export const TRANSLATIONS_EN = {
             statusClosing: "Closing",
             statusVoting: "Voting",
         },
+        debatePhotoAlt: "Debate photo",
         userDeleted: "[deleted]",
         close: "Close debate",
         deleteConfirmation: "Are you sure you want to delete this debate?",
