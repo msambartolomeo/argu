@@ -73,7 +73,7 @@ const Register = () => {
                         data.username,
                         data.password
                     );
-                    if (loggedIn) navigate("/login");
+                    if (loggedIn) navigate("/");
                 }
                 break;
             case HttpStatusCode.BadRequest:
