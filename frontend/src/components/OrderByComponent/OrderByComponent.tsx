@@ -8,16 +8,8 @@ import SortSelectComponent from "./SortSelectComponent/SortSelectComponent";
 
 import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 import "../../locales/index";
+import DebateOrder from "../../types/enums/DebateOrder";
 import DatePicker from "../DatePicker/DatePicker";
-
-const orderValues = [
-    "date_desc",
-    "date_asc",
-    "alpha_asc",
-    "alpha_desc",
-    "subs_asc",
-    "subs_desc",
-];
 
 const statusValues = ["all", "open", "closed"];
 
@@ -69,7 +61,7 @@ const OrderByComponent = () => {
             <div className="order-by-container">
                 <div className="filter-input-container">
                     <SortSelectComponent
-                        options={orderValues}
+                        options={Object.values(DebateOrder)}
                         type="order"
                         handleSelectChange={handleSelectOrderChange}
                     />
