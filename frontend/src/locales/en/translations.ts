@@ -345,6 +345,7 @@ export const TRANSLATIONS_EN = {
         message: "An error has ocurred.",
         goBack: "Go back to the homepage",
         notFound: {
+            page: "Page not found",
             debate: "Debate not found",
             user: "User not found",
         },
