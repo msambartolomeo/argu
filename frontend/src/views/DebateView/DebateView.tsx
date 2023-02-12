@@ -32,28 +32,36 @@ const DebateView = () => {
 
     const params = useParams();
 
-    const { loading: isDebateLoading, getDebate: getDebate } =
-        useGetDebateById();
+    const { getDebate: getDebate } = useGetDebateById();
 
-    useEffect(() => {
-        if (location.state?.debate) {
-            setDebateData(location.state.debate as DebateDto);
-            location.state.debate = undefined;
-            return;
-        }
-        const id: string = params.id?.toString() || "";
-        getDebate({ id: parseInt(id) }).then((output: GetDebateOutput) => {
+    function callGet() {
+        getDebate({ id: Number(params.id) }).then((output: GetDebateOutput) => {
             if (output.status === HttpStatusCode.Ok) {
                 setDebateData(output.data);
             }
         });
+    }
+
+    useEffect(() => {
+        setDebateData(undefined);
+        if (location.state?.debate) {
+            setDebateData(location.state.debate as DebateDto);
+            location.state.debate = undefined;
+        } else {
+            callGet();
+        }
+        // TODO: CHOSE TIMER
+        const interval = setInterval(callGet, 30000);
+
+        return () => clearInterval(interval);
     }, [params]);
 
+    // FIXME: this is not being used as debateData is always DebateDto or undefined
     if (typeof debateData === "string") {
         return <Error status={HttpStatusCode.NotFound} message={debateData} />;
     }
 
-    if (isDebateLoading || !debateData) {
+    if (!debateData) {
         return <CircularProgress size={100} />;
     }
 

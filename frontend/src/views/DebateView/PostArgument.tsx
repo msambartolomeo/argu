@@ -163,7 +163,8 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
         }
     }, [argumentList]);
 
-    if (isLastArgLoading) return <CircularProgress size={100} />;
+    if (isLastArgLoading && !lastArgument)
+        return <CircularProgress size={100} />;
 
     return (
         <>
