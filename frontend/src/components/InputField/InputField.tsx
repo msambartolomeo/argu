@@ -2,6 +2,7 @@ import cn from "classnames";
 import { UseFormRegisterReturn } from "react-hook-form/dist/types/form";
 
 interface Props {
+    name?: string;
     type?: "text" | "email" | "password";
     text: string;
     value?: string;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const InputField = ({
+    name,
     type,
     text,
     value,
@@ -25,6 +27,7 @@ const InputField = ({
     return (
         <div className={`input-field ${className}`}>
             <input
+                data-testid={name}
                 type={type}
                 value={value}
                 className={cn({ invalid: error !== undefined })}
