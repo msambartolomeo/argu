@@ -49,7 +49,10 @@ const TrendingDebatesComponent = () => {
                 {loading ? (
                     <CircularProgress data-testid="loading" size={100} />
                 ) : (
-                    <DebatesList data-testid="debates-list" debates={debates} />
+                    <DebatesList
+                        data-testid="trending-debates-list"
+                        debates={debates}
+                    />
                 )}
             </div>
         </div>

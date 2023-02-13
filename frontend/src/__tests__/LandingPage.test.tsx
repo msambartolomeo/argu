@@ -62,14 +62,14 @@ test("show landing page with trending debates", async () => {
     );
 
     waitFor(() => {
-        expect(getByTestId("debates-list")).toBeInTheDocument();
-        expect(getByTestId("debates-list")).toContain(
+        expect(getByTestId("trending-debates-list")).toBeInTheDocument();
+        expect(getByTestId("trending-debates-list")).toContain(
             <DebateListItem debate={mockedDebate1} />
         );
-        expect(getByTestId("debates-list")).toContain(
+        expect(getByTestId("trending-debates-list")).toContain(
             <DebateListItem debate={mockedDebate2} />
         );
-        expect(getByTestId("debates-list")).toContain(
+        expect(getByTestId("trending-debates-list")).toContain(
             <DebateListItem debate={mockedDebate3} />
         );
     });
