@@ -1,7 +1,10 @@
+import { UserInfo } from "../hooks/useAuth";
+import ArgumentDto from "../types/dto/ArgumentDto";
 import DebateDto from "../types/dto/DebateDto";
 import UserDto from "../types/dto/UserDto";
 import DebateCategory from "../types/enums/DebateCategory";
 import DebateStatus from "../types/enums/DebateStatus";
+import UserRole from "../types/enums/UserRole";
 
 const mockedUser: UserDto = {
     username: "test",
@@ -13,6 +16,15 @@ const mockedUser: UserDto = {
     debates: "http://localhost:8080/paw-2022a-06/debates?userUrl=test",
     subscribedDebates:
         "http://localhost:8080/paw-2022a-06/debates?userUrl=test&subscribed=true",
+};
+
+const mockedUserInfo: UserInfo = {
+    sub: "test",
+    exp: 1000000000000,
+    username: "test",
+    email: "test@mail.com",
+    role: UserRole.MODERATOR,
+    points: 10,
 };
 
 const mockedDebate1: DebateDto = {
@@ -100,4 +112,94 @@ const mockedDebate3: DebateDto = {
     afterSameDate: "http://localhost:8080/paw-2022a-06/debates?date=2020-10-19",
 };
 
-export { mockedUser, mockedDebate1, mockedDebate2, mockedDebate3 };
+const mockedArgument1: ArgumentDto = {
+    content: "I think that smoking should be banned in public places.",
+    createdDate: "2020-01-01",
+    status: "Introduction",
+    likes: 5,
+    likedByUser: false,
+    deleted: false,
+    creatorName: "test",
+    self: "http://localhost:8080/paw-2022a-06/debates/1/arguments/1",
+    creator: "http://localhost:8080/paw-2022a-06/users/test",
+    debate: "http://localhost:8080/paw-2022a-06/debates/1",
+};
+
+const mockedArgument2: ArgumentDto = {
+    content: "I believe that smoking should not be banned in public places.",
+    createdDate: "2020-01-01",
+    status: "Introduction",
+    likes: 2,
+    likedByUser: false,
+    deleted: false,
+    creatorName: "test2",
+    self: "http://localhost:8080/paw-2022a-06/debates/1/arguments/2",
+    creator: "http://localhost:8080/paw-2022a-06/users/test2",
+    debate: "http://localhost:8080/paw-2022a-06/debates/1",
+};
+
+const mockedArgument3: ArgumentDto = {
+    content: "It is detrimental to the health of the people around you.",
+    createdDate: "2020-01-01",
+    status: "Argument",
+    likes: 7,
+    likedByUser: false,
+    deleted: false,
+    creatorName: "test",
+    self: "http://localhost:8080/paw-2022a-06/debates/1/arguments/3",
+    creator: "http://localhost:8080/paw-2022a-06/users/test",
+    debate: "http://localhost:8080/paw-2022a-06/debates/1",
+};
+
+const mockedArgument4: ArgumentDto = {
+    content: "If you are careful, you will not harm anyone.",
+    createdDate: "2020-01-01",
+    status: "Argument",
+    likes: 5,
+    likedByUser: true,
+    deleted: false,
+    creatorName: "test2",
+    self: "http://localhost:8080/paw-2022a-06/debates/1/arguments/4",
+    creator: "http://localhost:8080/paw-2022a-06/users/test2",
+    debate: "http://localhost:8080/paw-2022a-06/debates/1",
+};
+
+const mockedArgument5: ArgumentDto = {
+    content: "It is addictive and harmful to your health.",
+    createdDate: "2020-01-02",
+    status: "Conclusion",
+    likes: 8,
+    likedByUser: true,
+    deleted: false,
+    creatorName: "test",
+    self: "http://localhost:8080/paw-2022a-06/debates/1/arguments/5",
+    creator: "http://localhost:8080/paw-2022a-06/users/test",
+    debate: "http://localhost:8080/paw-2022a-06/debates/1",
+};
+
+const mockedArgument6: ArgumentDto = {
+    content: "It is not addictive and it is not harmful to your health.",
+    createdDate: "2020-01-02",
+    status: "Conclusion",
+    likes: 2,
+    likedByUser: false,
+    deleted: false,
+    creatorName: "test2",
+    self: "http://localhost:8080/paw-2022a-06/debates/1/arguments/6",
+    creator: "http://localhost:8080/paw-2022a-06/users/test2",
+    debate: "http://localhost:8080/paw-2022a-06/debates/1",
+};
+
+export {
+    mockedUser,
+    mockedUserInfo,
+    mockedDebate1,
+    mockedDebate2,
+    mockedDebate3,
+    mockedArgument1,
+    mockedArgument2,
+    mockedArgument3,
+    mockedArgument4,
+    mockedArgument5,
+    mockedArgument6,
+};
