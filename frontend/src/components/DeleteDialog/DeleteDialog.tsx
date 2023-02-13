@@ -37,7 +37,7 @@ const DeleteDialog = ({
                 {name}
                 <i className="material-icons">delete</i>
             </a>
-            <div id={id} className="modal">
+            <div data-testid="debate-delete-modal" id={id} className="modal">
                 <div className="modal-content">
                     <h4>{title}</h4>
                 </div>
