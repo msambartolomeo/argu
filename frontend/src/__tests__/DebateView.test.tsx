@@ -545,7 +545,7 @@ test("vote call triggered when clicking on vote button", async () => {
         );
         expect(
             getByRole("button", {
-                name: t("debate.argument.vote").toString(),
+                name: "test",
             })
         ).toBeInTheDocument();
         fireEvent.click(
