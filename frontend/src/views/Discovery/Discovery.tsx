@@ -80,7 +80,7 @@ const Discovery = () => {
     }, [queryParams]);
 
     return (
-        <div className="discovery-container">
+        <div data-testid="discover" className="discovery-container">
             <div className="filters-container">
                 <CategoryFilters />
             </div>
