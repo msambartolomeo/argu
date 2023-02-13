@@ -31,7 +31,15 @@ function ArgumentList({
     const { t } = useTranslation();
     const { enqueueSnackbar } = useSnackbar();
 
-    const [argumentsUrl, setArgumentsUrl] = useState<string>(debate.arguments);
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [page, setPage] = useState<number>(
+        Number(queryParams.get("page")) || Number(PAGE_DEFAULT)
+    );
+    const [argumentsUrl, setArgumentsUrl] = useState<string>(() => {
+        const page = queryParams.get("page");
+        if (page) return `${debate.arguments}?page=${Number(page) - 1}`;
+        return debate.arguments;
+    });
 
     const { loading, getArguments } = useGetArguments();
 
@@ -53,11 +61,6 @@ function ArgumentList({
             }
         });
     }
-
-    const [queryParams, setQueryParams] = useSearchParams();
-    const [page, setPage] = useState<number>(
-        Number(queryParams.get("page")) || Number(PAGE_DEFAULT)
-    );
 
     useEffect(() => {
         callGet();
