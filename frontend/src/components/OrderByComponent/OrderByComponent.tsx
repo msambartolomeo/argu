@@ -1,53 +1,33 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
-
-import { SelectChangeEvent } from "@mui/material";
 
 import "./OrderByComponent.css";
 import SortSelectComponent from "./SortSelectComponent/SortSelectComponent";
 
 import { useNonInitialEffect } from "../../hooks/useNonInitialEffect";
 import "../../locales/index";
+import DebateOrder from "../../types/enums/DebateOrder";
 import DatePicker from "../DatePicker/DatePicker";
+
+const statusValues = ["all", "open", "closed"];
 
 const OrderByComponent = () => {
     const { t } = useTranslation();
 
-    const datePickerPlaceholder: string = t(
-        "discovery.orderBy.datePicker.placeholder"
-    );
-
-    const orderBySuppliers = [
-        { value: "date_desc", label: "dateDesc" },
-        { value: "date_asc", label: "dateAsc" },
-        { value: "alpha_asc", label: "alphaAsc" },
-        { value: "alpha_desc", label: "alphaDesc" },
-        { value: "subs_asc", label: "subsAsc" },
-        { value: "subs_desc", label: "subsDesc" },
-    ];
-
-    const statusSuppliers = [
-        { value: "all", label: "all" },
-        { value: "open", label: "open" },
-        { value: "closed", label: "closed" },
-    ];
-
     const [queryParams, setQueryParams] = useSearchParams();
-    const [queryOrder, setQueryOrder] = useState(
-        queryParams.get("order") ?? ""
-    );
-    const [queryStatus, setQueryStatus] = useState(
-        queryParams.get("status") ?? ""
-    );
+    const [queryOrder, setQueryOrder] = useState(queryParams.get("order"));
+    const [queryStatus, setQueryStatus] = useState(queryParams.get("status"));
     const selectedCategory = queryParams.get("category");
 
-    const handleSelectOrderChange = (event: SelectChangeEvent) => {
+    const handleSelectOrderChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setQueryOrder(event.target.value);
     };
 
-    const handleSelectStatusChange = (event: SelectChangeEvent) => {
+    const handleSelectStatusChange = (
+        event: ChangeEvent<HTMLSelectElement>
+    ) => {
         setQueryStatus(event.target.value);
     };
 
@@ -69,28 +49,6 @@ const OrderByComponent = () => {
         setQueryParams(queryParams);
     }, [queryStatus]);
 
-    const orderByProps = {
-        header: "Order by",
-        name: "orderBy",
-        defaultValue: "newest",
-        id: "order-by",
-        labelId: "order-by-label",
-        suppliers: orderBySuppliers,
-        query: queryOrder,
-        handleSelectChange: handleSelectOrderChange,
-    };
-
-    const statusProps = {
-        header: "Status",
-        name: "status",
-        defaultValue: "all",
-        id: "status",
-        labelId: "status-label",
-        suppliers: statusSuppliers,
-        query: queryStatus,
-        handleSelectChange: handleSelectStatusChange,
-    };
-
     return (
         <div className="order-by-container-with-header">
             <h5 className="order-by-header">
@@ -101,14 +59,19 @@ const OrderByComponent = () => {
                     : t("discovery.orderBy.showingAllDebates")}
             </h5>
             <div className="order-by-container">
-                <div className="select-container">
-                    <SortSelectComponent {...orderByProps} />
-                    <SortSelectComponent {...statusProps} />
-                </div>
-                <div className="date-picker-container">
+                <div className="filter-input-container">
+                    <SortSelectComponent
+                        options={Object.values(DebateOrder)}
+                        type="order"
+                        handleSelectChange={handleSelectOrderChange}
+                    />
+                    <SortSelectComponent
+                        options={statusValues}
+                        type="status"
+                        handleSelectChange={handleSelectStatusChange}
+                    />
                     <DatePicker
                         label={t("discovery.orderBy.datePicker.label")}
-                        placeholder={datePickerPlaceholder}
                     />
                 </div>
             </div>

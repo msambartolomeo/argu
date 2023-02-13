@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export const TRANSLATIONS_ES = {
     navbar: {
         explore: "Explorar",
@@ -260,18 +261,14 @@ export const TRANSLATIONS_ES = {
             all: "Todos",
         },
         orderBy: {
-            placeholders: {
-                all: "Todos",
-                newest: "Más reciente",
-            },
-            orderBy: {
+            order: {
                 title: "Ordenar por",
-                dateDesc: "Más reciente",
-                dateAsc: "Más antiguo",
-                alphaAsc: "A - Z",
-                alphaDesc: "Z - A",
-                subsAsc: "Menos suscriptos",
-                subsDesc: "Más suscriptos",
+                date_desc: "Más reciente",
+                date_asc: "Más antiguo",
+                alpha_asc: "A - Z",
+                alpha_desc: "Z - A",
+                subs_asc: "Menos suscriptos",
+                subs_desc: "Más suscriptos",
             },
             status: {
                 title: "Estado",
