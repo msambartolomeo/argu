@@ -13,6 +13,7 @@ import ar.edu.itba.paw.webapp.validators.Image;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -94,6 +95,7 @@ public class UserController {
     @PATCH
     @Path("/{url}")
     @Consumes({MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.checkSameUser(authentication, #url)")
     public Response patchUser(@PathParam("url") final String url, @Valid @NotNull final ModeratorForm form) throws UnsupportedEncodingException {
         final String username = URLDecoder.decode(url, User.ENCODING);
         userService.requestModerator(username, form.getReason());

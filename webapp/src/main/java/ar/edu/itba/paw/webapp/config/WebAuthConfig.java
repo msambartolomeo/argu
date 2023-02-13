@@ -58,6 +58,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE,"/users/{url}", "/users/{url}/image").access("@securityManager.checkSameUser(authentication, #url)")
                 .antMatchers(HttpMethod.PUT, "/users/{url}/image").access("@securityManager.checkSameUser(authentication, #url)")
                 .antMatchers(HttpMethod.POST, "/users").anonymous()
+                .antMatchers(HttpMethod.PATCH, "/users/{url}").hasAuthority("USER")
                 // debate
                 .antMatchers(HttpMethod.DELETE, "/debates/{\\d+}").hasAuthority("MODERATOR")
                 .antMatchers(HttpMethod.POST, "/debates").hasAuthority("MODERATOR")
