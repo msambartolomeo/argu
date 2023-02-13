@@ -1,17 +1,10 @@
-import React from "react";
-
 import { useTranslation } from "react-i18next";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { createSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-
-import Chip from "@mui/material/Chip";
-import Stack from "@mui/material/Stack";
 
 import "./LandingPageExploreComponent.css";
 
 import "../../locales/index";
-
-// TODO: Add icons
 
 interface CategoriesProps {
     categories: string[];
@@ -19,7 +12,6 @@ interface CategoriesProps {
 
 const LandingPageExploreComponent = ({ categories }: CategoriesProps) => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
 
     return (
         <div className="explore-component-container">

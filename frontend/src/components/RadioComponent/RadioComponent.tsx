@@ -14,6 +14,7 @@ import "./RadioComponent.css";
 interface RadioComponentProps {
     name: string;
     label: string;
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     control: any;
     options: { value: string; label: string }[];
     error?: string;

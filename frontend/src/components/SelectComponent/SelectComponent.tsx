@@ -6,6 +6,7 @@ import FormControl from "@mui/material/FormControl/FormControl";
 interface SelectComponentProps {
     name: string;
     label: string;
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     control: any;
     options: { value: string; label: string }[];
     error?: string;

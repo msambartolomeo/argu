@@ -1,23 +1,13 @@
 import "./LandingPage.css";
 
-import parallaxBackgroud from "../../assets/speech-bubbles.jpeg";
 import LandingPageAboutComponent from "../../components/LandingPageAboutComponent/LandingPageAboutComponent";
 import LandingPageExploreComponent from "../../components/LandingPageExploreComponent/LandingPageExploreComponent";
 import TrendingDebatesComponent from "../../components/TrendingDebatesComponent/TrendingDebatesComponent";
 import DebateCategory from "../../types/enums/DebateCategory";
 
-// TODO: Add icons
-
-interface ParallaxBackgroundProps {
-    background?: string;
-}
-
-const LandingPage = ({
-    background = parallaxBackgroud,
-}: ParallaxBackgroundProps) => {
+const LandingPage = () => {
     document.title = "Argu";
 
-    const parallaxPages = 5;
     const categories = Object.values(DebateCategory);
 
     return (
