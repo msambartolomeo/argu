@@ -112,7 +112,7 @@ const Discovery = () => {
                     </>
                 ) : (
                     <div className="no-debates-container">
-                        <NoDebatesFound />
+                        <NoDebatesFound data-testid="no-debates-found" />
                     </div>
                 )}
             </div>
