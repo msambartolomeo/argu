@@ -1,6 +1,19 @@
 import DebateDto from "../types/dto/DebateDto";
+import UserDto from "../types/dto/UserDto";
 import DebateCategory from "../types/enums/DebateCategory";
 import DebateStatus from "../types/enums/DebateStatus";
+
+const mockedUser: UserDto = {
+    username: "test",
+    createdDate: "2021-10-10",
+    points: 10,
+
+    self: "http://localhost:8080/paw-2022a-06/users/test",
+    image: "http://localhost:8080/paw-2022a-06/users/test/image",
+    debates: "http://localhost:8080/paw-2022a-06/debates?userUrl=test",
+    subscribedDebates:
+        "http://localhost:8080/paw-2022a-06/debates?userUrl=test&subscribed=true",
+};
 
 const mockedDebate1: DebateDto = {
     id: 1,
@@ -87,4 +100,4 @@ const mockedDebate3: DebateDto = {
     afterSameDate: "http://localhost:8080/paw-2022a-06/debates?date=2020-10-19",
 };
 
-export { mockedDebate1, mockedDebate2, mockedDebate3 };
+export { mockedUser, mockedDebate1, mockedDebate2, mockedDebate3 };

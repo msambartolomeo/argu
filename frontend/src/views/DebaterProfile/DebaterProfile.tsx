@@ -128,7 +128,7 @@ export const DebaterProfile = () => {
     if (error)
         return <Error status={HttpStatusCode.NotFound} message={error} />;
     if (userLoading || imageLoading || !userData)
-        return <CircularProgress size={100} />;
+        return <CircularProgress data-testid="loading" size={100} />;
 
     document.title = `Argu | ${userData.username}`;
 
@@ -153,7 +153,10 @@ export const DebaterProfile = () => {
                     {debatesLoading ? (
                         <CircularProgress size={100} />
                     ) : (
-                        <DebatesList debates={userDebates?.data || []} />
+                        <DebatesList
+                            data-testid="debater-debates-list"
+                            debates={userDebates?.data || []}
+                        />
                     )}
 
                     {userDebates && (
