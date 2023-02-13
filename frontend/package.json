@@ -45,7 +45,7 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "build-java": "react-scripts build && sed -i '1s/^/<%@ page session=\"false\" %> /' ./build/index.html",
-        "test": "react-scripts test --watchAll",
+        "test": "react-scripts test",
         "eject": "react-scripts eject",
         "prepare": "cd .. && husky install frontend/.husky",
         "eslint-fix": "eslint --config ./.eslintrc.json --fix src/",
