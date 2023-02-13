@@ -120,7 +120,7 @@ const Discovery = () => {
                 <div className="discovery-order-container">
                     <OrderByComponent />
                 </div>
-                {isLoading ? (
+                {isLoading || isDebatesUrlLoading ? (
                     <CircularProgress size={100} />
                 ) : debatesList.data.length > 0 ? (
                     <>
