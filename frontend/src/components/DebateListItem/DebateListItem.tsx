@@ -66,12 +66,14 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                     <div className="image-width">
                         <img
                             src={
-                                // debate.image
-                                //     ? "/images/" + debate.image
-                                //     :
-                                defaultDebatePhoto
+                                debate.image ? debate.image : defaultDebatePhoto
                             }
-                            alt="Debate photo"
+                            defaultValue={defaultDebatePhoto}
+                            alt={t("debate.debatePhotoAlt").toString()}
+                            onError={({ target }) =>
+                                ((target as HTMLImageElement).src =
+                                    defaultDebatePhoto)
+                            }
                             className="limit-img-sm responsive-img"
                         />
                     </div>
