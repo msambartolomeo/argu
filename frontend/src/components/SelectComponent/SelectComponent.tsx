@@ -1,7 +1,6 @@
 import { Controller } from "react-hook-form";
 
-import { Autocomplete, TextField } from "@mui/material";
-import FormControl from "@mui/material/FormControl/FormControl";
+import { Autocomplete, FormControl, TextField } from "@mui/material";
 
 interface SelectComponentProps {
     name: string;
