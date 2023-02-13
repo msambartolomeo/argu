@@ -41,9 +41,16 @@ const Register = () => {
                 .min(1, t("register.errors.passwordEmpty") as string),
             email: z
                 .string()
-                .email(t("register.errors.emailInvalid") as string)
                 .max(100, t("register.errors.emailTooLong") as string)
-                .min(1, t("register.errors.emailEmpty") as string),
+                .min(1, t("register.errors.emailEmpty") as string)
+                .refine((email) => {
+                    const emailParts = email.split("@");
+                    if (emailParts.length !== 2) return false;
+                    const [username, domain] = emailParts;
+                    if (username.length === 0 || domain.length === 0)
+                        return false;
+                    return true;
+                }, t("register.errors.emailInvalid") as string),
             confirmPassword: z.string(),
         })
         .superRefine(({ confirmPassword, password }, ctx) => {
