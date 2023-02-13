@@ -13,6 +13,7 @@ import "../../locales/index";
 import { PaginatedList } from "../../types/PaginatedList";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import DebateDto from "../../types/dto/DebateDto";
+import { PAGE_DEFAULT } from "../../types/globalConstants";
 
 interface Props {
     debate: DebateDto;
@@ -54,13 +55,17 @@ function ArgumentList({
     }
 
     const [queryParams, setQueryParams] = useSearchParams();
-    let page = Number(queryParams.get("page"));
+    const [page, setPage] = useState<number>(
+        Number(queryParams.get("page")) || Number(PAGE_DEFAULT)
+    );
 
     useEffect(() => {
         callGet();
     }, [refreshArguments, debate, argumentsUrl]);
 
     const handleChangePage = async (value: number) => {
+        if (value === page) return;
+
         let url = "";
         switch (value) {
             case 1:
@@ -78,8 +83,8 @@ function ArgumentList({
         }
         if (url) {
             setArgumentsUrl(url);
-            page = value;
             setQueryParams({ page: value.toString() });
+            setPage(value);
         }
     };
 

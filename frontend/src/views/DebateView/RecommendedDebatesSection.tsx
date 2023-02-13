@@ -41,7 +41,7 @@ const RecommendedDebatesSection = ({
                 }
             });
         }
-    }, [debate]);
+    }, []);
 
     if (recommendedDebates.length === 0 && isRecommendedDebatesLoading) {
         return <CircularProgress size={100} />;
