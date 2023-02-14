@@ -33,7 +33,9 @@ const Discovery = () => {
 
     const [queryParams, setQueryParams] = useSearchParams();
 
-    const [page, setPage] = useState<number>(Number(queryParams.get("page")));
+    const [page, setPage] = useState<number>(
+        Number(queryParams.get("page") || 1)
+    );
     const [newPage, setNewPage] = useState<number>();
 
     const { loading: isLoading, getDebates: getDebates } = useGetDebates();
@@ -130,15 +132,14 @@ const Discovery = () => {
                         <div className="pagination-container">
                             <Pagination
                                 count={debatesList.totalPages}
-                                color="primary"
-                                siblingCount={1}
-                                className="white"
                                 page={page}
                                 onChange={(e, v) => {
                                     setNewPage(v);
                                 }}
                                 showLastButton
                                 showFirstButton
+                                siblingCount={0}
+                                boundaryCount={0}
                             />
                         </div>
                     </>

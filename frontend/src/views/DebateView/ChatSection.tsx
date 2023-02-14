@@ -197,7 +197,8 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
                                     count={chat?.totalPages || 0}
                                     color="primary"
                                     className="white"
-                                    siblingCount={1}
+                                    siblingCount={0}
+                                    boundaryCount={0}
                                     page={page}
                                     showFirstButton
                                     showLastButton
