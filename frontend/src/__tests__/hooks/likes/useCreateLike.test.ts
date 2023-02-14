@@ -23,7 +23,8 @@ describe("useCreateLike", () => {
 
         const { createLike } = result.current;
         const response = await createLike({
-            likeUrl: "http://localhost:8080/paw-2022a-06/debates/1/arguments/1",
+            likeUrl:
+                "http://localhost:8080/paw-2022a-06/debates/1/arguments/1/likes",
         });
 
         expect(response).toEqual(mockResponse.status);
