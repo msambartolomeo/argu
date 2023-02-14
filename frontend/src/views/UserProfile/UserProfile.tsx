@@ -30,9 +30,7 @@ const UserProfile = () => {
     const [debates, setDebates] = useState<
         PaginatedList<DebateDto> | undefined
     >();
-    const [showMyDebates, setShowMyDebates] = useState<boolean>(() => {
-        return queryParams.get("showMyDebates") === "true";
-    });
+    const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
     const [reloadImage, setReloadImage] = useState<number>(1);
     const [error, setError] = useState<GetUserByUrlOutput | undefined>(
         undefined
@@ -77,6 +75,9 @@ const UserProfile = () => {
                 switch (res.status) {
                     case HttpStatusCode.Ok:
                         setUserData(res.data);
+                        break;
+                    case HttpStatusCode.Unauthorized:
+                        logout();
                         break;
                     default:
                         setError(res);
