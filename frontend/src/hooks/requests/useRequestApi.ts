@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { AUTHORIZATION_HEADER, REFRESH_HEADER } from "./constants";
 
+import i18n from "../../locales";
 import { useSharedAuth } from "../useAuth";
 
 export interface BasicCredentials {
@@ -73,7 +74,10 @@ export const useRequestApi = () => {
                 url,
                 method: method || "GET",
                 data: body,
-                headers: headers,
+                headers: {
+                    "Accept-Language": i18n.language,
+                    ...headers,
+                },
                 params: input.queryParams,
             });
 
