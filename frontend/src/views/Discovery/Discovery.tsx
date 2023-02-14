@@ -89,11 +89,14 @@ const Discovery = () => {
                     <OrderByComponent />
                 </div>
                 {isLoading ? (
-                    <CircularProgress size={100} />
+                    <CircularProgress data-testid="loading" size={100} />
                 ) : debatesList && debatesList?.data.length > 0 ? (
                     <>
                         <div className="debates-list-container">
-                            <DebatesList debates={debatesList?.data || []} />
+                            <DebatesList
+                                data-testid="discovery-debates-list"
+                                debates={debatesList?.data || []}
+                            />
                         </div>
                         <div className="pagination-container">
                             <Pagination
