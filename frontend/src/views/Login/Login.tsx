@@ -89,17 +89,6 @@ const Login = () => {
                         register={register("password")}
                         error={errors.password?.message?.toString()}
                     />
-                    <div className="left">
-                        <label>
-                            <input
-                                type="checkbox"
-                                className="filled-in"
-                                name="rememberme"
-                                id="rememberme"
-                            />
-                            <span>{t("login.rememberMe")}</span>
-                        </label>
-                    </div>
                     <SubmitButton text={t("login.login")} disabled={loading} />
                 </div>
             </form>
