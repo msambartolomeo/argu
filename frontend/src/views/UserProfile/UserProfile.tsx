@@ -135,7 +135,8 @@ const UserProfile = () => {
 
     if (isUserLoading) return <CircularProgress size={100} />;
 
-    document.title = `Argu | ${userData?.username}`;
+    document.title =
+        "Argu" + (userData?.username ? ` | ${userData?.username}` : "");
 
     return (
         <div className="profile-container">
