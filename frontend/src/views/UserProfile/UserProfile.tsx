@@ -30,7 +30,9 @@ const UserProfile = () => {
     const [debates, setDebates] = useState<
         PaginatedList<DebateDto> | undefined
     >();
-    const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
+    const [showMyDebates, setShowMyDebates] = useState<boolean>(() => {
+        return queryParams.get("showMyDebates") === "true";
+    });
     const [reloadImage, setReloadImage] = useState<number>(1);
     const [error, setError] = useState<GetUserByUrlOutput | undefined>(
         undefined
@@ -85,7 +87,7 @@ const UserProfile = () => {
         }
         if (queryParams.get("showMyDebates") === "true") setShowMyDebates(true);
         else setShowMyDebates(false);
-    }, [userInfo]);
+    }, [userInfo, reloadImage]);
 
     useEffect(() => {
         if (userData) {
@@ -107,6 +109,8 @@ const UserProfile = () => {
     }, [userData, showMyDebates]);
 
     const handleChangePage = async (value: number) => {
+        if (value === page) return;
+
         let url = "";
         switch (value) {
             case 1:
@@ -122,23 +126,25 @@ const UserProfile = () => {
                 url = debates?.next || "";
                 break;
         }
-        const res = await getDebates({ url: url });
-        switch (res.status) {
-            case HttpStatusCode.Ok:
-                setDebates(res.data);
-                break;
-            case HttpStatusCode.NoContent:
-                setDebates(undefined);
-                break;
+        if (url) {
+            const res = await getDebates({ url: url });
+            switch (res.status) {
+                case HttpStatusCode.Ok:
+                    setDebates(res.data);
+                    break;
+                case HttpStatusCode.NoContent:
+                    setDebates(undefined);
+                    break;
+            }
+            page = value;
+            queryParams.set("page", page.toString());
+            setQueryParams(queryParams);
         }
-        page = value;
-        queryParams.set("page", page.toString());
-        setQueryParams(queryParams);
     };
 
     if (error) return <Error status={error.status} message={error.message} />;
 
-    if (isUserLoading) return <CircularProgress size={100} />;
+    if (isUserLoading && !userData) return <CircularProgress size={100} />;
 
     document.title = `Argu | ${userData?.username}`;
 
