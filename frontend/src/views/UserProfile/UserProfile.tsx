@@ -63,6 +63,8 @@ const UserProfile = () => {
     const handleUpdateDebates = (value: boolean) => {
         page = 1;
         queryParams.delete("page");
+        if (value) queryParams.set("showMyDebates", "true");
+        else queryParams.set("showMyDebates", "false");
         setQueryParams(queryParams);
         setShowMyDebates(value);
     };
@@ -81,6 +83,8 @@ const UserProfile = () => {
         } else {
             navigate("/login");
         }
+        if (queryParams.get("showMyDebates") === "true") setShowMyDebates(true);
+        else setShowMyDebates(false);
     }, [userInfo]);
 
     useEffect(() => {
@@ -128,7 +132,8 @@ const UserProfile = () => {
                 break;
         }
         page = value;
-        setQueryParams({ page: value.toString() });
+        queryParams.set("page", page.toString());
+        setQueryParams(queryParams);
     };
 
     if (error) return <Error status={error.status} message={error.message} />;
