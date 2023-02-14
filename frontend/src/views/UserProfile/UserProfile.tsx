@@ -30,7 +30,10 @@ const UserProfile = () => {
     const [debates, setDebates] = useState<
         PaginatedList<DebateDto> | undefined
     >();
-    const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [showMyDebates, setShowMyDebates] = useState<boolean>(() => {
+        return queryParams.get("showMyDebates") === "true";
+    });
     const [reloadImage, setReloadImage] = useState<number>(1);
     const [error, setError] = useState<GetUserByUrlOutput | undefined>(
         undefined
@@ -41,7 +44,6 @@ const UserProfile = () => {
 
     const { userInfo } = useSharedAuth();
 
-    const [queryParams, setQueryParams] = useSearchParams();
     let page = parseInt(queryParams.get("page") || PAGE_DEFAULT, 10);
 
     const { loading: isUserLoading, getUserByUsername: getUser } =
