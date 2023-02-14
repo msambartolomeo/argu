@@ -103,6 +103,8 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
     }, [chat]);
 
     const handleChangePage = async (value: number) => {
+        if (value === page) return;
+
         let url = "";
         switch (value) {
             case 1:
