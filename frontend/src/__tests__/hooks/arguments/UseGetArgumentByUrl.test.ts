@@ -2,9 +2,9 @@ import { HttpStatusCode } from "axios";
 
 import { renderHook } from "@testing-library/react";
 
-import { mockedArgument1 } from "../__mocks__/mockedData";
-import { useGetArgumentByUrl } from "../hooks/arguments/useGetArgumentByUrl";
-import * as useGetModule from "../hooks/requests/useGet";
+import { mockedArgument1 } from "../../../__mocks__/mockedData";
+import { useGetArgumentByUrl } from "../../../hooks/arguments/useGetArgumentByUrl";
+import * as useGetModule from "../../../hooks/requests/useGet";
 
 const mockedUsedNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
