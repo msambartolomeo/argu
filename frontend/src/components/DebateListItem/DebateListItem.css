@@ -21,8 +21,6 @@ a.card {
 }
 
 .limit-img-sm {
-    max-width: 150px !important;
-    max-height: 150px;
-    width: 10vw;
-    height: 10vw !important;
+    max-width: 10vw;
+    max-height: 10vw !important;
 }
