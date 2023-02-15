@@ -51,6 +51,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 continueFilter = basicAuthentication(header, request, response);
             } else if (header.startsWith("Bearer ")) {
                 continueFilter = bearerAuthentication(header, request, response);
+            } else {
+                continueFilter = false;
             }
         }
 
