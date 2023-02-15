@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { HttpStatusCode } from "axios";
+import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
@@ -24,6 +25,7 @@ import DebateStatus from "../../types/enums/DebateStatus";
 
 const Discovery = () => {
     const { t } = useTranslation();
+    const { enqueueSnackbar } = useSnackbar();
 
     document.title = "Argu | " + t("discovery.title");
 
@@ -83,33 +85,37 @@ const Discovery = () => {
             }
         } else {
             getDebates({
-                category: queryParams.get("category") as DebateCategory,
-                order: queryParams.get("order") as DebateOrder,
-                status: queryParams.get("status") as DebateStatus,
+                category:
+                    DebateCategory[
+                        queryParams.get(
+                            "category"
+                        ) as keyof typeof DebateCategory
+                    ],
+                order: DebateOrder[
+                    queryParams.get("order") as keyof typeof DebateOrder
+                ],
+                status: DebateStatus[
+                    queryParams.get("status") as keyof typeof DebateStatus
+                ],
                 date: queryParams.get("date") as string,
                 page: queryPage - 1 >= 0 ? queryPage - 1 : 0,
                 search: queryParams.get("search") as string,
                 size: 5,
-            })
-                .then((res) => {
-                    switch (res.status) {
-                        case HttpStatusCode.Ok:
-                            if (res.data) setDebatesList(res.data);
-                            break;
-                        case HttpStatusCode.NotFound:
-                        case HttpStatusCode.NoContent:
-                            setDebatesList(PaginatedList.emptyList());
-                            break;
-                        case HttpStatusCode.BadRequest:
-                            throw new Error("Bad request");
-                        default:
-                            throw new Error("Unknown error");
-                    }
-                })
-
-                .catch((error) => {
-                    throw new Error("Error loading debates list: ", error);
-                });
+            }).then((res) => {
+                switch (res.status) {
+                    case HttpStatusCode.Ok:
+                        if (res.data) setDebatesList(res.data);
+                        break;
+                    case HttpStatusCode.NotFound:
+                    case HttpStatusCode.NoContent:
+                        setDebatesList(PaginatedList.emptyList());
+                        break;
+                    default:
+                        enqueueSnackbar(t("errors.unexpected"), {
+                            variant: "error",
+                        });
+                }
+            });
         }
     }, [queryParams]);
 

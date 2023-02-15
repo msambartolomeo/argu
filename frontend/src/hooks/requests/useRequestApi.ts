@@ -87,7 +87,6 @@ export const useRequestApi = () => {
             if (response.headers[REFRESH_HEADER]) {
                 setRefreshToken(response.headers[REFRESH_HEADER]);
             }
-
             return response;
         } catch (err) {
             if (axios.isAxiosError(err)) {
@@ -129,7 +128,12 @@ export const useRequestApi = () => {
                     setRefreshToken(response.headers[REFRESH_HEADER]);
                 }
 
-                return axiosError.response as AxiosResponse;
+                if (axiosError.response) {
+                    return axiosError.response as AxiosResponse;
+                }
+                return {
+                    status: 503,
+                } as AxiosResponse;
             }
             throw err;
         } finally {

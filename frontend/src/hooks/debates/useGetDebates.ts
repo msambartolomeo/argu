@@ -22,8 +22,6 @@ export interface GetDebatesInput {
     subscribed?: boolean;
 
     page?: number;
-
-    // TODO: Size < 10, should we verify this or just catch the error?
     size?: number;
 }
 

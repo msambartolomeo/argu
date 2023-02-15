@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { HttpStatusCode } from "axios";
+import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
 
 import { CircularProgress } from "@mui/material";
@@ -19,6 +21,7 @@ const TrendingDebatesComponent = () => {
     const [debates, setDebates] = useState<DebateDto[]>([]);
 
     const { loading, getDebates } = useGetDebates();
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         getDebates({
@@ -26,15 +29,18 @@ const TrendingDebatesComponent = () => {
             status: DebateStatus.OPEN,
             page: 0,
             size: 3,
-        })
-            .then((out) => {
-                if (out.data) {
-                    setDebates(out.data.data);
-                }
-            })
-            .catch((error) => {
-                throw new Error("Error loading debates list: ", error);
-            });
+        }).then((response) => {
+            switch (response.status) {
+                case HttpStatusCode.Ok:
+                    if (response.data) setDebates(response.data.data);
+                    break;
+                default:
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
+                    break;
+            }
+        });
     }, []);
 
     return (
