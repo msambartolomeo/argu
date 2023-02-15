@@ -2,6 +2,7 @@ import { UserInfo } from "../hooks/useAuth";
 import ArgumentDto from "../types/dto/ArgumentDto";
 import DebateDto from "../types/dto/DebateDto";
 import UserDto from "../types/dto/UserDto";
+import ArgumentStatus from "../types/enums/ArgumentStatus";
 import DebateCategory from "../types/enums/DebateCategory";
 import DebateStatus from "../types/enums/DebateStatus";
 import UserRole from "../types/enums/UserRole";
@@ -33,7 +34,7 @@ const mockedDebate1: DebateDto = {
     description:
         "Smoking is a major cause of preventable death and disease. It is estimated that smoking causes 1 in 5 deaths in the UK.",
     isCreatorFor: true,
-    createdDate: new Date("2020-01-01"),
+    createdDate: "2020-01-01",
     dateToClose: "2020-01-05",
     category: DebateCategory.OTHER,
     status: DebateStatus.OPEN,
@@ -61,7 +62,7 @@ const mockedDebate2: DebateDto = {
     description:
         "School uniforms are a controversial topic in the United States. Some people believe that school uniforms are a good idea because they would reduce violence in schools, improve students' grades, and help students focus on their studies. Others believe that school uniforms are a bad idea because they would limit students' freedom of expression and take away students' individuality.",
     isCreatorFor: true,
-    createdDate: new Date("2020-02-09"),
+    createdDate: "2020-02-09",
     dateToClose: "2020-02-12",
     category: DebateCategory.EDUCATION,
     status: DebateStatus.OPEN,
@@ -90,7 +91,7 @@ const mockedDebate3: DebateDto = {
     description:
         "The chicken or the egg is a common riddle that has been around for centuries. The question is, which came first, the chicken or the egg? The answer to this question is not as simple as it seems. The answer to this question depends on how you define the word 'first'.",
     isCreatorFor: false,
-    createdDate: new Date("2020-10-19"),
+    createdDate: "2020-10-19",
     dateToClose: "2020-10-22",
     category: DebateCategory.SCIENCE,
     status: DebateStatus.OPEN,
@@ -115,7 +116,7 @@ const mockedDebate3: DebateDto = {
 const mockedArgument1: ArgumentDto = {
     content: "I think that smoking should be banned in public places.",
     createdDate: "2020-01-01",
-    status: "Introduction",
+    status: ArgumentStatus.INTRODUCTION,
     likes: 5,
     likedByUser: false,
     deleted: false,
@@ -128,7 +129,7 @@ const mockedArgument1: ArgumentDto = {
 const mockedArgument2: ArgumentDto = {
     content: "I believe that smoking should not be banned in public places.",
     createdDate: "2020-01-01",
-    status: "Introduction",
+    status: ArgumentStatus.INTRODUCTION,
     likes: 2,
     likedByUser: false,
     deleted: false,
@@ -141,7 +142,7 @@ const mockedArgument2: ArgumentDto = {
 const mockedArgument3: ArgumentDto = {
     content: "It is detrimental to the health of the people around you.",
     createdDate: "2020-01-01",
-    status: "Argument",
+    status: ArgumentStatus.ARGUMENT,
     likes: 7,
     likedByUser: false,
     deleted: false,
@@ -154,7 +155,7 @@ const mockedArgument3: ArgumentDto = {
 const mockedArgument4: ArgumentDto = {
     content: "If you are careful, you will not harm anyone.",
     createdDate: "2020-01-01",
-    status: "Argument",
+    status: ArgumentStatus.ARGUMENT,
     likes: 5,
     likedByUser: true,
     deleted: false,
@@ -167,7 +168,7 @@ const mockedArgument4: ArgumentDto = {
 const mockedArgument5: ArgumentDto = {
     content: "It is addictive and harmful to your health.",
     createdDate: "2020-01-02",
-    status: "Conclusion",
+    status: ArgumentStatus.CONCLUSION,
     likes: 8,
     likedByUser: true,
     deleted: false,
@@ -180,7 +181,7 @@ const mockedArgument5: ArgumentDto = {
 const mockedArgument6: ArgumentDto = {
     content: "It is not addictive and it is not harmful to your health.",
     createdDate: "2020-01-02",
-    status: "Conclusion",
+    status: ArgumentStatus.CONCLUSION,
     likes: 2,
     likedByUser: false,
     deleted: false,
