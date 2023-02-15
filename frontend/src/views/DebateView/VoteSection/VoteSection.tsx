@@ -34,10 +34,10 @@ const VoteSection = ({ debateData }: VotesSectionProps) => {
     const { loading: deleteLoading, callDeleteVote } = useDeleteVote();
     const { getDebate } = useGetDebateById();
 
-    const userFor = debate.isCreatorFor
+    const userFor = debate.creatorFor
         ? debate.creatorName
         : debate.opponentName;
-    const userAgainst = debate.isCreatorFor
+    const userAgainst = debate.creatorFor
         ? debate.opponentName
         : debate.creatorName;
 
@@ -155,7 +155,7 @@ const VoteSection = ({ debateData }: VotesSectionProps) => {
                                     style={{ width: debate.votesFor + "%" }}
                                 >
                                     <span>
-                                        {debate.isCreatorFor
+                                        {debate.creatorFor
                                             ? debate.creatorName
                                             : debate.opponentName}
                                     </span>
@@ -168,7 +168,7 @@ const VoteSection = ({ debateData }: VotesSectionProps) => {
                                     style={{ width: debate.votesAgainst + "%" }}
                                 >
                                     <span>
-                                        {debate.isCreatorFor
+                                        {debate.creatorFor
                                             ? debate.opponentName
                                             : debate.creatorName}
                                     </span>

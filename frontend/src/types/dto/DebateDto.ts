@@ -5,7 +5,7 @@ export default interface DebateDto {
     id: number;
     name: string;
     description: string;
-    isCreatorFor: boolean;
+    creatorFor: boolean;
     createdDate: string;
     dateToClose?: string;
     category: DebateCategory;

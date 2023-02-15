@@ -33,7 +33,7 @@ const mockedDebate1: DebateDto = {
     name: "Should we ban smoking in public places?",
     description:
         "Smoking is a major cause of preventable death and disease. It is estimated that smoking causes 1 in 5 deaths in the UK.",
-    isCreatorFor: true,
+    creatorFor: true,
     createdDate: "2020-01-01",
     dateToClose: "2020-01-05",
     category: DebateCategory.OTHER,
@@ -61,7 +61,7 @@ const mockedDebate2: DebateDto = {
     name: "Should students use uniforms?",
     description:
         "School uniforms are a controversial topic in the United States. Some people believe that school uniforms are a good idea because they would reduce violence in schools, improve students' grades, and help students focus on their studies. Others believe that school uniforms are a bad idea because they would limit students' freedom of expression and take away students' individuality.",
-    isCreatorFor: true,
+    creatorFor: true,
     createdDate: "2020-02-09",
     dateToClose: "2020-02-12",
     category: DebateCategory.EDUCATION,
@@ -90,7 +90,7 @@ const mockedDebate3: DebateDto = {
     name: "What came first, the chicken or the egg?",
     description:
         "The chicken or the egg is a common riddle that has been around for centuries. The question is, which came first, the chicken or the egg? The answer to this question is not as simple as it seems. The answer to this question depends on how you define the word 'first'.",
-    isCreatorFor: false,
+    creatorFor: false,
     createdDate: "2020-10-19",
     dateToClose: "2020-10-22",
     category: DebateCategory.SCIENCE,

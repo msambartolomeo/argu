@@ -203,7 +203,7 @@ function DebateHeader({ debate }: Props) {
                             <h5 className="debate-description word-wrap">
                                 {debate.description}
                             </h5>
-                            {debate.isCreatorFor ? (
+                            {debate.creatorFor ? (
                                 <>
                                     <DebaterDisplay
                                         debater={debate.creatorName}
