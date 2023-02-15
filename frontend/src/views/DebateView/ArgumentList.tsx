@@ -132,7 +132,8 @@ function ArgumentList({
                         count={argumentList?.totalPages || 0}
                         color="primary"
                         className="white"
-                        siblingCount={1}
+                        siblingCount={0}
+                        boundaryCount={0}
                         page={page}
                         showFirstButton
                         showLastButton

@@ -30,7 +30,10 @@ const UserProfile = () => {
     const [debates, setDebates] = useState<
         PaginatedList<DebateDto> | undefined
     >();
-    const [showMyDebates, setShowMyDebates] = useState<boolean>(false);
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [showMyDebates, setShowMyDebates] = useState<boolean>(() => {
+        return queryParams.get("showMyDebates") === "true";
+    });
     const [reloadImage, setReloadImage] = useState<number>(1);
     const [error, setError] = useState<GetUserByUrlOutput | undefined>(
         undefined
@@ -41,13 +44,12 @@ const UserProfile = () => {
 
     const { userInfo } = useSharedAuth();
 
-    const [queryParams, setQueryParams] = useSearchParams();
     let page = parseInt(queryParams.get("page") || PAGE_DEFAULT, 10);
 
     const { loading: isUserLoading, getUserByUsername: getUser } =
         useGetUserByUsername();
 
-    const { loading: isUserDebatesLoading, getDebatesByUrl: getDebates } =
+    const { loading: isUserDebatesLoading, getDebatesByUrl: getDebatesByUrl } =
         useGetDebatesByUrl();
 
     const { callLogout } = useSharedAuth();
@@ -63,6 +65,8 @@ const UserProfile = () => {
     const handleUpdateDebates = (value: boolean) => {
         page = 1;
         queryParams.delete("page");
+        if (value) queryParams.set("showMyDebates", "true");
+        else queryParams.set("showMyDebates", "false");
         setQueryParams(queryParams);
         setShowMyDebates(value);
     };
@@ -74,6 +78,9 @@ const UserProfile = () => {
                     case HttpStatusCode.Ok:
                         setUserData(res.data);
                         break;
+                    case HttpStatusCode.Unauthorized:
+                        logout();
+                        break;
                     default:
                         setError(res);
                 }
@@ -81,15 +88,18 @@ const UserProfile = () => {
         } else {
             navigate("/login");
         }
-    }, [userInfo]);
+        if (queryParams.get("showMyDebates") === "true") setShowMyDebates(true);
+        else setShowMyDebates(false);
+    }, [userInfo, reloadImage]);
 
     useEffect(() => {
         if (userData) {
-            const url =
+            let url =
                 (showMyDebates
                     ? userData?.debates
                     : userData?.subscribedDebates) || "";
-            getDebates({ url: url }).then((res) => {
+            url = url + `&page=${page - 1}`;
+            getDebatesByUrl({ url: url }).then((res) => {
                 switch (res.status) {
                     case HttpStatusCode.Ok:
                         setDebates(res.data);
@@ -103,6 +113,8 @@ const UserProfile = () => {
     }, [userData, showMyDebates]);
 
     const handleChangePage = async (value: number) => {
+        if (value === page) return;
+
         let url = "";
         switch (value) {
             case 1:
@@ -118,22 +130,25 @@ const UserProfile = () => {
                 url = debates?.next || "";
                 break;
         }
-        const res = await getDebates({ url: url });
-        switch (res.status) {
-            case HttpStatusCode.Ok:
-                setDebates(res.data);
-                break;
-            case HttpStatusCode.NoContent:
-                setDebates(undefined);
-                break;
+        if (url) {
+            const res = await getDebatesByUrl({ url: url });
+            switch (res.status) {
+                case HttpStatusCode.Ok:
+                    setDebates(res.data);
+                    break;
+                case HttpStatusCode.NoContent:
+                    setDebates(undefined);
+                    break;
+            }
+            page = value;
+            queryParams.set("page", page.toString());
+            setQueryParams(queryParams);
         }
-        page = value;
-        setQueryParams({ page: value.toString() });
     };
 
     if (error) return <Error status={error.status} message={error.message} />;
 
-    if (isUserLoading) return <CircularProgress size={100} />;
+    if (isUserLoading && !userData) return <CircularProgress size={100} />;
 
     document.title =
         "Argu" + (userData?.username ? ` | ${userData?.username}` : "");
@@ -205,7 +220,8 @@ const UserProfile = () => {
                                 count={debates?.totalPages || 0}
                                 color="primary"
                                 className="white"
-                                siblingCount={1}
+                                siblingCount={0}
+                                boundaryCount={0}
                                 page={page}
                                 showFirstButton
                                 showLastButton
