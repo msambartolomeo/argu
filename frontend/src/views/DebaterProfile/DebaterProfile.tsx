@@ -62,7 +62,7 @@ export const DebaterProfile = () => {
     const fetchUserDebates = useCallback(() => {
         if (userData?.debates) {
             getDebatesByUrl({
-                url: userData.debates,
+                url: userData.debates + `&page=${page}`,
             }).then((res: GetDebatesByUrlOutput) => {
                 switch (res.status) {
                     case HttpStatusCode.Ok:
