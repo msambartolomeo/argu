@@ -19,7 +19,6 @@ import "../../locales/index";
 import { PaginatedList } from "../../types/PaginatedList";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import DebateDto from "../../types/dto/DebateDto";
-import { Error } from "../Error/Error";
 
 const DebateView = () => {
     const location = useLocation();
@@ -50,16 +49,11 @@ const DebateView = () => {
         } else {
             callGet();
         }
-        // TODO: CHOSE TIMER
+
         const interval = setInterval(callGet, 30000);
 
         return () => clearInterval(interval);
     }, [params]);
-
-    // FIXME: this is not being used as debateData is always DebateDto or undefined
-    if (typeof debateData === "string") {
-        return <Error status={HttpStatusCode.NotFound} message={debateData} />;
-    }
 
     if (!debateData) {
         return <CircularProgress size={100} />;

@@ -86,10 +86,11 @@ export const DebaterProfile = () => {
         if (userData?.image) {
             getUserImage(userData.image).then((status) => {
                 switch (status) {
-                    case HttpStatusCode.NotFound:
+                    case HttpStatusCode.SeeOther:
+                        setUserImage(userData.image);
                         break;
                     default:
-                        setUserImage(userData.image);
+                        break;
                 }
             });
         }

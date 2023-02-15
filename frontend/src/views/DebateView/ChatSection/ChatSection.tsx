@@ -97,7 +97,6 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
         callGet();
     }, [debate, chatUrl]);
 
-    // FIXME: This runs every time
     useEffect(() => {
         if (page === 1) {
             const chatElem = document.getElementById("chat");

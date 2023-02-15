@@ -9,8 +9,6 @@ import debateIcon from "../../assets/debate-icon.png";
 import subscribeLikeVote from "../../assets/subscribe-like-vote.png";
 import "../../locales/index";
 
-// TODO: Align text and images
-
 interface IconsProps {
     debateIconImg?: string;
     createParticipateDebateImg?: string;
