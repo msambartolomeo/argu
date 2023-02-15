@@ -85,18 +85,9 @@ const Discovery = () => {
             }
         } else {
             getDebates({
-                category:
-                    DebateCategory[
-                        queryParams.get(
-                            "category"
-                        ) as keyof typeof DebateCategory
-                    ],
-                order: DebateOrder[
-                    queryParams.get("order") as keyof typeof DebateOrder
-                ],
-                status: DebateStatus[
-                    queryParams.get("status") as keyof typeof DebateStatus
-                ],
+                category: queryParams.get("category") as DebateCategory,
+                order: queryParams.get("order") as DebateOrder,
+                status: queryParams.get("status") as DebateStatus,
                 date: queryParams.get("date") as string,
                 page: queryPage - 1 >= 0 ? queryPage - 1 : 0,
                 search: queryParams.get("search") as string,

@@ -14,7 +14,9 @@ The application has two releases. The first one is a static web application buil
 To switch between releases, reviewers must use git to checkout the respective branches. To switch releases, please run:
 
 - Static web application: `git checkout release-6.0.1`
-- REST API and SPA: `git checkout release-7.0.0`
+- REST API and SPA: `git checkout release-7.0.1`
+
+The REST API and SPA is also on master
 
 ## Build Requirements
 
