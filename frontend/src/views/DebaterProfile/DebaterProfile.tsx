@@ -98,6 +98,8 @@ export const DebaterProfile = () => {
     }, [fetchProfileImage]);
 
     const handleChangePage = async (value: number) => {
+        if (value === page) return;
+
         let url = "";
         switch (value) {
             case 1:
@@ -113,17 +115,19 @@ export const DebaterProfile = () => {
                 url = userDebates?.next || "";
                 break;
         }
-        const res = await getDebatesByUrl({ url: url });
-        switch (res.status) {
-            case HttpStatusCode.Ok:
-                setUserDebates(res.data);
-                break;
-            case HttpStatusCode.NoContent:
-                setUserDebates(undefined);
-                break;
+        if (url) {
+            const res = await getDebatesByUrl({ url: url });
+            switch (res.status) {
+                case HttpStatusCode.Ok:
+                    setUserDebates(res.data);
+                    break;
+                case HttpStatusCode.NoContent:
+                    setUserDebates(undefined);
+                    break;
+            }
+            page = value;
+            setQueryParams({ page: value.toString() });
         }
-        page = value;
-        setQueryParams({ page: value.toString() });
     };
 
     if (error)

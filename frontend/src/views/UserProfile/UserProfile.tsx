@@ -94,7 +94,6 @@ const UserProfile = () => {
 
     useEffect(() => {
         if (userData) {
-            console.log("showMyDebates: ", showMyDebates);
             let url =
                 (showMyDebates
                     ? userData?.debates
