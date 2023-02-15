@@ -38,16 +38,16 @@ const EditImageDialog = ({ imageUrl, imageChange }: EditImageDialogProps) => {
                 t("profile.errors.imageEmpty").toString()
             )
             .refine(
-                (fileList) => fileList[0]?.size <= MAX_FILE_SIZE,
-                t("profile.errors.imageTooBig").toString()
-            )
-            .refine(
                 (fileList) => {
                     fileList[0]?.type.startsWith("image/");
                 },
                 {
                     message: t("createDebate.errors.imageInvalid") as string,
                 }
+            )
+            .refine(
+                (fileList) => fileList[0]?.size <= MAX_FILE_SIZE,
+                t("profile.errors.imageTooBig").toString()
             ),
     });
 

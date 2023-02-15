@@ -126,7 +126,6 @@ const Register = () => {
                     </span>
                     <InputField
                         text={t("register.email")}
-                        type="email"
                         register={register("email")}
                         error={formErrors.email?.message as string}
                     />
