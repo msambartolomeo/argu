@@ -82,9 +82,12 @@ export const TRANSLATIONS_EN = {
         deleteSuccess: "Your account has been deleted successfully.",
         debatesSubscribed: "Debates Subscribed",
         myDebates: "My Debates",
-        imageEmpty: "The file provided is empty",
-        imageTooBig:
-            "The image provided is bigger than the maximum allowed (10MB)",
+        errors: {
+            imageEmpty: "The file provided is empty",
+            imageTooBig:
+                "The image provided is bigger than the maximum allowed (10MB)",
+            imageInvalid: "The file provided is not a valid image",
+        },
     },
     debate: {
         creator: "Creator",
@@ -128,6 +131,11 @@ export const TRANSLATIONS_EN = {
             postConclusion: "Post conclusion!",
             content: "Add your argument here:",
             image: "Upload Image",
+            errors: {
+                imageInvalid: "The file provided is not a valid image",
+                imageTooBig:
+                    "The image provided is bigger than the maximum allowed (10MB)",
+            },
         },
         votes: {
             votes: "Votes",
@@ -215,7 +223,7 @@ export const TRANSLATIONS_EN = {
             opponentUsernameSame: "You cannot debate with yourself",
             categoryEmpty: "Category cannot be empty",
             imageTooBig: "Image cannot be bigger than 10MB",
-            imageInvalid: "Image format is invalid",
+            imageInvalid: "The file provided is not a valid image",
             opponentUsernameNotFound: "The selected opponent does not exist",
             isCreatorForEmpty: "You must specify a position",
             isCreatorForInvalid: "Invalid position",

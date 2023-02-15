@@ -103,6 +103,20 @@ const CreateDebate = () => {
                 {
                     message: t("createDebate.errors.imageTooLarge") as string,
                 }
+            )
+            .refine(
+                (value: FieldValues) => {
+                    if (!value || value.length === 0) {
+                        return true;
+                    }
+                    if (value.length > 1) {
+                        return false;
+                    }
+                    return value[0].type.startsWith("image/");
+                },
+                {
+                    message: t("createDebate.errors.imageInvalid") as string,
+                }
             ),
     });
 

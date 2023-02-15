@@ -64,16 +64,33 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
         image: z
             .any()
             .optional()
-            .refine((file) => {
-                if (file === undefined || file.length === 0) return true;
-                if (file.length > 1) {
-                    return false;
+            .refine(
+                (file) => {
+                    if (file === undefined || file.length === 0) return true;
+                    if (file.length > 1) {
+                        return false;
+                    }
+
+                    return file[0]?.size <= MAX_FILE_SIZE;
+                },
+                {
+                    message: t("debate.argument.errors.imageTooBig").toString(),
                 }
-                return (
-                    file[0]?.size <= MAX_FILE_SIZE,
-                    t("profile.imageTooBig").toString()
-                );
-            }),
+            )
+            .refine(
+                (file) => {
+                    if (file === undefined || file.length === 0) return true;
+                    if (file.length > 1) {
+                        return false;
+                    }
+                    return file[0]?.type.startsWith("image/");
+                },
+                {
+                    message: t(
+                        "debate.argument.errors.imageInvalid"
+                    ).toString(),
+                }
+            ),
     });
 
     const { loading: isCreateArgLoading, createArgument: createArgument } =

@@ -82,8 +82,12 @@ export const TRANSLATIONS_ES = {
         introducePswd: "Introduce tu contraseña",
         debatesSubscribed: "Debates suscriptos",
         myDebates: "Mis debates",
-        imageEmpty: "El archivo ingresado no es una imagen.",
-        imageTooBig: "El arhivo ingresado supera el limite de tamaño (10MB).",
+        errors: {
+            imageEmpty: "El archivo ingresado no es una imagen.",
+            imageTooBig:
+                "El arhivo ingresado supera el limite de tamaño (10MB).",
+            imageInvalid: "El archivo ingresado no es una imagen válida.",
+        },
     },
     debate: {
         creator: "Creador",
@@ -128,6 +132,11 @@ export const TRANSLATIONS_ES = {
             postConclusion: "¡Enviar Conclusión!",
             content: "Escribe tu argumento:",
             image: "Subir Imagen",
+            errors: {
+                imageInvalid: "El archivo ingresado no es una imagen válida.",
+                imageTooBig:
+                    "El arhivo ingresado supera el limite de tamaño (10MB).",
+            },
         },
         votes: {
             votes: "Votos",
@@ -221,7 +230,7 @@ export const TRANSLATIONS_ES = {
             opponentUsernameSame: "No puedes ser tu propio oponente",
             categoryEmpty: "La categoría no puede estar vacía",
             imageTooBig: "La imagen no puede superar los 10MB",
-            imageInvalid: "El formato de la imagen no es válido",
+            imageInvalid: "El archivo ingresado no es una imagen válida.",
             opponentUsernameNotFound: "El oponente seleccionado no existe",
             isCreatorForEmpty: "Debe especificar una posición",
             isCreatorForInvalid: "Posición inválida",
