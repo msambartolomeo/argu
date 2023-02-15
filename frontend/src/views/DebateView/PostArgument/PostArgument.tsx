@@ -71,9 +71,23 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
                 }
                 return (
                     file[0]?.size <= MAX_FILE_SIZE,
-                    t("profile.imageTooBig").toString()
+                    t("debate.argument.errors.imageTooBig").toString()
                 );
-            }),
+            })
+            .refine(
+                (file) => {
+                    if (file === undefined || file.length === 0) return true;
+                    if (file.length > 1) {
+                        return false;
+                    }
+                    return file[0]?.type.startsWith("image/");
+                },
+                {
+                    message: t(
+                        "debate.argument.errors.imageInvalid"
+                    ).toString(),
+                }
+            ),
     });
 
     const { loading: isCreateArgLoading, createArgument: createArgument } =

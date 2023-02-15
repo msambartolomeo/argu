@@ -132,6 +132,11 @@ export const TRANSLATIONS_ES = {
             postConclusion: "¡Enviar Conclusión!",
             content: "Escribe tu argumento:",
             image: "Subir Imagen",
+            errors: {
+                imageInvalid: "El archivo ingresado no es una imagen válida.",
+                imageTooBig:
+                    "El arhivo ingresado supera el limite de tamaño (10MB).",
+            },
         },
         votes: {
             votes: "Votos",

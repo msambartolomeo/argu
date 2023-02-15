@@ -131,6 +131,11 @@ export const TRANSLATIONS_EN = {
             postConclusion: "Post conclusion!",
             content: "Add your argument here:",
             image: "Upload Image",
+            errors: {
+                imageInvalid: "The file provided is not a valid image",
+                imageTooBig:
+                    "The image provided is bigger than the maximum allowed (10MB)",
+            },
         },
         votes: {
             votes: "Votes",
