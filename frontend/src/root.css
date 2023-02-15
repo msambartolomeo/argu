@@ -71,7 +71,6 @@ body {
 }
 
 .image-width {
-    min-width: 20%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -79,8 +78,8 @@ body {
 }
 
 .limit-img {
-    max-height: 250px;
-    height: 15vw !important;
+    max-height: 12vw;
+    max-width: 25vw !important;
 }
 
 /* Login and Register */
