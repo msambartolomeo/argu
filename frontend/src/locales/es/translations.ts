@@ -82,8 +82,12 @@ export const TRANSLATIONS_ES = {
         introducePswd: "Introduce tu contraseña",
         debatesSubscribed: "Debates suscriptos",
         myDebates: "Mis debates",
-        imageEmpty: "El archivo ingresado no es una imagen.",
-        imageTooBig: "El arhivo ingresado supera el limite de tamaño (10MB).",
+        errors: {
+            imageEmpty: "El archivo ingresado no es una imagen.",
+            imageTooBig:
+                "El arhivo ingresado supera el limite de tamaño (10MB).",
+            imageInvalid: "El archivo ingresado no es una imagen válida.",
+        },
     },
     debate: {
         creator: "Creador",

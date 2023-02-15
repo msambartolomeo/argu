@@ -33,12 +33,21 @@ const EditImageDialog = ({ imageUrl, imageChange }: EditImageDialogProps) => {
         image: z
             .any()
             .refine(
-                (file) => file !== undefined && file[0] !== undefined,
-                t("profile.imageEmpty").toString()
+                (fileList) =>
+                    fileList !== undefined && fileList[0] !== undefined,
+                t("profile.errors.imageEmpty").toString()
             )
             .refine(
-                (file) => file[0]?.size <= MAX_FILE_SIZE,
-                t("profile.imageTooBig").toString()
+                (fileList) => fileList[0]?.size <= MAX_FILE_SIZE,
+                t("profile.errors.imageTooBig").toString()
+            )
+            .refine(
+                (fileList) => {
+                    fileList[0]?.type.startsWith("image/");
+                },
+                {
+                    message: t("createDebate.errors.imageInvalid") as string,
+                }
             ),
     });
 
@@ -67,6 +76,15 @@ const EditImageDialog = ({ imageUrl, imageChange }: EditImageDialogProps) => {
                 setError("image", {
                     message: t("profile.imageTooBig").toString(),
                 });
+                break;
+            case HttpStatusCode.UnsupportedMediaType:
+                setError("image", {
+                    message: t("profile.imageInvalid").toString(),
+                });
+                break;
+            default:
+                // TODO
+                break;
         }
     }, []);
 
@@ -80,8 +98,6 @@ const EditImageDialog = ({ imageUrl, imageChange }: EditImageDialogProps) => {
             </a>
             <div id="edit-profile-image" className="modal">
                 <form
-                    method="put"
-                    encType="multipart/form-data"
                     acceptCharset="utf-8"
                     onSubmit={handleSubmit((data) => {
                         handleEditProfile(data as FieldValues);

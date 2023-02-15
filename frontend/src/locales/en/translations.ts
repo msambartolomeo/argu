@@ -82,9 +82,12 @@ export const TRANSLATIONS_EN = {
         deleteSuccess: "Your account has been deleted successfully.",
         debatesSubscribed: "Debates Subscribed",
         myDebates: "My Debates",
-        imageEmpty: "The file provided is empty",
-        imageTooBig:
-            "The image provided is bigger than the maximum allowed (10MB)",
+        errors: {
+            imageEmpty: "The file provided is empty",
+            imageTooBig:
+                "The image provided is bigger than the maximum allowed (10MB)",
+            imageInvalid: "The file provided is not a valid image",
+        },
     },
     debate: {
         creator: "Creator",
