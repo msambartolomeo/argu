@@ -133,6 +133,8 @@ const Discovery = () => {
                             <Pagination
                                 count={debatesList.totalPages}
                                 page={page}
+                                color="primary"
+                                className="white"
                                 onChange={(e, v) => {
                                     setNewPage(v);
                                 }}
