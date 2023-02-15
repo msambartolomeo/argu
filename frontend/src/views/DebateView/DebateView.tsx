@@ -60,7 +60,7 @@ const DebateView = () => {
     }
 
     const handleRefreshArguments = () => {
-        setRefreshArguments(!refreshArguments);
+        setRefreshArguments((currentVal) => !currentVal);
     };
 
     document.title = "Argu | " + debateData.name;
