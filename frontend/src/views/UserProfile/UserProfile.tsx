@@ -206,7 +206,9 @@ const UserProfile = () => {
                 </div>
                 <div className="card user-debates">
                     <h3 className="center">
-                        {t("profile.userDebates", { username: "username" })}
+                        {t("profile.userDebates", {
+                            username: userData?.username,
+                        })}
                     </h3>
                     {isUserDebatesLoading ? (
                         <CircularProgress size={100} />
@@ -215,7 +217,7 @@ const UserProfile = () => {
                     )}
 
                     {debates && (
-                        <div className="pagination-format">
+                        <div className="pagination-format no-background-pag">
                             <Pagination
                                 count={debates?.totalPages || 0}
                                 color="primary"

@@ -5,12 +5,12 @@ import { useTranslation } from "react-i18next";
 
 import { CircularProgress } from "@mui/material";
 
-import DebateListItem from "../../components/DebateListItem/DebateListItem";
+import DebateListItem from "../../../components/DebateListItem/DebateListItem";
 import {
     GetDebatesByUrlOutput,
     useGetDebatesByUrl,
-} from "../../hooks/debates/useGetDebatesByUrl";
-import DebateDto from "../../types/dto/DebateDto";
+} from "../../../hooks/debates/useGetDebatesByUrl";
+import DebateDto from "../../../types/dto/DebateDto";
 
 interface RecommendedDebatesSectionProps {
     debate: DebateDto;

@@ -9,17 +9,17 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircularProgress } from "@mui/material";
 
-import TextArea from "../../components/TextArea/TextArea";
-import { useCreateArgument } from "../../hooks/arguments/useCreateArgument";
-import { useCreateArgumentWithImage } from "../../hooks/arguments/useCreateArgumentWithImage";
-import { useGetArgumentByUrl } from "../../hooks/arguments/useGetArgumentByUrl";
-import { useSharedAuth } from "../../hooks/useAuth";
-import { PaginatedList } from "../../types/PaginatedList";
-import ArgumentDto from "../../types/dto/ArgumentDto";
-import DebateDto from "../../types/dto/DebateDto";
-import ArgumentStatus from "../../types/enums/ArgumentStatus";
-import DebateStatus from "../../types/enums/DebateStatus";
-import { PAGE_DEFAULT } from "../../types/globalConstants";
+import TextArea from "../../../components/TextArea/TextArea";
+import { useCreateArgument } from "../../../hooks/arguments/useCreateArgument";
+import { useCreateArgumentWithImage } from "../../../hooks/arguments/useCreateArgumentWithImage";
+import { useGetArgumentByUrl } from "../../../hooks/arguments/useGetArgumentByUrl";
+import { useSharedAuth } from "../../../hooks/useAuth";
+import { PaginatedList } from "../../../types/PaginatedList";
+import ArgumentDto from "../../../types/dto/ArgumentDto";
+import DebateDto from "../../../types/dto/DebateDto";
+import ArgumentStatus from "../../../types/enums/ArgumentStatus";
+import DebateStatus from "../../../types/enums/DebateStatus";
+import { PAGE_DEFAULT } from "../../../types/globalConstants";
 
 type FieldValues = {
     content: string;

@@ -9,16 +9,18 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pagination } from "@mui/material";
 
-import InputField from "../../components/InputField/InputField";
-import SubmitButton from "../../components/SubmitButton/SubmitButton";
-import { useCreateChat } from "../../hooks/chats/useCreateChat";
-import { useGetChats } from "../../hooks/chats/useGetChats";
-import { useSharedAuth } from "../../hooks/useAuth";
-import { PaginatedList } from "../../types/PaginatedList";
-import ChatDto from "../../types/dto/ChatDto";
-import DebateDto from "../../types/dto/DebateDto";
-import DebateStatus from "../../types/enums/DebateStatus";
-import { PAGE_DEFAULT } from "../../types/globalConstants";
+import "./ChatSection.css";
+
+import InputField from "../../../components/InputField/InputField";
+import SubmitButton from "../../../components/SubmitButton/SubmitButton";
+import { useCreateChat } from "../../../hooks/chats/useCreateChat";
+import { useGetChats } from "../../../hooks/chats/useGetChats";
+import { useSharedAuth } from "../../../hooks/useAuth";
+import { PaginatedList } from "../../../types/PaginatedList";
+import ChatDto from "../../../types/dto/ChatDto";
+import DebateDto from "../../../types/dto/DebateDto";
+import DebateStatus from "../../../types/enums/DebateStatus";
+import { PAGE_DEFAULT } from "../../../types/globalConstants";
 
 interface ChatSectionProps {
     debate: DebateDto;
@@ -188,7 +190,7 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
                                 </>
                             )}
                         {chat.data.length > 0 && (
-                            <div className="pagination-format">
+                            <div className="pagination-format no-background-pag">
                                 <Pagination
                                     count={chat?.totalPages || 0}
                                     color="primary"

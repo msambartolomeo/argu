@@ -6,6 +6,8 @@ import { useParams, useSearchParams } from "react-router-dom";
 
 import { CircularProgress, Pagination } from "@mui/material";
 
+import "./DebaterProfile.css";
+
 import DebatesList from "../../components/DebatesList/DebatesList";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import {
@@ -164,7 +166,7 @@ export const DebaterProfile = () => {
                     )}
 
                     {userDebates && (
-                        <div className="pagination-format">
+                        <div className="pagination-format no-background-pag">
                             <Pagination
                                 count={userDebates?.totalPages || 0}
                                 color="primary"

@@ -5,14 +5,14 @@ import { useTranslation } from "react-i18next";
 
 import { CircularProgress } from "@mui/material";
 
-import { useGetDebateById } from "../../hooks/debates/useGetDebateById";
-import { useSharedAuth } from "../../hooks/useAuth";
-import { useCreateVote } from "../../hooks/votes/useCreateVote";
-import { useDeleteVote } from "../../hooks/votes/useDeleteVote";
-import { useGetVote } from "../../hooks/votes/useGetVote";
-import DebateDto from "../../types/dto/DebateDto";
-import DebateStatus from "../../types/enums/DebateStatus";
-import DebateVote from "../../types/enums/DebateVote";
+import { useGetDebateById } from "../../../hooks/debates/useGetDebateById";
+import { useSharedAuth } from "../../../hooks/useAuth";
+import { useCreateVote } from "../../../hooks/votes/useCreateVote";
+import { useDeleteVote } from "../../../hooks/votes/useDeleteVote";
+import { useGetVote } from "../../../hooks/votes/useGetVote";
+import DebateDto from "../../../types/dto/DebateDto";
+import DebateStatus from "../../../types/enums/DebateStatus";
+import DebateVote from "../../../types/enums/DebateVote";
 
 interface VotesSectionProps {
     debateData: DebateDto;

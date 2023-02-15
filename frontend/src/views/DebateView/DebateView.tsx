@@ -5,13 +5,13 @@ import { useLocation, useParams } from "react-router-dom";
 
 import { CircularProgress } from "@mui/material";
 
-import ArgumentList from "./ArgumentList";
-import ChatSection from "./ChatSection";
-import DebateHeader from "./DebateHeader";
+import ArgumentList from "./ArgumentList/ArgumentList";
+import ChatSection from "./ChatSection/ChatSection";
+import DebateHeader from "./DebateHeader/DebateHeader";
 import "./DebateView.css";
-import PostArgument from "./PostArgument";
-import RecommendedDebatesSection from "./RecommendedDebatesSection";
-import VoteSection from "./VoteSection";
+import PostArgument from "./PostArgument/PostArgument";
+import RecommendedDebatesSection from "./RecommendedDebatesSection/RecommendedDebatesSection";
+import VoteSection from "./VoteSection/VoteSection";
 
 import { useGetDebateById } from "../../hooks/debates/useGetDebateById";
 import { GetDebateOutput } from "../../hooks/debates/useGetDebateByUrl";

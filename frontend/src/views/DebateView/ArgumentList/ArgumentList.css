@@ -1,0 +1,8 @@
+.argument-list {
+    padding-bottom: 10px;
+}
+
+.argument-list .no-background-pag nav {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}

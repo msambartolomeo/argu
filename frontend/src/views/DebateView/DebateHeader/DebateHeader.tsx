@@ -7,20 +7,19 @@ import { useNavigate } from "react-router-dom";
 
 import { CircularProgress } from "@mui/material";
 
-import DebaterDisplay from "./DebaterDisplay";
-
-import Chip from "../../components/Chip/Chip";
-import DebatePhoto from "../../components/DebatePhoto/DebatePhoto";
-import DeleteDialog from "../../components/DeleteDialog/DeleteDialog";
-import NonClickableChip from "../../components/NonClickableChip/NonClickableChip";
-import { useConcludeDebate } from "../../hooks/debates/useConcludeDebate";
-import { useDeleteDebate } from "../../hooks/debates/useDeleteDebate";
-import { useCreateSubscription } from "../../hooks/subscriptions/useCreateSubscription";
-import { useDeleteSubscription } from "../../hooks/subscriptions/useDeleteSubscription";
-import { useGetSubscription } from "../../hooks/subscriptions/useGetSubscription";
-import { useSharedAuth } from "../../hooks/useAuth";
-import DebateDto from "../../types/dto/DebateDto";
-import DebateStatus from "../../types/enums/DebateStatus";
+import Chip from "../../../components/Chip/Chip";
+import DebatePhoto from "../../../components/DebatePhoto/DebatePhoto";
+import DeleteDialog from "../../../components/DeleteDialog/DeleteDialog";
+import NonClickableChip from "../../../components/NonClickableChip/NonClickableChip";
+import { useConcludeDebate } from "../../../hooks/debates/useConcludeDebate";
+import { useDeleteDebate } from "../../../hooks/debates/useDeleteDebate";
+import { useCreateSubscription } from "../../../hooks/subscriptions/useCreateSubscription";
+import { useDeleteSubscription } from "../../../hooks/subscriptions/useDeleteSubscription";
+import { useGetSubscription } from "../../../hooks/subscriptions/useGetSubscription";
+import { useSharedAuth } from "../../../hooks/useAuth";
+import DebateDto from "../../../types/dto/DebateDto";
+import DebateStatus from "../../../types/enums/DebateStatus";
+import DebaterDisplay from "../DebaterDisplay/DebaterDisplay";
 
 interface Props {
     debate: DebateDto;

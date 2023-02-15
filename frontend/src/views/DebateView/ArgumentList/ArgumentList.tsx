@@ -7,13 +7,15 @@ import { useSearchParams } from "react-router-dom";
 
 import { CircularProgress, Pagination } from "@mui/material";
 
-import ArgumentBubble from "../../components/ArgumentBubble/ArgumentBubble";
-import { useGetArguments } from "../../hooks/arguments/useGetArguments";
-import "../../locales/index";
-import { PaginatedList } from "../../types/PaginatedList";
-import ArgumentDto from "../../types/dto/ArgumentDto";
-import DebateDto from "../../types/dto/DebateDto";
-import { PAGE_DEFAULT } from "../../types/globalConstants";
+import "./ArgumentList.css";
+
+import ArgumentBubble from "../../../components/ArgumentBubble/ArgumentBubble";
+import { useGetArguments } from "../../../hooks/arguments/useGetArguments";
+import "../../../locales/index";
+import { PaginatedList } from "../../../types/PaginatedList";
+import ArgumentDto from "../../../types/dto/ArgumentDto";
+import DebateDto from "../../../types/dto/DebateDto";
+import { PAGE_DEFAULT } from "../../../types/globalConstants";
 
 interface Props {
     debate: DebateDto;
@@ -129,7 +131,7 @@ function ArgumentList({
                 <h5 className="center">{t("debate.noArguments")}</h5>
             )}
             {argumentList.data.length > 0 && (
-                <div className="pagination-format">
+                <div className="pagination-format no-background-pag">
                     <Pagination
                         count={argumentList?.totalPages || 0}
                         color="primary"
