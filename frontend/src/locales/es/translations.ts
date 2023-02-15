@@ -221,7 +221,7 @@ export const TRANSLATIONS_ES = {
             opponentUsernameSame: "No puedes ser tu propio oponente",
             categoryEmpty: "La categoría no puede estar vacía",
             imageTooBig: "La imagen no puede superar los 10MB",
-            imageInvalid: "El formato de la imagen no es válido",
+            imageInvalid: "El archivo ingresado no es una imagen válida.",
             opponentUsernameNotFound: "El oponente seleccionado no existe",
             isCreatorForEmpty: "Debe especificar una posición",
             isCreatorForInvalid: "Posición inválida",

@@ -215,7 +215,7 @@ export const TRANSLATIONS_EN = {
             opponentUsernameSame: "You cannot debate with yourself",
             categoryEmpty: "Category cannot be empty",
             imageTooBig: "Image cannot be bigger than 10MB",
-            imageInvalid: "Image format is invalid",
+            imageInvalid: "The file provided is not a valid image",
             opponentUsernameNotFound: "The selected opponent does not exist",
             isCreatorForEmpty: "You must specify a position",
             isCreatorForInvalid: "Invalid position",
