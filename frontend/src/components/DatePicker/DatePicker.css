@@ -1,0 +1,17 @@
+div.datepicker-date-display {
+    background-color: var(--primary-color);
+}
+
+.datepicker-table td.is-selected {
+    background-color: var(--secondary-color) !important;
+    color: black !important;
+}
+
+.datepicker-table td.is-today {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+div.datepicker-footer div.confirmation-btns button {
+    color: black !important;
+}

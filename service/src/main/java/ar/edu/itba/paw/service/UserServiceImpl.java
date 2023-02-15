@@ -6,23 +6,18 @@ import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.UserConflictException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -45,20 +40,19 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User create(String username, String password, String email, Locale locale) {
+        boolean isUsername = getUserByUsername(username).isPresent();
         Optional<User> optionalUser = getUserByEmail(email);
+        boolean isEmail = optionalUser.isPresent() && optionalUser.get().getUsername() != null;
+
+        if (isUsername || isEmail) {
+            LOGGER.error("Conflicting username {} or email {}", username, email);
+            throw new UserConflictException(isUsername, isEmail);
+        }
+
         if (optionalUser.isPresent())
             return optionalUser.get().updateLegacyUser(username, passwordEncoder.encode(password));
 
-        User user = userDao.create(username, passwordEncoder.encode(password), email, locale);
-
-        final Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("USER"));
-
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
-        return user;
+        return userDao.create(username, passwordEncoder.encode(password), email, locale);
     }
 
     @Override
@@ -69,20 +63,35 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User updateImage(String username, byte[] data) {
-        User user = getUserByUsername(username).orElseThrow(() -> {
+        final User user = getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot update image for user {} because it does not exist", username);
             return new UserNotFoundException();
         });
 
-        Image image = null;
-        if (user.getImage() != null)
-            image = user.getImage();
+        final Image image = user.getImage();
 
         user.updateImage(data);
 
         if (image != null) imageService.deleteImage(image);
 
         return user;
+    }
+
+    @Override
+    public boolean deleteImage(String username) {
+        final User user = getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("Cannot update image for user {} because it does not exist", username);
+            return new UserNotFoundException();
+        });
+
+        final Image image = user.getImage();
+
+        if (image != null) {
+            user.deleteImage();
+            imageService.deleteImage(image);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -99,5 +108,15 @@ public class UserServiceImpl implements UserService {
             return new UserNotFoundException();
         });
         user.removeUser();
+    }
+
+    @Override
+    public Optional<Image> getUserImage(String username) {
+        final User user = getUserByUsername(username).orElseThrow(() -> {
+            LOGGER.error("User {} not found", username);
+            return new UserNotFoundException();
+        });
+
+        return Optional.ofNullable(user.getImage());
     }
 }

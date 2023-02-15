@@ -1,0 +1,64 @@
+.discovery-container {
+    display: flex;
+    flex-direction: row;
+    background-color: transparent;
+    justify-content: center;
+}
+
+.filters-container {
+    display: flex;
+    justify-content: center;
+    width: 30%;
+    padding: 2% 3.75% 2% 7.5%;
+}
+
+.debates-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70%;
+    background-color: transparent;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.discovery-order-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 7.5% 0 3.75%;
+    margin-bottom: 2.5%;
+}
+
+.debates-list-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 7.5% 0 3.75%;
+    margin-top: 2.5%;
+    margin-bottom: 2%;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+}
+
+.discovery-container .debates-container .pagination-container nav {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.discovery-container .debates-container .pagination-container button:focus {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.no-debates-container {
+    width: 80%;
+}

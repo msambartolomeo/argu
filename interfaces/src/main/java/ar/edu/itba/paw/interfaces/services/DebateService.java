@@ -13,17 +13,12 @@ public interface DebateService {
     Optional<Debate> getDebateById(long debateId);
     Debate create(String name, String description, String creatorUsername, boolean isCreatorFor, String opponentUsername, byte[] image,
                   DebateCategory category);
-    List<Debate> get(int page, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
-    int getPages(String search, DebateCategory category, DebateStatus status, LocalDate date);
-    List<Debate> getMostSubscribed();
-    List<Debate> getProfileDebates(String list, long userId, int page);
-    List<Debate> getUserDebates(long userId, int page);
-    int getProfileDebatesPageCount(String list, long userId);
-    int getUserDebatesPageCount(long userId);
-    void startConclusion(long id, String username);
-    void deleteDebate(long id, String username);
+    List<Debate> get(int page, int size, String search, DebateCategory category, DebateOrder order, DebateStatus status, LocalDate date);
+    int getPages(int size, String search, DebateCategory category, DebateStatus status, LocalDate date);
+    List<Debate> getUserDebates(String username, int page, int size, boolean subscribed);
+    int getUserDebatesPageCount(String username, int size, boolean subscribed);
+    void startConclusion(long id);
+    void deleteDebate(long id);
     void closeVotes();
-    List<Debate> getRecommendedDebates(long debateid);
-
-    List<Debate> getRecommendedDebates(long debateid, String username);
+    List<Debate> getRecommendedDebates(long debateId, String username);
 }

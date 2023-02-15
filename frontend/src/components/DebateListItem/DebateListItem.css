@@ -1,0 +1,26 @@
+.list-item {
+    margin-bottom: 2%;
+    width: 100%;
+}
+
+.list-item:hover {
+    cursor: pointer;
+}
+
+a.card {
+    display: block;
+}
+
+.debate-text-holder {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: baseline;
+    height: fit-content;
+    padding-bottom: 4%;
+}
+
+.limit-img-sm {
+    max-width: 15vw !important;
+    max-height: 10vw !important;
+}

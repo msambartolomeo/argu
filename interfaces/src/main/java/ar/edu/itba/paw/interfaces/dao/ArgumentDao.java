@@ -13,6 +13,6 @@ public interface ArgumentDao {
     Optional<Argument> getArgumentById(long argumentId);
     int getArgumentsByDebateCount(long debateId);
     Argument create(User user, Debate debate, String content, Image image, ArgumentStatus status);
-    List<Argument> getArgumentsByDebate(Debate debate, int page);
+    List<Argument> getArgumentsByDebate(Debate debate, int page, int size);
     Optional<Argument> getLastArgument(Debate debate);
 }

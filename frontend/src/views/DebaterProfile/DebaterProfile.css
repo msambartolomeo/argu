@@ -1,0 +1,4 @@
+.profile-container .debates-column .user-debates .no-background-pag nav {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}

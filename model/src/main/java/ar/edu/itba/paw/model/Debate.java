@@ -62,6 +62,11 @@ public class Debate {
         this.status = status;
     }
 
+    public void deleteDebate() {
+        this.status = DebateStatus.DELETED;
+        this.image = null;
+    }
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "subscribed",
             joinColumns = @JoinColumn(name = "debateid", referencedColumnName = "debateid"),
@@ -156,7 +161,10 @@ public class Debate {
     }
 
     public String getFormattedDateToClose() {
-        return dateToClose.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        if (dateToClose != null) {
+            return dateToClose.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
+        return null;
     }
 
     public void setDateToClose(LocalDate dateToClose) {

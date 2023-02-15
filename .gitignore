@@ -7,6 +7,9 @@
 node_modules/
 dist/
 
+# VS Code
+.vscode/
+
 # Compiled Java class files
 *.class
 
@@ -48,4 +51,5 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+docker-compose.yaml
 

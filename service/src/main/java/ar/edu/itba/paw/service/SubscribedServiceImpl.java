@@ -55,7 +55,7 @@ public class SubscribedServiceImpl implements SubscribedService {
 
     @Override
     @Transactional
-    public void unsubscribeToDebate(String username, long debateId) {
+    public boolean unsubscribeToDebate(String username, long debateId) {
         User user = userService.getUserByUsername(username).orElseThrow(() -> {
             LOGGER.error("Cannot unsubscribe to debate {} because user {} does not exist", debateId, username);
             return new UserNotFoundException();
@@ -64,15 +64,18 @@ public class SubscribedServiceImpl implements SubscribedService {
             LOGGER.error("Cannot unsubscribe to debate {} because it does not exist", debateId);
             return new DebateNotFoundException();
         });
-        subscribedDao.getSubscribed(user, debate).ifPresent(s -> {
+        Optional<Subscribed> subscribed = subscribedDao.getSubscribed(user, debate);
+        if (subscribed.isPresent()) {
             User creator = debate.getCreator();
             User opponent = debate.getOpponent();
             if (!user.equals(creator) && !user.equals(opponent)) {
                 creator.removeSubPoints();
                 opponent.removeSubPoints();
             }
-            subscribedDao.unsubscribe(s);
-        });
+            subscribedDao.unsubscribe(subscribed.get());
+            return true;
+        }
+        return false;
     }
 
     @Override

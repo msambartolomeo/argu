@@ -1,0 +1,194 @@
+.normalized-margins {
+    width: 85%;
+    margin: 1% auto;
+}
+
+.debate-text-organizer {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    padding-bottom: 4%;
+}
+
+.debate-description {
+    align-self: flex-start;
+}
+
+.debate-buttons-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.debate-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.argument-list {
+    background: var(--white);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 51%;
+    margin-right: 1%;
+}
+
+.post-arguments {
+    width: 32%;
+    margin-left: 1%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title-margins {
+    padding: 5%;
+}
+
+/* Debater Display */
+.username-container {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+.link {
+    color: blue;
+}
+
+.link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Post Argument */
+.image-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Vote Section */
+.vote-section {
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
+}
+
+.no-top-margin {
+    margin-top: 0;
+}
+
+.vote-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.progress {
+    min-height: 36px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+.votes-format {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
+}
+
+.votes-format > span {
+    color: white;
+}
+
+/* CHAT SECTION */
+.chat-box {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.message-container {
+    width: 100%;
+    margin: 1% auto;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    overflow: auto;
+    max-height: 300px;
+}
+
+.message {
+    border-bottom: solid 1px #ccc;
+    padding: 5px;
+    text-align: left;
+}
+
+.datetime {
+    float: right;
+    color: #999;
+}
+
+.send-chat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.flex-grow {
+    flex-grow: 2;
+}
+
+/* RECOMMENDED DEBATES SECTION */
+
+.slideshow-container {
+    position: relative !important;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.prev,
+.next {
+    cursor: pointer;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev:hover,
+.next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
+    }
+}

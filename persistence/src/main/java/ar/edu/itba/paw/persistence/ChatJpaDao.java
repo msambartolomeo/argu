@@ -32,11 +32,11 @@ public class ChatJpaDao implements ChatDao {
     }
 
     @Override
-    public List<Chat> getDebateChat(Debate debate, int page) {
+    public List<Chat> getDebateChat(Debate debate, int page, int size) {
         final Query idQuery = em.createNativeQuery("SELECT chatid FROM chats WHERE debateid = :debateid ORDER BY created_date DESC LIMIT :page_size OFFSET :offset");
         idQuery.setParameter("debateid", debate.getDebateId());
-        idQuery.setParameter("page_size", PAGE_SIZE);
-        idQuery.setParameter("offset", page * PAGE_SIZE);
+        idQuery.setParameter("page_size", size);
+        idQuery.setParameter("offset", page * size);
 
         @SuppressWarnings("unchecked")
         List<Long> ids = (List<Long>) idQuery.getResultList().stream().map(o -> ((BigInteger) o).longValue()).collect(Collectors.toList());
@@ -60,5 +60,10 @@ public class ChatJpaDao implements ChatDao {
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();
         return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
+    }
+
+    @Override
+    public Optional<Chat> getChatById(long id) {
+        return Optional.ofNullable(em.find(Chat.class, id));
     }
 }

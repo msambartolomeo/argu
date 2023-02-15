@@ -1,0 +1,9 @@
+.debate-form-container {
+    width: 40%;
+    margin: 1% auto;
+    padding-bottom: 1%;
+}
+
+.no-borders {
+    border-collapse: separate !important;
+}

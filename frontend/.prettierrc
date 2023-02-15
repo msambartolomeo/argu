@@ -1,0 +1,34 @@
+{
+    "semi": true,
+    "printWidth": 80,
+    "tabWidth": 4,
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "proseWrap": "preserve",
+    "arrowParens": "always",
+    "endOfLine": "auto",
+    "overrides": [
+        {
+            "files": "*.json",
+            "options": {
+                "singleQuote": false
+            }
+        },
+        {
+            "files": ".*rc",
+            "options": {
+                "singleQuote": false,
+                "parser": "json"
+            }
+        }
+    ],
+    "importOrder": [
+        "^react$",
+        "^[a-zA-Z0-9].*",
+        "@.*",
+        "^./[./]*",
+        "^[./]*"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
+}

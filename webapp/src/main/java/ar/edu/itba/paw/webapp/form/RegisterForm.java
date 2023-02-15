@@ -1,34 +1,24 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.webapp.validators.NotExistingEmail;
-import ar.edu.itba.paw.webapp.validators.NotExistingUsername;
-import ar.edu.itba.paw.webapp.validators.StringEquality;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
 
-@StringEquality(string1 = "password", string2 = "passwordConfirmation")
 public class RegisterForm {
 
     @Size(max = 64)
     @NotEmpty
-    @NotExistingUsername
     private String username;
 
     @Size(max = 100)
     @Email
     @NotEmpty
-    @NotExistingEmail
     private String email;
 
     @NotEmpty
     @Size(max = 100)
     private String password;
-
-    @NotEmpty
-    @Size(max = 100)
-    private String passwordConfirmation;
 
     public String getUsername() {
         return username;
@@ -52,14 +42,6 @@ public class RegisterForm {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPasswordConfirmation() {
-        return passwordConfirmation;
-    }
-
-    public void setPasswordConfirmation(String passwordConfirmation) {
-        this.passwordConfirmation = passwordConfirmation;
     }
 }
 

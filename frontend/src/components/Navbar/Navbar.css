@@ -1,0 +1,29 @@
+.nav-item {
+    border-bottom: 2px solid transparent;
+}
+
+.nav-item:hover {
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.activated {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.brand-logo {
+    display: flex !important;
+    align-items: center;
+    margin-left: 2%;
+    margin-top: 6px;
+}
+
+.logo-image {
+    margin-left: 1%;
+    height: 50px;
+}
+
+.nav-bar {
+    background: var(--primary-color);
+    padding-right: 3%;
+}

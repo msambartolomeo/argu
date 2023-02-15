@@ -1,18 +1,16 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.ArgumentDao;
-import ar.edu.itba.paw.interfaces.services.*;
-import ar.edu.itba.paw.model.Argument;
-import ar.edu.itba.paw.model.Debate;
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.interfaces.dao.LikeDao;
+import ar.edu.itba.paw.interfaces.services.DebateService;
+import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.interfaces.services.ImageService;
+import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.enums.ArgumentStatus;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
-import ar.edu.itba.paw.model.exceptions.ArgumentNotFoundException;
-import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenArgumentException;
-import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.model.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,7 +68,7 @@ public class ArgumentServiceImplTest {
     @Mock
     private DebateService debateService;
     @Mock
-    private LikeService likeService;
+    private LikeDao likeDao;
 
     @Before
     public void setUp() {
@@ -105,9 +103,9 @@ public class ArgumentServiceImplTest {
         arguments.add(new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT));
 
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
-        when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt())).thenReturn(arguments);
+        when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt(), anyInt())).thenReturn(arguments);
 
-        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, VALID_PAGE);
+        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, VALID_PAGE, 5);
 
         assertFalse(a.isEmpty());
 
@@ -120,19 +118,19 @@ public class ArgumentServiceImplTest {
     public void testGetArgumentsByDebateNotFound() {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, VALID_PAGE);
+        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, VALID_PAGE, 5);
 
         assertTrue(a.isEmpty());
     }
 
     @Test(expected = DebateNotFoundException.class)
     public void testGetArgumentsByDebateDebateNotFound() {
-        argumentService.getArgumentsByDebate(ID, null, VALID_PAGE);
+        argumentService.getArgumentsByDebate(ID, null, VALID_PAGE, 5);
     }
 
     @Test
     public void testGetArgumentsByDebateNotValidPage() {
-        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, NOT_VALID_PAGE);
+        List<Argument> a = argumentService.getArgumentsByDebate(ID, null, NOT_VALID_PAGE, 5);
 
         assertTrue(a.isEmpty());
     }
@@ -140,14 +138,15 @@ public class ArgumentServiceImplTest {
     @Test
     public void testGetArgumentsByDebateWithUserLike() {
         List<Argument> arguments = new ArrayList<>();
-        arguments.add(new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT));
+        Argument argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
+        arguments.add(argument);
 
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-        when(likeService.isLiked(any(User.class), any(Argument.class))).thenReturn(true);
-        when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt())).thenReturn(arguments);
+        when(likeDao.getLike(any(User.class), any(Argument.class))).thenReturn(Optional.of(new Like(user, argument)));
+        when(argumentDao.getArgumentsByDebate(any(Debate.class), anyInt(), anyInt())).thenReturn(arguments);
 
-        List<Argument> a = argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE);
+        List<Argument> a = argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE, 5);
 
         assertFalse(a.isEmpty());
 
@@ -161,7 +160,7 @@ public class ArgumentServiceImplTest {
     public void testGetArgumentsByDebateWithUserLikeNotValidUser() {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
 
-        argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE);
+        argumentService.getArgumentsByDebate(ID, USER_USERNAME, VALID_PAGE, 5);
     }
 
     @Test(expected = DebateNotFoundException.class)
@@ -192,7 +191,7 @@ public class ArgumentServiceImplTest {
 
     @Test(expected = ArgumentNotFoundException.class)
     public void testDeleteArgumentNoValidArgument() {
-        argumentService.deleteArgument(ID, USER_USERNAME);
+        argumentService.deleteArgument(ID);
     }
 
     @Test
@@ -200,15 +199,7 @@ public class ArgumentServiceImplTest {
         Argument argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
         when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
 
-        argumentService.deleteArgument(ID, USER_USERNAME);
-    }
-
-    @Test(expected = ForbiddenArgumentException.class)
-    public void testDeleteArgumentOtherUser() {
-        Argument argument = new Argument(user, debate, CONTENT, null, ArgumentStatus.ARGUMENT);
-        when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
-
-        argumentService.deleteArgument(ID, USER_USERNAME_2);
+        argumentService.deleteArgument(ID);
     }
 
     @Test // image must be deleted
@@ -216,7 +207,7 @@ public class ArgumentServiceImplTest {
         Argument argument = new Argument(user, debate, CONTENT, image, ArgumentStatus.ARGUMENT);
         when(argumentDao.getArgumentById(anyLong())).thenReturn(Optional.of(argument));
 
-        argumentService.deleteArgument(ID, USER_USERNAME);
+        argumentService.deleteArgument(ID);
 
         verify(imageService).deleteImage(any(Image.class));
     }
@@ -227,7 +218,7 @@ public class ArgumentServiceImplTest {
         int expectedPageCount = 10;
         when(argumentDao.getArgumentsByDebateCount(anyLong())).thenReturn(argumentCount);
 
-        int pc = argumentService.getArgumentByDebatePageCount(ID);
+        int pc = argumentService.getArgumentByDebatePageCount(ID, 5);
 
         assertEquals(expectedPageCount, pc);
     }
@@ -238,7 +229,7 @@ public class ArgumentServiceImplTest {
         int expectedPageCount = 0;
         when(argumentDao.getArgumentsByDebateCount(anyLong())).thenReturn(argumentCount);
 
-        int pc = argumentService.getArgumentByDebatePageCount(ID);
+        int pc = argumentService.getArgumentByDebatePageCount(ID, 5);
 
         assertEquals(expectedPageCount, pc);
     }
@@ -277,12 +268,12 @@ public class ArgumentServiceImplTest {
         assertEquals(ArgumentStatus.INTRODUCTION, status);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = ArgumentTurnException.class)
     public void testGetArgumentStatusFirstIntroductionUserIsNotCreator() {
         argumentService.getArgumentStatus(debate, user2);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = ArgumentTurnException.class)
     public void testGetArgumentStatusLastArgumentFromSameUser() {
         Argument argument = new Argument(user, debate, CONTENT, image, ArgumentStatus.ARGUMENT);
         when(argumentDao.getLastArgument(any(Debate.class))).thenReturn(Optional.of(argument));
@@ -353,7 +344,7 @@ public class ArgumentServiceImplTest {
         argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = DebateClosedException.class)
     public void testCreateArgumentClosedDebate() {
         debate.setStatus(DebateStatus.CLOSED);
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
@@ -362,7 +353,7 @@ public class ArgumentServiceImplTest {
         argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = DebateClosedException.class)
     public void testCreateArgumentDeletedDebate() {
         debate.setStatus(DebateStatus.DELETED);
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
@@ -371,7 +362,7 @@ public class ArgumentServiceImplTest {
         argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = DebateClosedException.class)
     public void testCreateArgumentVotingDebate() {
         debate.setStatus(DebateStatus.VOTING);
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
@@ -380,7 +371,7 @@ public class ArgumentServiceImplTest {
         argumentService.create(USER_USERNAME, ID, CONTENT, null);
     }
 
-    @Test(expected = ForbiddenArgumentException.class)
+    @Test(expected = ArgumentTurnException.class)
     public void testCreateArgumentUnauthorizedUser() {
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user3));

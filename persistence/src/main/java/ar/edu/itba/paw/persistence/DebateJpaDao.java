@@ -39,15 +39,15 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    public List<Debate> getSubscribedDebatesByUser(long userId, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
-        return getDebatesReusable(userId, page, idQuery);
+    public List<Debate> getSubscribedDebatesByUser(User user, int page, int size) {
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE debateid IN (SELECT debateid FROM subscribed WHERE userid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT :limit OFFSET :offset");
+        return getDebatesReusable(user.getUserId(), page, size, idQuery);
     }
 
     @Override
-    public int getSubscribedDebatesByUserCount(long userid) {
+    public int getSubscribedDebatesByUserCount(User user) {
         Query query = em.createNativeQuery("SELECT COUNT(*) FROM subscribed WHERE userid = :userid");
-        query.setParameter("userid", userid);
+        query.setParameter("userid", user.getUserId());
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();
         return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
@@ -70,7 +70,7 @@ public class DebateJpaDao implements DebateDao {
 
         Map<String, Object> params = setupDiscovery(searchQuery, category, queryString, status, date);
 
-        switch(orderBy) {
+        switch (orderBy) {
             case DATE_ASC:
                 queryString.append(" ORDER BY created_date ASC");
                 break;
@@ -119,11 +119,11 @@ public class DebateJpaDao implements DebateDao {
     private Map<String, Object> setupDiscovery(String searchQuery, DebateCategory category, StringBuilder queryString, DebateStatus status, LocalDate date) {
         Map<String, Object> params = new HashMap<>();
 
-        if(searchQuery != null) {
+        if (searchQuery != null) {
             queryString.append(" AND lower(name) LIKE lower(:searchWord)");
             params.put("searchWord", "%" + searchQuery + "%");
         }
-        if(category != null) {
+        if (category != null) {
             queryString.append(" AND category = :category");
             params.put("category", category.ordinal());
         }
@@ -147,15 +147,15 @@ public class DebateJpaDao implements DebateDao {
     }
 
     @Override
-    public List<Debate> getUserDebates(long userId, int page) {
-        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE (creatorid = :userid OR opponentid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT 5 OFFSET :offset");
-        return getDebatesReusable(userId, page, idQuery);
+    public List<Debate> getUserDebates(User user, int page, int size) {
+        Query idQuery = em.createNativeQuery("SELECT debateid FROM debates WHERE (creatorid = :userid OR opponentid = :userid) AND status <> 2 ORDER BY created_date DESC LIMIT :limit OFFSET :offset");
+        return getDebatesReusable(user.getUserId(), page, size, idQuery);
     }
 
     @Override
-    public int getUserDebatesCount(long userid) {
+    public int getUserDebatesCount(User user) {
         Query query = em.createNativeQuery("SELECT COUNT(*) FROM debates WHERE (creatorid = :userid OR opponentid = :userid) AND status <> 2");
-        query.setParameter("userid", userid);
+        query.setParameter("userid", user.getUserId());
 
         Optional<?> queryResult = query.getResultList().stream().findFirst();
         return queryResult.map(o -> ((BigInteger) o).intValue()).orElse(0);
@@ -189,8 +189,10 @@ public class DebateJpaDao implements DebateDao {
                 "    GROUP BY s.debateid\n" +
                 ")\n" +
                 "SELECT si.debateid\n" +
-                "FROM selected_ids si LEFT JOIN subscribed s ON si.debateid = s.debateid\n" +
-                "WHERE si.debateid != :debateid\n" +
+                "FROM selected_ids si\n" +
+                "LEFT JOIN subscribed s ON si.debateid = s.debateid\n" +
+                "INNER JOIN debates d2 on s.debateid = d2.debateid\n" +
+                "WHERE si.debateid != :debateid AND d2.status != 2\n" +
                 "GROUP BY si.debateid\n" +
                 "ORDER BY count(distinct s.userid) DESC LIMIT 3");
         idQuery.setParameter("category", debate.getCategory().ordinal());
@@ -198,6 +200,7 @@ public class DebateJpaDao implements DebateDao {
 
         return getDebatesReusable(idQuery);
     }
+
     @Override
     public List<Debate> getRecommendedDebates(Debate debate, User user) {
         Query idQuery = em.createNativeQuery("WITH selected_ids AS (\n" +
@@ -216,8 +219,11 @@ public class DebateJpaDao implements DebateDao {
                 "    GROUP BY s.debateid\n" +
                 ")\n" +
                 "SELECT si.debateid\n" +
-                "FROM selected_ids si LEFT JOIN subscribed s ON si.debateid = s.debateid\n" +
-                "WHERE si.debateid != :debateid AND si.debateid NOT IN (\n" +
+                "FROM selected_ids si\n" +
+                "LEFT JOIN subscribed s ON si.debateid = s.debateid\n" +
+                "INNER JOIN debates d2 on s.debateid = d2.debateid\n" +
+                "WHERE si.debateid != :debateid AND d2.status != 2\n" +
+                "AND si.debateid NOT IN (\n" +
                 "    SELECT debateid\n" +
                 "    FROM subscribed s\n" +
                 "    WHERE s.userid = :userid\n" +
@@ -232,9 +238,10 @@ public class DebateJpaDao implements DebateDao {
     }
 
     // Extracted code to simplify methods
-    private List<Debate> getDebatesReusable(long userId, int page, Query idQuery) {
+    private List<Debate> getDebatesReusable(long userId, int page, int size, Query idQuery) {
         idQuery.setParameter("userid", userId);
-        idQuery.setParameter("offset", page * 5);
+        idQuery.setParameter("offset", page * size);
+        idQuery.setParameter("limit", size);
         return getDebatesReusable(idQuery);
     }
 
@@ -252,7 +259,7 @@ public class DebateJpaDao implements DebateDao {
 
         List<Debate> unsortedList = query.getResultList();
         List<Debate> sortedList = new ArrayList<>();
-        for (Long id: ids)
+        for (Long id : ids)
             sortedList.add(unsortedList.stream().filter(d -> d.getDebateId().equals(id)).findFirst().get());
         return sortedList;
     }

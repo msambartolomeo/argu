@@ -8,8 +8,8 @@ import ar.edu.itba.paw.model.Debate;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.model.enums.DebateStatus;
+import ar.edu.itba.paw.model.exceptions.DebateClosedException;
 import ar.edu.itba.paw.model.exceptions.DebateNotFoundException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenChatException;
 import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -79,21 +79,13 @@ public class ChatServiceImplTest {
         chatService.create(CHAT_USERNAME, DEBATE_ID, MESSAGE);
     }
 
-    @Test(expected = ForbiddenChatException.class)
+    @Test(expected = DebateClosedException.class)
     public void testCreateChatClosedDebate() {
         debate.setStatus(DebateStatus.CLOSED);
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
         when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
 
         chatService.create(CHAT_USERNAME, DEBATE_ID, MESSAGE);
-    }
-
-    @Test(expected = ForbiddenChatException.class)
-    public void testCreateChatUserIsParticipant() {
-        when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
-        when(userService.getUserByUsername(anyString())).thenReturn(Optional.of(user2));
-
-        chatService.create(USER_USERNAME, DEBATE_ID, MESSAGE);
     }
 
     @Test
@@ -112,12 +104,12 @@ public class ChatServiceImplTest {
 
     @Test(expected = DebateNotFoundException.class)
     public void testGetDebateChatNoDebate() {
-        chatService.getDebateChat(DEBATE_ID, VALID_PAGE);
+        chatService.getDebateChat(DEBATE_ID, VALID_PAGE, 15);
     }
 
     @Test
     public void testGetDebateChatInvalidPage() {
-        List<Chat> c = chatService.getDebateChat(DEBATE_ID, INVALID_PAGE);
+        List<Chat> c = chatService.getDebateChat(DEBATE_ID, INVALID_PAGE, 15);
 
         assertTrue(c.isEmpty());
     }
@@ -127,9 +119,9 @@ public class ChatServiceImplTest {
         List<Chat> chats = new ArrayList<>();
         chats.add(new Chat(user, debate, MESSAGE));
         when(debateService.getDebateById(anyLong())).thenReturn(Optional.of(debate));
-        when(chatDao.getDebateChat(any(Debate.class), anyInt())).thenReturn(chats);
+        when(chatDao.getDebateChat(any(Debate.class), anyInt(), anyInt())).thenReturn(chats);
 
-        List<Chat> c = chatService.getDebateChat(DEBATE_ID, VALID_PAGE);
+        List<Chat> c = chatService.getDebateChat(DEBATE_ID, VALID_PAGE, 15);
 
         assertFalse(c.isEmpty());
 
@@ -142,7 +134,7 @@ public class ChatServiceImplTest {
         int expectedPageCount = 4;
         when(chatDao.getDebateChatsCount(anyLong())).thenReturn(postCount);
 
-        int pc = chatService.getDebateChatPageCount(DEBATE_ID);
+        int pc = chatService.getDebateChatPageCount(DEBATE_ID, 15);
 
         assertEquals(expectedPageCount, pc);
     }
@@ -153,7 +145,7 @@ public class ChatServiceImplTest {
         int expectedPageCount = 0;
         when(chatDao.getDebateChatsCount(anyLong())).thenReturn(postCount);
 
-        int pc = chatService.getDebateChatPageCount(DEBATE_ID);
+        int pc = chatService.getDebateChatPageCount(DEBATE_ID, 15);
 
         assertEquals(expectedPageCount, pc);
     }

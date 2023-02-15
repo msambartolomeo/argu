@@ -1,0 +1,4 @@
+.card .chat-box .no-background-pag nav {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}

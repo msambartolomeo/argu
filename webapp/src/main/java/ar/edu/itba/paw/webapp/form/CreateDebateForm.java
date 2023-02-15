@@ -1,12 +1,9 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.model.enums.DebateCategory;
 import ar.edu.itba.paw.webapp.validators.ExistingUser;
-import ar.edu.itba.paw.webapp.validators.Image;
-import ar.edu.itba.paw.webapp.validators.ImageSize;
 import ar.edu.itba.paw.webapp.validators.UserNotSelf;
+import ar.edu.itba.paw.webapp.validators.ValidCategory;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,23 +18,18 @@ public class CreateDebateForm {
     @NotEmpty
     private String description;
 
+    @ValidCategory
     @NotNull
-    private DebateCategory category;
+    private String category;
 
     @NotNull
-    private boolean isCreatorFor;
+    private Boolean isCreatorFor;
 
     @Size(max = 64)
     @NotEmpty
     @ExistingUser
     @UserNotSelf
     private String opponentUsername;
-
-    @ImageSize
-    @Image
-    private MultipartFile image;
-
-    private String imageName;
 
     public String getTitle() {
         return title;
@@ -55,11 +47,11 @@ public class CreateDebateForm {
         this.description = description;
     }
 
-    public DebateCategory getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(DebateCategory category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
@@ -69,22 +61,6 @@ public class CreateDebateForm {
 
     public void setOpponentUsername(String opponentUsername) {
         this.opponentUsername = opponentUsername;
-    }
-
-    public MultipartFile getImage() {
-        return image;
-    }
-
-    public void setImage(MultipartFile image) {
-        this.image = image;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
     }
 
     public boolean getIsCreatorFor() {

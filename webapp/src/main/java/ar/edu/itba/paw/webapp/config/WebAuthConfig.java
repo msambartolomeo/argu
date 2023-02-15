@@ -1,30 +1,42 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.webapp.auth.JwtFilter;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.concurrent.TimeUnit;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private Environment env;
-    @Autowired
     private PawUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,33 +50,53 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        http.sessionManagement()
-                .and().authorizeRequests()
-                    .antMatchers("/", "/debates", "/user/{username}", "/debates/{\\d+}").permitAll()
-                    .antMatchers("/login", "/register").anonymous()
-                    .antMatchers("/create_debate").hasAuthority("MODERATOR")
-                    .antMatchers("/moderator").hasAuthority("USER")
-                    .antMatchers("/debates/{\\d+}/**", "/profile", "/profile/**").authenticated()
-                .and().formLogin()
-                    .usernameParameter("username")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/debates", false)
-                    .loginPage("/login")
-                .and().rememberMe()
-                    .rememberMeParameter("rememberme")
-                    .userDetailsService(userDetailsService)
-                    .key(env.getProperty("spring.security.rememberme.key"))
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login")
-                .and().exceptionHandling()
-                    .accessDeniedPage("/403")
-                .and().csrf().disable();
+        http.cors()
+            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().headers().cacheControl().disable()
+            .and().authorizeRequests()
+                // users
+                .antMatchers(HttpMethod.DELETE,"/users/{url}", "/users/{url}/image").access("@securityManager.checkSameUser(authentication, #url)")
+                .antMatchers(HttpMethod.PUT, "/users/{url}/image").access("@securityManager.checkSameUser(authentication, #url)")
+                .antMatchers(HttpMethod.POST, "/users").anonymous()
+                .antMatchers(HttpMethod.PATCH, "/users/{url}").hasAuthority("USER")
+                // debate
+                .antMatchers(HttpMethod.DELETE, "/debates/{\\d+}").hasAuthority("MODERATOR")
+                .antMatchers(HttpMethod.POST, "/debates").hasAuthority("MODERATOR")
+                .antMatchers(HttpMethod.PATCH, "/debates/{\\d+}").authenticated()
+                // argument and chat
+                .antMatchers(HttpMethod.PATCH, "/debates/{\\d+}/arguments/{\\d+}").authenticated()
+                .antMatchers(HttpMethod.POST, "/debates/{\\d+}/arguments", "/debates/{\\d+}/chats").authenticated()
+                // likes, subs and votes
+                .antMatchers("/debates/\\d+}/arguments/{\\d+}/likes", "/debates/{\\d+}/subscriptions", "/debates/{\\d+}/votes").authenticated()
+                // general
+                .antMatchers(HttpMethod.GET, "/users/{url}", "/users/{url}/image", "/debates", "/debates/{\\d+}", "/debates/{\\d+}/arguments", "/debates/{\\d+}/arguments/{\\d+}", "/debates/{\\d+}/chats", "/debates/{\\d+}/chats/{\\d+}", "/images").permitAll()
+            .and().exceptionHandling()
+                .accessDeniedHandler((request, response, ex) -> response.setStatus(HttpServletResponse.SC_FORBIDDEN))
+                .authenticationEntryPoint((request, response, ex) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))
+            .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).csrf().disable();
     }
+
     @Override
-    public void configure(final WebSecurity web) throws Exception {
+    public void configure(final WebSecurity web) {
         web.ignoring() // Ignore static resources
-                .antMatchers("/resources/**", "/images/**", "/logs/**");
+                .antMatchers("/static/**");
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cors = new CorsConfiguration();
+        cors.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+        cors.setAllowedMethods(Collections.singletonList("*"));
+        cors.setAllowedHeaders(Collections.singletonList("*"));
+        cors.setExposedHeaders(Arrays.asList("Authorization", "X-Refresh", "Location", "Link", "X-Total-Pages"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", cors);
+        return source;
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 }
