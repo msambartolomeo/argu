@@ -81,7 +81,6 @@ public class JwtFilter extends OncePerRequestFilter {
             if (fullUser == null)
                 return false;
 
-            // TODO: Ask about headers
             response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUtils.generateToken(fullUser));
             response.setHeader("X-Refresh", "Bearer " + jwtUtils.generateRefreshToken(fullUser));
 
