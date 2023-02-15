@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { HttpStatusCode } from "axios";
 import cn from "classnames";
@@ -50,6 +50,10 @@ const ArgumentBubble = ({
         useDeleteLike();
     const { loading: deleteLoading, deleteArgument } = useDeleteArgument();
     const { enqueueSnackbar } = useSnackbar();
+
+    useEffect(() => {
+        setArgument(argumentData);
+    }, [argumentData]);
 
     const likeSubmit = () => {
         callLike({

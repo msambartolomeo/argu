@@ -24,10 +24,14 @@ const VoteSection = ({ debateData }: VotesSectionProps) => {
     const [vote, setVote] = useState<DebateVote | null>(null);
     const [debate, setDebate] = useState<DebateDto>(debateData);
 
+    useEffect(() => {
+        setDebate(debateData);
+    }, [debateData]);
+
     const { loading, getVote } = useGetVote();
     const { loading: postLoading, createVote } = useCreateVote();
     const { loading: deleteLoading, callDeleteVote } = useDeleteVote();
-    const { loading: debateLoading, getDebate } = useGetDebateById();
+    const { getDebate } = useGetDebateById();
 
     const userFor = debate.isCreatorFor
         ? debate.creatorName
@@ -91,7 +95,7 @@ const VoteSection = ({ debateData }: VotesSectionProps) => {
 
     return (
         <div className="card vote-section no-top-margin">
-            {loading && debateLoading ? (
+            {loading ? (
                 <CircularProgress size={100} />
             ) : (
                 <>

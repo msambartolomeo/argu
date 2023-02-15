@@ -33,7 +33,7 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
     const [chat, setChat] = useState<PaginatedList<ChatDto>>(
         PaginatedList.emptyList()
     );
-    const [refresh, setRefresh] = useState<boolean>(true);
+    const [chatUrl, setChatUrl] = useState<string>(debate.chats);
     const [page, setPage] = useState<number>(parseInt(PAGE_DEFAULT));
 
     const schema = z.object({
@@ -53,6 +53,25 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
     const { getChats } = useGetChats();
     const { loading: postLoading, createChat } = useCreateChat();
 
+    function callGet() {
+        getChats({
+            chatUrl,
+        }).then((output) => {
+            switch (output.status) {
+                case HttpStatusCode.Ok:
+                    if (output.data) setChat(output.data);
+                    break;
+                case HttpStatusCode.NoContent:
+                    setChat(PaginatedList.emptyList());
+                    break;
+                default:
+                    enqueueSnackbar(t("errors.unexpected"), {
+                        variant: "error",
+                    });
+            }
+        });
+    }
+
     const handlePostChat = (data: FieldValues) => {
         createChat({
             chatUrl: debate.chats,
@@ -60,7 +79,7 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
         }).then((output) => {
             switch (output.status) {
                 case HttpStatusCode.Created:
-                    setRefresh(true);
+                    callGet();
                     form.current?.reset();
                     break;
                 default:
@@ -72,29 +91,20 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
     };
 
     useEffect(() => {
-        if (refresh) {
-            getChats({
-                chatUrl: debate.chats,
-                // TODO: page
-            }).then((output) => {
-                switch (output.status) {
-                    case HttpStatusCode.Ok:
-                        if (output.data) setChat(output.data);
-                        break;
-                    case HttpStatusCode.NoContent:
-                        setChat(PaginatedList.emptyList());
-                        break;
-                }
-                const chatElem = document.getElementById("chat");
-                chatElem?.scrollTo(0, chatElem.scrollHeight);
-            });
-            setRefresh(false);
-        }
+        callGet();
+    }, [debate, chatUrl]);
 
-        // FIXME: the scrolling is not working after a post
-    }, [refresh]);
+    // FIXME: This runs every time
+    useEffect(() => {
+        if (page === 1) {
+            const chatElem = document.getElementById("chat");
+            chatElem?.scrollTo(0, chatElem.scrollHeight);
+        }
+    }, [chat]);
 
     const handleChangePage = async (value: number) => {
+        if (value === page) return;
+
         let url = "";
         switch (value) {
             case 1:
@@ -110,24 +120,11 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
                 url = chat?.next || "";
                 break;
         }
-        getChats({
-            chatUrl: url,
-            // TODO: page
-        }).then((output) => {
-            switch (output.status) {
-                case HttpStatusCode.Ok:
-                    if (output.data) setChat(output.data);
-                    break;
-                case HttpStatusCode.NoContent:
-                    setChat(PaginatedList.emptyList());
-                    break;
-                default:
-                    enqueueSnackbar(t("errors.unexpected"), {
-                        variant: "error",
-                    });
-            }
-        });
-        setPage(value);
+
+        if (url) {
+            setChatUrl(url);
+            setPage(value);
+        }
     };
 
     return (

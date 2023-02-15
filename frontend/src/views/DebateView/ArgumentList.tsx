@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { HttpStatusCode } from "axios";
 import { useSnackbar } from "notistack";
@@ -31,14 +31,21 @@ function ArgumentList({
     const { t } = useTranslation();
     const { enqueueSnackbar } = useSnackbar();
 
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [page, setPage] = useState<number>(
+        Number(queryParams.get("page")) || Number(PAGE_DEFAULT)
+    );
+    const [argumentsUrl, setArgumentsUrl] = useState<string>(() => {
+        const page = queryParams.get("page");
+        if (page) return `${debate.arguments}?page=${Number(page) - 1}`;
+        return debate.arguments;
+    });
+
     const { loading, getArguments } = useGetArguments();
 
-    const [queryParams, setQueryParams] = useSearchParams();
-    let page = parseInt(queryParams.get("page") || PAGE_DEFAULT, 10);
-
-    useEffect(() => {
+    function callGet() {
         getArguments({
-            argumentsUrl: debate.arguments,
+            argumentsUrl,
         }).then((out) => {
             switch (out.status) {
                 case HttpStatusCode.Ok:
@@ -53,16 +60,36 @@ function ArgumentList({
                     });
             }
         });
-    }, [refreshArguments, debate]);
-
-    if (loading) {
-        return (
-            // TODO: Center
-            <div className="z-depth-3 argument-list">
-                <CircularProgress size={100} />
-            </div>
-        );
     }
+
+    useEffect(() => {
+        callGet();
+    }, [refreshArguments, debate, argumentsUrl]);
+
+    const handleChangePage = async (value: number) => {
+        if (value === page) return;
+
+        let url = "";
+        switch (value) {
+            case 1:
+                url = argumentList?.first || "";
+                break;
+            case argumentList?.totalPages:
+                url = argumentList?.last || "";
+                break;
+            case page - 1:
+                url = argumentList?.prev || "";
+                break;
+            case page + 1:
+                url = argumentList?.next || "";
+                break;
+        }
+        if (url) {
+            setArgumentsUrl(url);
+            setQueryParams({ page: value.toString() });
+            setPage(value);
+        }
+    };
 
     const list = argumentList?.data.map((argument, index) => {
         return (
@@ -84,34 +111,14 @@ function ArgumentList({
         );
     });
 
-    const handleChangePage = async (value: number) => {
-        let url = "";
-        switch (value) {
-            case 1:
-                url = argumentList?.first || "";
-                break;
-            case argumentList?.totalPages:
-                url = argumentList?.last || "";
-                break;
-            case page - 1:
-                url = argumentList?.prev || "";
-                break;
-            case page + 1:
-                url = argumentList?.next || "";
-                break;
-        }
-        const res = await getArguments({ argumentsUrl: url });
-        switch (res.status) {
-            case HttpStatusCode.Ok:
-                if (res.data) setArgumentList(res.data);
-                break;
-            case HttpStatusCode.NoContent:
-                setArgumentList(PaginatedList.emptyList());
-                break;
-        }
-        page = value;
-        setQueryParams({ page: value.toString() });
-    };
+    if (argumentList.data.length === 0 && loading) {
+        return (
+            // TODO: Center
+            <div className="z-depth-3 argument-list">
+                <CircularProgress size={100} />
+            </div>
+        );
+    }
 
     return (
         <div className="z-depth-3 argument-list">

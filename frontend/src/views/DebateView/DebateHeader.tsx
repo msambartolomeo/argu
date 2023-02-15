@@ -67,6 +67,11 @@ function DebateHeader({ debate }: Props) {
         }
     }, []);
 
+    useEffect(() => {
+        setSubscriptionCount(debate.subscriptionsCount);
+        setStatus(debate.status);
+    }, [debate]);
+
     const subscribe = () => {
         callSubscribe({
             subscriptionUrl: debate.subscription as string,
