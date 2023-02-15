@@ -49,7 +49,7 @@ const UserProfile = () => {
     const { loading: isUserLoading, getUserByUsername: getUser } =
         useGetUserByUsername();
 
-    const { loading: isUserDebatesLoading, getDebatesByUrl: getDebates } =
+    const { loading: isUserDebatesLoading, getDebatesByUrl: getDebatesByUrl } =
         useGetDebatesByUrl();
 
     const { callLogout } = useSharedAuth();
@@ -94,11 +94,13 @@ const UserProfile = () => {
 
     useEffect(() => {
         if (userData) {
-            const url =
+            console.log("showMyDebates: ", showMyDebates);
+            let url =
                 (showMyDebates
                     ? userData?.debates
                     : userData?.subscribedDebates) || "";
-            getDebates({ url: url }).then((res) => {
+            url = url + `&page=${page - 1}`;
+            getDebatesByUrl({ url: url }).then((res) => {
                 switch (res.status) {
                     case HttpStatusCode.Ok:
                         setDebates(res.data);
@@ -130,7 +132,7 @@ const UserProfile = () => {
                 break;
         }
         if (url) {
-            const res = await getDebates({ url: url });
+            const res = await getDebatesByUrl({ url: url });
             switch (res.status) {
                 case HttpStatusCode.Ok:
                     setDebates(res.data);
