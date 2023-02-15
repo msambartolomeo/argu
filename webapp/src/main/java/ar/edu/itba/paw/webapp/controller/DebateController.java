@@ -52,11 +52,7 @@ public class DebateController {
 
     @Autowired
     private DebateService debateService;
-    @Autowired
-    private MessageSource messageSource;
 
-    @Context
-    private HttpServletRequest request;
     @Context
     private UriInfo uriInfo;
 
@@ -96,7 +92,7 @@ public class DebateController {
             }
 
             debateList = debateService.getRecommendedDebates(recommendToDebate, username)
-                    .stream().map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
+                    .stream().map(d -> DebateDto.fromDebate(uriInfo, d)).collect(Collectors.toList());
 
             if (debateList.isEmpty()) {
                 return Response.noContent().build();
@@ -107,7 +103,7 @@ public class DebateController {
         } else if (userUrl != null) {
             final String username = URLDecoder.decode(userUrl, User.ENCODING);
             debateList = debateService.getUserDebates(username, page, size, subscribed != null).stream()
-                    .map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
+                    .map(d -> DebateDto.fromDebate(uriInfo, d)).collect(Collectors.toList());
 
             if (debateList.isEmpty()) {
                 return Response.noContent().build();
@@ -116,7 +112,7 @@ public class DebateController {
             totalPages = debateService.getUserDebatesPageCount(username, size, subscribed != null);
         } else {
             debateList = debateService.get(page, size, search, finalCategory, finalOrder, finalStatus, finalDate)
-                    .stream().map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale())).collect(Collectors.toList());
+                    .stream().map(d -> DebateDto.fromDebate(uriInfo, d)).collect(Collectors.toList());
 
             if (debateList.isEmpty()) {
                 return Response.noContent().build();
@@ -133,7 +129,7 @@ public class DebateController {
     @Path("/{id}")
     public Response getDebate(@PathParam("id") final long id) {
         final Optional<DebateDto> debate = debateService.getDebateById(id)
-                .map(d -> DebateDto.fromDebate(uriInfo, d, messageSource, request.getLocale()));
+                .map(d -> DebateDto.fromDebate(uriInfo, d));
 
         if (debate.isPresent()) {
             return Response.ok(debate.get()).build();

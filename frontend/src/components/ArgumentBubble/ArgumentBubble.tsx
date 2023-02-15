@@ -150,7 +150,9 @@ const ArgumentBubble = ({
                     </div>
                     <div className="comment-header-section">
                         <NonClickableChip name={argument.createdDate} />
-                        <NonClickableChip name={argument.status} />
+                        <NonClickableChip
+                            name={t(`debate.argument.${argument.status}`)}
+                        />
                     </div>
                     {!argument.deleted &&
                         userInfo?.username === argument.creatorName && (

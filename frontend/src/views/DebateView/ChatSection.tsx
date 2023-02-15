@@ -17,6 +17,7 @@ import { useSharedAuth } from "../../hooks/useAuth";
 import { PaginatedList } from "../../types/PaginatedList";
 import ChatDto from "../../types/dto/ChatDto";
 import DebateDto from "../../types/dto/DebateDto";
+import DebateStatus from "../../types/enums/DebateStatus";
 import { PAGE_DEFAULT } from "../../types/globalConstants";
 
 interface ChatSectionProps {
@@ -129,8 +130,8 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
 
     return (
         <>
-            {((debate.status !== t("debate.statuses.statusOpen") &&
-                debate.status !== t("debate.statuses.statusClosing")) ||
+            {((debate.status !== DebateStatus.OPEN &&
+                debate.status !== DebateStatus.CLOSING) ||
                 !userInfo ||
                 (userInfo.username !== debate.creatorName &&
                     userInfo.username !== debate.opponentName)) && (
@@ -158,10 +159,8 @@ const ChatSection = ({ debate }: ChatSectionProps) => {
                             )}
                         </div>
                         {userInfo &&
-                            debate?.status !==
-                                t("debate.statuses.statusClosed") &&
-                            debate?.status !==
-                                t("debate.statuses.statusDeleted") && (
+                            debate.status !== DebateStatus.CLOSED &&
+                            debate.status !== DebateStatus.DELETED && (
                                 <>
                                     <form
                                         acceptCharset="utf-8"

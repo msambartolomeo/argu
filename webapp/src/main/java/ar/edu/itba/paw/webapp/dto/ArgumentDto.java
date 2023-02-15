@@ -30,7 +30,7 @@ public class ArgumentDto {
     private URI image;
     private URI like;
 
-    public static ArgumentDto fromArgument(final UriInfo uriInfo, final Argument argument, final MessageSource messageSource, final Locale locale) {
+    public static ArgumentDto fromArgument(final UriInfo uriInfo, final Argument argument) {
         ArgumentDto dto = new ArgumentDto();
 
         dto.deleted = argument.getDeleted();
@@ -43,7 +43,7 @@ public class ArgumentDto {
         }
         dto.likes = argument.getLikesCount();
         dto.createdDate = argument.getFormattedDate();
-        dto.status = messageSource.getMessage("status." + argument.getStatus().getName(), null, locale);
+        dto.status = argument.getStatus().getName();
 
         final String id = String.valueOf(argument.getArgumentId());
         final String debateId = String.valueOf(argument.getDebate().getDebateId());
