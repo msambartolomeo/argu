@@ -44,7 +44,7 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "build-java": "react-scripts build && sed -i '1s/^/<%@ page session=\"false\" %> /' ./build/index.html",
+        "build-java": "react-scripts build && echo '<%@ page session=\"false\" %> ' > ./build/.tmp && cat ./build/index.html >> ./build/.tmp && cp ./build/.tmp ./build/index.html && rm ./build/.tmp ",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "prepare": "cd .. && husky install frontend/.husky",
