@@ -136,7 +136,7 @@ const Discovery = () => {
                                 color="primary"
                                 className="white"
                                 onChange={(e, v) => {
-                                    setNewPage(v);
+                                    if (page !== v) setNewPage(v);
                                 }}
                                 showLastButton
                                 showFirstButton
