@@ -6,8 +6,8 @@
     background-color: var(--primary-color);
     color: white;
     width: 100%;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     position: relative;
     bottom: 0;
 }
