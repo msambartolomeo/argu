@@ -20,6 +20,7 @@ import { useDeleteSubscription } from "../../hooks/subscriptions/useDeleteSubscr
 import { useGetSubscription } from "../../hooks/subscriptions/useGetSubscription";
 import { useSharedAuth } from "../../hooks/useAuth";
 import DebateDto from "../../types/dto/DebateDto";
+import DebateStatus from "../../types/enums/DebateStatus";
 
 interface Props {
     debate: DebateDto;
@@ -36,7 +37,7 @@ function DebateHeader({ debate }: Props) {
     const [subscriptionCount, setSubscriptionCount] = useState<number>(
         debate.subscriptionsCount
     );
-    const [status, setStatus] = useState<string>(debate.status);
+    const [status, setStatus] = useState<DebateStatus>(debate.status);
 
     const { loading: getSubLoading, getSubscription } = useGetSubscription();
     const { loading: subLoading, createSubscription: callSubscribe } =
@@ -127,7 +128,7 @@ function DebateHeader({ debate }: Props) {
         concludeDebate(debate.self).then((code) => {
             switch (code) {
                 case HttpStatusCode.NoContent:
-                    setStatus(t("debate.statuses.statusClosing").toString());
+                    setStatus(DebateStatus.CLOSING);
                     break;
                 default:
                     enqueueSnackbar(t("errors.unexpected"), {
@@ -160,10 +161,7 @@ function DebateHeader({ debate }: Props) {
                                 {userInfo && (
                                     <div className="right debate-buttons-display">
                                         <div className="col">
-                                            {status ===
-                                                t(
-                                                    "debate.statuses.statusOpen"
-                                                ) &&
+                                            {status === DebateStatus.OPEN &&
                                                 (userInfo.username ===
                                                     debate.creatorName ||
                                                     userInfo.username ===
@@ -182,10 +180,7 @@ function DebateHeader({ debate }: Props) {
                                                         </i>
                                                     </Chip>
                                                 )}
-                                            {status !==
-                                                t(
-                                                    "debate.statuses.statusDeleted"
-                                                ) &&
+                                            {status !== DebateStatus.DELETED &&
                                                 userInfo.username ===
                                                     debate.creatorName && (
                                                     <DeleteDialog
@@ -264,7 +259,7 @@ function DebateHeader({ debate }: Props) {
                                     navigateDiscoverUrl(debate.sameCategory)
                                 }
                             >
-                                {debate.category}
+                                {t(`categories.${debate.category}`)}
                             </Chip>
                             <Chip
                                 onClick={() =>
@@ -278,7 +273,7 @@ function DebateHeader({ debate }: Props) {
                                     navigateDiscoverUrl(debate.sameStatus)
                                 }
                             >
-                                {status}
+                                {t(`debate.statuses.${status}`)}
                             </Chip>
                             <NonClickableChip
                                 name={

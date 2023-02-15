@@ -18,6 +18,8 @@ import { PaginatedList } from "../../types/PaginatedList";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import DebateDto from "../../types/dto/DebateDto";
 import { PAGE_DEFAULT } from "../../types/globalConstants";
+import ArgumentStatus from "../../types/enums/ArgumentStatus";
+import DebateStatus from "../../types/enums/DebateStatus";
 
 type FieldValues = {
     content: string;
@@ -47,12 +49,12 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
 
     if (
         lastArgument === null ||
-        (lastArgument?.status === "introduction" &&
+        (lastArgument?.status === ArgumentStatus.INTRODUCTION &&
             lastArgument?.creatorName === debate.creatorName)
     ) {
         message = t("debate.argument.introMessage");
         submitMessage = t("debate.argument.postIntro");
-    } else if (lastArgument?.status === "closing") {
+    } else if (lastArgument?.status === ArgumentStatus.CONCLUSION) {
         message = t("debate.argument.conclusionMessage");
         submitMessage = t("debate.argument.postConclusion");
     }
@@ -177,8 +179,8 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
 
     return (
         <>
-            {debate.status !== t("debate.statuses.statusClosed") &&
-                debate.status !== t("debate.statuses.statusVoting") && (
+            {debate.status !== DebateStatus.CLOSED &&
+                debate.status !== DebateStatus.VOTING && (
                     <div className="card no-top-margin">
                         <div className="card-content">
                             {userInfo &&

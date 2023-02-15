@@ -45,7 +45,7 @@ public class DebateDto {
     private URI vote;
     private URI subscription;
 
-    public static DebateDto fromDebate(final UriInfo uriInfo, final Debate debate, final MessageSource messageSource, final Locale locale) {
+    public static DebateDto fromDebate(final UriInfo uriInfo, final Debate debate) {
         final DebateDto dto = new DebateDto();
 
         dto.id = debate.getDebateId();
@@ -54,8 +54,8 @@ public class DebateDto {
         dto.isCreatorFor = debate.getIsCreatorFor();
         dto.createdDate = debate.getFormattedDate();
         dto.dateToClose = debate.getFormattedDateToClose();
-        dto.category = messageSource.getMessage("category." + debate.getCategory().getName(), null, locale);
-        dto.status = messageSource.getMessage("status." + debate.getStatus().getName(), null, locale);
+        dto.category = debate.getCategory().getName();
+        dto.status = debate.getStatus().getName();
         dto.subscriptionsCount = debate.getSubscribedUsersCount();
         dto.votesFor = debate.getForCount();
         dto.votesAgainst = debate.getAgainstCount();

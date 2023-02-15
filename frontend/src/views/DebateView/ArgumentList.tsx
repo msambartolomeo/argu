@@ -100,7 +100,9 @@ function ArgumentList({
                     (index === 0 ||
                         argumentList.data[index - 1].status !==
                             argument.status) && (
-                        <h5 className="center">{argument.status}</h5>
+                        <h5 className="center">
+                            {t(`debate.argument.${argument.status}`)}
+                        </h5>
                     )
                 }
                 <ArgumentBubble

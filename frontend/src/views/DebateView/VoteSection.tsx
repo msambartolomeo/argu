@@ -11,6 +11,7 @@ import { useCreateVote } from "../../hooks/votes/useCreateVote";
 import { useDeleteVote } from "../../hooks/votes/useDeleteVote";
 import { useGetVote } from "../../hooks/votes/useGetVote";
 import DebateDto from "../../types/dto/DebateDto";
+import DebateStatus from "../../types/enums/DebateStatus";
 import DebateVote from "../../types/enums/DebateVote";
 
 interface VotesSectionProps {
@@ -102,12 +103,9 @@ const VoteSection = ({ debateData }: VotesSectionProps) => {
                     <h5>{t("debate.votes.votes")}</h5>
                     {userInfo &&
                         (!vote ? (
-                            (debate.status ===
-                                t("debate.statuses.statusOpen") ||
-                                debate.status ===
-                                    t("debate.statuses.statusVoting") ||
-                                debate.status ===
-                                    t("debate.statuses.statusClosing")) && (
+                            (debate.status === DebateStatus.OPEN ||
+                                debate.status === DebateStatus.VOTING ||
+                                debate.status === DebateStatus.CLOSING) && (
                                 <>
                                     <h5>{t("debate.votes.whoWins")}</h5>
                                     <div className="vote-buttons">
@@ -179,16 +177,14 @@ const VoteSection = ({ debateData }: VotesSectionProps) => {
                             )}
                         </div>
                     )}
-                    {debate.status === t("debate.statuses.statusClosed") && (
+                    {debate.status === DebateStatus.CLOSED && (
                         <h6>{calculateVoteResult()}</h6>
                     )}
                     {userInfo &&
                         vote &&
-                        (debate.status === t("debate.statuses.statusOpen") ||
-                            debate.status ===
-                                t("debate.statuses.statusClosing") ||
-                            debate.status ===
-                                t("debate.statuses.statusVoting")) && (
+                        (debate.status === DebateStatus.OPEN ||
+                            debate.status === DebateStatus.CLOSING ||
+                            debate.status === DebateStatus.VOTING) && (
                             <>
                                 <h6>{t("debate.votes.changeVote")}</h6>
                                 <button
@@ -200,7 +196,7 @@ const VoteSection = ({ debateData }: VotesSectionProps) => {
                                 </button>
                             </>
                         )}
-                    {debate.status === t("debate.statuses.statusVoting") && (
+                    {debate.status === DebateStatus.VOTING && (
                         <h6 className="center">
                             {t("debate.votes.votingEnds") + debate.dateToClose}
                         </h6>

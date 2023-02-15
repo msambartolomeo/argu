@@ -40,12 +40,8 @@ public class ArgumentController {
     private long debateId;
 
     @Autowired
-    private MessageSource messageSource;
-    @Autowired
     private ArgumentService argumentService;
 
-    @Context
-    private HttpServletRequest request;
     @Context
     private UriInfo uriInfo;
 
@@ -63,7 +59,7 @@ public class ArgumentController {
         }
 
         final List<ArgumentDto> argumentList = argumentService.getArgumentsByDebate(debateId, username, page, size)
-                .stream().map(a -> ArgumentDto.fromArgument(uriInfo, a, messageSource, request.getLocale())).collect(Collectors.toList());
+                .stream().map(a -> ArgumentDto.fromArgument(uriInfo, a)).collect(Collectors.toList());
 
         if (argumentList.isEmpty()) {
             return Response.noContent().build();
@@ -84,7 +80,7 @@ public class ArgumentController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getArgument(@PathParam("id") final long id) {
         final Optional<ArgumentDto> argument = argumentService.getArgumentById(id)
-                .map(a -> ArgumentDto.fromArgument(uriInfo, a, messageSource, request.getLocale()));
+                .map(a -> ArgumentDto.fromArgument(uriInfo, a));
 
         if (argument.isPresent()) {
             return Response.ok(argument.get()).build();

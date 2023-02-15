@@ -1,7 +1,9 @@
+import ArgumentStatus from "../enums/ArgumentStatus";
+
 export default interface ArgumentDto {
     content: string;
     createdDate: string;
-    status: string;
+    status: ArgumentStatus;
     likes: number;
     likedByUser: boolean;
     deleted: boolean;

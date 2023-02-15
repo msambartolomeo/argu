@@ -1,9 +1,9 @@
 enum DebateStatus {
-    OPEN = "Open",
-    CLOSED = "Closed",
-    DELETED = "Deleted",
-    CLOSING = "Closing",
-    VOTING = "Voting",
+    OPEN = "open",
+    CLOSED = "closed",
+    DELETED = "deleted",
+    CLOSING = "closing",
+    VOTING = "voting",
 }
 
 export default DebateStatus;
