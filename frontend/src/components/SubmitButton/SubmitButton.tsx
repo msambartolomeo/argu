@@ -7,7 +7,6 @@ const SubmitButton = ({ text, disabled }: ButtonProps) => {
     return (
         <>
             <button
-                data-testid="submit-btn"
                 type="submit"
                 className="btn waves-effect center-block"
                 disabled={disabled}

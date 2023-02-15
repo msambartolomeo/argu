@@ -12,7 +12,6 @@ interface Props {
 }
 
 const InputField = ({
-    name,
     type,
     text,
     value,
@@ -27,7 +26,6 @@ const InputField = ({
     return (
         <div className={`input-field ${className}`}>
             <input
-                data-testid={name}
                 type={type}
                 value={value}
                 className={cn({ invalid: error !== undefined })}

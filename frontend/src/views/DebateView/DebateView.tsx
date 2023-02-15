@@ -50,17 +50,11 @@ const DebateView = () => {
     }, [params]);
 
     if (typeof debateData === "string") {
-        return (
-            <Error
-                data-testid="debate-not-found"
-                status={HttpStatusCode.NotFound}
-                message={debateData}
-            />
-        );
+        return <Error status={HttpStatusCode.NotFound} message={debateData} />;
     }
 
     if (isDebateLoading || !debateData) {
-        return <CircularProgress data-testid="debate-loading" size={100} />;
+        return <CircularProgress size={100} />;
     }
 
     const handleRefreshArguments = () => {
@@ -71,10 +65,9 @@ const DebateView = () => {
 
     return (
         <>
-            <DebateHeader data-testid="debate-header" debate={debateData} />
+            <DebateHeader debate={debateData} />
             <div className="debate-content">
                 <ArgumentList
-                    data-testid="argument-list"
                     debate={debateData}
                     argumentList={argumentList}
                     setArgumentList={setArgumentList}

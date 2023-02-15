@@ -80,7 +80,7 @@ const Discovery = () => {
     }, [queryParams]);
 
     return (
-        <div data-testid="discover" className="discovery-container">
+        <div className="discovery-container">
             <div className="filters-container">
                 <CategoryFilters />
             </div>
@@ -89,14 +89,11 @@ const Discovery = () => {
                     <OrderByComponent />
                 </div>
                 {isLoading ? (
-                    <CircularProgress data-testid="loading" size={100} />
+                    <CircularProgress size={100} />
                 ) : debatesList && debatesList?.data.length > 0 ? (
                     <>
                         <div className="debates-list-container">
-                            <DebatesList
-                                data-testid="discovery-debates-list"
-                                debates={debatesList?.data || []}
-                            />
+                            <DebatesList debates={debatesList?.data || []} />
                         </div>
                         <div className="pagination-container">
                             <Pagination
@@ -115,7 +112,7 @@ const Discovery = () => {
                     </>
                 ) : (
                     <div className="no-debates-container">
-                        <NoDebatesFound data-testid="no-debates-found" />
+                        <NoDebatesFound />
                     </div>
                 )}
             </div>

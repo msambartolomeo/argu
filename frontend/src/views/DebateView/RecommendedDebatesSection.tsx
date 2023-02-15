@@ -50,10 +50,7 @@ const RecommendedDebatesSection = ({
     return (
         <>
             {recommendedDebates.length > 0 && (
-                <div
-                    data-testid="recommended-debates"
-                    className="card vote-section"
-                >
+                <div className="card vote-section">
                     <h5>{t("debate.recommendedDebates")}</h5>
                     <div className="row">
                         <div className="slideshow-container">
