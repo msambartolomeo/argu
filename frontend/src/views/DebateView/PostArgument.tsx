@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +17,7 @@ import { useSharedAuth } from "../../hooks/useAuth";
 import { PaginatedList } from "../../types/PaginatedList";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import DebateDto from "../../types/dto/DebateDto";
+import { PAGE_DEFAULT } from "../../types/globalConstants";
 
 type FieldValues = {
     content: string;
@@ -148,8 +149,14 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
         imageFile.value = "";
     };
 
+    const [queryParams] = useSearchParams();
+
     useEffect(() => {
-        if (argumentList.lastElement) {
+        if (
+            argumentList.lastElement &&
+            Number(queryParams.get("page") || PAGE_DEFAULT) !==
+                argumentList.totalPages
+        ) {
             getLastArgument({ url: argumentList.lastElement }).then((res) => {
                 switch (res.status) {
                     case HttpStatusCode.Ok:
@@ -160,10 +167,13 @@ function PostArgument({ debate, argumentList, refreshArgs }: Props) {
                         break;
                 }
             });
+        } else {
+            setLastArgument(argumentList.data[argumentList.data.length - 1]);
         }
     }, [argumentList]);
 
-    if (isLastArgLoading) return <CircularProgress size={100} />;
+    if (isLastArgLoading && !lastArgument)
+        return <CircularProgress size={100} />;
 
     return (
         <>

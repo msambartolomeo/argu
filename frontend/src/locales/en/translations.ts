@@ -156,7 +156,6 @@ export const TRANSLATIONS_EN = {
         welcomeBack: "Welcome back :)",
         username: "Username: ",
         password: "Password: ",
-        rememberMe: "Remember me",
         login: "Login",
         noAccount: "Don't have an account? ",
         register: "Register here!",

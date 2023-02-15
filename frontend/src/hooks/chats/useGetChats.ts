@@ -7,8 +7,6 @@ import { useGet } from "../requests/useGet";
 
 export interface GetChatsInput {
     chatUrl: string;
-    page?: number;
-    size?: number;
 }
 
 export const useGetChats = () => {
@@ -16,13 +14,8 @@ export const useGetChats = () => {
 
     async function getChats({
         chatUrl,
-        page,
-        size,
     }: GetChatsInput): Promise<PaginatedOutput<ChatDto>> {
-        const response = await callGet(chatUrl, {}, false, {
-            page: page?.toString() ?? "0",
-            size: size?.toString() ?? "15",
-        });
+        const response = await callGet(chatUrl, {}, false);
         switch (response.status) {
             case HttpStatusCode.Ok:
                 return {

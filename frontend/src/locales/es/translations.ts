@@ -156,7 +156,6 @@ export const TRANSLATIONS_ES = {
         welcomeBack: "Bienvenido de nuevo :)",
         username: "Nombre de usuario: ",
         password: "Contraseña: ",
-        rememberMe: "Recordarme",
         login: "Ingresar",
         noAccount: "¿No tienes cuenta? ",
         register: "¡Regístrate aquí!",
