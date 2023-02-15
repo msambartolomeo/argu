@@ -35,7 +35,6 @@ export const useCreateArgumentWithImage = () => {
                     status: response.status,
                     location: response.headers.location,
                 };
-            // TODO: Should be handle more errors? Only ones possible are 403 and maybe 409 (if the debate is closed), which should never happen.
             default:
                 return {
                     status: response.status,

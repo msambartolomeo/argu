@@ -117,7 +117,6 @@ function ArgumentList({
 
     if (argumentList.data.length === 0 && loading) {
         return (
-            // TODO: Center
             <div className="z-depth-3 argument-list">
                 <CircularProgress size={100} />
             </div>

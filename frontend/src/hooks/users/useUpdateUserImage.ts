@@ -12,7 +12,6 @@ export const useUpdateUserImage = () => {
         imageUrl,
         image,
     }: UseUpdateUserImageInput) {
-        // TODO: Validate MimeType header usage
         const formData = new FormData();
         formData.append("image", image);
 

@@ -12,7 +12,6 @@ import { useGet } from "../requests/useGet";
 export interface GetDebatesInput {
     search?: string;
 
-    // TODO: Should we verify that the category is valid?
     category?: DebateCategory;
     order?: DebateOrder;
     status?: DebateStatus;

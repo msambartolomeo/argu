@@ -14,8 +14,6 @@ interface ArguLogoProps {
     image?: string;
 }
 
-// TODO: Add other buuttons depending if user is logged in
-
 const Navbar = ({ image = arguLogo }: ArguLogoProps) => {
     const { t } = useTranslation();
 

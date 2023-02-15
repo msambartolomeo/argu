@@ -193,7 +193,6 @@ const CreateDebate = () => {
                     });
                     switch (debateResponse.status) {
                         case HttpStatusCode.Ok:
-                            // TODO: Add routes as constants
                             enqueueSnackbar(
                                 t("createDebate.success") as string,
                                 {
