@@ -34,7 +34,7 @@ export const Error = ({ status, message }: ErrorProps) => {
     return (
         <div className="error-container">
             <div className="error-div">
-                <img src={image} alt="Error 404" />
+                <img src={image} alt="Error" />
                 <h1>{t("errors.title")}</h1>
                 <h6>{message}</h6>
                 <Link to={"/"} className="link-underlined">

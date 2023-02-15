@@ -5,7 +5,7 @@ import { useBetween } from "use-between";
 
 import UserRole from "../types/enums/UserRole";
 
-interface UserInfo {
+export interface UserInfo {
     sub: string;
     exp: number;
     username: string;

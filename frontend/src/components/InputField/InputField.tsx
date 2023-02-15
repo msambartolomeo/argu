@@ -2,6 +2,7 @@ import cn from "classnames";
 import { UseFormRegisterReturn } from "react-hook-form/dist/types/form";
 
 interface Props {
+    name?: string;
     type?: "text" | "email" | "password";
     text: string;
     value?: string;

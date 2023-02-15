@@ -11,7 +11,7 @@ const LandingPage = () => {
     const categories = Object.values(DebateCategory);
 
     return (
-        <div className="landing-container">
+        <div data-testid="landing-page" className="landing-container">
             <div className="explore-container">
                 <LandingPageExploreComponent categories={categories} />
             </div>

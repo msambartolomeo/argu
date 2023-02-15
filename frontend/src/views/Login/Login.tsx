@@ -79,12 +79,14 @@ const Login = () => {
                         {t("login.welcomeBack")}
                     </span>
                     <InputField
+                        name="username"
                         text={t("login.username")}
                         register={register("username")}
                         error={errors.username?.message?.toString()}
                     />
                     <InputField
                         text={t("login.password")}
+                        name="password"
                         type="password"
                         register={register("password")}
                         error={errors.password?.message?.toString()}
