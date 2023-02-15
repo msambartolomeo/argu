@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.model.Argument;
 import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +11,6 @@ import javax.ws.rs.core.UriInfo;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
-import java.util.Locale;
 
 public class ArgumentDto {
 
