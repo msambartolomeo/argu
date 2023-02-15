@@ -38,7 +38,7 @@ const SortSelectComponent = ({
     return (
         <div className="input-field margin-left">
             <select
-                id="select-status"
+                id={`select-${type}`}
                 onChange={handleSelectChange}
                 value={queryParams.get(type) ?? ""}
             >

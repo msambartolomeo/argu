@@ -41,7 +41,7 @@ const Footer = () => {
                 <Select
                     labelId="language-select-label"
                     onChange={handleLanguageChange}
-                    value={i18n.language}
+                    value={i18n.resolvedLanguage}
                     sx={{
                         color: "white",
                         ".MuiOutlinedInput-notchedOutline": {

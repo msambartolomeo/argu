@@ -16,7 +16,7 @@ i18n.use(LanguageDetector)
                 translation: TRANSLATIONS_ES,
             },
         },
-        fallbackLng: "es",
+        fallbackLng: "en",
     });
 
 export default i18n;
