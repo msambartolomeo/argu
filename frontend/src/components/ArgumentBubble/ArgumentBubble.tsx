@@ -127,7 +127,7 @@ const ArgumentBubble = ({
                     })}
                 </h6>
                 <div className="comment-extra">
-                    <div className="comment-header-section">
+                    <div className="comment-header-section nowrap">
                         {!argument.deleted &&
                             (argument.likedByUser ? (
                                 <LikeButton
