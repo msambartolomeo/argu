@@ -41,14 +41,22 @@ export const useRequestApi = () => {
 
         if (requiresAuth) {
             if (!authToken && !refreshToken && !credentials) {
-                // TODO: If we already throw an error (to avoid infinite recursion), should we still navigate to login or leave it to component?
                 navigate("/login", {
                     state: { from: window.location.pathname.substring(13) },
                 });
-                throw new Error("No auth token or credentials");
+                throw new Error("No auth token or credentials. Please login");
             }
         }
-        if (authToken) {
+
+        if (credentials) {
+            const encodedBasic = Buffer.from(
+                `${credentials?.username}:${credentials?.password}`
+            ).toString("base64");
+            headers = {
+                Authorization: `Basic ${encodedBasic}`,
+                ...headers,
+            };
+        } else if (authToken) {
             headers = {
                 Authorization: `${authToken}`,
                 ...headers,
@@ -56,14 +64,6 @@ export const useRequestApi = () => {
         } else if (refreshToken) {
             headers = {
                 Authorization: `${refreshToken}`,
-                ...headers,
-            };
-        } else if (credentials) {
-            const encodedBasic = Buffer.from(
-                `${credentials?.username}:${credentials?.password}`
-            ).toString("base64");
-            headers = {
-                Authorization: `Basic ${encodedBasic}`,
                 ...headers,
             };
         }
