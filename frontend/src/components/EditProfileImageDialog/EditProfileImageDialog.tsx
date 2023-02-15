@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
 import { HttpStatusCode } from "axios";
 import { useForm } from "react-hook-form";
@@ -70,6 +70,14 @@ const EditImageDialog = ({ imageUrl, imageChange }: EditImageDialogProps) => {
         }
     }, []);
 
+    const modalRef = useRef<HTMLDivElement>(null);
+    if (modalRef.current && (formErrors.filename || formErrors.image)) {
+        const modal = M.Modal.init(modalRef.current);
+        if (!modal.isOpen) {
+            modal.open();
+        }
+    }
+
     return (
         <>
             <a
@@ -78,7 +86,7 @@ const EditImageDialog = ({ imageUrl, imageChange }: EditImageDialogProps) => {
             >
                 {t("profile.editProfileImg")}
             </a>
-            <div id="edit-profile-image" className="modal">
+            <div ref={modalRef} id="edit-profile-image" className="modal">
                 <form
                     method="put"
                     encType="multipart/form-data"
