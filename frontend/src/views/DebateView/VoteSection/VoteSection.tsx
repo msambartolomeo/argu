@@ -91,7 +91,7 @@ const VoteSection = ({ debateData }: VotesSectionProps) => {
 
         let winner = result > 0 ? userFor : userAgainst;
         winner ??= t("debate.userDeleted").toString();
-        return t("debate.votes.winner") + winner;
+        return t("debate.votes.winner") + " " + winner;
     };
 
     return (
