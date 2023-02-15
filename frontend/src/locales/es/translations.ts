@@ -94,7 +94,7 @@ export const TRANSLATIONS_ES = {
             open: "Abierto",
             closed: "Cerrado",
             deleted: "Eliminado",
-            closing: "Cerrando",
+            closing: "Por cerrar",
             voting: "Votando",
         },
         debatePhotoAlt: "Foto del debate",
