@@ -149,7 +149,9 @@ export const DebaterProfile = () => {
             <div className="debates-column">
                 <div className="card user-debates">
                     <h3 className="center">
-                        {t("profile.userDebates", { username: "username" })}
+                        {t("profile.userDebates", {
+                            username: userData.username,
+                        })}
                     </h3>
                     {debatesLoading ? (
                         <CircularProgress size={100} />

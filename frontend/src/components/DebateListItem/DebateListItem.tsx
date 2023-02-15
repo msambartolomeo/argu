@@ -39,7 +39,7 @@ const DebateListItem = ({ debate }: DebateListItemProps) => {
                                 <b>{t("debate.creator")}:</b>{" "}
                                 {debate.creatorName
                                     ? debate.creatorName
-                                    : "[deleted user]"}
+                                    : t("debate.userDeleted")}
                             </h6>
                         </div>
                         <div className="debate-footer">

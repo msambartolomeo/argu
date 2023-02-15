@@ -122,7 +122,8 @@ const ArgumentBubble = ({
             <div className="comment-info">
                 <h6 className="comment-owner">
                     {t("components.argumentBubble.userSaid", {
-                        username: argument.creatorName,
+                        username:
+                            argument.creatorName ?? t("debate.userDeleted"),
                     })}
                 </h6>
                 <div className="comment-extra">
