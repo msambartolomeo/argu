@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 export const TRANSLATIONS_EN = {
+    language: "Language",
     navbar: {
         explore: "Explore",
         login: "Login",
