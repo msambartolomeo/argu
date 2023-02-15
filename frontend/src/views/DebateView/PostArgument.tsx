@@ -17,9 +17,9 @@ import { useSharedAuth } from "../../hooks/useAuth";
 import { PaginatedList } from "../../types/PaginatedList";
 import ArgumentDto from "../../types/dto/ArgumentDto";
 import DebateDto from "../../types/dto/DebateDto";
-import { PAGE_DEFAULT } from "../../types/globalConstants";
 import ArgumentStatus from "../../types/enums/ArgumentStatus";
 import DebateStatus from "../../types/enums/DebateStatus";
+import { PAGE_DEFAULT } from "../../types/globalConstants";
 
 type FieldValues = {
     content: string;
