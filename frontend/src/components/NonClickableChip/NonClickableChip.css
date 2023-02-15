@@ -1,0 +1,9 @@
+.wrappable-chip {
+    /* display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap !important;
+    word-wrap: normal !important; */
+    height: fit-content;
+}

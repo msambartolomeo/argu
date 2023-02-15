@@ -10,6 +10,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    z-index: 0;
 }
 
 .speech-bubble.sb-right {
@@ -70,4 +71,11 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
+    flex-wrap: wrap;
+    z-index: 1;
+}
+
+.nowrap {
+    white-space: nowrap;
+    flex-wrap: nowrap;
 }

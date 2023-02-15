@@ -1,3 +1,5 @@
+import "./NonClickableChip.css";
+
 interface NonClickableChipProps {
     name: string;
 }
@@ -5,7 +7,7 @@ interface NonClickableChipProps {
 const NonClickableChip = ({ name }: NonClickableChipProps) => {
     return (
         <>
-            <div className="chip">{name}</div>
+            <div className="chip wrappable-chip">{name}</div>
         </>
     );
 };
